@@ -1,0 +1,274 @@
+---
+import { clinicas } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Clinica {
+  t: string;
+  dir: string;
+  lat: number;
+  lng: number;
+}
+const lista = clinicas as Clinica[];
+---
+
+<section class="dr-seccion dr-wrap" id="clinicas">
+  <div class="dr-cab dr-reveal">
+    <span class="dr-kicker">Clínicas</span>
+    <h2 class="dr-titulo">Encuentra a un dentista cerca de ti</h2>
+    <p class="dr-sub">Elige entre nuestras {lista.length} sedes en Lima para cuidar tu sonrisa. Al cargar la página resaltamos una sede al azar.</p>
+  </div>
+
+  <div class="dr-mapa__grid dr-reveal dr-reveal--2">
+    <div class="dr-mapa__panel">
+      <div class="dr-mapa__buscador">
+        <Icono nombre="busqueda" size={16} />
+        <input type="search" id="dr-mapa-buscar" placeholder="Escribe tu distrito o dirección…" aria-label="Buscar sede" />
+      </div>
+
+      <div class="dr-mapa__lista" id="dr-mapa-lista">
+        {lista.map((c: Clinica, i: number) => (
+          <button type="button" class="dr-mapa__item" data-clinica-idx={i}>
+            <span class="dr-mapa__item-ico"><Icono nombre="pin" size={16} /></span>
+            <span class="dr-mapa__item-texto">
+              <b>{c.t}</b>
+              <small>{c.dir}</small>
+            </span>
+          </button>
+        ))}
+      </div>
+      <p class="dr-mapa__vacio" id="dr-mapa-vacio" hidden>No encontramos esa sede. Escríbenos y te decimos la más cercana 💬</p>
+    </div>
+
+    <div class="dr-mapa__mapa-wrap">
+      <div id="dr-mapa" class="dr-mapa__mapa" role="application" aria-label="Mapa de sedes en Lima"></div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="dr-clinicas-data" is:inline set:html={JSON.stringify(lista)} />
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" is:inline></script>
+<script is:inline>
+  (function () {
+    var dataEl = document.getElementById('dr-clinicas-data');
+    var clinicas = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+    var mapEl = document.getElementById('dr-mapa');
+    var L = window.L;
+    if (!L || !mapEl || !clinicas.length) return;
+
+    var map = L.map(mapEl, { scrollWheelZoom: false }).setView([clinicas[0].lat, clinicas[0].lng], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    var icono = L.divIcon({
+      className: 'dr-pin',
+      html: '<span></span>',
+      iconSize: [26, 26],
+      iconAnchor: [13, 26],
+      popupAnchor: [0, -24],
+    });
+
+    var marcadores = clinicas.map(function (c) {
+      var m = L.marker([c.lat, c.lng], { icon: icono }).addTo(map);
+      m.bindPopup('<b>' + c.t + '</b><br>' + c.dir);
+      return m;
+    });
+
+    var botones = Array.prototype.slice.call(document.querySelectorAll('[data-clinica-idx]'));
+
+    function activar(idx) {
+      var c = clinicas[idx];
+      if (!c) return;
+      map.flyTo([c.lat, c.lng], 15, { duration: 0.8 });
+      marcadores[idx].openPopup();
+      botones.forEach(function (b) {
+        b.classList.toggle('is-on', Number(b.dataset.clinicaIdx) === idx);
+      });
+    }
+
+    botones.forEach(function (b) {
+      b.addEventListener('click', function () {
+        activar(Number(b.dataset.clinicaIdx));
+      });
+    });
+
+    marcadores.forEach(function (m, idx) {
+      m.on('click', function () {
+        activar(idx);
+      });
+    });
+
+    var azar = Math.floor(Math.random() * clinicas.length);
+    activar(azar);
+
+    var buscador = document.getElementById('dr-mapa-buscar');
+    var vacio = document.getElementById('dr-mapa-vacio');
+    if (buscador) {
+      buscador.addEventListener('input', function () {
+        var q = buscador.value.trim().toLowerCase();
+        var visibles = 0;
+        botones.forEach(function (b) {
+          var ok = (b.textContent || '').toLowerCase().indexOf(q) !== -1;
+          b.hidden = !ok;
+          if (ok) visibles++;
+        });
+        if (vacio) vacio.hidden = visibles > 0;
+      });
+    }
+
+    setTimeout(function () {
+      map.invalidateSize();
+    }, 200);
+  })();
+</script>
+
+<style>
+  .dr-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .dr-mapa__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(1.5rem, 4vw, 2rem);
+    align-items: start;
+  }
+
+  .dr-mapa__buscador {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border: 2px solid var(--dr-linea);
+    border-radius: var(--dr-pill);
+    padding: 0.75rem 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--dr-texto);
+  }
+
+  .dr-mapa__buscador input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    color: var(--dr-tinta);
+    background: none;
+  }
+
+  .dr-mapa__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  .dr-mapa__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    text-align: left;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid var(--dr-linea);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .dr-mapa__item:hover {
+    border-color: var(--dr-navy);
+  }
+
+  .dr-mapa__item.is-on {
+    border-color: var(--dr-navy);
+    background: var(--dr-azul-suave);
+  }
+
+  .dr-mapa__item[hidden] {
+    display: none;
+  }
+
+  .dr-mapa__item-ico {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--dr-azul-suave);
+    color: var(--dr-navy);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .dr-mapa__item.is-on .dr-mapa__item-ico {
+    background: var(--dr-navy);
+    color: #fff;
+  }
+
+  .dr-mapa__item-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .dr-mapa__item-texto b {
+    font-size: 0.88rem;
+    color: var(--dr-tinta);
+  }
+
+  .dr-mapa__item-texto small {
+    font-size: 0.76rem;
+    color: var(--dr-texto);
+  }
+
+  .dr-mapa__vacio {
+    text-align: center;
+    color: var(--dr-texto);
+    font-size: 0.86rem;
+    padding-top: 1rem;
+  }
+
+  .dr-mapa__vacio[hidden] {
+    display: none;
+  }
+
+  .dr-mapa__mapa-wrap {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--dr-linea);
+  }
+
+  .dr-mapa__mapa {
+    height: 460px;
+    width: 100%;
+    background: var(--dr-azul-suave);
+  }
+
+  :global(.dr-pin span) {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--dr-navy);
+    transform: rotate(-45deg);
+    border: 3px solid #fff;
+    box-shadow: 0 3px 8px -2px rgba(0, 35, 71, 0.6);
+  }
+
+  :global(.leaflet-popup-content) {
+    font-family: var(--dr-font);
+    font-size: 0.85rem;
+    color: var(--dr-tinta);
+  }
+
+  @media (max-width: 860px) {
+    .dr-mapa__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dr-mapa__lista {
+      max-height: 280px;
+    }
+  }
+</style>

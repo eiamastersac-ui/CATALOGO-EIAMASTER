@@ -1,0 +1,69 @@
+---
+import { diagnostico } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="dr-seccion dr-wrap dr-diag">
+  <div class="dr-diag__texto dr-reveal">
+    <span class="dr-kicker">{diagnostico.kicker}</span>
+    <h2 class="dr-titulo">{diagnostico.titulo}</h2>
+    <p class="dr-sub">{diagnostico.d}</p>
+    <a href="#preguntas" class="dr-btn dr-btn--navy">{diagnostico.cta}</a>
+  </div>
+
+  <div class="dr-diag__foto dr-reveal dr-reveal--2">
+    <img src={diagnostico.img} alt="Diagnóstico dental sin costo" loading="lazy" />
+    <span class="dr-diag__badge"><Icono nombre="calendario" size={22} /></span>
+  </div>
+</section>
+
+<style>
+  .dr-diag {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .dr-diag__texto .dr-sub {
+    max-width: 34ch;
+    margin-bottom: 1.6rem;
+  }
+
+  .dr-diag__foto {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 5 / 4;
+  }
+
+  .dr-diag__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .dr-diag__badge {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--dr-navy);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 16px 32px -16px rgba(0, 35, 71, 0.5);
+  }
+
+  @media (max-width: 780px) {
+    .dr-diag {
+      grid-template-columns: 1fr;
+    }
+
+    .dr-diag__foto {
+      order: -1;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+---
+
+<section class="dr-news">
+  <div class="dr-wrap dr-news__grid">
+    <div>
+      <h2>Suscribirme al Newsletter</h2>
+      <p>Mantente informado de todas las novedades odontológicas para cuidar tu salud dental de la mejor manera.</p>
+    </div>
+    <form class="dr-news__form" onsubmit="return false">
+      <div class="dr-news__campo">
+        <input type="email" placeholder="Ingresa tu email" required />
+        <button type="submit">Suscribirme</button>
+      </div>
+      <p class="dr-news__legal">Al suscribirte aceptas nuestra <a href="#top">Política de Privacidad</a></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .dr-news {
+    background: var(--dr-azul);
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .dr-news__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  .dr-news__grid h2 {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .dr-news__grid > div > p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.92rem;
+  }
+
+  .dr-news__campo {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .dr-news__campo input {
+    flex: 1;
+    border: none;
+    border-radius: var(--dr-pill);
+    padding: 0.9rem 1.3rem;
+    font-size: 0.9rem;
+  }
+
+  .dr-news__campo input:focus {
+    outline: 2px solid #fff;
+  }
+
+  .dr-news__campo button {
+    background: var(--dr-navy-oscuro);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.9rem 1.6rem;
+    border-radius: var(--dr-pill);
+    white-space: nowrap;
+  }
+
+  .dr-news__campo button:hover {
+    background: var(--dr-tinta);
+  }
+
+  .dr-news__legal {
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 0.6rem;
+  }
+
+  .dr-news__legal a {
+    text-decoration: underline;
+    font-weight: 700;
+  }
+
+  @media (max-width: 720px) {
+    .dr-news__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dr-news__campo {
+      flex-direction: column;
+    }
+  }
+</style>

@@ -1,0 +1,182 @@
+---
+import { marca, footerNav, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+
+const rutas: Record<string, string> = {
+  'Agenda una cita': `${base}/#preguntas`,
+  'Ubica tu clínica más cercana': `${base}/#clinicas`,
+  'Descubre nuestras promociones': `${base}/#tratamientos`,
+  'Genera tu factura': `${base}/#top`,
+  Alineadores: `${base}/#tratamientos`,
+  Invisalign: `${base}/#tratamientos`,
+  Brackets: `${base}/#tratamientos`,
+  'Dentistas para niños': `${base}/#tratamientos`,
+  'Otros tratamientos': `${base}/#tratamientos`,
+  'Quiénes somos': `${base}/#equipo`,
+  Recursos: `${base}/#blog`,
+  'Bolsa de trabajo': `${base}/#top`,
+  Opiniones: `${base}/#opiniones`,
+  'Preguntas frecuentes': `${base}/#preguntas`,
+};
+---
+
+<footer class="dr-foot">
+  <div class="dr-wrap dr-foot__grid">
+    <div>
+      <h3>Planifica tu visita</h3>
+      {footerNav.visita.map((t: string) => <a href={rutas[t] ?? `${base}/#top`}>{t}</a>)}
+    </div>
+    <div>
+      <h3>Tratamientos</h3>
+      {footerNav.tratamientos.map((t: string) => <a href={rutas[t] ?? `${base}/#top`}>{t}</a>)}
+    </div>
+    <div>
+      <h3>Nosotros</h3>
+      {footerNav.nosotros.map((t: string) => <a href={rutas[t] ?? `${base}/#top`}>{t}</a>)}
+    </div>
+    <div>
+      <h3>Contáctanos</h3>
+      <a href={marca.whatsappHref}><Icono nombre="whatsapp" size={15} /> WhatsApp</a>
+      <a href={`tel:${marca.tel.replace(/\D/g, '')}`}><Icono nombre="telefono" size={15} /> {marca.tel}</a>
+      <a href={`mailto:${marca.correo}`}><Icono nombre="correo" size={15} /> {marca.correo}</a>
+    </div>
+  </div>
+
+  <div class="dr-wrap dr-foot__legal">
+    <div class="dr-foot__marca">
+      <span>{marca.nombre}</span>
+      <p>&copy; {anio} {marca.nombre} {marca.sub}&reg;. Plantilla de referencia, no es un negocio real.</p>
+    </div>
+
+    <div class="dr-foot__legal-right">
+      <div class="dr-foot__legal-links">
+        <a href={`${base}/#top`}>Términos y Condiciones</a>
+        <a href={`${base}/#top`}>Política de Privacidad</a>
+      </div>
+      <div class="dr-foot__redes">
+        <a href={`${base}/#top`} aria-label="Instagram"><Icono nombre="instagram" size={16} /></a>
+        <a href={`${base}/#top`} aria-label="Facebook"><Icono nombre="facebook" size={16} /></a>
+        <a href={`${base}/#top`} aria-label="TikTok"><Icono nombre="tiktok" size={16} /></a>
+        <a href={`${base}/#top`} aria-label="LinkedIn"><Icono nombre="linkedin" size={16} /></a>
+        <a href={`${base}/#top`} aria-label="YouTube"><Icono nombre="youtube" size={16} /></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .dr-foot {
+    background: var(--dr-tinta);
+    color: rgba(255, 255, 255, 0.75);
+    padding-top: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .dr-foot h3 {
+    color: #fff;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .dr-foot__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .dr-foot__grid a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.83rem;
+    margin-bottom: 0.7rem;
+    color: rgba(255, 255, 255, 0.78);
+    transition: color 0.2s ease;
+  }
+
+  .dr-foot__grid a:hover {
+    color: #fff;
+  }
+
+  .dr-foot__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+  }
+
+  .dr-foot__marca span {
+    font-weight: 800;
+    color: #fff;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .dr-foot__marca p {
+    font-size: 0.76rem;
+  }
+
+  .dr-foot__legal-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+  }
+
+  .dr-foot__legal-links {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.78rem;
+  }
+
+  .dr-foot__legal-links a:hover {
+    color: #fff;
+  }
+
+  .dr-foot__redes {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .dr-foot__redes a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .dr-foot__redes a:hover {
+    background: var(--dr-azul);
+  }
+
+  @media (max-width: 860px) {
+    .dr-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .dr-foot__legal {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .dr-foot__legal-right {
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dr-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+import { marca, hero } from '../datos/clinica.js';
+
+interface Tile {
+  img: string;
+  bg: string;
+}
+const collage = hero.collage as Tile[];
+---
+
+<section class="dr-hero dr-wrap" id="top">
+  <div class="dr-hero__texto dr-reveal">
+    <h1><span class="dr-hero__marca">{marca.nombre}</span> {hero.titulo}</h1>
+    <p>{hero.sub}</p>
+    <div class="dr-hero__cta">
+      <a href="#preguntas" class="dr-btn dr-btn--navy">{hero.cta1}</a>
+      <a href="#tratamientos" class="dr-btn dr-btn--navy">{hero.cta2}</a>
+    </div>
+  </div>
+
+  <div class="dr-hero__collage dr-reveal dr-reveal--2">
+    {collage.map((t: Tile, i: number) => (
+      <div class={`dr-hero__tile dr-hero__tile--${i + 1}`} style={`background:${t.bg}`}>
+        <img src={t.img} alt="Paciente feliz de tu tienda.com Red Dental" loading={i === 0 ? 'eager' : 'lazy'} />
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .dr-hero {
+    padding-top: clamp(2rem, 5vw, 3rem);
+    padding-bottom: 0;
+    text-align: center;
+  }
+
+  .dr-hero__texto {
+    max-width: 42rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .dr-hero__marca {
+    color: var(--dr-azul);
+  }
+
+  .dr-hero__texto h1 {
+    font-size: clamp(2rem, 4.6vw, 3.1rem);
+    margin-bottom: 1rem;
+  }
+
+  .dr-hero__texto p {
+    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    margin-bottom: 1.75rem;
+  }
+
+  .dr-hero__cta {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .dr-hero__collage {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    align-items: end;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+
+  .dr-hero__tile {
+    border-radius: 22px 22px 0 0;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .dr-hero__tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .dr-hero__tile--1,
+  .dr-hero__tile--3,
+  .dr-hero__tile--5 {
+    aspect-ratio: 3 / 4;
+  }
+
+  .dr-hero__tile--2,
+  .dr-hero__tile--4 {
+    aspect-ratio: 3 / 5;
+  }
+
+  @media (max-width: 860px) {
+    .dr-hero__collage {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .dr-hero__tile--4,
+    .dr-hero__tile--5 {
+      display: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .dr-hero__collage {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dr-hero__tile--3 {
+      display: none;
+    }
+  }
+</style>

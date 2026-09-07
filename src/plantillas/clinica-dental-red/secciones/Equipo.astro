@@ -1,0 +1,84 @@
+---
+import { equipo } from '../datos/clinica.js';
+
+interface Miembro {
+  nombre: string;
+  cargo: string;
+  img: string;
+}
+const lista = equipo as Miembro[];
+---
+
+<section class="dr-seccion dr-wrap" id="equipo">
+  <div class="dr-cab dr-centro dr-reveal">
+    <span class="dr-kicker dr-centro">¿Quiénes somos?</span>
+    <h2 class="dr-titulo dr-centro">Odontólogos especializados en todo Lima</h2>
+  </div>
+
+  <div class="dr-equipo__grid">
+    {lista.map((m: Miembro, i: number) => (
+      <article class={`dr-equipo__card dr-reveal dr-reveal--${i + 1} ${i % 2 === 1 ? 'dr-equipo__card--crema' : ''}`}>
+        <div class="dr-equipo__nombre">
+          <b>{m.nombre}</b>
+          <span>{m.cargo}</span>
+        </div>
+        <img src={m.img} alt={m.nombre} loading="lazy" />
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .dr-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .dr-equipo__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .dr-equipo__card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dr-equipo__card--crema {
+    background: var(--dr-crema);
+  }
+
+  .dr-equipo__nombre {
+    padding: 1.5rem 1.25rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .dr-equipo__nombre b {
+    font-size: 1.1rem;
+    color: var(--dr-tinta);
+  }
+
+  .dr-equipo__nombre span {
+    font-size: 0.85rem;
+    color: var(--dr-texto);
+  }
+
+  .dr-equipo__card img {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 860px) {
+    .dr-equipo__grid {
+      grid-template-columns: 1fr;
+      max-width: 24rem;
+      margin-inline: auto;
+    }
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+import { anuncio } from '../datos/clinica.js';
+---
+
+<div class="dr-anuncio">
+  <p><span aria-hidden="true">✦</span> {anuncio} <span aria-hidden="true">✦</span></p>
+</div>
+
+<style>
+  .dr-anuncio {
+    background: var(--dr-azul);
+    color: #fff;
+    text-align: center;
+    padding-block: 0.6rem;
+  }
+
+  .dr-anuncio p {
+    font-weight: 700;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+</style>

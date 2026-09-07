@@ -1,0 +1,148 @@
+---
+import { resenas } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Resena {
+  autor: string;
+  clinica: string;
+  texto: string;
+}
+const lista = resenas.lista as Resena[];
+const estrellas = Array.from({ length: 5 });
+---
+
+<section class="dr-seccion dr-wrap" id="opiniones">
+  <div class="dr-resenas__cab dr-reveal">
+    <span class="dr-kicker">Opiniones</span>
+    <h2 class="dr-titulo">Resultados que hablan por nosotros</h2>
+
+    <div class="dr-resenas__badge">
+      <span class="dr-resenas__g"><Icono nombre="google" size={20} /> {resenas.calificacion}</span>
+      <div class="dr-resenas__estrellas">
+        {estrellas.map(() => <Icono nombre="estrella" size={16} />)}
+      </div>
+      <span class="dr-resenas__meta">En miles de recomendaciones</span>
+    </div>
+  </div>
+
+  <div class="dr-resenas__fila dr-fila dr-reveal dr-reveal--2" id="dr-resenas-fila">
+    {lista.map((r: Resena) => (
+      <article class="dr-resenas__card">
+        <div class="dr-resenas__estrellas dr-resenas__estrellas--card">
+          {estrellas.map(() => <Icono nombre="estrella" size={13} />)}
+          <span class="dr-resenas__google-tag">Google</span>
+        </div>
+        <p>&ldquo;{r.texto}&rdquo;</p>
+        <div class="dr-resenas__autor">
+          <b>{r.autor}</b>
+          <span>{r.clinica}</span>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="dr-resenas__nav">
+    <button type="button" class="dr-flecha" data-fila-prev="dr-resenas-fila" aria-label="Reseñas anteriores">
+      <Icono nombre="flechaIzq" size={18} />
+    </button>
+    <button type="button" class="dr-flecha" data-fila-next="dr-resenas-fila" aria-label="Reseñas siguientes">
+      <Icono nombre="flechaDer" size={18} />
+    </button>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-fila-prev]').forEach((btn) => {
+    const fila = document.getElementById(btn.dataset.filaPrev ?? '');
+    btn.addEventListener('click', () => fila?.scrollBy({ left: -320, behavior: 'smooth' }));
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-fila-next]').forEach((btn) => {
+    const fila = document.getElementById(btn.dataset.filaNext ?? '');
+    btn.addEventListener('click', () => fila?.scrollBy({ left: 320, behavior: 'smooth' }));
+  });
+</script>
+
+<style>
+  .dr-resenas__cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .dr-resenas__badge {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .dr-resenas__g {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    color: var(--dr-tinta);
+  }
+
+  .dr-resenas__estrellas {
+    display: flex;
+    gap: 0.1rem;
+    color: var(--dr-navy);
+  }
+
+  .dr-resenas__meta {
+    font-size: 0.85rem;
+    color: var(--dr-texto);
+  }
+
+  .dr-resenas__fila {
+    padding-bottom: 1.25rem;
+  }
+
+  .dr-resenas__card {
+    background: #fff;
+    border: 1px solid var(--dr-linea);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .dr-resenas__estrellas--card {
+    justify-content: space-between;
+  }
+
+  .dr-resenas__google-tag {
+    margin-left: auto;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--dr-texto);
+  }
+
+  .dr-resenas__card p {
+    font-size: 0.86rem;
+    color: var(--dr-texto);
+    flex: 1;
+  }
+
+  .dr-resenas__autor {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .dr-resenas__autor b {
+    font-size: 0.86rem;
+    color: var(--dr-tinta);
+  }
+
+  .dr-resenas__autor span {
+    font-size: 0.75rem;
+    color: var(--dr-texto);
+  }
+
+  .dr-resenas__nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+</style>

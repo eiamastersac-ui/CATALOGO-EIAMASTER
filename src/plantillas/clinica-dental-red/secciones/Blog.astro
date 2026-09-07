@@ -1,0 +1,152 @@
+---
+import { blog, blogCategorias } from '../datos/clinica.js';
+
+interface Post {
+  t: string;
+  d: string;
+  cat: string;
+  img: string;
+}
+const lista = blog as Post[];
+---
+
+<section class="dr-seccion dr-wrap" id="blog">
+  <div class="dr-cab dr-centro dr-reveal">
+    <span class="dr-kicker dr-centro">Blog</span>
+    <h2 class="dr-titulo dr-centro">Descubre más sobre el cuidado de tu salud dental</h2>
+  </div>
+
+  <div class="dr-blog__filtro dr-reveal dr-reveal--2" role="tablist" aria-label="Filtrar artículos por categoría">
+    {blogCategorias.map((c: string, i: number) => (
+      <button type="button" class={`dr-blog__pill${i === 0 ? ' is-on' : ''}`} data-cat={c} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{c}</button>
+    ))}
+  </div>
+
+  <div class="dr-blog__grid" id="dr-blog-grid">
+    {lista.map((p: Post, i: number) => (
+      <a href="#top" class={`dr-blog__card dr-reveal dr-reveal--${i + 1}`} data-cat={p.cat}>
+        <img src={p.img} alt={p.t} loading="lazy" />
+        <div class="dr-blog__card-texto">
+          <h3>{p.t}</h3>
+          <p>{p.d}</p>
+          <span>Leer más →</span>
+        </div>
+      </a>
+    ))}
+  </div>
+  <p class="dr-blog__vacio" id="dr-blog-vacio" hidden>No hay artículos en esta categoría todavía.</p>
+</section>
+
+<script>
+  const botones = Array.from(document.querySelectorAll<HTMLButtonElement>('.dr-blog__pill'));
+  const tarjetas = Array.from(document.querySelectorAll<HTMLElement>('#dr-blog-grid [data-cat]'));
+  const vacio = document.getElementById('dr-blog-vacio');
+
+  function aplicar(cat: string) {
+    let visibles = 0;
+    for (const t of tarjetas) {
+      const ok = cat === 'Todos' || t.dataset.cat === cat;
+      t.hidden = !ok;
+      if (ok) visibles++;
+    }
+    botones.forEach((b) => {
+      const activo = b.dataset.cat === cat;
+      b.classList.toggle('is-on', activo);
+      b.setAttribute('aria-selected', String(activo));
+    });
+    if (vacio) vacio.hidden = visibles > 0;
+  }
+
+  botones.forEach((b) => b.addEventListener('click', () => aplicar(b.dataset.cat ?? 'Todos')));
+</script>
+
+<style>
+  .dr-cab {
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .dr-blog__filtro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .dr-blog__pill {
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--dr-pill);
+    border: 1.5px solid var(--dr-linea);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--dr-texto);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .dr-blog__pill:hover {
+    border-color: var(--dr-navy);
+  }
+
+  .dr-blog__pill.is-on {
+    background: var(--dr-navy);
+    border-color: var(--dr-navy);
+    color: #fff;
+  }
+
+  .dr-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .dr-blog__grid [hidden] {
+    display: none;
+  }
+
+  .dr-blog__card img {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .dr-blog__card:hover img {
+    transform: scale(1.02);
+  }
+
+  .dr-blog__card-texto h3 {
+    font-size: 1.02rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .dr-blog__card-texto p {
+    font-size: 0.85rem;
+    color: var(--dr-texto);
+    margin-bottom: 0.6rem;
+  }
+
+  .dr-blog__card-texto span {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--dr-navy);
+  }
+
+  .dr-blog__vacio {
+    text-align: center;
+    color: var(--dr-texto);
+    font-size: 0.9rem;
+    padding-top: 2rem;
+  }
+
+  .dr-blog__vacio[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .dr-blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

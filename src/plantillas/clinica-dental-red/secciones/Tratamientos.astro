@@ -1,0 +1,81 @@
+---
+import { tratamientos } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Tratamiento {
+  t: string;
+  icono: string;
+}
+const lista = tratamientos as Tratamiento[];
+---
+
+<section class="dr-trat" id="tratamientos">
+  <div class="dr-wrap">
+    <div class="dr-cab dr-centro dr-reveal">
+      <span class="dr-kicker dr-centro">Tratamientos Dentales</span>
+      <h2 class="dr-titulo dr-centro">Cuidado dental para cada momento de tu vida</h2>
+    </div>
+
+    <div class="dr-trat__fila dr-fila dr-reveal dr-reveal--2">
+      {lista.map((t: Tratamiento) => (
+        <a href="#preguntas" class="dr-trat__pill">
+          <span class="dr-trat__ico"><Icono nombre={t.icono} size={22} /></span>
+          {t.t}
+        </a>
+      ))}
+    </div>
+
+    <div class="dr-trat__cta dr-centro dr-reveal dr-reveal--3">
+      <a href="#preguntas" class="dr-btn dr-btn--linea">Ver todos los tratamientos</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dr-trat {
+    background: var(--dr-crema);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .dr-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .dr-trat__fila {
+    grid-auto-columns: max-content;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.25rem);
+  }
+
+  .dr-trat__pill {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: #fff;
+    border: 1.5px solid var(--dr-linea);
+    border-radius: var(--dr-pill);
+    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--dr-tinta);
+    white-space: nowrap;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .dr-trat__pill:hover {
+    border-color: var(--dr-navy);
+    transform: translateY(-2px);
+  }
+
+  .dr-trat__ico {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--dr-azul-suave);
+    color: var(--dr-navy);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+</style>

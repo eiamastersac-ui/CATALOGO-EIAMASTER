@@ -1,0 +1,83 @@
+---
+import { porQueElegirnos } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Item {
+  t: string;
+  d: string;
+  icono: string;
+}
+const lista = porQueElegirnos as Item[];
+---
+
+<section class="dr-porque">
+  <div class="dr-wrap dr-porque__grid">
+    <div class="dr-porque__intro dr-reveal">
+      <span class="dr-kicker">¿Por qué elegir tu tienda.com?</span>
+      <h2 class="dr-titulo">Tu bienestar dental es nuestra prioridad</h2>
+      <a href="#preguntas" class="dr-btn dr-btn--navy">Agenda gratis</a>
+    </div>
+
+    <div class="dr-porque__items">
+      {lista.map((it: Item, i: number) => (
+        <div class={`dr-porque__item dr-reveal dr-reveal--${(i % 4) + 1}`}>
+          <span class="dr-porque__ico"><Icono nombre={it.icono} size={24} /></span>
+          <h3>{it.t}</h3>
+          <p>{it.d}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .dr-porque {
+    background: var(--dr-azul-suave);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .dr-porque__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: clamp(2rem, 5vw, 3rem);
+    align-items: center;
+  }
+
+  .dr-porque__items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem 2rem;
+  }
+
+  .dr-porque__ico {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--dr-navy);
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.9rem;
+  }
+
+  .dr-porque__item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .dr-porque__item p {
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 780px) {
+    .dr-porque__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dr-porque__items {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

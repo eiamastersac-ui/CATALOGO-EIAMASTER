@@ -1,0 +1,357 @@
+---
+import { marca, nav, tratamientosMenu, clinicas, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface ItemNav {
+  t: string;
+  href: string;
+  mega?: string;
+}
+const lista = nav as ItemNav[];
+---
+
+<header class="dr-hdr" id="cabecera">
+  <div class="dr-wrap dr-hdr__fila">
+    <a href={`${base}/#top`} class="dr-logo">
+      <span class="dr-logo__anios">{marca.anios}</span>
+      <span class="dr-logo__marca">{marca.nombre}</span>
+    </a>
+
+    <nav class="dr-nav" id="dr-nav" aria-label="Navegación principal">
+      {lista.map((item) => (
+        item.mega ? (
+          <div class="dr-nav__item dr-nav__item--mega" data-mega={item.mega}>
+            <button type="button" class="dr-nav__btn" data-mega-btn aria-expanded="false">
+              {item.t}
+              <Icono nombre="chevron" size={14} />
+            </button>
+          </div>
+        ) : (
+          <a href={item.href.startsWith('#') ? `${base}/${item.href}` : item.href} class="dr-nav__link">{item.t}</a>
+        )
+      ))}
+    </nav>
+
+    <div class="dr-hdr__acc">
+      <a href={`${base}/#preguntas`} class="dr-hdr__emergencia">Emergencias</a>
+      <a href={`${base}/#preguntas`} class="dr-btn dr-btn--navy dr-hdr__cta">Agenda gratis</a>
+      <button type="button" class="dr-hdr__burger" id="dr-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="dr-mega" data-mega-panel="tratamientos" hidden>
+    <div class="dr-wrap dr-mega__grid">
+      <div>
+        <h3>Tratamientos Clínicos</h3>
+        {tratamientosMenu.clinicos.map((t: string) => <a href={`${base}/#tratamientos`}>{t}</a>)}
+      </div>
+      <div>
+        <h3>Tratamientos Estéticos</h3>
+        {tratamientosMenu.esteticos.map((t: string) => <a href={`${base}/#tratamientos`}>{t}</a>)}
+      </div>
+      <div>
+        <h3>Tratamientos Infantiles</h3>
+        {tratamientosMenu.infantiles.map((t: string) => <a href={`${base}/#tratamientos`}>{t}</a>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="dr-mega" data-mega-panel="clinicas" hidden>
+    <div class="dr-wrap dr-mega__clinicas">
+      <p class="dr-mega__clinicas-titulo">Nuestras sedes en Lima</p>
+      <div class="dr-mega__clinicas-lista">
+        {clinicas.map((c: { t: string; dir: string }) => (
+          <a href={`${base}/#clinicas`}>
+            <Icono nombre="pin" size={15} />
+            {c.t}
+          </a>
+        ))}
+      </div>
+      <a href={`${base}/#clinicas`} class="dr-btn dr-btn--linea">Ver el mapa completo</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('cabecera');
+  const burger = document.getElementById('dr-burger');
+  const nav = document.getElementById('dr-nav');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 30);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  const items = document.querySelectorAll<HTMLElement>('[data-mega]');
+  function cerrarTodo() {
+    items.forEach((item) => {
+      item.classList.remove('is-abierto');
+      item.querySelector('[data-mega-btn]')?.setAttribute('aria-expanded', 'false');
+      const panel = document.querySelector<HTMLElement>(`[data-mega-panel="${item.dataset.mega}"]`);
+      if (panel) panel.hidden = true;
+    });
+  }
+
+  items.forEach((item) => {
+    const btn = item.querySelector<HTMLButtonElement>('[data-mega-btn]');
+    const panel = document.querySelector<HTMLElement>(`[data-mega-panel="${item.dataset.mega}"]`);
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const abierto = item.classList.contains('is-abierto');
+      cerrarTodo();
+      if (!abierto && panel) {
+        item.classList.add('is-abierto');
+        btn.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+      }
+    });
+  });
+
+  document.addEventListener('click', cerrarTodo);
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .dr-hdr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: var(--dr-azul-suave);
+  }
+
+  .dr-hdr.is-scrolled {
+    box-shadow: 0 4px 20px -14px rgba(0, 35, 71, 0.35);
+  }
+
+  .dr-hdr__fila {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: var(--dr-hdr-h);
+  }
+
+  .dr-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .dr-logo__anios {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--dr-tinta);
+    border-right: 1.5px solid var(--dr-tinta);
+    padding-right: 0.4rem;
+    line-height: 1.1;
+  }
+
+  .dr-logo__marca {
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--dr-azul);
+  }
+
+  .dr-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-inline: auto;
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+
+  .dr-nav__link,
+  .dr-nav__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--dr-tinta);
+    padding: 0.5rem 0;
+  }
+
+  .dr-nav__link:hover,
+  .dr-nav__btn:hover {
+    color: var(--dr-azul);
+  }
+
+  .dr-nav__item--mega svg {
+    transition: transform 0.2s ease;
+  }
+
+  .dr-nav__item--mega.is-abierto svg {
+    transform: rotate(180deg);
+  }
+
+  .dr-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .dr-hdr__emergencia {
+    background: var(--dr-crema);
+    color: var(--dr-tinta);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--dr-pill);
+  }
+
+  .dr-hdr__cta {
+    padding: 0.65rem 1.3rem;
+    font-size: 0.85rem;
+  }
+
+  .dr-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .dr-hdr__burger span {
+    height: 2px;
+    background: var(--dr-tinta);
+    border-radius: 2px;
+  }
+
+  .dr-mega {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid var(--dr-linea);
+    box-shadow: 0 24px 40px -24px rgba(0, 35, 71, 0.35);
+  }
+
+  .dr-mega[hidden] {
+    display: none;
+  }
+
+  .dr-mega__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding-block: 1.75rem;
+  }
+
+  .dr-mega__grid h3 {
+    font-size: 0.85rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .dr-mega__grid a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--dr-texto);
+    padding-block: 0.5rem;
+    font-weight: 500;
+  }
+
+  .dr-mega__grid a:hover {
+    color: var(--dr-azul);
+  }
+
+  .dr-mega__clinicas {
+    padding-block: 1.75rem;
+  }
+
+  .dr-mega__clinicas-titulo {
+    font-weight: 700;
+    color: var(--dr-tinta);
+    margin-bottom: 1rem;
+  }
+
+  .dr-mega__clinicas-lista {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dr-mega__clinicas-lista a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--dr-tinta);
+    padding: 0.6rem 0.9rem;
+    border: 1.5px solid var(--dr-linea);
+    border-radius: 8px;
+  }
+
+  .dr-mega__clinicas-lista a:hover {
+    border-color: var(--dr-azul);
+    color: var(--dr-azul);
+  }
+
+  @media (max-width: 960px) {
+    .dr-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: #fff;
+      border-bottom: 2px solid var(--dr-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+
+    .dr-nav.is-abierto {
+      display: flex;
+    }
+
+    .dr-nav__link,
+    .dr-nav__btn {
+      padding-block: 0.75rem;
+      border-top: 1px solid var(--dr-linea);
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .dr-mega {
+      position: static;
+      box-shadow: none;
+    }
+
+    .dr-mega__grid,
+    .dr-mega__clinicas-lista {
+      grid-template-columns: 1fr;
+    }
+
+    .dr-hdr__emergencia {
+      display: none;
+    }
+
+    .dr-hdr__burger {
+      display: flex;
+    }
+  }
+</style>

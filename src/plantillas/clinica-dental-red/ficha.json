@@ -1,0 +1,12 @@
+{
+  "titulo": "tu tienda.com — Dental Red (Estilo Dentalia)",
+  "categoria": "salud-dental",
+  "descripcion": "Cadena de clínicas dentales con presencia en toda Lima: mega-menús de tratamientos y sedes, hero con mosaico de pacientes, sección \"por qué elegirnos\" y mapa interactivo real (Leaflet + OpenStreetMap) que resalta una sede al azar en cada carga y permite buscar por distrito y saltar entre sedes. Incluye carrusel de reseñas estilo Google, equipo de odontólogos, blog con filtro de categorías funcional, FAQ en acordeón, CTA final y newsletter. Sin login. Marca propia tu tienda.com.",
+  "thumbnail": "/previews/clinica-dental-red.jpg",
+  "tags": ["dental", "clinica", "salud", "mapa", "landing", "corporativo", "resenas", "interactivo"],
+  "paleta": ["#0046a2", "#008fff", "#fbf3de", "#002347"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "dentalia.com",
+  "orden": 65
+}
