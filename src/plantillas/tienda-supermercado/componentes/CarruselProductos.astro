@@ -1,0 +1,88 @@
+---
+import TarjetaProducto from './TarjetaProducto.astro';
+
+interface Producto {
+  marca: string;
+  nombre: string;
+  precio: number;
+  antes?: number;
+  img: string;
+  nuevo?: boolean;
+  advertencia?: string;
+}
+const { id, titulo, items } = Astro.props as { id: string; titulo: string; items: Producto[] };
+---
+
+<section class="sa-seccion sa-wrap" id={id}>
+  <div class="sa-carr__cab">
+    <h2 class="sa-carr__titulo">{titulo}</h2>
+    <a href="#top" class="sa-carr__ver">Ver todo</a>
+  </div>
+
+  <div class="sa-carr__area">
+    <button type="button" class="sa-flecha sa-carr__prev" data-target={id} aria-label="Anterior">&lsaquo;</button>
+    <div class="sa-fila" id={`${id}-fila`}>
+      {items.map((p: Producto) => <TarjetaProducto producto={p} />)}
+    </div>
+    <button type="button" class="sa-flecha sa-carr__next" data-target={id} aria-label="Siguiente">&rsaquo;</button>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.sa-carr__prev, .sa-carr__next').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.target;
+      const fila = document.getElementById(`${id}-fila`);
+      const dir = btn.classList.contains('sa-carr__next') ? 1 : -1;
+      fila?.scrollBy({ left: dir * 300, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .sa-carr__cab {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    margin-bottom: 1.75rem;
+  }
+
+  .sa-carr__titulo {
+    font-family: var(--sa-display);
+    font-weight: 900;
+    font-size: clamp(1.5rem, 3.6vw, 2.2rem);
+    text-transform: uppercase;
+  }
+
+  .sa-carr__ver {
+    position: absolute;
+    right: 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .sa-carr__area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sa-carr__area .sa-fila {
+    flex: 1;
+  }
+
+  @media (min-width: 1080px) {
+    [id$="-fila"] {
+      grid-template-columns: repeat(5, 1fr);
+      grid-auto-flow: row;
+      overflow: visible;
+    }
+    .sa-carr__prev,
+    .sa-carr__next {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+import { marca } from '../datos/saludable.js';
+---
+
+<a
+  href={`https://wa.me/51${marca.tel.replace(/\s/g, '')}`}
+  target="_blank"
+  rel="noopener"
+  class="sa-whats"
+  aria-label="Escríbenos por WhatsApp"
+>
+  <span class="sa-whats__tip">¿Necesitas ayuda? <b>¡Escríbenos!</b></span>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.44 1.32 4.94L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.23h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm5.8 14.24c-.24.68-1.4 1.3-1.93 1.34-.5.05-1 .25-3.36-.7-2.84-1.14-4.66-4.02-4.8-4.2-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.98-2.35.26-.28.56-.35.75-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.14.07.14.12.31.02.5-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.3.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.44.3.14.47.12.64-.07.18-.19.75-.87.95-1.17.2-.3.4-.24.66-.15.27.1 1.7.8 1.99.95.3.14.5.21.57.33.07.13.07.71-.17 1.39z"></path>
+  </svg>
+</a>
+
+<style>
+  .sa-whats {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 150;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 32px -10px rgba(37, 211, 102, 0.65);
+  }
+
+  .sa-whats__tip {
+    position: absolute;
+    right: 68px;
+    bottom: 0;
+    background: #fff;
+    color: var(--sa-tinta);
+    font-size: 0.76rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    white-space: nowrap;
+    box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .sa-whats:hover .sa-whats__tip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    .sa-whats__tip {
+      display: none;
+    }
+  }
+</style>

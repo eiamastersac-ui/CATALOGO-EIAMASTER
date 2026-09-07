@@ -1,0 +1,178 @@
+---
+import { heroSlides } from '../datos/saludable.js';
+---
+
+<section class="sa-hero" aria-roledescription="carrusel">
+  <div class="sa-hero__main">
+    <div class="sa-hero__track" id="sa-hero-track">
+      {heroSlides.map((s: { badge: string; marca: string; titulo: string; highlight: string; sub: string; cta: string; img: string }, i: number) => (
+        <article class="sa-hero__slide">
+          <img src={s.img} alt={s.titulo} loading={i === 0 ? 'eager' : 'lazy'} />
+          <div class="sa-hero__texto">
+            <span class="sa-hero__badge">&#10022; {s.badge}</span>
+            <p class="sa-hero__marca">{s.marca}</p>
+            <h2>{s.titulo}</h2>
+            <span class="sa-hero__highlight">{s.highlight}</span>
+            <p class="sa-hero__sub">{s.sub}</p>
+            <a href="#lo-nuevo" class="sa-btn sa-btn--oro">{s.cta}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+    <button class="sa-hero__nav sa-hero__nav--prev" id="sa-hero-prev" aria-label="Anterior">&lsaquo;</button>
+    <button class="sa-hero__nav sa-hero__nav--next" id="sa-hero-next" aria-label="Siguiente">&rsaquo;</button>
+    <div class="sa-hero__dots" id="sa-hero-dots">
+      {heroSlides.map((_: unknown, i: number) => <button aria-label={`Ir al slide ${i + 1}`} data-dot={i}></button>)}
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('sa-hero-track');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#sa-hero-dots button'));
+  const total = track ? track.children.length : 0;
+  let idx = 0;
+
+  function ir(n: number) {
+    if (!track) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+  }
+
+  document.getElementById('sa-hero-prev')?.addEventListener('click', () => ir(idx - 1));
+  document.getElementById('sa-hero-next')?.addEventListener('click', () => ir(idx + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => ir(i)));
+
+  let timer = window.setInterval(() => ir(idx + 1), 6000);
+  const box = track?.parentElement;
+  box?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  box?.addEventListener('mouseleave', () => (timer = window.setInterval(() => ir(idx + 1), 6000)));
+  ir(0);
+</script>
+
+<style>
+  .sa-hero__main {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sa-hero__track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .sa-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-height: clamp(340px, 42vw, 560px);
+    display: flex;
+    align-items: center;
+  }
+
+  .sa-hero__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sa-hero__texto {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    max-width: 32rem;
+    padding: clamp(1.5rem, 5vw, 4.5rem);
+  }
+
+  .sa-hero__texto::before {
+    content: "";
+    position: absolute;
+    inset: -1rem;
+    background: linear-gradient(90deg, rgba(15, 12, 8, 0.75), rgba(15, 12, 8, 0.25) 65%, transparent);
+    z-index: -1;
+  }
+
+  .sa-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--sa-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--sa-oro);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .sa-hero__marca {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .sa-hero__texto h2 {
+    color: #fff;
+    font-family: var(--sa-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(1.8rem, 4.4vw, 3rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .sa-hero__highlight {
+    display: inline-block;
+    background: var(--sa-oro);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.3rem 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .sa-hero__sub {
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    margin-bottom: 1.4rem;
+    max-width: 34ch;
+  }
+
+  .sa-hero__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--sa-tinta);
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .sa-hero__nav--prev { left: clamp(0.5rem, 2vw, 1.5rem); }
+  .sa-hero__nav--next { right: clamp(0.5rem, 2vw, 1.5rem); }
+
+  .sa-hero__dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .sa-hero__dots button {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--sa-pill);
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .sa-hero__dots button.is-on {
+    background: #fff;
+    width: 22px;
+  }
+</style>

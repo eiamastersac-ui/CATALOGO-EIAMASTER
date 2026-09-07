@@ -1,0 +1,52 @@
+---
+import { masVendidos } from '../datos/boniteza.js';
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+---
+
+<section class="bz-seccion bz-wrap" id="mas-vendidos">
+  <h2 class="bz-titulo">Los más vendidos</h2>
+
+  <div class="bz-carr__area">
+    <button type="button" class="bz-flecha bz-carr__prev" data-dir="-1" aria-label="Anterior">&lsaquo;</button>
+    <div class="bz-fila" id="bz-mas-vendidos-fila">
+      {masVendidos.map((p: { nombre: string; precio: number; antes?: number; tag?: string; img: string }) => (
+        <TarjetaProducto producto={p} />
+      ))}
+    </div>
+    <button type="button" class="bz-flecha bz-carr__next" data-dir="1" aria-label="Siguiente">&rsaquo;</button>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('bz-mas-vendidos-fila');
+  document.querySelectorAll<HTMLButtonElement>('.bz-carr__prev, .bz-carr__next').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = Number(btn.dataset.dir);
+      fila?.scrollBy({ left: dir * 320, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .bz-carr__area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .bz-carr__area .bz-fila {
+    flex: 1;
+  }
+
+  @media (min-width: 1000px) {
+    #bz-mas-vendidos-fila {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-flow: row;
+      overflow: visible;
+    }
+    .bz-carr__prev,
+    .bz-carr__next {
+      display: none;
+    }
+  }
+</style>

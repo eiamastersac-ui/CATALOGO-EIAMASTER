@@ -1,0 +1,159 @@
+---
+import { soles } from '../datos/boniteza.js';
+
+interface Producto {
+  nombre: string;
+  precio: number;
+  antes?: number;
+  tag?: string;
+  img: string;
+}
+const { producto } = Astro.props as { producto: Producto };
+const descuento = producto.antes ? Math.round((1 - producto.precio / producto.antes) * 100) : null;
+---
+
+<article class="bz-prod" data-nombre={producto.nombre.toLowerCase()} data-precio={producto.precio}>
+  <div class="bz-prod__media">
+    {producto.tag && <span class="bz-prod__tag">{producto.tag}</span>}
+    <img src={producto.img} alt={producto.nombre} loading="lazy" decoding="async" />
+  </div>
+  <div class="bz-prod__body">
+    <h3 class="bz-prod__nombre">{producto.nombre}</h3>
+    <p class="bz-prod__precio">
+      <b>{soles(producto.precio)}</b>
+      {producto.antes && <s>{soles(producto.antes)}</s>}
+      {descuento && <em>(-{descuento}%)</em>}
+    </p>
+    <div class="bz-prod__qty" role="group" aria-label="Cantidad">
+      <button type="button" class="bz-qty__b" data-step="-1" aria-label="Quitar uno">-</button>
+      <span class="bz-qty__n">1</span>
+      <button type="button" class="bz-qty__b" data-step="1" aria-label="Agregar uno">+</button>
+    </div>
+    <button type="button" class="bz-btn bz-btn--negro bz-prod__add">Agregar al carrito</button>
+  </div>
+</article>
+
+<style>
+  .bz-prod[hidden] {
+    display: none;
+  }
+
+  .bz-prod {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--bz-linea);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .bz-prod:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -20px rgba(107, 33, 168, 0.35);
+  }
+
+  .bz-prod__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--bz-lila-palido);
+  }
+
+  .bz-prod__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bz-prod__tag {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    background: var(--bz-magenta);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--bz-pill);
+  }
+
+  .bz-prod__body {
+    padding: 0.9rem 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    flex: 1;
+  }
+
+  .bz-prod__nombre {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    min-height: 2.6em;
+  }
+
+  .bz-prod__precio {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    align-items: baseline;
+  }
+
+  .bz-prod__precio b {
+    color: var(--bz-tinta);
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .bz-prod__precio s {
+    color: var(--bz-gris);
+    font-size: 0.78rem;
+  }
+
+  .bz-prod__precio em {
+    color: var(--bz-magenta);
+    font-style: normal;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .bz-prod__qty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+
+  .bz-qty__b {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bz-lila);
+    color: var(--bz-tinta);
+    font-weight: 700;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  .bz-qty__b:hover {
+    background: var(--bz-lila-med);
+  }
+
+  .bz-qty__n {
+    min-width: 1.4ch;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .bz-prod__add {
+    margin-top: auto;
+    width: 100%;
+  }
+
+  .bz-prod__add.is-ok {
+    background: var(--bz-magenta);
+  }
+</style>

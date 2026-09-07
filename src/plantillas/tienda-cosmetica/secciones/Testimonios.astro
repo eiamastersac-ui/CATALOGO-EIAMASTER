@@ -1,0 +1,56 @@
+---
+import { testimonios } from '../datos/boniteza.js';
+---
+
+<section class="bz-seccion bz-wrap bz-testi">
+  {testimonios.map((t: { texto: string; autor: string }) => (
+    <figure class="bz-testi__card">
+      <span class="bz-testi__quote" aria-hidden="true">&ldquo;</span>
+      <blockquote>{t.texto}</blockquote>
+      <figcaption>{t.autor}</figcaption>
+    </figure>
+  ))}
+</section>
+
+<style>
+  .bz-testi {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .bz-testi__card {
+    position: relative;
+    padding-top: 1.5rem;
+  }
+
+  .bz-testi__quote {
+    position: absolute;
+    top: -0.5rem;
+    left: -0.25rem;
+    font-family: var(--bz-serif);
+    font-size: 3.5rem;
+    color: var(--bz-lila-med);
+    line-height: 1;
+  }
+
+  .bz-testi__card blockquote {
+    position: relative;
+    font-size: 0.92rem;
+    color: var(--bz-tinta);
+    margin-bottom: 0.75rem;
+  }
+
+  .bz-testi__card figcaption {
+    font-size: 0.8rem;
+    color: var(--bz-gris);
+    font-weight: 600;
+  }
+
+  @media (max-width: 820px) {
+    .bz-testi {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

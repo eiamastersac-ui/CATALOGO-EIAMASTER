@@ -1,0 +1,201 @@
+---
+import { comprasRecientes } from '../datos/boniteza.js';
+---
+
+<div class="bz-fidelidad">
+  <span aria-hidden="true">&#127873;</span> Puntos tienda.com
+</div>
+
+<div class="bz-toast" id="bz-toast" role="status" aria-live="polite" hidden>
+  <div class="bz-toast__ico" aria-hidden="true">&#128142;</div>
+  <div class="bz-toast__body">
+    <p><b id="bz-toast-nombre"></b> ha comprado!</p>
+    <strong id="bz-toast-prod"></strong>
+    <span id="bz-toast-tiempo"></span>
+  </div>
+  <button type="button" class="bz-toast__cerrar" id="bz-toast-cerrar" aria-label="Cerrar aviso">&times;</button>
+</div>
+
+<a
+  href="https://wa.me/51901222333"
+  target="_blank"
+  rel="noopener"
+  class="bz-whats"
+  aria-label="Consultar por WhatsApp"
+>
+  <span class="bz-whats__tip">Consulta a una experta</span>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.44 1.32 4.94L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.23h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm5.8 14.24c-.24.68-1.4 1.3-1.93 1.34-.5.05-1 .25-3.36-.7-2.84-1.14-4.66-4.02-4.8-4.2-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.98-2.35.26-.28.56-.35.75-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.14.07.14.12.31.02.5-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.3.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.44.3.14.47.12.64-.07.18-.19.75-.87.95-1.17.2-.3.4-.24.66-.15.27.1 1.7.8 1.99.95.3.14.5.21.57.33.07.13.07.71-.17 1.39z"></path>
+  </svg>
+</a>
+
+<script define:vars={{ items: comprasRecientes }}>
+  const toast = document.getElementById('bz-toast');
+  const nombre = document.getElementById('bz-toast-nombre');
+  const prod = document.getElementById('bz-toast-prod');
+  const tiempo = document.getElementById('bz-toast-tiempo');
+  const cerrar = document.getElementById('bz-toast-cerrar');
+
+  let i = 0;
+  let cerrado = false;
+
+  function mostrar() {
+    if (cerrado || !toast || !items.length) return;
+    const item = items[i % items.length];
+    if (nombre) nombre.textContent = item.nombre;
+    if (prod) prod.textContent = item.producto;
+    if (tiempo) tiempo.textContent = item.tiempo;
+    toast.hidden = false;
+    requestAnimationFrame(() => toast.classList.add('is-on'));
+    i++;
+    window.setTimeout(() => {
+      toast.classList.remove('is-on');
+      window.setTimeout(() => {
+        toast.hidden = true;
+      }, 350);
+    }, 5000);
+  }
+
+  cerrar?.addEventListener('click', () => {
+    cerrado = true;
+    toast?.classList.remove('is-on');
+    if (toast) toast.hidden = true;
+  });
+
+  window.setTimeout(mostrar, 4000);
+  window.setInterval(mostrar, 13000);
+</script>
+
+<style>
+  .bz-fidelidad {
+    position: fixed;
+    left: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 150;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bz-magenta);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.7rem 1.1rem;
+    border-radius: var(--bz-pill);
+    box-shadow: 0 12px 30px -12px rgba(230, 17, 140, 0.6);
+  }
+
+  .bz-whats {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 150;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 12px 30px -10px rgba(37, 211, 102, 0.7);
+  }
+
+  .bz-whats__tip {
+    position: absolute;
+    right: 64px;
+    background: #fff;
+    color: var(--bz-tinta);
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .bz-whats:hover .bz-whats__tip {
+    opacity: 1;
+  }
+
+  .bz-toast[hidden] {
+    display: none;
+  }
+
+  .bz-toast {
+    position: fixed;
+    left: 1.25rem;
+    bottom: 5.25rem;
+    z-index: 160;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--bz-linea);
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    box-shadow: 0 18px 40px -18px rgba(32, 26, 43, 0.45);
+    max-width: 280px;
+    transform: translateY(12px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .bz-toast.is-on {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .bz-toast__ico {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--bz-lila);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+  }
+
+  .bz-toast__body p {
+    font-size: 0.76rem;
+    color: var(--bz-gris);
+  }
+
+  .bz-toast__body b {
+    color: var(--bz-tinta);
+  }
+
+  .bz-toast__body strong {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--bz-tinta);
+    margin: 0.15rem 0;
+  }
+
+  .bz-toast__body span {
+    font-size: 0.68rem;
+    color: var(--bz-gris);
+  }
+
+  .bz-toast__cerrar {
+    margin-left: auto;
+    color: var(--bz-gris);
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .bz-toast {
+      left: 0.75rem;
+      right: 0.75rem;
+      max-width: none;
+      bottom: 5rem;
+    }
+    .bz-whats__tip {
+      display: none;
+    }
+  }
+</style>

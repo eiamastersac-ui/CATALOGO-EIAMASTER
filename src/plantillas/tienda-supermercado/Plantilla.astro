@@ -1,0 +1,26 @@
+---
+import './estilos.css';
+
+import BarraSuperior from './secciones/BarraSuperior.astro';
+import Cabecera from './secciones/Cabecera.astro';
+import HeroCarrusel from './secciones/HeroCarrusel.astro';
+import FiltroSeleccion from './secciones/FiltroSeleccion.astro';
+import CategoriasCirculares from './secciones/CategoriasCirculares.astro';
+import CarruselProductos from './componentes/CarruselProductos.astro';
+import PiePagina from './secciones/PiePagina.astro';
+import WidgetFlotante from './secciones/WidgetFlotante.astro';
+
+import { loNuevo, medicinaNatural } from './datos/saludable.js';
+---
+
+<div class="tpl-tienda-supermercado">
+  <BarraSuperior />
+  <Cabecera />
+  <HeroCarrusel />
+  <FiltroSeleccion />
+  <CategoriasCirculares />
+  <CarruselProductos id="lo-nuevo" titulo="Lo Nuevo" items={loNuevo} />
+  <CarruselProductos id="medicina-natural" titulo="Medicina Natural" items={medicinaNatural} />
+  <PiePagina />
+  <WidgetFlotante />
+</div>

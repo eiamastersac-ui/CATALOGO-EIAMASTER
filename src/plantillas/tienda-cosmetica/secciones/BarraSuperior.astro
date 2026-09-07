@@ -1,0 +1,47 @@
+---
+import { barraMensajes } from '../datos/boniteza.js';
+---
+
+<div class="bz-barra" aria-label="Mensajes de envio y promociones">
+  <div class="bz-barra__track">
+    {[...barraMensajes, ...barraMensajes].map((m: string) => (
+      <span class="bz-barra__item">{m}</span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .bz-barra {
+    background: linear-gradient(90deg, var(--bz-magenta), var(--bz-morado));
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .bz-barra__track {
+    display: flex;
+    width: max-content;
+    gap: 3rem;
+    padding-block: 0.5rem;
+    animation: bz-marquee 26s linear infinite;
+  }
+
+  .bz-barra__item {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    padding-inline: 1.5rem;
+  }
+
+  @keyframes bz-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bz-barra__track {
+      animation: none;
+    }
+  }
+</style>

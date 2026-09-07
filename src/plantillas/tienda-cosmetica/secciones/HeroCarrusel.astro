@@ -1,0 +1,164 @@
+---
+import { heroSlides } from '../datos/boniteza.js';
+---
+
+<section class="bz-hero bz-wrap" aria-roledescription="carrusel">
+  <div class="bz-hero__main">
+    <div class="bz-hero__track" id="bz-hero-track">
+      {heroSlides.map((s: { kicker: string; titulo: string; sub: string; cta: string; img: string }, i: number) => (
+        <article class="bz-hero__slide">
+          <img src={s.img} alt={s.titulo} loading={i === 0 ? 'eager' : 'lazy'} />
+          <div class="bz-hero__texto">
+            <span class="bz-hero__kicker">{s.kicker}</span>
+            <h2>{s.titulo}</h2>
+            <p>{s.sub}</p>
+            <a href="#mas-vendidos" class="bz-btn bz-btn--magenta">{s.cta}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+    <button class="bz-hero__nav bz-hero__nav--prev" id="bz-hero-prev" aria-label="Anterior">&lsaquo;</button>
+    <button class="bz-hero__nav bz-hero__nav--next" id="bz-hero-next" aria-label="Siguiente">&rsaquo;</button>
+    <div class="bz-hero__dots" id="bz-hero-dots">
+      {heroSlides.map((_: unknown, i: number) => <button aria-label={`Ir al slide ${i + 1}`} data-dot={i}></button>)}
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('bz-hero-track');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#bz-hero-dots button'));
+  const total = track ? track.children.length : 0;
+  let idx = 0;
+
+  function ir(n: number) {
+    if (!track) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+  }
+
+  document.getElementById('bz-hero-prev')?.addEventListener('click', () => ir(idx - 1));
+  document.getElementById('bz-hero-next')?.addEventListener('click', () => ir(idx + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => ir(i)));
+
+  let timer = window.setInterval(() => ir(idx + 1), 6000);
+  const box = track?.parentElement;
+  box?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  box?.addEventListener('mouseleave', () => (timer = window.setInterval(() => ir(idx + 1), 6000)));
+  ir(0);
+</script>
+
+<style>
+  .bz-hero {
+    padding-top: 1.25rem;
+  }
+
+  .bz-hero__main {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--bz-lila);
+  }
+
+  .bz-hero__track {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+  }
+
+  .bz-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-height: clamp(320px, 40vw, 480px);
+    display: flex;
+    align-items: center;
+  }
+
+  .bz-hero__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bz-hero__texto {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    max-width: 30rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .bz-hero__texto::before {
+    content: "";
+    position: absolute;
+    inset: -1rem;
+    background: linear-gradient(90deg, rgba(32, 15, 51, 0.78), rgba(32, 15, 51, 0.25) 70%, transparent);
+    z-index: -1;
+  }
+
+  .bz-hero__kicker {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    background: var(--bz-magenta);
+    padding: 0.25rem 0.7rem;
+    border-radius: var(--bz-pill);
+  }
+
+  .bz-hero__texto h2 {
+    color: #fff;
+    font-family: var(--bz-serif);
+    font-weight: 700;
+    font-size: clamp(1.7rem, 4.2vw, 2.8rem);
+    margin: 0.8rem 0 0.6rem;
+  }
+
+  .bz-hero__texto p {
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    margin-bottom: 1.3rem;
+    max-width: 32ch;
+  }
+
+  .bz-hero__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--bz-morado);
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .bz-hero__nav--prev { left: 0.9rem; }
+  .bz-hero__nav--next { right: 0.9rem; }
+
+  .bz-hero__dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .bz-hero__dots button {
+    width: 9px;
+    height: 9px;
+    border-radius: var(--bz-pill);
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .bz-hero__dots button.is-on {
+    background: #fff;
+    width: 24px;
+  }
+</style>

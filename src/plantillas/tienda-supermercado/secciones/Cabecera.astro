@@ -1,0 +1,484 @@
+---
+import { marca, megaMenu } from '../datos/saludable.js';
+---
+
+<header class="sa-hdr" id="top">
+  <div class="sa-wrap sa-hdr__row">
+    <a href="#top" class="sa-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+      {marca.nombre}<span>{marca.sub}</span>
+    </a>
+
+    <form class="sa-buscar" id="sa-buscar" role="search">
+      <input type="search" id="sa-buscar-input" placeholder="Buscar productos" aria-label="Buscar productos" />
+      <button type="submit" aria-label="Buscar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </form>
+
+    <div class="sa-entrega">
+      <span>Personaliza tu entrega:</span>
+      <button type="button" id="sa-entrega-btn">Selecciona una opción <i aria-hidden="true">&#9662;</i></button>
+    </div>
+
+    <div class="sa-hdr__acc">
+      <a href="#footer" class="sa-hdr__ico" aria-label="Rastrea tu pedido">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 8l-9-5-9 5 9 5 9-5Z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path>
+        </svg>
+        <span class="sa-hdr__txt">Mis pedidos</span>
+      </a>
+      <button type="button" class="sa-hdr__ico" id="sa-fav" aria-label="Favoritos">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 21s-7-4.5-9.5-9C.5 8 2 4 6 4c2 0 3.5 1 6 3.5C14.5 5 16 4 18 4c4 0 5.5 4 3.5 8-2.5 4.5-9.5 9-9.5 9Z"></path>
+        </svg>
+      </button>
+      <button type="button" class="sa-hdr__ico sa-hdr__cart" id="sa-cart" aria-label="Ver carrito">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M6 6h15l-1.5 9h-12z"></path><path d="M6 6 5 3H2"></path><circle cx="9" cy="20" r="1.6"></circle><circle cx="18" cy="20" r="1.6"></circle>
+        </svg>
+        <span class="sa-hdr__badge" id="sa-cart-count" hidden>0</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="sa-nav" aria-label="Navegacion principal">
+    <div class="sa-wrap sa-nav__row">
+      <button type="button" class="sa-nav__menu" id="sa-menu-btn" aria-expanded="false" aria-controls="sa-mega">
+        <span class="sa-nav__burger" aria-hidden="true"><i></i><i></i><i></i></span> Categorías
+      </button>
+      <a href="#lo-nuevo" class="sa-nav__promo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12 12 4 4 12l8 8 8-8Z"></path></svg>
+        Promociones
+      </a>
+    </div>
+
+    <div class="sa-mega" id="sa-mega" hidden>
+      <div class="sa-wrap sa-mega__grid">
+        <ul class="sa-mega__cats">
+          {megaMenu.map((m: { cat: string }, i: number) => (
+            <li><button type="button" class={`sa-mega__cat${i === 0 ? ' is-on' : ''}`} data-cat={m.cat}>{m.cat}</button></li>
+          ))}
+        </ul>
+        <div class="sa-mega__panel">
+          {megaMenu.map((m: { cat: string; grupos: { t: string; sub: string[] }[] }, i: number) => (
+            <div class="sa-mega__sub" data-for={m.cat} hidden={i !== 0}>
+              {m.grupos.map((g: { t: string; sub: string[] }) => (
+                <div class="sa-mega__grupo">
+                  <h3>{g.t}</h3>
+                  <ul>
+                    {g.sub.map((s: string) => <li><a href="#lo-nuevo">{s}</a></li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const btn = document.getElementById('sa-menu-btn');
+  const mega = document.getElementById('sa-mega');
+  const cats = Array.from(document.querySelectorAll<HTMLButtonElement>('.sa-mega__cat'));
+  const subs = Array.from(document.querySelectorAll<HTMLElement>('.sa-mega__sub'));
+
+  function abrir(v: boolean) {
+    if (!mega || !btn) return;
+    mega.hidden = !v;
+    btn.classList.toggle('is-active', v);
+    btn.setAttribute('aria-expanded', String(v));
+  }
+
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    abrir(!!(mega?.hidden ?? true));
+  });
+
+  cats.forEach((c) => {
+    const activar = () => {
+      cats.forEach((x) => x.classList.toggle('is-on', x === c));
+      subs.forEach((s) => (s.hidden = s.dataset.for !== c.dataset.cat));
+    };
+    c.addEventListener('mouseenter', activar);
+    c.addEventListener('click', activar);
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as Node;
+    if (mega && btn && !mega.contains(t) && !btn.contains(t)) abrir(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') abrir(false);
+  });
+  mega?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => abrir(false)));
+
+  const entregaBtn = document.getElementById('sa-entrega-btn');
+  entregaBtn?.addEventListener('click', () => {
+    entregaBtn.textContent = '';
+    const span = document.createElement('span');
+    span.textContent = 'Lima, Perú ';
+    entregaBtn.appendChild(span);
+    const i = document.createElement('i');
+    i.setAttribute('aria-hidden', 'true');
+    i.textContent = '▾';
+    entregaBtn.appendChild(i);
+  });
+
+  const input = document.getElementById('sa-buscar-input') as HTMLInputElement | null;
+  document.getElementById('sa-buscar')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = (input?.value || '').trim().toLowerCase();
+    let visibles = 0;
+    document.querySelectorAll<HTMLElement>('.sa-prod').forEach((card) => {
+      const hit = !q || (card.dataset.nombre || '').includes(q);
+      card.hidden = !hit;
+      if (hit) visibles++;
+    });
+    document.getElementById('lo-nuevo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  const badge = document.getElementById('sa-cart-count');
+  let total = 0;
+
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+
+    const fav = el.closest<HTMLButtonElement>('.sa-prod__fav');
+    if (fav) {
+      fav.classList.toggle('is-on');
+      return;
+    }
+
+    const step = el.closest<HTMLButtonElement>('.sa-qty__b');
+    if (step) {
+      const cont = step.closest('.sa-prod__qty');
+      const n = cont?.querySelector<HTMLElement>('.sa-qty__n');
+      if (n) {
+        const val = Math.max(1, (parseInt(n.textContent || '1', 10) || 1) + Number(step.dataset.step));
+        n.textContent = String(val);
+      }
+      return;
+    }
+
+    const add = el.closest<HTMLButtonElement>('.sa-prod__add');
+    if (add) {
+      const card = add.closest('.sa-prod');
+      const n = card?.querySelector<HTMLElement>('.sa-qty__n');
+      total += parseInt(n?.textContent || '1', 10) || 1;
+      if (badge) {
+        badge.textContent = String(total);
+        badge.hidden = false;
+      }
+      const prev = add.textContent;
+      add.textContent = 'Agregado!';
+      add.classList.add('is-ok');
+      window.setTimeout(() => {
+        add.textContent = prev;
+        add.classList.remove('is-ok');
+      }, 1100);
+    }
+  });
+</script>
+
+<style>
+  .sa-hdr {
+    background: var(--sa-negro);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .sa-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2.5vw, 1.75rem);
+    padding-block: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .sa-logo {
+    font-family: var(--sa-display);
+    font-weight: 900;
+    font-size: 1.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .sa-logo span {
+    display: block;
+    font-family: var(--sa-font);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--sa-oro);
+    text-transform: uppercase;
+  }
+
+  .sa-buscar {
+    flex: 1;
+    min-width: 200px;
+    max-width: 460px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: var(--sa-pill);
+    padding: 0.15rem 0.3rem 0.15rem 1rem;
+  }
+
+  .sa-buscar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0.55rem 0;
+    font-size: 0.85rem;
+    color: var(--sa-tinta);
+  }
+
+  .sa-buscar button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--sa-negro);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .sa-entrega {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+
+  .sa-entrega span {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #b9b6ad;
+  }
+
+  .sa-entrega button {
+    font-weight: 700;
+    text-decoration: underline;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .sa-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .sa-hdr__ico {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .sa-hdr__txt {
+    display: inline;
+  }
+
+  .sa-hdr__ico.is-on svg,
+  .sa-prod__fav.is-on svg {
+    fill: var(--sa-oro);
+    stroke: var(--sa-oro);
+  }
+
+  .sa-hdr__badge[hidden] {
+    display: none;
+  }
+
+  .sa-hdr__badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: var(--sa-pill);
+    background: var(--sa-oro);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+
+  .sa-nav {
+    background: #000;
+    position: relative;
+  }
+
+  .sa-nav__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 0.6rem;
+  }
+
+  .sa-nav__menu {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .sa-nav__burger {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sa-nav__burger i {
+    width: 17px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  .sa-nav__promo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--sa-oro);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .sa-mega[hidden] {
+    display: none;
+  }
+
+  .sa-mega {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    color: var(--sa-tinta);
+    box-shadow: 0 30px 50px -30px rgba(0, 0, 0, 0.4);
+    z-index: 90;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .sa-mega__grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+  }
+
+  .sa-mega__cats {
+    list-style: none;
+    border-right: 1px solid var(--sa-linea);
+    padding-right: 0.5rem;
+  }
+
+  .sa-mega__cat {
+    width: 100%;
+    text-align: left;
+    padding: 0.65rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .sa-mega__cat:hover,
+  .sa-mega__cat.is-on {
+    background: var(--sa-crema);
+    color: var(--sa-oro-osc);
+  }
+
+  .sa-mega__sub[hidden] {
+    display: none;
+  }
+
+  .sa-mega__sub {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .sa-mega__grupo h3 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--sa-tinta);
+    margin-bottom: 0.7rem;
+  }
+
+  .sa-mega__grupo ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sa-mega__grupo a {
+    font-size: 0.8rem;
+    color: var(--sa-gris);
+  }
+
+  .sa-mega__grupo a:hover {
+    color: var(--sa-oro-osc);
+  }
+
+  @media (max-width: 960px) {
+    .sa-entrega {
+      display: none;
+    }
+    .sa-hdr__txt {
+      display: none;
+    }
+    .sa-mega__sub {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sa-mega__grid {
+      grid-template-columns: 1fr;
+    }
+    .sa-mega__cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      border-right: none;
+      border-bottom: 1px solid var(--sa-linea);
+      padding-bottom: 0.75rem;
+    }
+    .sa-mega__cat {
+      width: auto;
+    }
+    .sa-mega__sub {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

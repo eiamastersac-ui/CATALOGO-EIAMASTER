@@ -1,0 +1,373 @@
+---
+import { marca, navPrincipal, megaMenu } from '../datos/boniteza.js';
+---
+
+<header class="bz-hdr" id="top">
+  <div class="bz-wrap bz-hdr__row">
+    <button type="button" class="bz-hdr__menu" id="bz-menu-btn" aria-expanded="false" aria-controls="bz-mega">
+      <span class="bz-hdr__burger" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+
+    <a href="#top" class="bz-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+      {marca.nombre}<span aria-hidden="true">*</span>
+    </a>
+
+    <nav class="bz-nav" aria-label="Navegacion principal">
+      <ul class="bz-nav__links">
+        {navPrincipal.map((n: { t: string; href: string }, i: number) => (
+          <li>
+            <button type="button" class="bz-nav__link" data-mega={i === 0 ? 'true' : 'false'}>{n.t}</button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="bz-hdr__acc">
+      <button type="button" class="bz-hdr__ico" id="bz-buscar-btn" aria-label="Buscar" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <button type="button" class="bz-hdr__ico bz-hdr__cart" id="bz-cart" aria-label="Ver carrito">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 6h15l-1.5 9h-12z"></path><path d="M6 6 5 3H2"></path><circle cx="9" cy="20" r="1.6"></circle><circle cx="18" cy="20" r="1.6"></circle>
+        </svg>
+        <span class="bz-hdr__badge" id="bz-cart-count" hidden>0</span>
+      </button>
+    </div>
+  </div>
+
+  <form class="bz-buscar" id="bz-buscar" role="search" hidden>
+    <div class="bz-wrap bz-buscar__row">
+      <input type="search" id="bz-buscar-input" placeholder="Buscar shampoo, cremas, maquillaje..." aria-label="Buscar productos" />
+      <button type="submit" aria-label="Buscar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
+  </form>
+
+  <div class="bz-mega" id="bz-mega" hidden>
+    <div class="bz-wrap bz-mega__grid">
+      {megaMenu.map((m: { cat: string; sub: string[] }) => (
+        <div class="bz-mega__col">
+          <h3>{m.cat}</h3>
+          <ul>
+            {m.sub.map((s: string) => <li><a href="#mas-vendidos">{s}</a></li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('bz-menu-btn');
+  const mega = document.getElementById('bz-mega');
+  const navLinks = Array.from(document.querySelectorAll<HTMLButtonElement>('.bz-nav__link'));
+
+  function abrirMega(v: boolean) {
+    if (!mega || !btn) return;
+    mega.hidden = !v;
+    btn.classList.toggle('is-active', v);
+    btn.setAttribute('aria-expanded', String(v));
+  }
+
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    abrirMega(!!(mega?.hidden ?? true));
+  });
+
+  navLinks.forEach((l) => {
+    if (l.dataset.mega === 'true') {
+      l.addEventListener('click', (e) => {
+        e.stopPropagation();
+        abrirMega(!!(mega?.hidden ?? true));
+      });
+    } else {
+      l.addEventListener('click', () => abrirMega(false));
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as Node;
+    if (mega && btn && !mega.contains(t) && !btn.contains(t)) abrirMega(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') abrirMega(false);
+  });
+  mega?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => abrirMega(false)));
+
+  const buscarBtn = document.getElementById('bz-buscar-btn');
+  const buscarForm = document.getElementById('bz-buscar') as HTMLFormElement | null;
+  buscarBtn?.addEventListener('click', () => {
+    if (!buscarForm) return;
+    buscarForm.hidden = !buscarForm.hidden;
+    buscarBtn.setAttribute('aria-expanded', String(!buscarForm.hidden));
+    if (!buscarForm.hidden) document.getElementById('bz-buscar-input')?.focus();
+  });
+
+  const input = document.getElementById('bz-buscar-input') as HTMLInputElement | null;
+  buscarForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = (input?.value || '').trim().toLowerCase();
+    const grid = document.getElementById('bz-mas-vendidos-fila');
+    if (!grid) return;
+    let visibles = 0;
+    grid.querySelectorAll<HTMLElement>('.bz-prod').forEach((card) => {
+      const hit = !q || (card.dataset.nombre || '').includes(q);
+      card.hidden = !hit;
+      if (hit) visibles++;
+    });
+    document.getElementById('mas-vendidos')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  const badge = document.getElementById('bz-cart-count');
+  let total = 0;
+
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+
+    const step = el.closest<HTMLButtonElement>('.bz-qty__b');
+    if (step) {
+      const cont = step.closest('.bz-prod__qty');
+      const n = cont?.querySelector<HTMLElement>('.bz-qty__n');
+      if (n) {
+        const val = Math.max(1, (parseInt(n.textContent || '1', 10) || 1) + Number(step.dataset.step));
+        n.textContent = String(val);
+      }
+      return;
+    }
+
+    const add = el.closest<HTMLButtonElement>('.bz-prod__add');
+    if (add) {
+      const card = add.closest('.bz-prod');
+      const n = card?.querySelector<HTMLElement>('.bz-qty__n');
+      total += parseInt(n?.textContent || '1', 10) || 1;
+      if (badge) {
+        badge.textContent = String(total);
+        badge.hidden = false;
+      }
+      const prev = add.textContent;
+      add.textContent = 'Agregado!';
+      add.classList.add('is-ok');
+      window.setTimeout(() => {
+        add.textContent = prev;
+        add.classList.remove('is-ok');
+      }, 1100);
+    }
+  });
+</script>
+
+<style>
+  .bz-hdr {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px -8px rgba(0, 0, 0, 0.25);
+  }
+
+  .bz-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 3vw, 2rem);
+    padding-block: 1rem;
+  }
+
+  .bz-hdr__menu {
+    display: none;
+    align-items: center;
+    color: var(--bz-tinta);
+  }
+
+  .bz-hdr__burger {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bz-hdr__burger i {
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  .bz-logo {
+    font-family: var(--bz-serif);
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 0.02em;
+    color: var(--bz-tinta);
+  }
+
+  .bz-logo span {
+    color: var(--bz-magenta);
+  }
+
+  .bz-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .bz-nav__links {
+    display: flex;
+    gap: 1.7rem;
+    list-style: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .bz-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .bz-nav__link:hover {
+    color: var(--bz-magenta);
+  }
+
+  .bz-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .bz-hdr__ico {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--bz-tinta);
+  }
+
+  .bz-hdr__ico:hover {
+    background: var(--bz-lila);
+    color: var(--bz-magenta);
+  }
+
+  .bz-hdr__badge[hidden] {
+    display: none;
+  }
+
+  .bz-hdr__badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: var(--bz-pill);
+    background: var(--bz-magenta);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+
+  .bz-buscar[hidden] {
+    display: none;
+  }
+
+  .bz-buscar {
+    border-top: 1px solid var(--bz-linea);
+    background: var(--bz-lila-palido);
+  }
+
+  .bz-buscar__row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.7rem;
+  }
+
+  .bz-buscar__row input {
+    flex: 1;
+    border: 1.5px solid var(--bz-linea);
+    border-radius: var(--bz-pill);
+    padding: 0.6rem 1.1rem;
+    outline: none;
+    background: #fff;
+  }
+
+  .bz-buscar__row input:focus {
+    border-color: var(--bz-magenta);
+  }
+
+  .bz-buscar__row button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bz-magenta);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .bz-mega[hidden] {
+    display: none;
+  }
+
+  .bz-mega {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    border-top: 1px solid var(--bz-linea);
+    box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.3);
+    z-index: 90;
+  }
+
+  .bz-mega__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    padding-block: 2rem;
+  }
+
+  .bz-mega__col h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--bz-magenta);
+    margin-bottom: 0.9rem;
+  }
+
+  .bz-mega__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .bz-mega__col a {
+    font-size: 0.83rem;
+    color: var(--bz-gris);
+  }
+
+  .bz-mega__col a:hover {
+    color: var(--bz-morado);
+  }
+
+  @media (max-width: 960px) {
+    .bz-nav {
+      display: none;
+    }
+    .bz-hdr__menu {
+      display: inline-flex;
+    }
+    .bz-mega__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

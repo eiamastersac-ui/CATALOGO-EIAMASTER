@@ -1,0 +1,37 @@
+---
+import { marcasLogos } from '../datos/boniteza.js';
+---
+
+<section class="bz-seccion bz-marcas" id="marcas">
+  <p class="bz-marcas__kicker">{marcasLogos.length}+ marcas · Distribuidor autorizado</p>
+  <div class="bz-wrap bz-marcas__fila">
+    {marcasLogos.map((m: string) => <span class="bz-marcas__item">{m}</span>)}
+  </div>
+</section>
+
+<style>
+  .bz-marcas {
+    text-align: center;
+  }
+
+  .bz-marcas__kicker {
+    color: var(--bz-gris);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .bz-marcas__fila {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem 2.75rem;
+  }
+
+  .bz-marcas__item {
+    font-family: var(--bz-serif);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--bz-tinta);
+    opacity: 0.75;
+  }
+</style>

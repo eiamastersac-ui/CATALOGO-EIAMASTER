@@ -1,0 +1,80 @@
+---
+import { categoriasCirculares } from '../datos/saludable.js';
+
+const ICONS: Record<string, string> = {
+  pescado: '<path d="M4 12c4-5 10-7 15-4-2 2-2 6 0 8-5 3-11 1-15-4Z"/><circle cx="15" cy="10" r=".6" fill="currentColor" stroke="none"/><path d="M4 12 1 9m3 3-3 3"/>',
+  spray: '<path d="M9 3h3v3H9z"/><path d="M10.5 6v2M8 9h5l1 11H7l1-11Z"/><path d="M15 6l2-1M16 9l2 0M15 12l2 1"/>',
+  verduras: '<path d="M12 4c2 0 3 2 3 4-3 0-5 1-5 4 3 0 5 2 5 5H9c-3 0-4-2-4-5 0-4 3-8 7-8Z"/><path d="M14 4l1.5-2"/>',
+  mortero: '<path d="M6 11h12a6 6 0 0 1-12 0Z"/><path d="M9 11c0-3 1-5 1-7"/><path d="M15 4l-2 3"/><ellipse cx="12" cy="17" rx="7" ry="2"/>',
+  despensa: '<rect x="6" y="9" width="12" height="10" rx="1"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/><path d="M9 13h6"/>',
+  gota: '<path d="M12 3c3 4 6 8 6 12a6 6 0 0 1-12 0c0-4 3-8 6-12Z"/>',
+  vaso: '<path d="M8 3h8l-1 16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2L8 3Z"/><path d="M7.4 8h9.2"/>',
+  taza: '<path d="M5 8h11v6a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V8Z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2"/><path d="M8 4c0 1-1 1-1 2M12 4c0 1-1 1-1 2"/>',
+};
+---
+
+<section class="sa-seccion sa-wrap" id="categorias">
+  <h2 class="sa-titulo">Categorías</h2>
+
+  <div class="sa-cats__area">
+    <button type="button" class="sa-flecha sa-cats__prev" data-dir="-1" aria-label="Anterior">&lsaquo;</button>
+    <div class="sa-fila sa-cats__fila" id="sa-cats-fila">
+      {categoriasCirculares.map((c: { t: string; color: string; icon: string }) => (
+        <a href="#lo-nuevo" class="sa-cat">
+          <span class="sa-cat__circ" style={`background:${c.color}`} set:html={`<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[c.icon] || ''}</svg>`} />
+          <span class="sa-cat__t">{c.t}</span>
+        </a>
+      ))}
+    </div>
+    <button type="button" class="sa-flecha sa-cats__next" data-dir="1" aria-label="Siguiente">&rsaquo;</button>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('sa-cats-fila');
+  document.querySelectorAll<HTMLButtonElement>('.sa-cats__prev, .sa-cats__next').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = Number(btn.dataset.dir);
+      fila?.scrollBy({ left: dir * 300, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .sa-cats__area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sa-cats__fila {
+    flex: 1;
+    grid-auto-columns: minmax(120px, 1fr);
+  }
+
+  .sa-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .sa-cat__circ {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transition: transform 0.15s ease;
+  }
+
+  .sa-cat:hover .sa-cat__circ {
+    transform: translateY(-4px);
+  }
+
+  .sa-cat__t {
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+</style>

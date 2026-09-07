@@ -1,0 +1,73 @@
+---
+import { categoriasBanners } from '../datos/boniteza.js';
+---
+
+<section class="bz-cats" id="categorias">
+  {categoriasBanners.map((b: { titulo: string; sub: string; cta: string; img: string }) => (
+    <a href="#mas-vendidos" class="bz-cats__banner">
+      <img src={b.img} alt={b.titulo} loading="lazy" />
+      <div class="bz-cats__texto">
+        <h3>{b.titulo}</h3>
+        <p>{b.sub}</p>
+        <span class="bz-btn bz-btn--magenta">{b.cta}</span>
+      </div>
+    </a>
+  ))}
+</section>
+
+<style>
+  .bz-cats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bz-cats__banner {
+    position: relative;
+    min-height: clamp(260px, 30vw, 360px);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .bz-cats__banner img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bz-cats__banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(32, 15, 51, 0.72) 0%, rgba(32, 15, 51, 0.35) 55%, rgba(32, 15, 51, 0.05) 100%);
+  }
+
+  .bz-cats__texto {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    max-width: 26rem;
+  }
+
+  .bz-cats__texto h3 {
+    color: #fff;
+    font-family: var(--bz-serif);
+    font-size: clamp(1.4rem, 2.8vw, 2rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .bz-cats__texto p {
+    font-size: 0.88rem;
+    margin-bottom: 1.1rem;
+    max-width: 30ch;
+  }
+
+  @media (max-width: 760px) {
+    .bz-cats {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

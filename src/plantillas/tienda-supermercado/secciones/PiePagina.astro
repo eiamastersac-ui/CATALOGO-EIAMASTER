@@ -1,0 +1,258 @@
+---
+import { marca, footerCols } from '../datos/saludable.js';
+---
+
+<footer class="sa-foot" id="footer">
+  <div class="sa-foot__news">
+    <div class="sa-wrap sa-foot__news-row">
+      <div>
+        <h2>Suscríbete y disfruta de nuestras ofertas más destacadas</h2>
+        <p>Mantente al día con nuestras últimas promociones y consejos para una vida saludable.</p>
+      </div>
+      <form class="sa-foot__news-form" onsubmit="return false">
+        <div class="sa-foot__news-input">
+          <input type="email" placeholder="Escribe aquí un correo" aria-label="Correo electrónico" required />
+          <button type="submit">Suscribirme</button>
+        </div>
+        <label class="sa-foot__check">
+          <input type="checkbox" required />
+          He leído y acepto los Términos y Condiciones, la Política de Privacidad y la Política de uso de datos personales.
+        </label>
+      </form>
+    </div>
+  </div>
+
+  <div class="sa-wrap sa-foot__grid">
+    <div>
+      <h3>Contáctanos</h3>
+      <p class="sa-foot__linea">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.9 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z"/></svg>
+        {marca.tel}
+      </p>
+      <p class="sa-foot__linea">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+        {marca.correo}
+      </p>
+      <div class="sa-foot__redes">
+        <a href="#" aria-label="Facebook">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.3h-3V8.4c0-.9.3-1.6 1.7-1.6h1.5V3.8C16.5 3.7 15.4 3.6 14.2 3.6c-2.6 0-4.4 1.6-4.4 4.5v2.6H7v3.3h2.8v8Z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav aria-label="Servicio al cliente">
+      <h3>Servicio al cliente</h3>
+      <ul>
+        {footerCols.servicioCliente.map((l: string) => <li><a href="#">{l}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Institucional">
+      <h3>Institucional</h3>
+      <ul>
+        {footerCols.institucional.map((l: string) => <li><a href="#">{l}</a></li>)}
+        <li>
+          <a href="#" class="sa-foot__lr">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l3 3v15H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+            Libro de reclamaciones
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div>
+      <h3>Medios de pago</h3>
+      <div class="sa-foot__pagos">
+        <span>VISA</span><span>MasterCard</span><span>AMEX</span><span>Diners</span>
+      </div>
+      <p class="sa-foot__linea sa-foot__seguro">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        Tienda 100% Segura
+      </p>
+    </div>
+  </div>
+
+  <div class="sa-wrap sa-foot__base">
+    <span>© {marca.nombre} {marca.sub} 2026, todos los derechos reservados.</span>
+  </div>
+</footer>
+
+<style>
+  .sa-foot {
+    background: var(--sa-negro);
+    color: #fff;
+  }
+
+  .sa-foot__news {
+    background: #000;
+  }
+
+  .sa-foot__news-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding-block: 2.5rem;
+  }
+
+  .sa-foot__news-row h2 {
+    color: #fff;
+    font-family: var(--sa-display);
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sa-foot__news-row p {
+    font-size: 0.82rem;
+    color: #b9b6ad;
+  }
+
+  .sa-foot__news-input {
+    display: flex;
+    border: 1px solid #444;
+  }
+
+  .sa-foot__news-input input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .sa-foot__news-input button {
+    background: #fff;
+    color: var(--sa-tinta);
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 0 1.5rem;
+    white-space: nowrap;
+  }
+
+  .sa-foot__check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.68rem;
+    color: #918e86;
+    margin-top: 0.7rem;
+  }
+
+  .sa-foot__check input {
+    margin-top: 0.15rem;
+  }
+
+  .sa-foot__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-block: 2.5rem 1.75rem;
+  }
+
+  .sa-foot__grid h3 {
+    color: var(--sa-oro);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .sa-foot__linea {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #cfccc4;
+    margin-bottom: 0.6rem;
+  }
+
+  .sa-foot__redes {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .sa-foot__redes a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #444;
+    display: grid;
+    place-items: center;
+    color: #fff;
+  }
+
+  .sa-foot__redes a:hover {
+    background: var(--sa-oro);
+    border-color: var(--sa-oro);
+  }
+
+  .sa-foot__grid ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sa-foot__grid a {
+    font-size: 0.8rem;
+    color: #cfccc4;
+  }
+
+  .sa-foot__grid a:hover {
+    color: var(--sa-oro);
+  }
+
+  .sa-foot__lr {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .sa-foot__pagos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sa-foot__pagos span {
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #cfccc4;
+  }
+
+  .sa-foot__seguro {
+    margin-top: 1rem;
+  }
+
+  .sa-foot__base {
+    border-top: 1px solid #333;
+    padding-block: 1rem;
+    text-align: center;
+    font-size: 0.74rem;
+    color: #918e86;
+  }
+
+  @media (max-width: 900px) {
+    .sa-foot__news-row {
+      grid-template-columns: 1fr;
+    }
+    .sa-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .sa-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
