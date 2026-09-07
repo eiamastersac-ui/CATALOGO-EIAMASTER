@@ -1,0 +1,600 @@
+---
+import { marca, navPrincipal, busquedaPopular, busquedaSugerencias, busquedaCategorias } from '../datos/nordstrom.js';
+
+const base = '/plantillas/tienda-departamental';
+
+interface Item {
+  t: string;
+  href?: string;
+  menu?: string;
+  destacado?: boolean;
+  sidebar?: string[];
+  columnas?: { t: string; links: string[] }[];
+  banner?: { t: string; sub: string; img: string };
+}
+---
+
+<header class="nd-hdr" id="top">
+  <div class="nd-wrap nd-hdr__row">
+    <button type="button" class="nd-hdr__ico nd-hdr__menu" id="nd-menu-btn" aria-label="Abrir menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <a href={`${base}/`} class="nd-logo">{marca.nombre}</a>
+
+    <form class="nd-buscar" id="nd-buscar" role="search" action={`${base}/buscar/`} method="get" autocomplete="off">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="search" name="q" id="nd-buscar-input" placeholder="Search for products or brands" aria-label="Search for products or brands" />
+      <button type="submit" class="nd-buscar__ir" aria-label="Buscar">Buscar</button>
+
+      <div class="nd-overlay" id="nd-overlay" hidden>
+        <div class="nd-overlay__ia">
+          <span class="nd-overlay__ia-ico" aria-hidden="true">&#10022;</span>
+          <div>
+            <p><b>tienda.com Shopping Assistant</b> <em>BETA</em></p>
+            <p class="nd-overlay__ia-sub">Describe it, we'll help you find it.</p>
+          </div>
+          <span class="nd-btn nd-btn--oscuro nd-overlay__ia-btn">Shop with AI &rsaquo;</span>
+        </div>
+
+        <div class="nd-overlay__popular" id="nd-overlay-popular">
+          <h3>Popular Searches</h3>
+          <ul>
+            {busquedaPopular.map((s: string) => <li><a href={`${base}/buscar/?q=${encodeURIComponent(s)}`}>{s}</a></li>)}
+          </ul>
+        </div>
+
+        <div class="nd-overlay__typing" id="nd-overlay-typing" hidden>
+          <div>
+            <h3>Suggestions</h3>
+            <ul id="nd-overlay-suggestions"></ul>
+          </div>
+          <div>
+            <h3>Categories</h3>
+            <ul id="nd-overlay-categories"></ul>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="nd-hdr__acc">
+      <a href={`${base}/#top`} class="nd-hdr__cuenta" aria-label="Rastrea tu pedido">
+        <span class="nd-hdr__cuenta-ico" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+        </span>
+        Rastrea tu pedido
+      </a>
+      <button type="button" class="nd-hdr__ico nd-hdr__cart" id="nd-cart" aria-label="Ver carrito">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span class="nd-hdr__badge" id="nd-cart-count" hidden>0</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nd-nav" aria-label="Navegacion principal">
+    <div class="nd-wrap nd-nav__row">
+      <ul class="nd-nav__list">
+        {(navPrincipal as Item[]).map((n) => (
+          <li>
+            {n.menu ? (
+              <button type="button" class={`nd-nav__link${n.destacado ? ' es-destacado' : ''}`} data-abrir={n.menu}>{n.t}</button>
+            ) : (
+              <a href={n.href} class={`nd-nav__link${n.destacado ? ' es-destacado' : ''}`}>{n.t}</a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {(navPrincipal as Item[]).filter((n) => n.menu).map((n) => (
+      <div class="nd-mega" data-mega={n.menu} hidden>
+        <div class="nd-wrap nd-mega__grid">
+          <button type="button" class="nd-mega__cerrar" aria-label="Cerrar menu">&times;</button>
+          <ul class="nd-mega__sidebar">
+            {n.sidebar?.map((s: string, i: number) => <li class={i === 0 ? 'es-todo' : ''}><a href={`${base}/buscar/?q=${encodeURIComponent(s.toLowerCase())}`}>{s}</a></li>)}
+          </ul>
+          {n.columnas?.map((c) => (
+            <div class="nd-mega__col">
+              <h3>{c.t}</h3>
+              <ul>
+                {c.links.map((l: string) => <li><a href={`${base}/buscar/?q=${encodeURIComponent(l.toLowerCase())}`}>{l}</a></li>)}
+              </ul>
+            </div>
+          ))}
+          {n.banner && (
+            <a href={`${base}/buscar/`} class="nd-mega__banner">
+              <img src={n.banner.img} alt={n.banner.t} loading="lazy" />
+              <span>{n.banner.t}</span>
+            </a>
+          )}
+        </div>
+      </div>
+    ))}
+  </nav>
+</header>
+
+<script define:vars={{ suggestions: busquedaSugerencias, categories: busquedaCategorias, base }}>
+  const input = document.getElementById('nd-buscar-input');
+  const overlay = document.getElementById('nd-overlay');
+  const popularBox = document.getElementById('nd-overlay-popular');
+  const typingBox = document.getElementById('nd-overlay-typing');
+  const sugList = document.getElementById('nd-overlay-suggestions');
+  const catList = document.getElementById('nd-overlay-categories');
+
+  function resaltar(texto, q) {
+    if (!q) return texto;
+    const i = texto.toLowerCase().indexOf(q.toLowerCase());
+    if (i === -1) return texto;
+    return `${texto.slice(0, i)}<b>${texto.slice(i, i + q.length)}</b>${texto.slice(i + q.length)}`;
+  }
+
+  function render() {
+    const q = (input.value || '').trim().toLowerCase();
+    if (!q) {
+      popularBox.hidden = false;
+      typingBox.hidden = true;
+      return;
+    }
+    popularBox.hidden = true;
+    typingBox.hidden = false;
+
+    const sug = suggestions.filter((s) => s.toLowerCase().includes(q)).slice(0, 5);
+    sugList.innerHTML = sug
+      .map((s) => `<li><a href="${base}/buscar/?q=${encodeURIComponent(s)}">${resaltar(s, q)}</a></li>`)
+      .join('') || '<li class="nd-overlay__vacio">Sin sugerencias</li>';
+
+    const cats = categories.filter((c) => c.t.toLowerCase().includes(q)).slice(0, 5);
+    catList.innerHTML = cats
+      .map((c) => `<li><a href="${base}/buscar/?q=${encodeURIComponent(c.t)}">${resaltar(c.t, q)} <span>in ${c.en}</span></a></li>`)
+      .join('') || '<li class="nd-overlay__vacio">Sin categorias</li>';
+  }
+
+  input?.addEventListener('input', render);
+  input?.addEventListener('focus', () => {
+    overlay.hidden = false;
+    render();
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    const form = document.getElementById('nd-buscar');
+    if (form && !form.contains(t)) overlay.hidden = true;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') overlay.hidden = true;
+  });
+</script>
+
+<script>
+  const menuBtn = document.getElementById('nd-menu-btn');
+  const btns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-abrir]'));
+  const megas = Array.from(document.querySelectorAll<HTMLElement>('[data-mega]'));
+
+  function cerrarTodo() {
+    megas.forEach((m) => (m.hidden = true));
+    btns.forEach((b) => b.classList.remove('is-on'));
+  }
+
+  btns.forEach((b) => {
+    b.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const nombre = b.dataset.abrir;
+      const target = megas.find((m) => m.dataset.mega === nombre);
+      const yaAbierto = target ? !target.hidden : false;
+      cerrarTodo();
+      if (target && !yaAbierto) {
+        target.hidden = false;
+        b.classList.add('is-on');
+      }
+    });
+  });
+
+  megas.forEach((m) => {
+    m.querySelector('.nd-mega__cerrar')?.addEventListener('click', cerrarTodo);
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as Node;
+    const dentro = megas.some((m) => m.contains(t)) || btns.some((b) => b.contains(t));
+    if (!dentro) cerrarTodo();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarTodo();
+  });
+
+  menuBtn?.addEventListener('click', () => {
+    const nav = document.querySelector('.nd-nav__list');
+    nav?.classList.toggle('is-abierto');
+  });
+
+  const qActual = new URLSearchParams(location.search).get('q');
+  const input = document.getElementById('nd-buscar-input') as HTMLInputElement | null;
+  if (input && qActual) input.value = qActual;
+
+  const badge = document.getElementById('nd-cart-count');
+  let total = 0;
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+    const add = el.closest<HTMLButtonElement>('.nd-prod__add');
+    if (add) {
+      e.preventDefault();
+      total += 1;
+      if (badge) {
+        badge.textContent = String(total);
+        badge.hidden = false;
+      }
+      const prev = add.textContent;
+      add.textContent = 'Added';
+      add.classList.add('is-ok');
+      window.setTimeout(() => {
+        add.textContent = prev;
+        add.classList.remove('is-ok');
+      }, 1100);
+    }
+    const fav = el.closest<HTMLButtonElement>('.nd-prod__fav');
+    if (fav) fav.classList.toggle('is-on');
+  });
+</script>
+
+<style>
+  .nd-hdr {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nd-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2.5vw, 2rem);
+    padding-block: 1rem;
+  }
+
+  .nd-hdr__menu {
+    display: none;
+  }
+
+  .nd-logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    flex-shrink: 0;
+  }
+
+  .nd-buscar {
+    position: relative;
+    flex: 1;
+    max-width: 620px;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--nd-gris-claro);
+    padding: 0.65rem 1rem;
+    border-radius: 4px;
+    color: var(--nd-gris);
+  }
+
+  .nd-buscar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 0.88rem;
+    color: var(--nd-tinta);
+  }
+
+  .nd-buscar__ir {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .nd-overlay[hidden] {
+    display: none;
+  }
+
+  .nd-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 0.6rem);
+    background: #fff;
+    border: 1px solid var(--nd-linea);
+    box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.3);
+    padding: 1.1rem 1.25rem 1.4rem;
+    z-index: 120;
+  }
+
+  .nd-overlay__ia {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--nd-ia);
+    border: 1px solid var(--nd-ia-borde);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .nd-overlay__ia-ico {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .nd-overlay__ia p {
+    font-size: 0.8rem;
+  }
+
+  .nd-overlay__ia p em {
+    font-style: normal;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--nd-gris);
+    border: 1px solid var(--nd-linea);
+    border-radius: 3px;
+    padding: 0.05rem 0.3rem;
+    margin-left: 0.3rem;
+  }
+
+  .nd-overlay__ia-sub {
+    color: var(--nd-gris);
+    font-size: 0.76rem;
+  }
+
+  .nd-overlay__ia-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 0.55rem 1rem;
+    font-size: 0.7rem;
+    border-radius: 999px;
+  }
+
+  .nd-overlay h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .nd-overlay__popular[hidden],
+  .nd-overlay__typing[hidden] {
+    display: none;
+  }
+
+  .nd-overlay__popular ul,
+  .nd-overlay__typing ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .nd-overlay__popular a,
+  .nd-overlay__typing a {
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .nd-overlay__popular a:hover,
+  .nd-overlay__typing a:hover {
+    color: var(--nd-gris);
+  }
+
+  .nd-overlay__typing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .nd-overlay__typing a span {
+    color: var(--nd-gris);
+    font-size: 0.76rem;
+  }
+
+  .nd-overlay__vacio {
+    color: var(--nd-gris);
+    font-size: 0.82rem;
+  }
+
+  .nd-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .nd-hdr__cuenta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .nd-hdr__ico {
+    position: relative;
+    color: var(--nd-tinta);
+    display: grid;
+    place-items: center;
+  }
+
+  .nd-hdr__badge[hidden] {
+    display: none;
+  }
+
+  .nd-hdr__badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--nd-rojo);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+
+  .nd-nav {
+    border-top: 1px solid var(--nd-linea);
+    border-bottom: 1px solid var(--nd-linea);
+    position: relative;
+  }
+
+  .nd-nav__row {
+    padding-block: 0.6rem;
+  }
+
+  .nd-nav__list {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .nd-nav__link {
+    font-size: 0.8rem;
+    padding-block: 0.3rem;
+  }
+
+  .nd-nav__link:hover,
+  .nd-nav__link.is-on {
+    color: var(--nd-gris);
+  }
+
+  .nd-nav__link.es-destacado {
+    color: var(--nd-rojo);
+  }
+
+  .nd-mega[hidden] {
+    display: none;
+  }
+
+  .nd-mega {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    border-top: 1px solid var(--nd-linea);
+    box-shadow: 0 30px 50px -30px rgba(0, 0, 0, 0.3);
+    z-index: 90;
+  }
+
+  .nd-mega__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px repeat(auto-fit, minmax(140px, 1fr)) 220px;
+    gap: 2rem;
+    padding-block: 2rem;
+  }
+
+  .nd-mega__cerrar {
+    position: absolute;
+    top: -0.25rem;
+    right: clamp(1rem, 3vw, 2.5rem);
+    font-size: 1.2rem;
+    color: var(--nd-gris);
+  }
+
+  .nd-mega__sidebar {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    border-right: 1px solid var(--nd-linea);
+    padding-right: 1rem;
+  }
+
+  .nd-mega__sidebar a {
+    font-size: 0.83rem;
+  }
+
+  .nd-mega__sidebar .es-todo a {
+    font-weight: 700;
+  }
+
+  .nd-mega__sidebar a:hover {
+    color: var(--nd-gris);
+  }
+
+  .nd-mega__col h3 {
+    font-size: 0.83rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .nd-mega__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .nd-mega__col a {
+    font-size: 0.8rem;
+    color: var(--nd-gris);
+  }
+
+  .nd-mega__col a:hover {
+    color: var(--nd-tinta);
+  }
+
+  .nd-mega__banner {
+    position: relative;
+    overflow: hidden;
+    align-self: start;
+  }
+
+  .nd-mega__banner img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .nd-mega__banner span {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 960px) {
+    .nd-hdr__menu {
+      display: grid;
+    }
+    .nd-nav__list {
+      display: none;
+      flex-direction: column;
+      gap: 0;
+    }
+    .nd-nav__list.is-abierto {
+      display: flex;
+    }
+    .nd-mega {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nd-hdr__cuenta span {
+      display: none;
+    }
+    .nd-overlay__typing {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

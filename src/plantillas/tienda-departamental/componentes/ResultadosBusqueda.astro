@@ -1,0 +1,215 @@
+---
+import Filtros from './Filtros.astro';
+import TarjetaProducto from './TarjetaProducto.astro';
+import { catalogo, busquedaPopular } from '../datos/nordstrom.js';
+
+interface Producto {
+  nombre: string;
+  marca: string;
+  precio: number;
+  antes?: number;
+  img: string;
+  popular?: boolean;
+  tags?: string[];
+}
+const base = '/plantillas/tienda-departamental';
+const productos = catalogo as Producto[];
+const heno = (p: Producto) => [p.nombre, p.marca, ...(p.tags ?? [])].join(' ').toLowerCase();
+---
+
+<section class="nd-res nd-wrap">
+  <p class="nd-res__migas"><a href={`${base}/`}>Home</a> / <span>All Results</span></p>
+  <h1 class="nd-res__titulo" id="nd-res-titulo">All Products</h1>
+  <p class="nd-res__cont" id="nd-res-cont">{productos.length} items</p>
+
+  <button class="nd-res__toggle" type="button" id="nd-toggle-filtros">Filter</button>
+
+  <div class="nd-res__layout">
+    <Filtros />
+
+    <div class="nd-res__grid-wrap">
+      <div class="nd-res__vacio" id="nd-res-vacio" hidden>
+        <p>We didn't find results for <b id="nd-res-vacio-q"></b>.</p>
+        <p class="nd-res__prueba">Try searching for:</p>
+        <div class="nd-res__sugs">
+          {busquedaPopular.map((s: string) => (
+            <a href={`${base}/buscar/?q=${encodeURIComponent(s)}`} class="nd-btn nd-btn--claro">{s}</a>
+          ))}
+        </div>
+      </div>
+
+      <div class="nd-res__grid" id="nd-res-grid">
+        {productos.map((p) => (
+          <div data-item data-heno={heno(p)} data-marca={p.marca} data-precio={p.precio}>
+            <TarjetaProducto producto={p} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const norm = (s: string) => (s ?? '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  const termino = (new URLSearchParams(location.search).get('q') ?? '').trim();
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-item]'));
+
+  const tituloEl = document.getElementById('nd-res-titulo');
+  const contEl = document.getElementById('nd-res-cont');
+  const vacio = document.getElementById('nd-res-vacio') as HTMLElement | null;
+  const vacioQ = document.getElementById('nd-res-vacio-q');
+  const grid = document.getElementById('nd-res-grid') as HTMLElement | null;
+
+  if (tituloEl && termino) tituloEl.textContent = `You searched for "${termino}"`;
+  if (vacioQ) vacioQ.textContent = `"${termino}"`;
+
+  function checkboxesActivos(nombre: string) {
+    return Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${nombre}"]:checked`)).map((i) => i.value);
+  }
+
+  function aplicar() {
+    const palabras = norm(termino).split(/\s+/).filter(Boolean);
+    const marcasSel = checkboxesActivos('marca');
+
+    let visibles = 0;
+    for (const it of items) {
+      const heno = norm(it.dataset.heno || '');
+      const nombreOk = palabras.length === 0 || palabras.some((w) => heno.includes(w));
+      const marcaOk = marcasSel.length === 0 || marcasSel.includes(it.dataset.marca || '');
+      const ok = nombreOk && marcaOk;
+      it.hidden = !ok;
+      if (ok) visibles++;
+    }
+    if (vacio) vacio.hidden = visibles > 0;
+    if (grid) grid.hidden = visibles === 0;
+    if (contEl) contEl.textContent = `${visibles} item${visibles === 1 ? '' : 's'}`;
+  }
+
+  document.querySelectorAll<HTMLInputElement>('.nd-filtros input[type="checkbox"]').forEach((cb) => {
+    cb.addEventListener('change', aplicar);
+  });
+
+  const ordenRadios = document.querySelectorAll<HTMLInputElement>('input[name="orden"]');
+  ordenRadios.forEach((r) => {
+    r.addEventListener('change', () => {
+      if (!grid) return;
+      const visibles = items.filter((it) => !it.hidden);
+      const precio = (it: HTMLElement) => Number(it.dataset.precio || '0');
+      if (r.value === 'Price: Low to High') visibles.sort((a, b) => precio(a) - precio(b));
+      if (r.value === 'Price: High to Low') visibles.sort((a, b) => precio(b) - precio(a));
+      visibles.forEach((it) => grid.appendChild(it));
+    });
+  });
+
+  document.getElementById('nd-filtros-limpiar')?.addEventListener('click', () => {
+    document.querySelectorAll<HTMLInputElement>('.nd-filtros input[type="checkbox"]').forEach((cb) => (cb.checked = false));
+    aplicar();
+  });
+
+  const panel = document.getElementById('nd-filtros');
+  const abrirBtn = document.getElementById('nd-toggle-filtros');
+  const cerrarBtn = panel?.querySelector('.nd-filtros__x');
+  abrirBtn?.addEventListener('click', () => panel?.classList.toggle('is-abierto'));
+  cerrarBtn?.addEventListener('click', () => panel?.classList.remove('is-abierto'));
+
+  aplicar();
+</script>
+
+<style>
+  .nd-res {
+    padding-block: 1.75rem 4rem;
+  }
+
+  .nd-res__migas {
+    font-size: 0.78rem;
+    color: var(--nd-gris);
+    margin-bottom: 1rem;
+  }
+
+  .nd-res__migas a:hover {
+    color: var(--nd-tinta);
+  }
+
+  .nd-res__titulo {
+    font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .nd-res__cont {
+    color: var(--nd-gris);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .nd-res__toggle {
+    display: none;
+    border: 1px solid var(--nd-tinta);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .nd-res__layout {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .nd-res__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem 1.25rem;
+  }
+
+  .nd-res__grid[hidden] {
+    display: none;
+  }
+
+  .nd-res__vacio[hidden] {
+    display: none;
+  }
+
+  .nd-res__vacio {
+    border: 1px dashed var(--nd-linea);
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+
+  .nd-res__prueba {
+    margin-top: 0.75rem;
+    font-weight: 600;
+  }
+
+  .nd-res__sugs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 1100px) {
+    .nd-res__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .nd-res__layout {
+      grid-template-columns: 1fr;
+    }
+    .nd-res__toggle {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .nd-res__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

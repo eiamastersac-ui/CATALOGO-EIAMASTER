@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;600;700;800&display=swap");
+
+.tpl-tienda-departamental {
+  --nd-tinta: #171717;
+  --nd-gris: #6e6e6e;
+  --nd-gris-claro: #f2f1ee;
+  --nd-linea: #e4e2dd;
+  --nd-crema: #faf9f7;
+  --nd-rojo: #a02332;
+  --nd-ia: #eaf3fb;
+  --nd-ia-borde: #cfe3f5;
+
+  --nd-font: "Libre Franklin", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --nd-maxw: 1400px;
+
+  background: #fff;
+  color: var(--nd-tinta);
+  font-family: var(--nd-font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tpl-tienda-departamental *,
+.tpl-tienda-departamental *::before,
+.tpl-tienda-departamental *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-tienda-departamental h1,
+.tpl-tienda-departamental h2,
+.tpl-tienda-departamental h3,
+.tpl-tienda-departamental h4 {
+  line-height: 1.15;
+  color: var(--nd-tinta);
+  font-weight: 600;
+}
+
+.tpl-tienda-departamental img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-tienda-departamental a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-tienda-departamental button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-tienda-departamental input {
+  font: inherit;
+}
+
+.tpl-tienda-departamental .nd-wrap {
+  max-width: var(--nd-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+}
+
+.tpl-tienda-departamental .nd-seccion {
+  padding-block: clamp(2rem, 5vw, 3.5rem);
+}
+
+.tpl-tienda-departamental .nd-titulo {
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.tpl-tienda-departamental .nd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  font-weight: 600;
+  font-size: 0.78rem;
+  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.tpl-tienda-departamental .nd-btn--oscuro {
+  background: var(--nd-tinta);
+  color: #fff;
+}
+
+.tpl-tienda-departamental .nd-btn--oscuro:hover {
+  opacity: 0.85;
+}
+
+.tpl-tienda-departamental .nd-btn--claro {
+  background: #fff;
+  color: var(--nd-tinta);
+}
+
+.tpl-tienda-departamental .nd-btn--claro:hover {
+  opacity: 0.8;
+}
+
+.tpl-tienda-departamental .nd-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(230px, 1fr);
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.tpl-tienda-departamental .nd-fila > * {
+  scroll-snap-align: start;
+}
+
+.tpl-tienda-departamental .nd-flecha {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--nd-linea);
+  display: grid;
+  place-items: center;
+  color: var(--nd-tinta);
+  font-size: 1.3rem;
+  line-height: 1;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.tpl-tienda-departamental .nd-flecha:hover {
+  border-color: var(--nd-tinta);
+}
+
+.tpl-tienda-departamental .nd-flecha:disabled {
+  opacity: 0.35;
+  cursor: default;
+}

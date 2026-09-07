@@ -35,18 +35,24 @@ const opciones = ['todas', ...categorias];
   const botones = document.querySelectorAll<HTMLButtonElement>('.filtro-btn');
 
   // Items de la grilla: el <li> que envuelve cada tarjeta. Se resuelve la
-  // categoria desde el [data-categoria] interno una sola vez.
-  const items = [...document.querySelectorAll<HTMLElement>('.catalogo-grid > li')].map(
-    (li) => ({
+  // categoria y los tags desde el [data-categoria]/[data-tags] interno una
+  // sola vez. Una plantilla coincide con un filtro si su categoria principal
+  // lo es, O si lo trae entre sus tags (ej. "floreria" tambien trae el tag
+  // "ecommerce", asi que aparece en ambos filtros).
+  const items = [...document.querySelectorAll<HTMLElement>('.catalogo-grid > li')].map((li) => {
+    const tarjeta = li.querySelector<HTMLElement>('[data-categoria]');
+    return {
       li,
-      cat: li.querySelector<HTMLElement>('[data-categoria]')?.dataset.categoria ?? '',
-    }),
-  );
+      cat: tarjeta?.dataset.categoria ?? '',
+      tags: (tarjeta?.dataset.tags ?? '').split(' ').filter(Boolean),
+    };
+  });
 
   function aplicar(filtro: string) {
     let visibles = 0;
-    for (const { li, cat } of items) {
-      const oculto = filtro !== 'todas' && cat !== filtro;
+    for (const { li, cat, tags } of items) {
+      const coincide = filtro === 'todas' || cat === filtro || tags.includes(filtro);
+      const oculto = !coincide;
       li.hidden = oculto;
       if (!oculto) visibles++;
     }

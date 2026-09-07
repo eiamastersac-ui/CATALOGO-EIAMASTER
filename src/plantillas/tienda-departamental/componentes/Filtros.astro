@@ -1,0 +1,215 @@
+---
+import { marcas, colores, tallas, ordenarPor } from '../datos/nordstrom.js';
+---
+
+<aside class="nd-filtros" id="nd-filtros">
+  <div class="nd-filtros__cab">
+    <span>Filter</span>
+    <button class="nd-filtros__x" type="button" aria-label="Cerrar filtros">&times;</button>
+  </div>
+
+  <form class="nd-filtros__form" onsubmit="return false">
+    <details class="nd-grupo" open>
+      <summary>Brand</summary>
+      <div class="nd-grupo__cuerpo">
+        <ul class="nd-grupo__lista">
+          {marcas.map((m: string) => (
+            <li><label><input type="checkbox" name="marca" value={m} /><span>{m}</span></label></li>
+          ))}
+        </ul>
+      </div>
+    </details>
+
+    <details class="nd-grupo">
+      <summary>Size</summary>
+      <div class="nd-grupo__cuerpo">
+        <div class="nd-grupo__tallas">
+          {tallas.map((t: string) => <button type="button" class="nd-talla">{t}</button>)}
+        </div>
+      </div>
+    </details>
+
+    <details class="nd-grupo">
+      <summary>Price</summary>
+      <div class="nd-grupo__cuerpo">
+        <label class="nd-check"><input type="checkbox" disabled /> <span>Under S/ 300</span></label>
+        <label class="nd-check"><input type="checkbox" disabled /> <span>S/ 300 – S/ 800</span></label>
+        <label class="nd-check"><input type="checkbox" disabled /> <span>Over S/ 800</span></label>
+      </div>
+    </details>
+
+    <details class="nd-grupo">
+      <summary>Color</summary>
+      <div class="nd-grupo__cuerpo">
+        <div class="nd-grupo__colores">
+          {colores.map((c: { nombre: string; hex: string }) => (
+            <button type="button" class="nd-color" title={c.nombre} aria-label={c.nombre}>
+              <span style={`background:${c.hex}`}></span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </details>
+
+    <details class="nd-grupo" open>
+      <summary>Sort</summary>
+      <div class="nd-grupo__cuerpo">
+        <ul class="nd-grupo__radios">
+          {ordenarPor.map((o: string, i: number) => (
+            <li><label><input type="radio" name="orden" value={o} checked={i === 0} /><span>{o}</span></label></li>
+          ))}
+        </ul>
+      </div>
+    </details>
+
+    <button type="button" class="nd-btn nd-btn--claro nd-filtros__limpiar" id="nd-filtros-limpiar">Clear filters</button>
+  </form>
+</aside>
+
+<style>
+  .nd-filtros {
+    align-self: start;
+    border: 1px solid var(--nd-linea);
+    padding: 1rem 1.1rem;
+  }
+
+  .nd-filtros__cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+  }
+
+  .nd-filtros__cab span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .nd-filtros__x {
+    display: none;
+    font-size: 1.1rem;
+  }
+
+  .nd-grupo {
+    border-top: 1px solid var(--nd-linea);
+    padding-block: 0.85rem;
+  }
+
+  .nd-grupo summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .nd-grupo summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nd-grupo summary::after {
+    content: "\002B";
+    color: var(--nd-gris);
+  }
+
+  .nd-grupo[open] summary::after {
+    content: "\2212";
+  }
+
+  .nd-grupo__cuerpo {
+    padding-top: 0.85rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .nd-grupo__lista,
+  .nd-grupo__radios {
+    list-style: none;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .nd-grupo__lista label,
+  .nd-grupo__radios label,
+  .nd-check {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  .nd-grupo__lista input,
+  .nd-grupo__radios input,
+  .nd-check input {
+    accent-color: var(--nd-tinta);
+  }
+
+  .nd-grupo__colores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nd-color {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    padding: 2px;
+    border: 1px solid var(--nd-linea);
+  }
+
+  .nd-color span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .nd-grupo__tallas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nd-talla {
+    min-width: 38px;
+    padding: 0.4rem;
+    border: 1px solid var(--nd-linea);
+    font-size: 0.78rem;
+  }
+
+  .nd-talla:hover {
+    border-color: var(--nd-tinta);
+  }
+
+  .nd-filtros__limpiar {
+    width: 100%;
+    margin-top: 0.5rem;
+    border: 1px solid var(--nd-tinta);
+  }
+
+  @media (max-width: 900px) {
+    .nd-filtros {
+      position: fixed;
+      inset: 0 25% 0 0;
+      z-index: 350;
+      background: #fff;
+      padding: 1.25rem;
+      overflow-y: auto;
+      transform: translateX(-105%);
+      transition: transform 0.25s ease;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
+    }
+    .nd-filtros.is-abierto {
+      transform: none;
+    }
+    .nd-filtros__x {
+      display: block;
+    }
+  }
+</style>

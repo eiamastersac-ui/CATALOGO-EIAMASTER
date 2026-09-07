@@ -1,0 +1,50 @@
+---
+import { catalogo } from '../datos/nordstrom.js';
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+
+interface Producto {
+  nombre: string;
+  marca: string;
+  precio: number;
+  antes?: number;
+  img: string;
+  popular?: boolean;
+}
+const productos = catalogo as Producto[];
+---
+
+<section class="nd-seccion nd-wrap" id="top-picks">
+  <h2 class="nd-titulo">Top Picks for You</h2>
+
+  <div class="nd-carr__area">
+    <button type="button" class="nd-flecha nd-carr__prev" aria-label="Anterior">&lsaquo;</button>
+    <div class="nd-fila" id="nd-top-picks-fila">
+      {productos.map((p: Producto) => (
+        <TarjetaProducto producto={p} />
+      ))}
+    </div>
+    <button type="button" class="nd-flecha nd-carr__next" aria-label="Siguiente">&rsaquo;</button>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('nd-top-picks-fila');
+  document.querySelectorAll<HTMLButtonElement>('.nd-carr__prev, .nd-carr__next').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = btn.classList.contains('nd-carr__next') ? 1 : -1;
+      fila?.scrollBy({ left: dir * 320, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .nd-carr__area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nd-carr__area .nd-fila {
+    flex: 1;
+  }
+</style>

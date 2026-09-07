@@ -7,7 +7,7 @@
   "tags": ["jugueteria", "juguetes", "ecommerce", "ninos", "carrito", "chatbot", "carrusel"],
   "paleta": ["#6fa684", "#d6a23b", "#c96b52", "#fbf7ef"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "caramba.pe",
   "orden": 44
 }

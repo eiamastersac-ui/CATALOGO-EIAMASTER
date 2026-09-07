@@ -7,7 +7,7 @@
   "tags": ["barberia", "insumos", "ecommerce", "hombres", "carrito", "chatbot", "mega-menu"],
   "paleta": ["#0c0c0c", "#d4a72c", "#e5372f", "#f4f2ee"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "sanbarber.pe",
   "orden": 46
 }

@@ -24,6 +24,7 @@ const placeholder = "/previews/_placeholder.svg";
 <article
   class="tarjeta"
   data-categoria={ficha.categoria}
+  data-tags={ficha.tags.join(" ")}
   data-preview={ficha.previewVideo ?? ""}
 >
   <a class="tarjeta__link" href={href} target="_blank" rel="noopener">

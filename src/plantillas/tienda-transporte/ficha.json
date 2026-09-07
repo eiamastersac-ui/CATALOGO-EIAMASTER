@@ -7,7 +7,7 @@
   "tags": ["transporte", "buses", "viajes", "encomiendas", "chatbot", "reservas"],
   "paleta": ["#f2691f", "#1c1c1c", "#474747", "#ffffff"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "movilbus.pe",
   "orden": 50
 }

@@ -1,0 +1,190 @@
+---
+import { marca, footerCols } from '../datos/nordstrom.js';
+---
+
+<footer class="nd-foot">
+  <div class="nd-wrap nd-foot__grid">
+    <div class="nd-foot__marca">
+      <span class="nd-foot__logo">{marca.nombre}</span>
+      <p>Suscríbete para conocer novedades, ofertas exclusivas y eventos.</p>
+      <form class="nd-foot__news-form" onsubmit="return false">
+        <input type="email" placeholder="Correo electrónico" aria-label="Correo electrónico" required />
+        <button type="submit">Suscribirme</button>
+      </form>
+      <div class="nd-foot__redes" aria-label="Redes sociales">
+        <a href="#" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.3h-3V8.4c0-.9.3-1.6 1.7-1.6h1.5V3.8C16.5 3.7 15.4 3.6 14.2 3.6c-2.6 0-4.4 1.6-4.4 4.5v2.6H7v3.3h2.8v8Z"/></svg>
+        </a>
+        <a href="#" aria-label="Pinterest">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 17c1-3 1.5-5 1.5-6.5a2.5 2.5 0 1 1 5 0c0 1.5-1 4-2 4.5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    {footerCols.map((col: { t: string; links: string[] }) => (
+      <nav class="nd-foot__col" aria-label={col.t}>
+        <h3>{col.t}</h3>
+        <ul>
+          {col.links.map((l: string) => <li><a href="#">{l}</a></li>)}
+        </ul>
+      </nav>
+    ))}
+
+    <div class="nd-foot__col">
+      <h3>Formas de pago</h3>
+      <div class="nd-foot__pagos">
+        <span>VISA</span><span>MasterCard</span><span>AMEX</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nd-wrap nd-foot__base">
+    <span>© {marca.nombre} 2026. Todos los derechos reservados.</span>
+    <div class="nd-foot__legales">
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Política de privacidad</a>
+      <a href="#">Libro de reclamaciones</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .nd-foot {
+    background: var(--nd-crema);
+    border-top: 1px solid var(--nd-linea);
+    margin-top: 2rem;
+  }
+
+  .nd-foot__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-block: 3rem 2rem;
+  }
+
+  .nd-foot__logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+
+  .nd-foot__marca p {
+    font-size: 0.8rem;
+    color: var(--nd-gris);
+    margin: 0.9rem 0;
+    max-width: 30ch;
+  }
+
+  .nd-foot__news-form {
+    display: flex;
+    border-bottom: 1.5px solid var(--nd-tinta);
+    margin-bottom: 1rem;
+  }
+
+  .nd-foot__news-form input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0.55rem 0;
+    font-size: 0.82rem;
+  }
+
+  .nd-foot__news-form button {
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .nd-foot__redes {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nd-foot__redes a {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--nd-linea);
+    display: grid;
+    place-items: center;
+  }
+
+  .nd-foot__redes a:hover {
+    background: var(--nd-tinta);
+    color: #fff;
+    border-color: var(--nd-tinta);
+  }
+
+  .nd-foot__col h3 {
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+  }
+
+  .nd-foot__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .nd-foot__col a {
+    font-size: 0.8rem;
+    color: var(--nd-gris);
+  }
+
+  .nd-foot__col a:hover {
+    color: var(--nd-tinta);
+  }
+
+  .nd-foot__pagos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nd-foot__pagos span {
+    border: 1px solid var(--nd-linea);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--nd-gris);
+  }
+
+  .nd-foot__base {
+    border-top: 1px solid var(--nd-linea);
+    padding-block: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.74rem;
+    color: var(--nd-gris);
+  }
+
+  .nd-foot__legales {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .nd-foot__legales a:hover {
+    color: var(--nd-tinta);
+  }
+
+  @media (max-width: 900px) {
+    .nd-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .nd-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

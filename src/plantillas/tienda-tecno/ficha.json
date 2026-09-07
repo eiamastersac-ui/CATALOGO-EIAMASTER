@@ -7,7 +7,7 @@
   "tags": ["electronica", "tecnologia", "gadgets", "ecommerce", "carrito", "chatbot", "ofertas"],
   "paleta": ["#ea0029", "#141414", "#f5f5f5", "#41ae3b"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "coolbox.pe",
   "orden": 52
 }

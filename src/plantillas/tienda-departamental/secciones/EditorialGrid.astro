@@ -1,0 +1,52 @@
+---
+import { editorialGrid } from '../datos/nordstrom.js';
+---
+
+<section class="nd-seccion nd-wrap">
+  <div class="nd-carr__area">
+    <button type="button" class="nd-flecha nd-edit__prev" aria-label="Anterior">&lsaquo;</button>
+    <div class="nd-fila nd-edit__fila" id="nd-edit-fila">
+      {editorialGrid.map((e: { t: string; sub: string; img: string }) => (
+        <a href="#top-picks" class="nd-edit">
+          <img src={e.img} alt={e.t} loading="lazy" />
+          <h3>{e.t}</h3>
+          <p>{e.sub}</p>
+        </a>
+      ))}
+    </div>
+    <button type="button" class="nd-flecha nd-edit__next" aria-label="Siguiente">&rsaquo;</button>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('nd-edit-fila');
+  document.querySelectorAll<HTMLButtonElement>('.nd-edit__prev, .nd-edit__next').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = btn.classList.contains('nd-edit__next') ? 1 : -1;
+      fila?.scrollBy({ left: dir * 340, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .nd-edit__fila {
+    grid-auto-columns: minmax(260px, 1fr);
+  }
+
+  .nd-edit img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    margin-bottom: 0.85rem;
+  }
+
+  .nd-edit h3 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .nd-edit p {
+    font-size: 0.82rem;
+    color: var(--nd-gris);
+  }
+</style>

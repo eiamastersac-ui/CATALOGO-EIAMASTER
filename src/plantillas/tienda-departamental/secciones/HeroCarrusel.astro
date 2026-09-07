@@ -1,0 +1,187 @@
+---
+import { heroSlides, heroFiltros } from '../datos/nordstrom.js';
+---
+
+<section class="nd-hero" aria-roledescription="carrusel">
+  <div class="nd-hero__main">
+    <div class="nd-hero__track" id="nd-hero-track">
+      {heroSlides.map((s: { kicker: string; titulo: string; sub: string; cta: string; img: string }, i: number) => (
+        <article class="nd-hero__slide">
+          <img src={s.img} alt={s.titulo} loading={i === 0 ? 'eager' : 'lazy'} />
+          <div class="nd-hero__texto">
+            <span class="nd-hero__kicker">{s.kicker}</span>
+            <h2>{s.titulo}</h2>
+            <p>{s.sub}</p>
+            {i === 0 && (
+              <div class="nd-hero__pills">
+                {heroFiltros.map((f: string) => <a href="#top-picks" class="nd-hero__pill">{f}</a>)}
+              </div>
+            )}
+            <a href="#top-picks" class="nd-btn nd-btn--oscuro">{s.cta}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+    <button class="nd-hero__nav nd-hero__nav--prev" id="nd-hero-prev" aria-label="Anterior">&lsaquo;</button>
+    <button class="nd-hero__nav nd-hero__nav--next" id="nd-hero-next" aria-label="Siguiente">&rsaquo;</button>
+    <div class="nd-hero__contador">
+      <span id="nd-hero-actual">1</span>/<span>{heroSlides.length}</span>
+      <button type="button" id="nd-hero-play" aria-label="Pausar carrusel" aria-pressed="false">&#10073;&#10073;</button>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ total: heroSlides.length }}>
+  const track = document.getElementById('nd-hero-track');
+  const actualEl = document.getElementById('nd-hero-actual');
+  let idx = 0;
+  let jugando = true;
+
+  function ir(n) {
+    if (!track) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    if (actualEl) actualEl.textContent = String(idx + 1);
+  }
+
+  document.getElementById('nd-hero-prev')?.addEventListener('click', () => ir(idx - 1));
+  document.getElementById('nd-hero-next')?.addEventListener('click', () => ir(idx + 1));
+
+  let timer = window.setInterval(() => ir(idx + 1), 5500);
+
+  const playBtn = document.getElementById('nd-hero-play');
+  playBtn?.addEventListener('click', () => {
+    jugando = !jugando;
+    playBtn.setAttribute('aria-pressed', String(!jugando));
+    playBtn.innerHTML = jugando ? '&#10073;&#10073;' : '&#9654;';
+    if (jugando) {
+      timer = window.setInterval(() => ir(idx + 1), 5500);
+    } else {
+      window.clearInterval(timer);
+    }
+  });
+
+  ir(0);
+</script>
+
+<style>
+  .nd-hero__main {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nd-hero__track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .nd-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-height: clamp(360px, 46vw, 620px);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .nd-hero__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .nd-hero__texto {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    max-width: 30rem;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .nd-hero__texto::before {
+    content: "";
+    position: absolute;
+    inset: -1rem;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.55), transparent 70%);
+    z-index: -1;
+  }
+
+  .nd-hero__kicker {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .nd-hero__texto h2 {
+    color: #fff;
+    font-weight: 300;
+    font-size: clamp(2rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .nd-hero__texto p {
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    margin-bottom: 1rem;
+    max-width: 34ch;
+  }
+
+  .nd-hero__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .nd-hero__pill {
+    background: #fff;
+    color: var(--nd-tinta);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+  }
+
+  .nd-hero__pill:hover {
+    opacity: 0.85;
+  }
+
+  .nd-hero__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--nd-tinta);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .nd-hero__nav--prev { left: 1rem; }
+  .nd-hero__nav--next { right: 1rem; }
+
+  .nd-hero__contador {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #fff;
+    font-size: 0.78rem;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+  }
+
+  .nd-hero__contador button {
+    color: #fff;
+    font-size: 0.6rem;
+    margin-left: 0.3rem;
+  }
+</style>

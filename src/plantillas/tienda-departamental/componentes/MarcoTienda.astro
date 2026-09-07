@@ -1,0 +1,16 @@
+---
+import '../estilos.css';
+
+import BarraUtilidad from './BarraUtilidad.astro';
+import Cabecera from './Cabecera.astro';
+import PiePagina from './PiePagina.astro';
+---
+
+<div class="tpl-tienda-departamental">
+  <BarraUtilidad />
+  <Cabecera />
+  <main>
+    <slot />
+  </main>
+  <PiePagina />
+</div>

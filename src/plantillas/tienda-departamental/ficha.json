@@ -1,0 +1,13 @@
+{
+  "titulo": "tienda.com Departamental (Estilo Nordstrom)",
+  "categoria": "moda-departamental",
+  "descripcion": "Tienda departamental de moda multimarca: barra de utilidad, cabecera con buscador predictivo (sugerencias y categorias resaltadas mientras se escribe, mas asistente de compras con IA) y mega-menu por categoria con panel lateral, banner y columnas, hero carrusel con contador y pausa, pildoras de acceso rapido a rebajas, carrusel de destacados y grid editorial. Incluye pagina de resultados de busqueda multipagina con filtros por marca, talla, color y precio, orden y estado vacio con sugerencias. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/tienda-departamental.jpg",
+  "previewVideo": "/previews/tienda-departamental.webm",
+  "tags": ["moda", "departamental", "lujo", "ecommerce", "mega-menu", "buscador", "multipagina"],
+  "paleta": ["#171717", "#faf9f7", "#6e6e6e", "#a02332"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "nordstrom.com",
+  "orden": 60
+}

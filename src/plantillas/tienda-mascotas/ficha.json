@@ -7,7 +7,7 @@
   "tags": ["mascotas", "perros", "gatos", "ecommerce", "carrito", "chatbot", "ofertas"],
   "paleta": ["#e10600", "#141414", "#f5f5f5", "#20ba5a"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "superpet.pe",
   "orden": 54
 }

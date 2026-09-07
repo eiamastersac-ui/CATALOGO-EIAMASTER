@@ -7,7 +7,7 @@
   "tags": ["automotriz", "herramientas", "taller", "ecommerce", "carrito", "chatbot", "diagnostico"],
   "paleta": ["#0a0a0a", "#f47c20", "#d9650a", "#ffffff"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "tiendadelmecanico.pe",
   "orden": 48
 }
