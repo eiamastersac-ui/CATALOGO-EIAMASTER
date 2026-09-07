@@ -3,7 +3,6 @@
   "categoria": "supermercado-organico",
   "descripcion": "Supermercado saludable online: barra de envios, cabecera negra con buscador y personalizacion de entrega, mega-menu de dos niveles por categoria (Abarrotes, Frescos, Congelados, Medicina Natural, Cuidado Personal, Hogar y Limpieza), hero carrusel de productos destacados con etiqueta Nuevo, banner de filtro de seleccion, categorias circulares con iconos, carruseles de productos con stepper de cantidad, favoritos y octagonos de advertencia nutricional estilo Peru, footer con newsletter, contacto, servicio al cliente, institucional y medios de pago. Incluye boton flotante de WhatsApp. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-supermercado.jpg",
-  "previewVideo": "/previews/tienda-supermercado.webm",
   "tags": ["supermercado", "organico", "saludable", "suplementos", "ecommerce", "mega-menu", "carrito", "whatsapp"],
   "paleta": ["#c49705", "#1c1c1c", "#c6304e", "#0f7a5c"],
   "destacada": false,

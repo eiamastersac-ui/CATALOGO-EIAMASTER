@@ -3,7 +3,6 @@
   "categoria": "ecommerce",
   "descripcion": "Tienda de herramientas, repuestos y equipos para técnicos de celulares y talleres electrónicos: barra superior con tienda física y teléfono, cabecera con buscador por código o nombre, mega-menú de categorías a 10 columnas (microscopios, estaciones, hidrogel, herramientas...), banners promocionales de campaña, marcas destacadas, categorías circulares con scroll, bloque de servicio técnico (cambio de batería/pantalla iPhone) junto a combos para emprendedores de taller, sección de soluciones hidrogel, filas de nuevos ingresos y más vendidos, búsquedas populares, página de búsqueda con filtros por categoría/marca/precio, footer con CTA de WhatsApp y burbuja flotante de WhatsApp real (el sitio de referencia sí la tiene). Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-ventasfree.jpg",
-  "previewVideo": "/previews/tienda-ventasfree.webm",
   "tags": ["ecommerce", "electronica", "repuestos", "b2b", "mega-menu", "whatsapp", "multipagina"],
   "paleta": ["#1a56c4", "#e0272a", "#1a9b4a", "#f5f7fa"],
   "destacada": false,

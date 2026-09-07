@@ -3,7 +3,6 @@
   "categoria": "gastronomia",
   "descripcion": "Plataforma de alta cocina y reservas en tiempo real: explorador de restaurantes por distrito, barra de filtros (cocina, distrito, precio, 50 Best), rutas gastronómicas y guías culinarias. Tema oscuro con acentos dorados. Migrada del proyecto Vite antiguo a secciones Astro.",
   "thumbnail": "/previews/restaurante-gourmet.jpg",
-  "previewVideo": "/previews/restaurante-gourmet.webm",
   "tags": ["gastronomía", "restaurante", "reservas", "fine dining", "premium", "migrada"],
   "paleta": ["#070a11", "#facc15", "#121929", "#cbd5e1"],
   "destacada": false,

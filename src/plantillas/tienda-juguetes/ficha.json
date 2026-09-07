@@ -3,7 +3,6 @@
   "categoria": "jugueteria",
   "descripcion": "Jugueteria online: barra superior con avisos rotativos, cabecera con menu de categorias en acordeon, filtros por marca/edad/precio y buscador con overlay, franja de beneficios, hero carrusel, bloque de tendencia con mini productos, multiples carruseles de novedades por marca, destacados con etiqueta de unidades limitadas, categorias circulares, carrusel de resenas de clientes, newsletter con fotos laterales, franja de garantias y footer con tiendas fisicas. Incluye chatbot flotante con respuestas automaticas y carrito con contador. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-juguetes.jpg",
-  "previewVideo": "/previews/tienda-juguetes.webm",
   "tags": ["jugueteria", "juguetes", "ecommerce", "ninos", "carrito", "chatbot", "carrusel"],
   "paleta": ["#6fa684", "#d6a23b", "#c96b52", "#fbf7ef"],
   "destacada": false,

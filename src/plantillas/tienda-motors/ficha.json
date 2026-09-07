@@ -3,7 +3,6 @@
   "categoria": "automotriz",
   "descripcion": "Concesionario multimarca: barra roja de contacto, cabecera con CTAs (cotizar / agendar taller), hero carrusel, bloque '¿qué estás buscando?' (autos / corporativas / camiones), carrusel de modelos con cuota mensual, novedades, marcas representadas, cotizador con formulario, tiendas y talleres, disclaimer legal y footer oscuro. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-motors.jpg",
-  "previewVideo": "/previews/tienda-motors.webm",
   "tags": ["automotriz", "concesionario", "autos", "post venta", "cotizador", "multimarca"],
   "paleta": ["#dc241f", "#4d4d4d", "#2b2b2b", "#f4f4f4"],
   "destacada": false,

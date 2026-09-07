@@ -3,7 +3,6 @@
   "categoria": "supermercado",
   "descripcion": "Hipermercado multicategoria: barra de eleccion de entrega, cabecera con mega-menu de categorias (supermercado, electro, tecnologia, hogar, dormitorio, mascotas...), buscador y carrito, hero carrusel de ofertas con cuotas sin intereses, categorias en iconos, banners promocionales, tira de mundos, vitrina por pestanas (Electro/Tecnologia, Supermercado, Hogar/Bazar), carruseles de productos con banner lateral y stepper de cantidad, grid de marcas, banner de descarga de app y footer con bloques SEO y newsletter. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-metro.jpg",
-  "previewVideo": "/previews/tienda-metro.webm",
   "tags": ["supermercado", "hipermercado", "ecommerce", "mega-menu", "cuotas", "delivery", "carrito"],
   "paleta": ["#ffd100", "#e4032e", "#1a1a1a", "#f7f7f7"],
   "destacada": false,

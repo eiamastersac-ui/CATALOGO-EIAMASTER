@@ -3,7 +3,6 @@
   "categoria": "retail",
   "descripcion": "Maqueta de home tipo department store / marketplace: barra negra, cinta de servicios, hero rotativo, flash sale con contador, banners de marca, carruseles de producto, buscador con filtro lateral, menú lateral y footer oscuro. Sin login.",
   "thumbnail": "/previews/tienda-marketplace.jpg",
-  "previewVideo": "/previews/tienda-marketplace.webm",
   "tags": ["marketplace", "ecommerce", "retail", "electro", "moda", "maqueta"],
   "paleta": ["#101014", "#6a148e", "#e5007e", "#ffd100"],
   "destacada": false,

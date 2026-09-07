@@ -3,7 +3,6 @@
   "categoria": "moda",
   "descripcion": "E-commerce de moda multipágina (home + colecciones, mujer, hombre, kids, comics, sale) con cabecera amarilla, barra de filtros lateral, buscador, menú lateral y burbuja de compra por WhatsApp.",
   "thumbnail": "/previews/tutienda-moda.jpg",
-  "previewVideo": "/previews/tutienda-moda.webm",
   "tags": ["moda", "ropa", "ecommerce", "multipágina", "denim", "urbano"],
   "paleta": ["#ffd200", "#111111", "#e30613", "#f7f1e6"],
   "destacada": true,

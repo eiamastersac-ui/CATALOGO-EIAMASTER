@@ -3,7 +3,6 @@
   "categoria": "electronica",
   "descripcion": "Retail de tecnologia: cabecera con drawer de categorias (lista + panel multicolumna de subcategorias), buscador y carrito lateral, sub-barra negra de accesos rapidos, hero full-bleed con callouts de producto y descuento superpuestos, franja de 3 destacados, seccion de ofertas relampago con cronometro real, banners promocionales, bloques repetibles por categoria (banner + accesos + carrusel de productos), bloque de texto SEO expandible y footer con metodos de pago. Incluye boton flotante con opciones de WhatsApp y chat, mas panel de chat con respuestas automaticas. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-tecno.jpg",
-  "previewVideo": "/previews/tienda-tecno.webm",
   "tags": ["electronica", "tecnologia", "gadgets", "ecommerce", "carrito", "chatbot", "ofertas"],
   "paleta": ["#ea0029", "#141414", "#f5f5f5", "#41ae3b"],
   "destacada": false,

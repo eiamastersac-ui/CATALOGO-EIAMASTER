@@ -3,7 +3,6 @@
   "categoria": "salud-natural",
   "descripcion": "Tienda de productos organicos, vitaminas y suplementos: barra de delivery, cabecera con buscador y contacto, mega-menu por categoria (Vitaminas, Suplementos, Abarrotes, Frescos y Congelados, Cuidado Personal), hero de producto destacado, promos con contador en vivo, banner de marca, categorias saludables, carrusel de novedades, grid de marcas y asistente de chat flotante. Incluye pagina multipagina 'Nuestras Tiendas' con filtro por tipo de tienda, direccion, telefono, horario y enlaces a mapa. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-organica.jpg",
-  "previewVideo": "/previews/tienda-organica.webm",
   "tags": ["salud", "organico", "vitaminas", "suplementos", "ecommerce", "mega-menu", "tiendas", "multipagina"],
   "paleta": ["#2fae52", "#1f8f3f", "#eaf7ee", "#1c1c1c"],
   "destacada": false,

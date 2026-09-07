@@ -3,7 +3,6 @@
   "categoria": "fitness",
   "descripcion": "Landing de cadena de gimnasios con marca GYM iron: hero promocional, buscador de sede por ciudad, planes de membresía con tabla comparativa, beneficios (app, clases, equipos, spa), bloque Black, locator de sedes filtrable y FAQ. Migrada del proyecto Vite antiguo (router SPA + imágenes locales) a secciones Astro.",
   "thumbnail": "/previews/gimnasio-smartfit.jpg",
-  "previewVideo": "/previews/gimnasio-smartfit.webm",
   "tags": ["gimnasio", "fitness", "membresías", "landing", "sedes", "migrada"],
   "paleta": ["#ffb800", "#111111", "#1e232a", "#f9fafb"],
   "destacada": false,

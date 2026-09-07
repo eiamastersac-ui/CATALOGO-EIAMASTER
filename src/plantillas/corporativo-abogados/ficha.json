@@ -3,7 +3,6 @@
   "categoria": "servicios-profesionales",
   "descripcion": "Sitio de estudio jurídico con estética editorial: cabecera minimalista, hero tipográfico, imagen a sangre, disciplinas numeradas, bloque oscuro de filosofía, banca de socios, perspectivas (insights) y formulario de contacto por oficina. Tipografía Bodoni Moda + Hanken Grotesk sobre papel. Migrada del proyecto Vite antiguo a secciones Astro.",
   "thumbnail": "/previews/corporativo-abogados.jpg",
-  "previewVideo": "/previews/corporativo-abogados.webm",
   "tags": ["abogados", "legal", "corporativo", "editorial", "servicios", "migrada"],
   "paleta": ["#1a1a1a", "#755a34", "#e5c192", "#fdfcf9"],
   "destacada": false,

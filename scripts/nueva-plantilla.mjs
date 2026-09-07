@@ -83,7 +83,6 @@ const ficha = {
   categoria,
   descripcion,
   thumbnail: `/previews/${id}.webp`,
-  previewVideo: `/previews/${id}.webm`,
   tags: [],
   paleta: [],
   destacada,

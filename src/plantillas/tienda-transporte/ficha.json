@@ -3,7 +3,6 @@
   "categoria": "transporte",
   "descripcion": "Empresa de transporte terrestre: hero full-bleed con carrusel de promociones y widget de compra de pasajes (origen, destino con buscador de ciudades, fechas, pasajeros) que queda fijo al hacer scroll, carrusel de descuentos especiales, banner de encomiendas con rastreo de envio demo, banner de experiencia de viaje con amenidades, carrusel de destinos con precios, grilla de niveles de servicio (Premier, Presidencial, Ejecutivo VIP, Economico), franja de metodos de pago y footer con rutas frecuentes. Incluye menu lateral con mapa del sitio y chatbot flotante con respuestas automaticas. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-transporte.jpg",
-  "previewVideo": "/previews/tienda-transporte.webm",
   "tags": ["transporte", "buses", "viajes", "encomiendas", "chatbot", "reservas"],
   "paleta": ["#f2691f", "#1c1c1c", "#474747", "#ffffff"],
   "destacada": false,

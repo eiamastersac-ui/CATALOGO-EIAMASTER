@@ -3,7 +3,6 @@
   "categoria": "automotriz",
   "descripcion": "Tienda de herramientas y equipos de diagnostico para talleres mecanicos: cinta superior con marcas, cabecera con buscador en vivo y carrito lateral, hero full-bleed con texto watermark gigante y foto de producto a pantalla completa (sin achicar en cajas), carrusel circular de categorias, tarjetas de ofertas estilo campana, banner de lanzamientos, carrusel de marcas, filas de productos por categoria con stepper y carrito, seccion nosotros y newsletter. Incluye chatbot flotante con respuestas automaticas. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-mecanico.jpg",
-  "previewVideo": "/previews/tienda-mecanico.webm",
   "tags": ["automotriz", "herramientas", "taller", "ecommerce", "carrito", "chatbot", "diagnostico"],
   "paleta": ["#0a0a0a", "#f47c20", "#d9650a", "#ffffff"],
   "destacada": false,

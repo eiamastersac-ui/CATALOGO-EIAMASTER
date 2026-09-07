@@ -3,7 +3,6 @@
   "categoria": "floreria",
   "descripcion": "Floreria y tienda de regalos: barra superior de preferencias, cabecera con buscador y carrito, mega-menu desplegable por categorias, hero carrusel con banner lateral, ocasiones circulares, carruseles de productos con stepper de cantidad y anadir al carrito, grilla de destacados con buscador en cliente, mas vendidos, categorias circulares, banners promocionales, garantias de delivery, suscripcion y footer rosado. Incluye chatbot flotante con respuestas automaticas. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-flores.jpg",
-  "previewVideo": "/previews/tienda-flores.webm",
   "tags": ["floreria", "regalos", "ecommerce", "delivery", "mega-menu", "chatbot", "carrito"],
   "paleta": ["#e50f2b", "#f0544c", "#f7bcd0", "#fdeef2"],
   "destacada": false,

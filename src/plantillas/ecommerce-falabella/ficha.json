@@ -3,7 +3,6 @@
   "categoria": "ecommerce",
   "descripcion": "Marketplace de alta densidad con marca tienda.com: barra superior, mega-menú de categorías, hero carrusel, accesos rápidos, ofertas del día, beneficios financieros, PLP con sidebar de filtros y orden, recomendados y navegación móvil. Migrado del proyecto Vite antiguo a secciones Astro.",
   "thumbnail": "/previews/ecommerce-falabella.jpg",
-  "previewVideo": "/previews/ecommerce-falabella.webm",
   "tags": ["marketplace", "ecommerce", "retail", "plp", "filtros", "migrada"],
   "paleta": ["#6ab000", "#1c1c1c", "#e11900", "#f4f4f4"],
   "destacada": false,

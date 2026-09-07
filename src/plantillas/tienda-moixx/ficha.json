@@ -3,7 +3,6 @@
   "categoria": "moda",
   "descripcion": "Boutique de moda femenina editorial: cabecera minimalista con mega-menu por linea (Ropa, Tops, Bottoms, Vestidos, Accesorios), buscador desplegable, hero de campana en collage de 3 paneles con overlay tipografico, grids de categoria a pantalla completa con 'Shop now', banners editoriales de coleccion, seccion New Arrivals con tarjetas de producto (swatches de color, quick-add al pasar el mouse), pagina de busqueda con filtros por tipo/color/talla y orden por radio, footer minimal con Libro de Reclamaciones y burbuja de WhatsApp real (el sitio de referencia si la tiene) mas barra de envio gratis fija. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-moixx.jpg",
-  "previewVideo": "/previews/tienda-moixx.webm",
   "tags": ["moda", "boutique", "editorial", "ecommerce", "mega-menu", "whatsapp", "multipagina"],
   "paleta": ["#f0ebdc", "#1c1a17", "#b3312c", "#25d366"],
   "destacada": false,

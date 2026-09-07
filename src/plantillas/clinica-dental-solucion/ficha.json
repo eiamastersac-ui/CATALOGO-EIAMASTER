@@ -3,7 +3,6 @@
   "categoria": "salud-dental",
   "descripcion": "Clínica dental clásica y confiable: cabecera con barra superior, menú con submenús de tratamientos, hero en carrusel con caja de texto sobre foto, grilla de 8 tratamientos con iconografía propia, carrusel de reseñas estilo Google, sección \"por qué elegirnos\", equipo de dentistas, comparador antes/después, blog y FAQ. Incluye página de contacto dedicada con formulario. Sin login. Marca propia tu tienda.com.",
   "thumbnail": "/previews/clinica-dental-solucion.jpg",
-  "previewVideo": "/previews/clinica-dental-solucion.webm",
   "tags": ["dental", "clinica", "salud", "servicios", "landing", "corporativo", "resenas", "formulario"],
   "paleta": ["#1399b1", "#ffc932", "#1b1b1b", "#dff4f7"],
   "destacada": false,

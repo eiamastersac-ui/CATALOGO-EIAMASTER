@@ -3,7 +3,6 @@
   "categoria": "inmobiliaria",
   "descripcion": "Sitio de desarrollo inmobiliario premium con marca Solera: ticker de mercado, hero de residencia emblemática, bloque de experiencia 3D, catálogo de proyectos filtrable por distrito y etapa, simulador de crédito hipotecario con cálculo en vivo y bloque concierge. Paleta teal/navy con tipografía Cinzel. Migrada del proyecto Vite antiguo a secciones Astro.",
   "thumbnail": "/previews/inmobiliaria-luxury.jpg",
-  "previewVideo": "/previews/inmobiliaria-luxury.webm",
   "tags": ["inmobiliaria", "real estate", "lujo", "simulador", "catálogo", "migrada"],
   "paleta": ["#2a2f63", "#5fb0c9", "#a7e0db", "#f4faf9"],
   "destacada": false,

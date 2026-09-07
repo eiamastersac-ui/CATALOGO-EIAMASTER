@@ -3,7 +3,6 @@
   "categoria": "moda",
   "descripcion": "Marketplace multi-marca de moda de lujo: barra de utilidad con marca hermana y envio gratis, tabs por genero (Mujer/Hombre/Belleza), cabecera con mega-menu de disenadores y banners editoriales, hero de doble panel con tipografia superpuesta, grids editoriales repetibles, tarjetas de producto con nombre de disenador y badge de tendencia, pagina de busqueda con filtros por disenador/color/talla/precio, footer con newsletter, encuesta, app y marca hermana, y widget de chat generico tipo FAQ (el sitio de referencia no usa WhatsApp). Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-revolve.jpg",
-  "previewVideo": "/previews/tienda-revolve.webm",
   "tags": ["moda", "lujo", "marketplace", "ecommerce", "mega-menu", "multipagina", "disenadores"],
   "paleta": ["#111111", "#faf9f7", "#767676", "#b1261f"],
   "destacada": false,

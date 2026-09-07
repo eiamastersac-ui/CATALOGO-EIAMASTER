@@ -3,7 +3,6 @@
   "categoria": "categoria-en-kebab",
   "descripcion": "Una linea que resume que resuelve esta plantilla.",
   "thumbnail": "/previews/mi-plantilla.jpg",
-  "previewVideo": "/previews/mi-plantilla.webm",
   "tags": ["tag-1", "tag-2"],
   "paleta": ["#111111", "#888888", "#f2f2f2"],
   "destacada": false,

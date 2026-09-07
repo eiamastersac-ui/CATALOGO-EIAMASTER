@@ -3,7 +3,6 @@
   "categoria": "cosmetica",
   "descripcion": "Tienda de cosmética, maquillaje y cuidado capilar: barra superior con mensajes de envio en movimiento, cabecera con mega-menu por categorias y buscador en cliente, hero carrusel de banners promocionales, carrusel de mas vendidos con descuentos y stepper de cantidad, grilla de banners de categoria a pantalla completa, tira de marcas, bloque institucional con texto SEO, testimonios, footer con newsletter y libro de reclamaciones. Incluye boton flotante de WhatsApp, widget de puntos de fidelidad y aviso de compra reciente tipo prueba social. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-cosmetica.jpg",
-  "previewVideo": "/previews/tienda-cosmetica.webm",
   "tags": ["cosmetica", "belleza", "cabello", "ecommerce", "mega-menu", "carrito", "whatsapp"],
   "paleta": ["#6b21a8", "#e6118c", "#f1e4fb", "#201a2b"],
   "destacada": false,

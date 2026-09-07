@@ -3,7 +3,6 @@
   "categoria": "mascotas",
   "descripcion": "Tienda para mascotas con cabecera de mega-menu (Perro y Gato con 4 columnas: alimentos, accesorios, juguetes, farmacia e higiene), mega-menu de marcas propias y de ofertas, barra de promocion superior, hero full-bleed con carrusel de campanas, franja de beneficios de delivery, tarjetas de ofertas, sello de satisfaccion garantizada con marcas propias, categorias por etapa de vida (cachorros, gatitos, seniors), grilla de combos, banner de seguro para mascotas, carrusel de precios bomba, franja de servicios (tienda, peluqueria, catalogo), bloque de texto SEO expandible, newsletter y footer con libro de reclamaciones. Incluye boton flotante con opciones de WhatsApp y chat, mas panel de chat con respuestas automaticas. Sin login. Marca propia tienda.com.",
   "thumbnail": "/previews/tienda-mascotas.jpg",
-  "previewVideo": "/previews/tienda-mascotas.webm",
   "tags": ["mascotas", "perros", "gatos", "ecommerce", "carrito", "chatbot", "ofertas"],
   "paleta": ["#e10600", "#141414", "#f5f5f5", "#20ba5a"],
   "destacada": false,

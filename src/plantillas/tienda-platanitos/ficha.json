@@ -3,7 +3,6 @@
   "categoria": "multivertical",
   "descripcion": "Maqueta de marketplace multivertical: 4 verticales (Moda, Comida, Hogar, Deporte) con tabs superiores, hero por vertical, círculos 'Lo más top', carruseles de producto, blog, opiniones, buscador con filtro lateral y menú lateral. Sin login.",
   "thumbnail": "/previews/tienda-platanitos.jpg",
-  "previewVideo": "/previews/tienda-platanitos.webm",
   "tags": ["marketplace", "verticales", "ecommerce", "moda", "comida", "hogar", "deporte", "maqueta"],
   "paleta": ["#55b849", "#0b5e02", "#ef3e56", "#f4efe6"],
   "destacada": false,
