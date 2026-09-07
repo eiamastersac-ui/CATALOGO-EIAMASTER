@@ -1,0 +1,12 @@
+{
+  "titulo": "tu tienda.com — ATM Funcional (Estilo Clínica Darser)",
+  "categoria": "salud-dental",
+  "descripcion": "Clínica especializada en ortodoncia craneomandibular y disfunción de la ATM: hero con badge y titular en dos tonos, sección de fundador con credenciales, grilla de 9 servicios técnicos (condilografía, análisis en articulador, estudio del bruxismo, entre otros) con tarjetas de foto y corte diagonal, testimonios, formulario de contacto y una sub-página dedicada a venta de equipos de precisión. Sin login. Marca propia tu tienda.com.",
+  "thumbnail": "/previews/clinica-dental-atm.jpg",
+  "tags": ["dental", "clinica", "salud", "ortodoncia", "landing", "corporativo", "formulario"],
+  "paleta": ["#06b6d4", "#0f172a", "#f8fafc", "#0891b2"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "clinicadarser.com",
+  "orden": 66
+}

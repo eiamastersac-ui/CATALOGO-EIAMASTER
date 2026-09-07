@@ -1,0 +1,117 @@
+---
+import { marca, footerEnlaces, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="am-foot">
+  <div class="am-wrap am-foot__grid">
+    <div>
+      <span class="am-foot__logo">{marca.nombre}</span>
+      <p>{marca.claim}</p>
+    </div>
+
+    <nav>
+      <h3>Enlaces</h3>
+      {footerEnlaces.map((e: { t: string; href: string }) => (
+        <a href={e.href.startsWith('#') ? `${base}/${e.href}` : `${base}${e.href}`}>{e.t}</a>
+      ))}
+    </nav>
+
+    <div>
+      <h3>Contacto</h3>
+      <a href={marca.whatsappHref} target="_blank" rel="noopener">WhatsApp: {marca.tel}</a>
+      <a href={`mailto:${marca.correo}`}>Email: {marca.correo}</a>
+      <div class="am-foot__redes">
+        <a href={`${base}/#top`} aria-label="Facebook"><Icono nombre="facebook" size={16} /></a>
+        <a href={`${base}/#top`} aria-label="Instagram"><Icono nombre="instagram" size={16} /></a>
+        <a href={`${base}/#top`} aria-label="TikTok"><Icono nombre="tiktok" size={16} /></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="am-wrap am-foot__legal">
+    <span>&copy; {anio} {marca.nombre}. Plantilla de referencia, no es un negocio real.</span>
+  </div>
+</footer>
+
+<style>
+  .am-foot {
+    background: var(--am-navy);
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .am-foot h3 {
+    color: #fff;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .am-foot__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .am-foot__logo {
+    font-weight: 800;
+    color: #fff;
+    font-size: 1.15rem;
+    display: block;
+    margin-bottom: 0.9rem;
+  }
+
+  .am-foot__grid > div > p {
+    font-size: 0.85rem;
+    max-width: 30ch;
+  }
+
+  .am-foot__grid a {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.7rem;
+    color: rgba(255, 255, 255, 0.78);
+    transition: color 0.2s ease;
+  }
+
+  .am-foot__grid a:hover {
+    color: #fff;
+  }
+
+  .am-foot__redes {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+  }
+
+  .am-foot__redes a {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: grid;
+    place-items: center;
+    margin-bottom: 0;
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .am-foot__redes a:hover {
+    background: var(--am-cian);
+  }
+
+  .am-foot__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-block: 1.25rem;
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 720px) {
+    .am-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

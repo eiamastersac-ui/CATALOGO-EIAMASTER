@@ -1,0 +1,116 @@
+---
+import { hero } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="am-hero" id="top">
+  <img src={hero.img} alt={hero.t1 + ' ' + hero.t2} class="am-hero__img" loading="eager" />
+  <span class="am-hero__scrim" aria-hidden="true"></span>
+
+  <div class="am-wrap am-hero__body">
+    <span class="am-hero__badge">{hero.badge}</span>
+    <h1>
+      <span class="am-hero__t1">{hero.t1}</span>
+      <span class="am-hero__t2">{hero.t2}</span>
+    </h1>
+    <p>{hero.sub}</p>
+  </div>
+
+  <div class="am-hero__nav">
+    <button type="button" class="am-hero__flecha" aria-label="Anterior"><Icono nombre="flechaIzq" size={18} /></button>
+    <button type="button" class="am-hero__flecha" aria-label="Siguiente"><Icono nombre="flechaDer" size={18} /></button>
+  </div>
+</section>
+
+<style>
+  .am-hero {
+    position: relative;
+    height: clamp(460px, 62vw, 660px);
+    overflow: hidden;
+    background: var(--am-tinta);
+  }
+
+  .am-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .am-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.45) 45%, rgba(15, 23, 42, 0.15) 75%);
+  }
+
+  .am-hero__body {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .am-hero__badge {
+    display: inline-block;
+    align-self: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border-radius: var(--am-pill);
+    margin-bottom: 1.5rem;
+  }
+
+  .am-hero__body h1 {
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+  }
+
+  .am-hero__t1 {
+    color: #fff;
+  }
+
+  .am-hero__t2 {
+    color: var(--am-cian);
+  }
+
+  .am-hero__body p {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    max-width: 34ch;
+  }
+
+  .am-hero__nav {
+    position: absolute;
+    z-index: 2;
+    right: clamp(1.25rem, 5vw, 2.5rem);
+    bottom: clamp(1.25rem, 4vw, 2rem);
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .am-hero__flecha {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background 0.2s ease;
+  }
+
+  .am-hero__flecha:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+---
+
+<section class="am-seccion am-wrap am-contacto" id="contacto">
+  <div class="am-cab am-centro am-reveal">
+    <h2 class="am-titulo">Formulario de Contacto</h2>
+    <p class="am-sub">Llena el siguiente formulario y nos comunicaremos contigo.</p>
+  </div>
+
+  <form class="am-contacto__form am-reveal am-reveal--2" onsubmit="return false">
+    <div class="am-contacto__grid2">
+      <label>
+        Nombre Completo
+        <input type="text" placeholder="Tu nombre" required />
+      </label>
+      <label>
+        Teléfono
+        <input type="tel" placeholder="Tu celular" required />
+      </label>
+    </div>
+    <label>
+      Correo Electrónico
+      <input type="email" placeholder="tu@correo.com" required />
+    </label>
+    <label>
+      Preguntas o comentarios
+      <textarea rows="5" placeholder="¿En qué podemos ayudarte?"></textarea>
+    </label>
+    <button type="submit" class="am-btn am-btn--cian am-contacto__enviar">Enviar Mensaje</button>
+  </form>
+</section>
+
+<style>
+  .am-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .am-contacto__form {
+    max-width: 40rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .am-contacto__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--am-tinta);
+  }
+
+  .am-contacto__grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .am-contacto__form input,
+  .am-contacto__form textarea {
+    border: 1.5px solid var(--am-linea);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--am-texto);
+  }
+
+  .am-contacto__form input:focus,
+  .am-contacto__form textarea:focus {
+    outline: none;
+    border-color: var(--am-cian);
+  }
+
+  .am-contacto__enviar {
+    width: 100%;
+    padding-block: 0.95rem;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 620px) {
+    .am-contacto__grid2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+import { servicios } from '../datos/clinica.js';
+
+interface Servicio {
+  t: string;
+  d: string;
+  img: string;
+}
+const lista = servicios as Servicio[];
+---
+
+<section class="am-seccion am-wrap" id="servicios">
+  <h2 class="am-titulo">Nuestros Servicios</h2>
+
+  <div class="am-serv__grid">
+    {lista.map((s: Servicio, i: number) => (
+      <article class={`am-serv__card am-reveal am-reveal--${(i % 4) + 1}`}>
+        <div class="am-serv__foto">
+          <img src={s.img} alt={s.t} loading="lazy" />
+          <span class="am-serv__titulo">{s.t}</span>
+        </div>
+        <p>{s.d}</p>
+        <a href="#contacto" class="am-btn am-btn--cian am-serv__cta">Contactar</a>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .am-serv__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: clamp(2rem, 5vw, 2.75rem);
+  }
+
+  .am-serv__card {
+    background: #fff;
+    border: 1px solid var(--am-linea);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1.5rem;
+  }
+
+  .am-serv__foto {
+    position: relative;
+    aspect-ratio: 16 / 10;
+  }
+
+  .am-serv__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .am-serv__foto::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.05) 55%);
+  }
+
+  .am-serv__foto::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--am-cian);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    z-index: 2;
+  }
+
+  .am-serv__titulo {
+    position: absolute;
+    left: 1.1rem;
+    bottom: 0.9rem;
+    z-index: 2;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.02rem;
+  }
+
+  .am-serv__card p {
+    padding: 1.1rem 1.25rem 1.1rem;
+    font-size: 0.86rem;
+    flex: 1;
+  }
+
+  .am-serv__cta {
+    align-self: flex-start;
+    margin-inline: 1.25rem;
+    padding: 0.6rem 1.4rem;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 960px) {
+    .am-serv__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 620px) {
+    .am-serv__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

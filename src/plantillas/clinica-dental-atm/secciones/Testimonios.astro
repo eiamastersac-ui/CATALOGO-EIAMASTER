@@ -1,0 +1,107 @@
+---
+import { testimonios } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Testimonio {
+  texto: string;
+  autor: string;
+  rol: string;
+}
+const lista = testimonios as Testimonio[];
+---
+
+<section class="am-seccion am-wrap am-testi">
+  <div class="am-cab am-centro am-reveal">
+    <span class="am-pill">Lo que dicen de nosotros</span>
+    <h2 class="am-titulo">Testimonios</h2>
+  </div>
+
+  <div class="am-testi__grid">
+    {lista.map((t: Testimonio, i: number) => (
+      <article class={`am-testi__card am-reveal am-reveal--${i + 1}`}>
+        <span class="am-testi__comilla"><Icono nombre="comilla" size={28} /></span>
+        <p>&ldquo;{t.texto}&rdquo;</p>
+        <div class="am-testi__autor">
+          <span class="am-testi__avatar">{t.autor.charAt(0)}</span>
+          <div>
+            <b>{t.autor}</b>
+            <span>{t.rol}</span>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .am-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .am-testi__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .am-testi__card {
+    background: #fff;
+    border: 1px solid var(--am-linea);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .am-testi__comilla {
+    color: var(--am-linea);
+  }
+
+  .am-testi__card p {
+    font-size: 0.92rem;
+    color: var(--am-texto);
+    flex: 1;
+  }
+
+  .am-testi__autor {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .am-testi__avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--am-cian);
+    color: #fff;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .am-testi__autor div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .am-testi__autor b {
+    font-size: 0.88rem;
+    color: var(--am-tinta);
+  }
+
+  .am-testi__autor span {
+    font-size: 0.78rem;
+    color: var(--am-texto);
+  }
+
+  @media (max-width: 860px) {
+    .am-testi__grid {
+      grid-template-columns: 1fr;
+      max-width: 26rem;
+      margin-inline: auto;
+    }
+  }
+</style>

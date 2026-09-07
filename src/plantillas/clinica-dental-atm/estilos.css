@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap");
+
+.tpl-clinica-dental-atm {
+  --am-tinta: #0f172a;
+  --am-texto: #475569;
+  --am-linea: #e2e8f0;
+  --am-blanco: #ffffff;
+  --am-crema: #f8fafc;
+
+  --am-cian: #06b6d4;
+  --am-cian-oscuro: #0891b2;
+  --am-cian-suave: #ecfeff;
+  --am-navy: #0f172a;
+  --am-navy-suave: #1e293b;
+
+  --am-font: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --am-maxw: 1200px;
+  --am-pill: 999px;
+  --am-hdr-h: 78px;
+
+  background: var(--am-blanco);
+  color: var(--am-texto);
+  font-family: var(--am-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-dental-atm {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-clinica-dental-atm *,
+.tpl-clinica-dental-atm *::before,
+.tpl-clinica-dental-atm *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-clinica-dental-atm h1,
+.tpl-clinica-dental-atm h2,
+.tpl-clinica-dental-atm h3,
+.tpl-clinica-dental-atm h4 {
+  font-family: var(--am-font);
+  line-height: 1.15;
+  color: var(--am-tinta);
+  font-weight: 800;
+}
+
+.tpl-clinica-dental-atm img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-clinica-dental-atm a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-clinica-dental-atm button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-clinica-dental-atm input,
+.tpl-clinica-dental-atm textarea,
+.tpl-clinica-dental-atm select {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-clinica-dental-atm .am-wrap {
+  max-width: var(--am-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-clinica-dental-atm .am-seccion {
+  padding-block: clamp(3rem, 7vw, 5rem);
+  position: relative;
+}
+
+.tpl-clinica-dental-atm .am-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--am-cian-oscuro);
+  background: var(--am-cian-suave);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  padding: 0.5rem 1rem;
+  border-radius: var(--am-pill);
+  margin-bottom: 1rem;
+}
+
+.tpl-clinica-dental-atm .am-titulo {
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-clinica-dental-atm .am-centro {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.tpl-clinica-dental-atm .am-sub {
+  color: var(--am-texto);
+  font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+}
+
+.tpl-clinica-dental-atm .am-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: var(--am-pill);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.tpl-clinica-dental-atm .am-btn--cian {
+  background: var(--am-cian);
+  color: #fff;
+}
+
+.tpl-clinica-dental-atm .am-btn--cian:hover {
+  background: var(--am-cian-oscuro);
+  transform: translateY(-2px);
+}
+
+.tpl-clinica-dental-atm .am-btn--navy {
+  background: var(--am-navy);
+  color: #fff;
+}
+
+.tpl-clinica-dental-atm .am-btn--navy:hover {
+  background: var(--am-navy-suave);
+}
+
+/* --- Reveal on scroll --- */
+.tpl-clinica-dental-atm .am-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-clinica-dental-atm .am-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-clinica-dental-atm .am-reveal--1 { transition-delay: 0.05s; }
+.tpl-clinica-dental-atm .am-reveal--2 { transition-delay: 0.1s; }
+.tpl-clinica-dental-atm .am-reveal--3 { transition-delay: 0.15s; }
+.tpl-clinica-dental-atm .am-reveal--4 { transition-delay: 0.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-dental-atm .am-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
