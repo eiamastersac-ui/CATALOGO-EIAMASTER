@@ -1,0 +1,86 @@
+---
+import { beneficios } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="od-seccion od-wrap od-porque" id="nosotros">
+  <div class="od-porque__grid">
+    <div class="od-porque__texto od-reveal">
+      <span class="od-kicker">Por qué elegirnos</span>
+      <h2 class="od-titulo">Tu sonrisa, a cargo de un equipo completo</h2>
+      <p class="od-sub">No buscamos el precio más bajo, buscamos que tu tratamiento sea la última vez que necesites resolver ese problema.</p>
+      <a href="#preguntas" class="od-btn od-btn--primario">Agenda tu evaluación</a>
+    </div>
+
+    <div class="od-porque__cards">
+      {beneficios.map((b: { icono: string; t: string; d: string }, i: number) => (
+        <div class={`od-tarjeta od-porque__card od-reveal od-reveal--${i + 1}`}>
+          <span class="od-porque__ico"><Icono nombre={b.icono} size={19} /></span>
+          <h3>{b.t}</h3>
+          <p>{b.d}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .od-porque__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .od-porque__texto h2 {
+    margin-bottom: 0.9rem;
+  }
+
+  .od-porque__texto p {
+    margin-bottom: 1.75rem;
+  }
+
+  .od-porque__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem;
+  }
+
+  .od-porque__card {
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .od-porque__ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--od-crema);
+    color: var(--od-tinta);
+  }
+
+  .od-porque__card h3 {
+    font-size: 0.95rem;
+  }
+
+  .od-porque__card p {
+    font-size: 0.82rem;
+    color: var(--od-gris);
+  }
+
+  @media (max-width: 900px) {
+    .od-porque__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .od-porque__cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

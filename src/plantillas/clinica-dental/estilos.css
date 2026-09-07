@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
+.tpl-clinica-dental {
+  --od-tinta: #15161a;
+  --od-gris: #6b6d76;
+  --od-linea: #e6e2d8;
+  --od-crema: #f6f4ee;
+  --od-blanco: #ffffff;
+
+  --od-acento: #b28a46;
+  --od-acento-suave: #f0e6d2;
+
+  --od-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --od-display: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --od-maxw: 1240px;
+  --od-pill: 999px;
+  --od-hdr-h: 82px;
+
+  background: var(--od-blanco);
+  color: var(--od-tinta);
+  font-family: var(--od-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-dental {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-clinica-dental *,
+.tpl-clinica-dental *::before,
+.tpl-clinica-dental *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-clinica-dental h1,
+.tpl-clinica-dental h2,
+.tpl-clinica-dental h3,
+.tpl-clinica-dental h4 {
+  font-family: var(--od-display);
+  line-height: 1.12;
+  color: var(--od-tinta);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.tpl-clinica-dental img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-clinica-dental a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-clinica-dental button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-clinica-dental input,
+.tpl-clinica-dental textarea {
+  font: inherit;
+}
+
+.tpl-clinica-dental .od-wrap {
+  max-width: var(--od-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-clinica-dental .od-seccion {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  position: relative;
+}
+
+.tpl-clinica-dental .od-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--od-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--od-acento);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-clinica-dental .od-kicker::before {
+  content: "";
+  width: 16px;
+  height: 1.5px;
+  background: var(--od-acento);
+}
+
+.tpl-clinica-dental .od-titulo {
+  font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-clinica-dental .od-titulo--centro {
+  text-align: center;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.tpl-clinica-dental .od-sub {
+  color: var(--od-gris);
+  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+  max-width: 40ch;
+}
+
+.tpl-clinica-dental .od-sub--centro {
+  margin-inline: auto;
+  text-align: center;
+  max-width: 46ch;
+}
+
+.tpl-clinica-dental .od-cab {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.tpl-clinica-dental .od-cab--centro {
+  text-align: center;
+}
+
+.tpl-clinica-dental .od-cab--centro .od-kicker {
+  justify-content: center;
+}
+
+.tpl-clinica-dental .od-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: var(--od-pill);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.tpl-clinica-dental .od-btn--primario {
+  background: var(--od-tinta);
+  color: #fff;
+}
+
+.tpl-clinica-dental .od-btn--primario:hover {
+  opacity: 0.85;
+}
+
+.tpl-clinica-dental .od-btn--claro {
+  background: #fff;
+  color: var(--od-tinta);
+  border: 1.5px solid var(--od-linea);
+}
+
+.tpl-clinica-dental .od-btn--claro:hover {
+  border-color: var(--od-tinta);
+}
+
+.tpl-clinica-dental .od-btn--sobre-foto {
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--od-tinta);
+}
+
+.tpl-clinica-dental .od-btn--sobre-foto:hover {
+  background: #fff;
+}
+
+.tpl-clinica-dental .od-btn--ghost {
+  color: var(--od-tinta);
+}
+
+.tpl-clinica-dental .od-btn--ghost:hover {
+  color: var(--od-acento);
+}
+
+/* --- Reveal on scroll: toggled via IntersectionObserver in RevelarScroll.astro --- */
+.tpl-clinica-dental .od-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-clinica-dental .od-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-clinica-dental .od-reveal--1 { transition-delay: 0.08s; }
+.tpl-clinica-dental .od-reveal--2 { transition-delay: 0.16s; }
+.tpl-clinica-dental .od-reveal--3 { transition-delay: 0.24s; }
+.tpl-clinica-dental .od-reveal--4 { transition-delay: 0.32s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-dental .od-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.tpl-clinica-dental .od-tarjeta {
+  background: #fff;
+  border: 1px solid var(--od-linea);
+  border-radius: 18px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.tpl-clinica-dental .od-tarjeta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 45px -28px rgba(21, 22, 26, 0.2);
+}
+
+.tpl-clinica-dental .od-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(270px, 1fr);
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.tpl-clinica-dental .od-fila > * {
+  scroll-snap-align: start;
+}
+
+.tpl-clinica-dental .od-flecha {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--od-linea);
+  display: grid;
+  place-items: center;
+  color: var(--od-tinta);
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tpl-clinica-dental .od-flecha:hover {
+  border-color: var(--od-tinta);
+  background: var(--od-tinta);
+  color: #fff;
+}

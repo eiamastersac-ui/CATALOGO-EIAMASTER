@@ -1,0 +1,86 @@
+---
+import { blog } from '../datos/clinica.js';
+
+interface Post {
+  t: string;
+  fecha: string;
+  img: string;
+}
+const lista = blog as Post[];
+---
+
+<section class="sd-blog" id="blog">
+  <div class="sd-blog__banda sd-reveal">
+    <h2 class="sd-titulo--linea sd-centro sd-blog__titulo">Noticias actuales</h2>
+    <p class="sd-blog__sub">Últimas publicaciones del blog</p>
+  </div>
+
+  <div class="sd-wrap sd-blog__grid">
+    {lista.map((p: Post, i: number) => (
+      <a href="#top" class={`sd-blog__card sd-reveal sd-reveal--${i + 1}`}>
+        <img src={p.img} alt={p.t} loading="lazy" />
+        <h3>{p.t}</h3>
+        <span>{p.fecha}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .sd-blog__banda {
+    background: var(--sd-teal);
+    padding-block: clamp(2rem, 5vw, 2.75rem);
+    text-align: center;
+  }
+
+  .sd-blog__titulo {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .sd-blog__titulo::after {
+    background: var(--sd-amarillo);
+  }
+
+  .sd-blog__sub {
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+  }
+
+  .sd-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .sd-blog__card img {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .sd-blog__card:hover img {
+    transform: scale(1.02);
+  }
+
+  .sd-blog__card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .sd-blog__card span {
+    font-size: 0.78rem;
+    color: var(--sd-texto);
+  }
+
+  @media (max-width: 860px) {
+    .sd-blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,184 @@
+---
+import { marca, nav } from '../datos/clinica.js';
+---
+
+<header class="kd-hdr" id="cabecera">
+  <div class="kd-wrap kd-hdr__row">
+    <a href="#top" class="kd-logo">
+      <span class="kd-logo__marca">{marca.nombre}</span>
+      <span class="kd-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="kd-nav" id="kd-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }) => <a href={n.href}>{n.t}</a>)}
+    </nav>
+
+    <div class="kd-hdr__acc">
+      <a href="#preguntas" class="kd-btn kd-hdr__cta">
+        Reservar cita
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button type="button" class="kd-hdr__burger" id="kd-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<span id="top"></span>
+
+<script>
+  const hdr = document.getElementById('cabecera');
+  const burger = document.getElementById('kd-burger');
+  const nav = document.getElementById('kd-nav');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 60);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+    hdr?.classList.toggle('is-menu-abierto', !!abierto);
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      hdr?.classList.remove('is-menu-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .kd-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: var(--kd-hdr-h);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(43, 33, 64, 0.4), rgba(43, 33, 64, 0));
+    transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  }
+
+  .kd-hdr.is-scrolled,
+  .kd-hdr.is-menu-abierto {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--kd-tinta);
+    box-shadow: 0 8px 30px -22px rgba(43, 33, 64, 0.4);
+  }
+
+  .kd-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .kd-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    color: inherit;
+  }
+
+  .kd-logo__marca {
+    font-family: var(--kd-display);
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+
+  .kd-logo__sub {
+    font-family: var(--kd-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--kd-sol);
+  }
+
+  .kd-nav {
+    display: flex;
+    gap: 1.8rem;
+    margin-inline: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .kd-nav a {
+    color: inherit;
+  }
+
+  .kd-nav a:hover {
+    opacity: 0.7;
+  }
+
+  .kd-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .kd-hdr__cta {
+    padding: 0.65rem 1.3rem;
+    font-size: 0.85rem;
+    background: var(--kd-coral);
+    color: #fff;
+  }
+
+  .kd-hdr__cta:hover {
+    background: var(--kd-coral-osc);
+  }
+
+  .kd-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .kd-hdr__burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .kd-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: #fff;
+      color: var(--kd-tinta);
+      border-bottom: 2px solid var(--kd-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+    .kd-nav.is-abierto {
+      display: flex;
+    }
+    .kd-nav a {
+      padding-block: 0.65rem;
+      border-top: 1px solid var(--kd-linea);
+    }
+    .kd-hdr__cta {
+      display: none;
+    }
+    .kd-hdr__burger {
+      display: flex;
+    }
+  }
+</style>

@@ -1,0 +1,202 @@
+---
+import { resenas } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Resena {
+  autor: string;
+  fecha: string;
+  texto: string;
+}
+const lista = resenas.lista as Resena[];
+const estrellas = Array.from({ length: 5 });
+---
+
+<section class="sd-resenas">
+  <div class="sd-resenas__banda sd-reveal">
+    <h2 class="sd-titulo--linea sd-centro sd-resenas__titulo">¿Qué dicen nuestros pacientes?</h2>
+    <p class="sd-resenas__sub">Tras más de 15 años cuidando la salud bucodental, la mejor presentación son sus opiniones:</p>
+  </div>
+
+  <div class="sd-wrap sd-resenas__resumen sd-reveal sd-reveal--2">
+    <span class="sd-resenas__excelente">Excelente</span>
+    <div class="sd-resenas__estrellas" aria-label={`${resenas.calificacion} de 5`}>
+      {estrellas.map(() => <Icono nombre="estrella" size={20} />)}
+    </div>
+    <span class="sd-resenas__meta">A base de <b>{resenas.total} reseñas</b></span>
+    <span class="sd-resenas__google"><Icono nombre="google" size={18} /> Google</span>
+  </div>
+
+  <div class="sd-wrap">
+    <div class="sd-resenas__fila sd-fila sd-reveal sd-reveal--3" id="sd-resenas-fila">
+      {lista.map((r: Resena) => (
+        <article class="sd-resenas__card">
+          <div class="sd-resenas__cab">
+            <span class="sd-resenas__avatar">{r.autor.charAt(0)}</span>
+            <div>
+              <b>{r.autor}</b>
+              <span>{r.fecha}</span>
+            </div>
+            <Icono nombre="google" size={16} />
+          </div>
+          <div class="sd-resenas__card-estrellas">
+            {estrellas.map(() => <Icono nombre="estrella" size={13} />)}
+          </div>
+          <p>{r.texto}</p>
+        </article>
+      ))}
+    </div>
+    <div class="sd-resenas__nav">
+      <button type="button" class="sd-flecha" data-fila-prev="sd-resenas-fila" aria-label="Reseñas anteriores">
+        <Icono nombre="flechaIzq" size={18} />
+      </button>
+      <button type="button" class="sd-flecha" data-fila-next="sd-resenas-fila" aria-label="Reseñas siguientes">
+        <Icono nombre="flechaDer" size={18} />
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-fila-prev]').forEach((btn) => {
+    const fila = document.getElementById(btn.dataset.filaPrev ?? '');
+    btn.addEventListener('click', () => fila?.scrollBy({ left: -320, behavior: 'smooth' }));
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-fila-next]').forEach((btn) => {
+    const fila = document.getElementById(btn.dataset.filaNext ?? '');
+    btn.addEventListener('click', () => fila?.scrollBy({ left: 320, behavior: 'smooth' }));
+  });
+</script>
+
+<style>
+  .sd-resenas__banda {
+    background: var(--sd-teal);
+    padding-block: clamp(2rem, 5vw, 2.75rem);
+    text-align: center;
+  }
+
+  .sd-resenas__titulo {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .sd-resenas__titulo::after {
+    background: var(--sd-amarillo);
+  }
+
+  .sd-resenas__sub {
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 40rem;
+    margin-inline: auto;
+    margin-top: 0.75rem;
+    font-size: 0.92rem;
+  }
+
+  .sd-resenas__resumen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .sd-resenas__excelente {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .sd-resenas__estrellas {
+    display: flex;
+    gap: 0.15rem;
+    color: var(--sd-amarillo);
+  }
+
+  .sd-resenas__estrellas svg,
+  .sd-resenas__card-estrellas svg {
+    fill: currentColor;
+  }
+
+  .sd-resenas__meta {
+    font-size: 0.85rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-resenas__google {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    color: var(--sd-tinta);
+  }
+
+  .sd-resenas__fila {
+    padding-bottom: 1.25rem;
+  }
+
+  .sd-resenas__card {
+    background: #fff;
+    border: 1px solid var(--sd-linea);
+    border-radius: 10px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sd-resenas__cab {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .sd-resenas__avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--sd-teal-suave);
+    color: var(--sd-teal-oscuro);
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .sd-resenas__cab div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .sd-resenas__cab b {
+    font-size: 0.86rem;
+  }
+
+  .sd-resenas__cab span {
+    font-size: 0.72rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-resenas__cab svg {
+    color: var(--sd-texto);
+    opacity: 0.6;
+  }
+
+  .sd-resenas__card-estrellas {
+    display: flex;
+    gap: 0.1rem;
+    color: var(--sd-amarillo);
+  }
+
+  .sd-resenas__card p {
+    font-size: 0.84rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-resenas__nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+</style>

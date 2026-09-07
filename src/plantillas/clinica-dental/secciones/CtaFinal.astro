@@ -1,0 +1,50 @@
+---
+import { ctaFinal } from '../datos/clinica.js';
+---
+
+<section class="od-seccion od-wrap">
+  <div class="od-cta od-reveal">
+    <div class="od-cta__texto">
+      <span class="od-kicker">Reserva tu cita</span>
+      <h2 class="od-titulo">Una clínica dental cerca de ti</h2>
+      <p class="od-sub">Agenda tu evaluación y llévate un 10% de descuento en tu primer tratamiento, más consulta de diagnóstico sin costo.</p>
+      <a href="#preguntas" class="od-btn od-btn--primario">Obtener el descuento</a>
+    </div>
+    <div class="od-cta__media">
+      <img src={ctaFinal.img} alt="Interior de la clínica" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .od-cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+    background: var(--od-crema);
+    border-radius: 28px;
+    padding: clamp(2rem, 5vw, 3rem);
+  }
+
+  .od-cta__texto .od-sub {
+    max-width: 34ch;
+    margin-bottom: 1.6rem;
+  }
+
+  .od-cta__media img {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .od-cta {
+      grid-template-columns: 1fr;
+    }
+    .od-cta__media {
+      order: -1;
+    }
+  }
+</style>

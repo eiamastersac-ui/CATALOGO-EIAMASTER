@@ -1,0 +1,282 @@
+---
+import { marca, nav, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface ItemNav {
+  t: string;
+  href: string;
+  dropdown?: { t: string; href: string }[];
+}
+const lista = nav as ItemNav[];
+
+const contactoHref = `${base}/contacto/`;
+---
+
+<header class="sd-hdr" id="cabecera">
+  <div class="sd-wrap sd-hdr__fila">
+    <a href={`${base}/#top`} class="sd-logo">
+      <span class="sd-logo__marca">{marca.nombre}</span>
+      <span class="sd-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="sd-nav" id="sd-nav" aria-label="Navegación principal">
+      {lista.map((item) => (
+        item.dropdown ? (
+          <div class="sd-nav__item sd-nav__item--drop" data-drop>
+            <button type="button" class="sd-nav__btn" data-drop-btn aria-expanded="false">
+              {item.t}
+              <Icono nombre="chevron" size={14} />
+            </button>
+            <div class="sd-nav__panel" data-drop-panel>
+              {item.dropdown.map((d) => (
+                <a href={`${base}/${d.href}`}>{d.t}</a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a href={item.href.startsWith('#') ? `${base}/${item.href}` : item.href} class="sd-nav__link">{item.t}</a>
+        )
+      ))}
+    </nav>
+
+    <div class="sd-hdr__acc">
+      <a href={contactoHref} class="sd-hdr__cta">Contacto</a>
+      <button type="button" class="sd-hdr__burger" id="sd-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('cabecera');
+  const burger = document.getElementById('sd-burger');
+  const nav = document.getElementById('sd-nav');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 40);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  const drops = document.querySelectorAll<HTMLElement>('[data-drop]');
+  drops.forEach((drop) => {
+    const btn = drop.querySelector<HTMLButtonElement>('[data-drop-btn]');
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const abierto = drop.classList.toggle('is-abierto');
+      btn.setAttribute('aria-expanded', String(abierto));
+      drops.forEach((otro) => {
+        if (otro !== drop) {
+          otro.classList.remove('is-abierto');
+          otro.querySelector('[data-drop-btn]')?.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  });
+
+  document.addEventListener('click', () => {
+    drops.forEach((d) => {
+      d.classList.remove('is-abierto');
+      d.querySelector('[data-drop-btn]')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .sd-hdr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: #fff;
+    box-shadow: 0 1px 0 var(--sd-linea);
+  }
+
+  .sd-hdr__fila {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: var(--sd-hdr-h);
+  }
+
+  .sd-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    flex-shrink: 0;
+  }
+
+  .sd-logo__marca {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--sd-teal);
+    letter-spacing: -0.01em;
+  }
+
+  .sd-logo__sub {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--sd-texto);
+    text-transform: uppercase;
+  }
+
+  .sd-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-inline: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .sd-nav__link,
+  .sd-nav__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--sd-tinta);
+    padding: 0.5rem 0;
+  }
+
+  .sd-nav__link:hover,
+  .sd-nav__btn:hover {
+    color: var(--sd-teal);
+  }
+
+  .sd-nav__item--drop {
+    position: relative;
+  }
+
+  .sd-nav__item--drop svg {
+    transition: transform 0.2s ease;
+  }
+
+  .sd-nav__item--drop.is-abierto svg {
+    transform: rotate(180deg);
+  }
+
+  .sd-nav__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 20px 40px -20px rgba(20, 30, 40, 0.35);
+    padding: 0.6rem;
+    display: none;
+    flex-direction: column;
+  }
+
+  .sd-nav__item--drop.is-abierto .sd-nav__panel {
+    display: flex;
+  }
+
+  .sd-nav__panel a {
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    color: var(--sd-texto);
+  }
+
+  .sd-nav__panel a:hover {
+    background: var(--sd-teal-suave);
+    color: var(--sd-teal-oscuro);
+  }
+
+  .sd-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .sd-hdr__cta {
+    background: var(--sd-amarillo);
+    color: var(--sd-tinta);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.85rem 1.6rem;
+    height: var(--sd-hdr-h);
+    display: flex;
+    align-items: center;
+    transition: background 0.2s ease;
+  }
+
+  .sd-hdr__cta:hover {
+    background: var(--sd-amarillo-oscuro);
+  }
+
+  .sd-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .sd-hdr__burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 960px) {
+    .sd-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: #fff;
+      border-bottom: 2px solid var(--sd-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+
+    .sd-nav.is-abierto {
+      display: flex;
+    }
+
+    .sd-nav__link,
+    .sd-nav__btn {
+      padding-block: 0.75rem;
+      border-top: 1px solid var(--sd-linea);
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .sd-nav__panel {
+      position: static;
+      box-shadow: none;
+      padding-left: 1rem;
+    }
+
+    .sd-hdr__cta {
+      height: auto;
+      padding: 0.65rem 1.2rem;
+    }
+
+    .sd-hdr__burger {
+      display: flex;
+    }
+  }
+</style>

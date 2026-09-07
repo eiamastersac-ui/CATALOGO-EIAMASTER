@@ -1,0 +1,224 @@
+---
+import { marca, redes, resenas, horario, footerNav, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+const footerRutas: Record<string, string> = {
+  Inicio: `${base}/#top`,
+  Dentistas: `${base}/#dentistas`,
+  Servicios: `${base}/#tratamientos`,
+  Galería: `${base}/#casos`,
+  Contacto: `${base}/contacto/`,
+  Blog: `${base}/#blog`,
+  Sugerencias: `${base}/contacto/`,
+};
+---
+
+<footer class="sd-foot">
+  <div class="sd-wrap sd-foot__grid">
+    <div class="sd-foot__marca">
+      <span class="sd-foot__logo">{marca.nombre}<b>{marca.sub}</b></span>
+
+      <h3>Horarios</h3>
+      <p>{horario.semana}</p>
+      <p>{horario.sabado}</p>
+
+      <h3>Síguenos:</h3>
+      <div class="sd-foot__redes">
+        {redes.map((r: { t: string; icono: string; href: string }) => (
+          <a href={r.href} aria-label={r.t}>
+            <Icono nombre={r.icono} size={16} />
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="sd-foot__col">
+      <h3>Contáctenos:</h3>
+      <a href={`tel:${marca.telFijo.replace(/\D/g, '')}`}><Icono nombre="telefono" size={14} /> {marca.telFijo}</a>
+      <a href={marca.whatsappHref}><Icono nombre="whatsapp" size={14} /> {marca.tel}</a>
+      <a href={`mailto:${marca.correo}`}><Icono nombre="correo" size={14} /> {marca.correo}</a>
+      <a href={`${base}/#top`}><Icono nombre="mapa" size={14} /> {marca.direccion}</a>
+      <a href={`${base}/#top`} class="sd-foot__link-secundario">¿Cómo llegar?</a>
+    </div>
+
+    <div class="sd-foot__col">
+      <h3>Opiniones:</h3>
+      <p class="sd-foot__rating">Excelente <b>{resenas.calificacion} de 5</b></p>
+      <a href={`${base}/#top`} class="sd-foot__google">
+        <span class="sd-foot__google-cab"><Icono nombre="google" size={16} /> Google</span>
+        <span class="sd-foot__google-estrellas" aria-hidden="true">★★★★★</span>
+        <span class="sd-foot__google-total">{resenas.total} reseñas ›</span>
+      </a>
+    </div>
+
+    <nav class="sd-foot__col">
+      <h3>Nuestra web:</h3>
+      {footerNav.map((t: string) => (
+        <a href={footerRutas[t] ?? `${base}/#top`}>{t}</a>
+      ))}
+    </nav>
+  </div>
+
+  <div class="sd-wrap sd-foot__legal">
+    <span>{marca.nombre} Perú &reg; 2009 &ndash; {anio}. Plantilla de referencia, no es un negocio real.</span>
+    <div class="sd-foot__legal-links">
+      <a href={`${base}/#top`}>Mapa web</a>
+      <a href={`${base}/#top`}>Aviso Legal</a>
+      <a href={`${base}/#top`}>Privacidad</a>
+      <a href={`${base}/#top`}>Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .sd-foot {
+    background: var(--sd-teal);
+    color: rgba(255, 255, 255, 0.88);
+    padding-top: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .sd-foot h3 {
+    color: #fff;
+    font-size: 0.9rem;
+    margin-top: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .sd-foot__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .sd-foot__logo {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #fff;
+    display: block;
+  }
+
+  .sd-foot__logo b {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sd-amarillo);
+    font-weight: 700;
+    margin-top: 0.15rem;
+  }
+
+  .sd-foot__marca p {
+    font-size: 0.82rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .sd-foot__redes {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .sd-foot__redes a {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .sd-foot__redes a:hover {
+    background: var(--sd-amarillo);
+    color: var(--sd-tinta);
+  }
+
+  .sd-foot__col a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    margin-bottom: 0.65rem;
+    color: rgba(255, 255, 255, 0.88);
+    transition: color 0.2s ease;
+  }
+
+  .sd-foot__col a:hover {
+    color: #fff;
+  }
+
+  .sd-foot__link-secundario {
+    text-decoration: underline;
+  }
+
+  .sd-foot__rating {
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .sd-foot__rating b {
+    color: #fff;
+  }
+
+  .sd-foot__google {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: #fff;
+    color: var(--sd-tinta);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    max-width: 180px;
+  }
+
+  .sd-foot__google-cab {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .sd-foot__google-estrellas {
+    color: var(--sd-amarillo);
+    letter-spacing: 0.1em;
+  }
+
+  .sd-foot__google-total {
+    font-size: 0.75rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-foot__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 1.25rem;
+    font-size: 0.76rem;
+  }
+
+  .sd-foot__legal-links {
+    display: flex;
+    gap: 1.1rem;
+  }
+
+  .sd-foot__legal-links a:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 860px) {
+    .sd-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .sd-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

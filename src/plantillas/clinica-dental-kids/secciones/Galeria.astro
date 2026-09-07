@@ -1,0 +1,218 @@
+---
+import { galeria } from '../datos/clinica.js';
+
+interface Foto {
+  img: string;
+  alt: string;
+}
+const fotos = galeria as Foto[];
+---
+
+<section class="kd-seccion kd-wrap" id="galeria">
+  <div class="kd-cab kd-cab--centro kd-reveal">
+    <span class="kd-kicker" style="justify-content:center">Momentos reales</span>
+    <h2 class="kd-titulo kd-titulo--centro">Así se ve una cita feliz</h2>
+    <p class="kd-sub kd-sub--centro">Toca cualquier foto para verla en grande.</p>
+  </div>
+
+  <div class="kd-galeria" id="kd-galeria">
+    {fotos.map((f: Foto, i: number) => (
+      <button type="button" class={`kd-galeria__item kd-reveal kd-reveal--${(i % 4) + 1}`} data-galeria-abrir={i}>
+        <img src={f.img} alt={f.alt} loading="lazy" />
+      </button>
+    ))}
+  </div>
+
+  <div class="kd-lightbox" id="kd-lightbox" hidden>
+    <div class="kd-lightbox__fondo" data-lightbox-cerrar></div>
+    <button type="button" class="kd-lightbox__cerrar" data-lightbox-cerrar aria-label="Cerrar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <button type="button" class="kd-lightbox__nav kd-lightbox__nav--prev" id="kd-lightbox-prev" aria-label="Anterior">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+    </button>
+    <figure class="kd-lightbox__figura">
+      <img src={fotos[0]?.img} alt="" id="kd-lightbox-img" />
+      <figcaption id="kd-lightbox-cap"></figcaption>
+    </figure>
+    <button type="button" class="kd-lightbox__nav kd-lightbox__nav--next" id="kd-lightbox-next" aria-label="Siguiente">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  interface FotoDato {
+    img: string;
+    alt: string;
+  }
+
+  const datos: FotoDato[] = Array.from(document.querySelectorAll<HTMLImageElement>('#kd-galeria img')).map((img) => ({
+    img: img.src,
+    alt: img.alt,
+  }));
+
+  const lightbox = document.getElementById('kd-lightbox');
+  const imgEl = document.getElementById('kd-lightbox-img') as HTMLImageElement | null;
+  const capEl = document.getElementById('kd-lightbox-cap');
+  let idx = 0;
+
+  function mostrar(n: number) {
+    if (!imgEl || !capEl || datos.length === 0) return;
+    idx = (n + datos.length) % datos.length;
+    imgEl.src = datos[idx].img;
+    imgEl.alt = datos[idx].alt;
+    capEl.textContent = datos[idx].alt;
+  }
+
+  function abrir(n: number) {
+    if (!lightbox) return;
+    mostrar(n);
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function cerrar() {
+    if (!lightbox) return;
+    lightbox.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-galeria-abrir]').forEach((b) => {
+    b.addEventListener('click', () => abrir(Number(b.dataset.galeriaAbrir ?? '0')));
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-lightbox-cerrar]').forEach((b) => b.addEventListener('click', cerrar));
+  document.getElementById('kd-lightbox-prev')?.addEventListener('click', () => mostrar(idx - 1));
+  document.getElementById('kd-lightbox-next')?.addEventListener('click', () => mostrar(idx + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox || lightbox.hidden) return;
+    if (e.key === 'Escape') cerrar();
+    if (e.key === 'ArrowLeft') mostrar(idx - 1);
+    if (e.key === 'ArrowRight') mostrar(idx + 1);
+  });
+</script>
+
+<style>
+  .kd-galeria {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.85rem;
+  }
+
+  .kd-galeria__item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .kd-galeria__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .kd-galeria__item:hover img {
+    transform: scale(1.07);
+  }
+
+  .kd-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .kd-lightbox[hidden] {
+    display: none;
+  }
+
+  .kd-lightbox__fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(43, 33, 64, 0.9);
+  }
+
+  .kd-lightbox__figura {
+    position: relative;
+    z-index: 1;
+    max-width: min(90vw, 640px);
+    text-align: center;
+  }
+
+  .kd-lightbox__figura img {
+    width: 100%;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: 18px;
+  }
+
+  .kd-lightbox__figura figcaption {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    margin-top: 0.9rem;
+  }
+
+  .kd-lightbox__cerrar {
+    position: absolute;
+    top: clamp(1rem, 3vw, 1.75rem);
+    right: clamp(1rem, 3vw, 1.75rem);
+    z-index: 2;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    display: grid;
+    place-items: center;
+  }
+
+  .kd-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    display: grid;
+    place-items: center;
+  }
+
+  .kd-lightbox__nav:hover,
+  .kd-lightbox__cerrar:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .kd-lightbox__nav--prev {
+    left: clamp(0.5rem, 3vw, 2rem);
+  }
+
+  .kd-lightbox__nav--next {
+    right: clamp(0.5rem, 3vw, 2rem);
+  }
+
+  @media (max-width: 960px) {
+    .kd-galeria {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .kd-galeria {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kd-lightbox__nav {
+      width: 38px;
+      height: 38px;
+    }
+  }
+</style>

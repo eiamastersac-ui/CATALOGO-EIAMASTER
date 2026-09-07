@@ -1,0 +1,29 @@
+---
+interface Props {
+  nombre: string;
+  size?: number;
+}
+const { nombre, size = 24 } = Astro.props;
+
+const PATHS: Record<string, string> = {
+  diente: '<path d="M12 3c-3 0-5 2-5 5 0 2 .5 3 1 5 .5 2 1 5 2 5 1.5 0 1-3 2-3s.5 3 2 3c1 0 1.5-3 2-5 .5-2 1-3 1-5 0-3-2-5-5-5Z"/>',
+  bebe: '<circle cx="12" cy="8" r="3.5"/><path d="M6 21c0-4 2.5-6.5 6-6.5s6 2.5 6 6.5"/><path d="M9 8c0-1.5.5-2.5 1.5-3M15 8c0-1.5-.5-2.5-1.5-3"/>',
+  nino: '<circle cx="12" cy="7" r="3.2"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/><path d="M9.5 7c.6.6 1.5.9 2.5.9s1.9-.3 2.5-.9"/>',
+  adolescente: '<circle cx="12" cy="6.5" r="3"/><path d="M4 21c0-5 3.5-8 8-8s8 3 8 8"/><path d="M9 12l-1 4M15 12l1 4"/>',
+  todos: '<circle cx="7" cy="8" r="2.4"/><circle cx="17" cy="8" r="2.4"/><path d="M2.5 20c0-3 2-5 4.5-5s4.5 2 4.5 5M12.5 20c0-3 2-5 4.5-5s4.5 2 4.5 5"/>',
+  estrella: '<path d="M12 2l3 7h7l-5.7 4.3L18.3 21 12 16.6 5.7 21l2-7.7L2 9h7z"/>',
+  corazon: '<path d="M12 20s-7-4.4-9.5-8.8C.8 8 2.2 4 6.2 4c2 0 3.5 1.2 5.8 3.5C14.3 5.2 15.8 4 17.8 4c4 0 5.4 4 3.7 7.2C19 15.6 12 20 12 20Z"/>',
+  reloj: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  mapa: '<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/>',
+  escudo: '<path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6Z"/><path d="m9 12 2 2 4-4"/>',
+  globo: '<ellipse cx="12" cy="9" rx="6" ry="7"/><path d="M12 16v6M9.5 22h5"/>',
+  chispa: '<path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/>',
+  lupa: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  whatsapp: '<path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.76.46 3.44 1.32 4.94L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.23h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2z"/><path d="M8.4 7.9c.2-.5.4-.5.6-.5h.5c.2 0 .4-.1.6.4.2.5.7 1.7.8 1.8.1.2.1.3 0 .5-.1.2-.2.3-.3.4l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1.9.9 1.7 1.1 2 1.3.3.1.4.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.9.3.1.5.2.5.3.1.6-.2 1.2-.6 1.5-.4.4-1.4.7-2 .6-.9-.2-2.4-.9-4.2-2.5-2.2-2-3.5-4.4-3.6-4.7-.1-.2-.9-1.2-.9-2.3 0-1.1.6-1.6.8-1.8Z" fill="currentColor" stroke="none"/>',
+  cierra: '<path d="M6 6l12 12M18 6 6 18"/>',
+  flechaIzq: '<path d="m15 6-6 6 6 6"/>',
+  flechaDer: '<path d="m9 6 6 6-6 6"/>',
+};
+---
+
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" set:html={PATHS[nombre] ?? ''} />

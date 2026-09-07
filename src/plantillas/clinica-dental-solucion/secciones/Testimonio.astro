@@ -1,0 +1,52 @@
+---
+import { testimonio } from '../datos/clinica.js';
+---
+
+<section class="sd-cita sd-wrap">
+  <div class="sd-cita__foto sd-reveal">
+    <img src={testimonio.img} alt="Paciente feliz de tu tienda.com Dental Care" loading="lazy" />
+  </div>
+  <div class="sd-cita__texto sd-reveal sd-reveal--2">
+    <p>{testimonio.texto} <span class="sd-cita__resaltado">{testimonio.resaltado}</span></p>
+    <a href="#preguntas" class="sd-btn sd-btn--teal">{testimonio.cta}</a>
+  </div>
+</section>
+
+<style>
+  .sd-cita {
+    background: var(--sd-teal-suave);
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(1.75rem, 5vw, 3rem);
+    align-items: center;
+  }
+
+  .sd-cita__foto {
+    border: 3px solid var(--sd-teal);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .sd-cita__texto p {
+    font-size: clamp(1.2rem, 2.6vw, 1.7rem);
+    color: var(--sd-tinta);
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 1.75rem;
+  }
+
+  .sd-cita__resaltado {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--sd-amarillo);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 720px) {
+    .sd-cita {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

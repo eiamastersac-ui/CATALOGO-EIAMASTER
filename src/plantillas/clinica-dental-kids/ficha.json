@@ -1,0 +1,13 @@
+{
+  "titulo": "tu tienda.com — Kids Dental (Estilo Laser Dent Kids)",
+  "categoria": "salud-dental",
+  "descripcion": "Odontopediatría con estética premium y playful: paleta plana coral/sol/menta (sin degradados decorativos), hero de foto completa a pantalla entera con carrusel de 4 escenas y tarjeta flotante de testimonio infantil. Incluye funciones realmente interactivas: filtro de especialidades por edad, selector de estado de ánimo del niño con resultado personalizado, comparador antes/después de la actitud del paciente, galería con lightbox navegable, e indicador de sede abierta/cerrada en vivo con buscador de sedes. Contenido curado y simplificado frente a la referencia (menos saturación, mismas fortalezas). Sin login. Marca propia tu tienda.com.",
+  "thumbnail": "/previews/clinica-dental-kids.jpg",
+  "previewVideo": "/previews/clinica-dental-kids.webm",
+  "tags": ["dental", "kids", "odontopediatria", "clinica", "salud", "landing", "premium", "animaciones", "interactivo"],
+  "paleta": ["#2b2140", "#ff6b7a", "#ffc93c", "#35b7a0"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "laserdentkids.com",
+  "orden": 63
+}

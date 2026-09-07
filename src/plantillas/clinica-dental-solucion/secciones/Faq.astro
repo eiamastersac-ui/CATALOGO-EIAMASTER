@@ -1,0 +1,95 @@
+---
+import { faq } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Pregunta {
+  p: string;
+  r: string;
+}
+const lista = faq as Pregunta[];
+---
+
+<section class="sd-seccion sd-wrap" id="preguntas">
+  <div class="sd-cab sd-reveal">
+    <h2 class="sd-titulo sd-titulo--linea">Preguntas Frecuentes</h2>
+  </div>
+
+  <div class="sd-faq sd-reveal sd-reveal--2">
+    {lista.map((f: Pregunta) => (
+      <details class="sd-faq__item">
+        <summary>
+          {f.p}
+          <span class="sd-faq__toggle">
+            <span class="sd-faq__mas"><Icono nombre="mas" size={14} /></span>
+            <span class="sd-faq__menos"><Icono nombre="menos" size={14} /></span>
+          </span>
+        </summary>
+        <p>{f.r}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .sd-cab {
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .sd-faq {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .sd-faq__item {
+    border: 1px solid var(--sd-linea);
+    border-radius: 6px;
+    padding: 1rem 1.15rem;
+  }
+
+  .sd-faq__item summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    list-style: none;
+    color: var(--sd-tinta);
+  }
+
+  .sd-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sd-faq__toggle {
+    flex-shrink: 0;
+    color: var(--sd-teal);
+    margin-top: 0.1rem;
+  }
+
+  .sd-faq__menos {
+    display: none;
+  }
+
+  .sd-faq__item[open] .sd-faq__mas {
+    display: none;
+  }
+
+  .sd-faq__item[open] .sd-faq__menos {
+    display: block;
+  }
+
+  .sd-faq__item p {
+    color: var(--sd-texto);
+    font-size: 0.85rem;
+    margin-top: 0.85rem;
+  }
+
+  @media (max-width: 860px) {
+    .sd-faq {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

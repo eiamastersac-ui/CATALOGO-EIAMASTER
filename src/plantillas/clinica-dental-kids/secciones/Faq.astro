@@ -1,0 +1,80 @@
+---
+import { faq } from '../datos/clinica.js';
+
+interface Pregunta {
+  p: string;
+  r: string;
+}
+const lista = faq as Pregunta[];
+---
+
+<section class="kd-seccion kd-wrap" id="preguntas">
+  <div class="kd-cab kd-cab--centro kd-reveal">
+    <span class="kd-kicker" style="justify-content:center">Preguntas frecuentes</span>
+    <h2 class="kd-titulo kd-titulo--centro">Todo lo que los papás preguntan</h2>
+  </div>
+
+  <div class="kd-faq kd-reveal kd-reveal--2">
+    {lista.map((f: Pregunta) => (
+      <details class="kd-faq__item">
+        <summary>
+          {f.p}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="kd-faq__icono"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <p>{f.r}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .kd-faq {
+    max-width: 42rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .kd-faq__item {
+    border: 2px solid var(--kd-linea);
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
+  }
+
+  .kd-faq__item[open] {
+    border-color: var(--kd-coral);
+  }
+
+  .kd-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--kd-display);
+    font-weight: 700;
+    font-size: 0.94rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .kd-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .kd-faq__icono {
+    flex-shrink: 0;
+    color: var(--kd-coral);
+    transition: transform 0.25s ease;
+  }
+
+  .kd-faq__item[open] .kd-faq__icono {
+    transform: rotate(180deg);
+  }
+
+  .kd-faq__item p {
+    color: var(--kd-gris);
+    font-size: 0.88rem;
+    margin-top: 0.85rem;
+  }
+</style>

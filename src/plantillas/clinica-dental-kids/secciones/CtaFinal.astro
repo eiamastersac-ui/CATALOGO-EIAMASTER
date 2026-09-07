@@ -1,0 +1,66 @@
+---
+import { ctaFinal, marca } from '../datos/clinica.js';
+---
+
+<section class="kd-seccion kd-cta">
+  <div class="kd-wrap kd-cta__grid">
+    <div class="kd-cta__foto kd-reveal">
+      <img src={ctaFinal.img} alt="Niño sonriendo después de su cita" loading="lazy" />
+    </div>
+    <div class="kd-cta__texto kd-reveal kd-reveal--2">
+      <span class="kd-kicker">Su primera cita, sin estrés</span>
+      <h2 class="kd-titulo">Agenda hoy y llévate el kit de bienvenida</h2>
+      <p class="kd-sub">Cepillo, pasta y cuento ilustrado de regalo en la primera visita de tu hijo a {marca.nombre}.</p>
+      <div class="kd-cta__acciones">
+        <a href="#preguntas" class="kd-btn kd-btn--primario">Agendar primera cita</a>
+        <a href={`tel:${marca.tel.replace(/\s/g, '')}`} class="kd-btn kd-btn--claro">Llamar {marca.tel}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kd-cta {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .kd-cta__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(1.75rem, 5vw, 3rem);
+    align-items: center;
+  }
+
+  .kd-cta__foto {
+    border-radius: 26px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+  }
+
+  .kd-cta__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kd-cta__texto .kd-sub {
+    max-width: 42ch;
+    margin-bottom: 1.6rem;
+  }
+
+  .kd-cta__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  @media (max-width: 780px) {
+    .kd-cta__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .kd-cta__foto {
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

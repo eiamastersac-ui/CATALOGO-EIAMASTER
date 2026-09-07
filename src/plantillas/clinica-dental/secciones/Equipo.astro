@@ -1,0 +1,91 @@
+---
+import { equipo } from '../datos/clinica.js';
+---
+
+<section class="od-seccion od-wrap">
+  <div class="od-equipo">
+    <div class="od-equipo__media od-reveal">
+      <img src={equipo.img} alt={equipo.nombre} loading="lazy" />
+    </div>
+
+    <div class="od-equipo__texto od-reveal od-reveal--2">
+      <span class="od-kicker">Nuestro equipo</span>
+      <h2 class="od-titulo">{equipo.nombre}</h2>
+      <p class="od-equipo__cargo">{equipo.cargo}</p>
+      <p class="od-sub">{equipo.bio}</p>
+      <ul class="od-equipo__lista">
+        {equipo.credenciales.map((c: string) => (
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4 4L19 7"/></svg>
+            {c}
+          </li>
+        ))}
+      </ul>
+      <a href="#preguntas" class="od-btn od-btn--primario">Reservar consulta</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .od-equipo {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .od-equipo__media {
+    position: relative;
+  }
+
+  .od-equipo__media img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 8px 32px 32px 32px;
+    box-shadow: 0 30px 60px -28px rgba(21, 22, 26, 0.35);
+  }
+
+  .od-equipo__cargo {
+    color: var(--od-acento);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .od-equipo__texto .od-sub {
+    max-width: 52ch;
+    margin-bottom: 1.5rem;
+  }
+
+  .od-equipo__lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 2rem;
+  }
+
+  .od-equipo__lista li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--od-tinta);
+  }
+
+  .od-equipo__lista svg {
+    color: var(--od-acento);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 860px) {
+    .od-equipo {
+      grid-template-columns: 1fr;
+    }
+    .od-equipo__media {
+      max-width: 320px;
+      margin-inline: auto;
+    }
+  }
+</style>

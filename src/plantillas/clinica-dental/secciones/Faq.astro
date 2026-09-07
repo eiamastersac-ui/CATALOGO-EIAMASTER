@@ -1,0 +1,95 @@
+---
+import { faq, marca } from '../datos/clinica.js';
+---
+
+<section class="od-seccion od-wrap od-faq" id="preguntas">
+  <div class="od-faq__grid">
+    <div class="od-reveal">
+      <span class="od-kicker">Preguntas frecuentes</span>
+      <h2 class="od-titulo">¿Tienes dudas antes de agendar?</h2>
+      <p class="od-sub">Estas son las preguntas que más nos hacen. Si no encuentras la tuya, escríbenos directo por WhatsApp y te respondemos en minutos.</p>
+      <a href={`https://wa.me/51${marca.tel.replace(/\s/g, '')}`} target="_blank" rel="noopener" class="od-btn od-btn--primario">Escríbenos por WhatsApp</a>
+    </div>
+
+    <div class="od-faq__lista">
+      {faq.map((f: { p: string; r: string }, i: number) => (
+        <details class={`od-faq__item od-reveal od-reveal--${(i % 4) + 1}`} open={i === 0}>
+          <summary>
+            {f.p}
+            <span class="od-faq__icono" aria-hidden="true">+</span>
+          </summary>
+          <p>{f.r}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .od-faq__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+
+  .od-faq__grid > div:first-child .od-sub {
+    margin-bottom: 1.75rem;
+  }
+
+  .od-faq__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .od-faq__item {
+    border: 1px solid var(--od-linea);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+  }
+
+  .od-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .od-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .od-faq__icono {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--od-crema);
+    color: var(--od-tinta);
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .od-faq__item[open] .od-faq__icono {
+    transform: rotate(45deg);
+  }
+
+  .od-faq__item p {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--od-gris);
+  }
+
+  @media (max-width: 860px) {
+    .od-faq__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,160 @@
+---
+import { marca, nav, footerEspecialidades } from '../datos/clinica.js';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="kd-foot">
+  <div class="kd-wrap kd-foot__grid">
+    <div class="kd-foot__marca">
+      <span class="kd-foot__logo">{marca.nombre}<b>{marca.sub}</b></span>
+      <p>Odontopediatría en Perú. Consultorios pensados para que la primera visita de tu hijo sea un buen recuerdo.</p>
+      <div class="kd-foot__redes">
+        <a href="#top" aria-label="Facebook">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.5-3.89 3.79-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>
+        </a>
+        <a href="#top" aria-label="Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+        <a href="#top" aria-label="TikTok">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.2v13.9a2.9 2.9 0 1 1-2.06-2.78V9.9a6.1 6.1 0 1 0 5.26 6.04V8.2a7.6 7.6 0 0 0 4.4 1.4V6.4a4.4 4.4 0 0 1-4.4-4.4Z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav class="kd-foot__col">
+      <h3>Explorar</h3>
+      {nav.map((n: { t: string; href: string }) => <a href={n.href}>{n.t}</a>)}
+    </nav>
+
+    <nav class="kd-foot__col">
+      <h3>Especialidades</h3>
+      {footerEspecialidades.map((e: string) => <a href="#especialidades">{e}</a>)}
+    </nav>
+
+    <div class="kd-foot__col">
+      <h3>Contacto</h3>
+      <a href={`tel:${marca.tel.replace(/\s/g, '')}`}>{marca.tel}</a>
+      <a href={`mailto:${marca.correo}`}>{marca.correo}</a>
+      <a href="#sedes">Ver las 10 sedes</a>
+    </div>
+  </div>
+
+  <div class="kd-wrap kd-foot__legal">
+    <span>© {anio} {marca.nombre} — Plantilla de referencia, no es un negocio real.</span>
+    <div class="kd-foot__legal-links">
+      <a href="#top">Libro de reclamaciones</a>
+      <a href="#top">Términos</a>
+      <a href="#top">Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .kd-foot {
+    background: var(--kd-tinta);
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: clamp(3rem, 6vw, 4rem);
+  }
+
+  .kd-foot__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .kd-foot__logo {
+    font-family: var(--kd-display);
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #fff;
+    display: block;
+    margin-bottom: 0.9rem;
+  }
+
+  .kd-foot__logo b {
+    color: var(--kd-sol);
+    margin-left: 0.35rem;
+    font-weight: 800;
+  }
+
+  .kd-foot__marca p {
+    font-size: 0.84rem;
+    max-width: 32ch;
+    margin-bottom: 1.25rem;
+  }
+
+  .kd-foot__redes {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .kd-foot__redes a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .kd-foot__redes a:hover {
+    background: var(--kd-coral);
+  }
+
+  .kd-foot__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .kd-foot__col h3 {
+    font-family: var(--kd-display);
+    color: #fff;
+    font-size: 0.86rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .kd-foot__col a {
+    font-size: 0.84rem;
+    transition: color 0.2s ease;
+  }
+
+  .kd-foot__col a:hover {
+    color: #fff;
+  }
+
+  .kd-foot__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    font-size: 0.76rem;
+  }
+
+  .kd-foot__legal-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .kd-foot__legal-links a:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 860px) {
+    .kd-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .kd-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

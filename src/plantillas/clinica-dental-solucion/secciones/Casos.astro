@@ -1,0 +1,181 @@
+---
+import { casos } from '../datos/clinica.js';
+
+interface Caso {
+  t: string;
+  d: string;
+  antes: string;
+  despues: string;
+}
+const lista = casos as Caso[];
+---
+
+<section class="sd-seccion sd-wrap" id="casos">
+  <div class="sd-cab sd-reveal">
+    <span class="sd-kicker">Casos de éxito</span>
+    <h2 class="sd-titulo sd-titulo--linea">Mueve para comparar</h2>
+    <p class="sd-sub">Desliza sobre cada foto para ver la diferencia. Resultados 100% reales de nuestros pacientes.</p>
+  </div>
+
+  <div class="sd-casos__grid">
+    {lista.map((c: Caso, i: number) => (
+      <article class={`sd-casos__item sd-reveal sd-reveal--${i + 1}`}>
+        <div class="sd-casos__comparador" data-comparador>
+          <img src={c.despues} alt={`${c.t} - después`} class="sd-casos__despues" loading="lazy" />
+          <div class="sd-casos__antes-wrap" data-antes-wrap>
+            <img src={c.antes} alt={`${c.t} - antes`} class="sd-casos__antes" loading="lazy" />
+            <span class="sd-casos__tag sd-casos__tag--antes">Antes</span>
+          </div>
+          <span class="sd-casos__tag sd-casos__tag--despues">Después</span>
+          <span class="sd-casos__linea" data-linea aria-hidden="true"></span>
+          <input type="range" min="0" max="100" value="50" class="sd-casos__slider" data-slider aria-label={`Comparar antes y después: ${c.t}`} />
+          <span class="sd-casos__handle" data-handle aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+        <h3>{c.t}</h3>
+        <p>{c.d}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-comparador]').forEach((comparador) => {
+    const slider = comparador.querySelector<HTMLInputElement>('[data-slider]');
+    const antesWrap = comparador.querySelector<HTMLElement>('[data-antes-wrap]');
+    const handle = comparador.querySelector<HTMLElement>('[data-handle]');
+    const linea = comparador.querySelector<HTMLElement>('[data-linea]');
+    if (!slider || !antesWrap || !handle || !linea) return;
+
+    function actualizar() {
+      if (!slider || !antesWrap || !handle || !linea) return;
+      const v = slider.value;
+      antesWrap.style.clipPath = `inset(0 ${100 - Number(v)}% 0 0)`;
+      handle.style.left = `${v}%`;
+      linea.style.left = `${v}%`;
+    }
+
+    slider.addEventListener('input', actualizar);
+    actualizar();
+  });
+</script>
+
+<style>
+  .sd-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .sd-casos__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+
+  .sd-casos__item h3 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .sd-casos__item p {
+    font-size: 0.84rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-casos__comparador {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    user-select: none;
+    box-shadow: 0 20px 45px -28px rgba(20, 30, 40, 0.4);
+  }
+
+  .sd-casos__despues,
+  .sd-casos__antes {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sd-casos__antes-wrap {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .sd-casos__tag {
+    position: absolute;
+    top: 0.75rem;
+    z-index: 2;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(20, 30, 40, 0.55);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--sd-pill);
+  }
+
+  .sd-casos__tag--antes {
+    left: 0.75rem;
+  }
+
+  .sd-casos__tag--despues {
+    right: 0.75rem;
+    background: var(--sd-teal);
+  }
+
+  .sd-casos__linea {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: #fff;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .sd-casos__slider {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 3;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+  }
+
+  .sd-casos__handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    color: var(--sd-teal-oscuro);
+    pointer-events: none;
+    z-index: 2;
+    box-shadow: 0 6px 16px -6px rgba(20, 30, 40, 0.5);
+  }
+
+  @media (max-width: 620px) {
+    .sd-casos__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

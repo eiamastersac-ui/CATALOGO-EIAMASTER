@@ -1,0 +1,100 @@
+---
+import { testimonios } from '../datos/clinica.js';
+---
+
+<section class="od-seccion od-wrap" id="testimonios">
+  <div class="od-cab od-cab--centro od-reveal">
+    <span class="od-kicker" style="justify-content:center">Testimonios</span>
+    <h2 class="od-titulo od-titulo--centro">Lo que cuentan nuestros pacientes</h2>
+  </div>
+
+  <div class="od-testi__area">
+    <button type="button" class="od-testi__flecha" data-dir="-1" aria-label="Anterior">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+    </button>
+    <div class="od-fila od-testi__fila" id="od-testi-fila">
+      {testimonios.map((t: { texto: string; autor: string; tratamiento: string }, i: number) => (
+        <figure class={`od-tarjeta od-testi__card od-reveal od-reveal--${(i % 4) + 1}`}>
+          <span class="od-testi__quote" aria-hidden="true">&ldquo;</span>
+          <blockquote>{t.texto}</blockquote>
+          <figcaption>
+            <b>{t.autor}</b>
+            <span>{t.tratamiento}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+    <button type="button" class="od-testi__flecha" data-dir="1" aria-label="Siguiente">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('od-testi-fila');
+  document.querySelectorAll<HTMLButtonElement>('.od-testi__flecha').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = Number(btn.dataset.dir);
+      fila?.scrollBy({ left: dir * 340, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .od-testi__area {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .od-testi__area .od-fila {
+    flex: 1;
+  }
+
+  .od-testi__flecha {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--od-linea);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: var(--od-tinta);
+  }
+
+  .od-testi__flecha:hover {
+    border-color: var(--od-acento);
+    color: var(--od-acento);
+  }
+
+  .od-testi__card {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .od-testi__quote {
+    font-family: var(--od-display);
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--od-acento);
+  }
+
+  .od-testi__card blockquote {
+    font-size: 0.92rem;
+    color: var(--od-tinta);
+  }
+
+  .od-testi__card figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: auto;
+  }
+
+  .od-testi__card figcaption span {
+    font-size: 0.78rem;
+    color: var(--od-gris);
+  }
+</style>

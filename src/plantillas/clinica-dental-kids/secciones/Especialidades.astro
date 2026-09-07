@@ -1,0 +1,192 @@
+---
+import { especialidades, filtrosEdad } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Especialidad {
+  img: string;
+  t: string;
+  d: string;
+  edad: string[];
+}
+const lista = especialidades as Especialidad[];
+---
+
+<section class="kd-seccion" id="especialidades">
+  <div class="kd-wrap">
+    <div class="kd-cab kd-cab--centro kd-reveal">
+      <span class="kd-kicker">Especialidades</span>
+      <h2 class="kd-titulo kd-titulo--centro">Un tratamiento para cada etapa</h2>
+      <p class="kd-sub kd-sub--centro">Filtra por edad y descubre qué necesita tu hijo en cada momento.</p>
+    </div>
+
+    <div class="kd-filtro kd-reveal kd-reveal--2" role="tablist" aria-label="Filtrar especialidades por edad">
+      {filtrosEdad.map((f: { id: string; t: string; icono: string }, i: number) => (
+        <button type="button" class={`kd-filtro__btn${i === 0 ? ' is-on' : ''}`} data-filtro={f.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>
+          <Icono nombre={f.icono} size={16} />
+          {f.t}
+        </button>
+      ))}
+    </div>
+
+    <div class="kd-esp__grid" id="kd-esp-grid">
+      {lista.map((e: Especialidad, i: number) => (
+        <a href="#preguntas" class={`kd-esp__card kd-reveal kd-reveal--${(i % 4) + 1}`} data-edad={e.edad.join(' ')}>
+          <img src={e.img} alt={e.t} loading="lazy" />
+          <span class="kd-esp__scrim" aria-hidden="true"></span>
+          <span class="kd-esp__etiqueta">
+            {e.t}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <p class="kd-esp__vacio" id="kd-esp-vacio" hidden>No encontramos especialidades para este filtro. Escríbenos y te ayudamos igual 💬</p>
+  </div>
+</section>
+
+<script>
+  const botones = Array.from(document.querySelectorAll<HTMLButtonElement>('.kd-filtro__btn'));
+  const tarjetas = Array.from(document.querySelectorAll<HTMLElement>('#kd-esp-grid [data-edad]'));
+  const vacio = document.getElementById('kd-esp-vacio');
+
+  function aplicar(filtro: string) {
+    let visibles = 0;
+    for (const t of tarjetas) {
+      const edades = (t.dataset.edad || '').split(' ');
+      const ok = filtro === 'todos' || edades.includes(filtro);
+      t.hidden = !ok;
+      if (ok) visibles++;
+    }
+    botones.forEach((b) => {
+      const activo = b.dataset.filtro === filtro;
+      b.classList.toggle('is-on', activo);
+      b.setAttribute('aria-selected', String(activo));
+    });
+    if (vacio) vacio.hidden = visibles > 0;
+  }
+
+  botones.forEach((b) => b.addEventListener('click', () => aplicar(b.dataset.filtro ?? 'todos')));
+</script>
+
+<style>
+  .kd-filtro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .kd-filtro__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--kd-pill);
+    border: 2px solid var(--kd-linea);
+    font-family: var(--kd-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--kd-gris);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .kd-filtro__btn:hover {
+    border-color: var(--kd-coral);
+  }
+
+  .kd-filtro__btn.is-on {
+    background: var(--kd-coral);
+    border-color: var(--kd-coral);
+    color: #fff;
+  }
+
+  .kd-esp__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .kd-esp__grid [hidden] {
+    display: none;
+  }
+
+  .kd-esp__card {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .kd-esp__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .kd-esp__card:hover img {
+    transform: scale(1.06);
+  }
+
+  .kd-esp__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(43, 33, 64, 0.78) 0%, rgba(43, 33, 64, 0.05) 45%);
+  }
+
+  .kd-esp__etiqueta {
+    position: absolute;
+    left: 0.9rem;
+    right: 0.9rem;
+    bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: #fff;
+    font-family: var(--kd-display);
+    font-weight: 700;
+    font-size: 0.86rem;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(6px);
+    padding: 0.65rem 0.6rem 0.65rem 0.9rem;
+    border-radius: var(--kd-pill);
+  }
+
+  .kd-esp__etiqueta svg {
+    flex-shrink: 0;
+    background: #fff;
+    color: var(--kd-tinta);
+    border-radius: 50%;
+    padding: 0.3rem;
+    box-sizing: content-box;
+  }
+
+  .kd-esp__vacio {
+    text-align: center;
+    color: var(--kd-gris);
+    padding-top: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .kd-esp__vacio[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 960px) {
+    .kd-esp__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .kd-esp__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+import { marca, nav } from '../datos/clinica.js';
+---
+
+<header class="od-hdr" id="cabecera">
+  <div class="od-wrap od-hdr__row">
+    <a href="#top" class="od-logo">
+      <span class="od-logo__marca">{marca.nombre}</span>
+      <span class="od-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="od-nav" id="od-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }) => <a href={n.href}>{n.t}</a>)}
+    </nav>
+
+    <div class="od-hdr__acc">
+      <a href="#preguntas" class="od-btn od-hdr__cta">
+        Reservar cita
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button type="button" class="od-hdr__burger" id="od-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<span id="top"></span>
+
+<script>
+  const hdr = document.getElementById('cabecera');
+  const burger = document.getElementById('od-burger');
+  const nav = document.getElementById('od-nav');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 60);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+    hdr?.classList.toggle('is-menu-abierto', !!abierto);
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      hdr?.classList.remove('is-menu-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .od-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: var(--od-hdr-h);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0));
+    transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  }
+
+  .od-hdr.is-scrolled,
+  .od-hdr.is-menu-abierto {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--od-tinta);
+    box-shadow: 0 8px 30px -22px rgba(21, 22, 26, 0.4);
+  }
+
+  .od-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .od-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    color: inherit;
+  }
+
+  .od-logo__marca {
+    font-family: var(--od-display);
+    font-weight: 800;
+    font-size: 1.3rem;
+  }
+
+  .od-logo__sub {
+    font-size: 0.7rem;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  .od-nav {
+    display: flex;
+    gap: 1.9rem;
+    margin-inline: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .od-nav a {
+    color: inherit;
+  }
+
+  .od-nav a:hover {
+    opacity: 0.7;
+  }
+
+  .od-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .od-hdr__cta {
+    padding: 0.65rem 1.3rem;
+    font-size: 0.82rem;
+    background: #fff;
+    color: var(--od-tinta);
+  }
+
+  .od-hdr__cta:hover {
+    opacity: 0.85;
+  }
+
+  .od-hdr.is-scrolled .od-hdr__cta {
+    background: var(--od-tinta);
+    color: #fff;
+  }
+
+  .od-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .od-hdr__burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 860px) {
+    .od-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: #fff;
+      color: var(--od-tinta);
+      border-bottom: 1px solid var(--od-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+    .od-nav.is-abierto {
+      display: flex;
+    }
+    .od-nav a {
+      padding-block: 0.65rem;
+      border-top: 1px solid var(--od-linea);
+    }
+    .od-hdr__cta {
+      display: none;
+    }
+    .od-hdr__burger {
+      display: flex;
+    }
+  }
+</style>

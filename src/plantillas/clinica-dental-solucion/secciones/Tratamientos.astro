@@ -1,0 +1,90 @@
+---
+import { tratamientos } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Tratamiento {
+  t: string;
+  icono: string;
+}
+const lista = tratamientos as Tratamiento[];
+---
+
+<section class="sd-trat" id="tratamientos">
+  <div class="sd-trat__banda sd-reveal">
+    <h2 class="sd-titulo--linea sd-centro sd-trat__titulo">Lo que hacemos con el <span aria-hidden="true">🤍</span></h2>
+  </div>
+
+  <div class="sd-wrap sd-trat__grid">
+    {lista.map((t: Tratamiento, i: number) => (
+      <a href="#preguntas" class={`sd-trat__card sd-reveal sd-reveal--${(i % 4) + 1}`}>
+        <div class="sd-trat__ico"><Icono nombre={t.icono} size={44} /></div>
+        <span class="sd-trat__etiqueta">{t.t}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .sd-trat {
+    background: var(--sd-teal-suave);
+  }
+
+  .sd-trat__banda {
+    background: var(--sd-teal);
+    padding-block: clamp(2rem, 5vw, 2.75rem);
+    margin-bottom: clamp(2rem, 5vw, 2.75rem);
+  }
+
+  .sd-trat__titulo {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .sd-trat__titulo::after {
+    background: var(--sd-amarillo);
+  }
+
+  .sd-trat__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.1rem;
+    padding-bottom: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .sd-trat__card {
+    background: #fff;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .sd-trat__card:hover {
+    border-color: var(--sd-teal);
+    transform: translateY(-3px);
+  }
+
+  .sd-trat__ico {
+    color: var(--sd-teal);
+    padding: clamp(1.5rem, 4vw, 2.25rem) 1rem;
+  }
+
+  .sd-trat__etiqueta {
+    width: 100%;
+    text-align: center;
+    background: var(--sd-teal);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.85rem 0.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .sd-trat__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

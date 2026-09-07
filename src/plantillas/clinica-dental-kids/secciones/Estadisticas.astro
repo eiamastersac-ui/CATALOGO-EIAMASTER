@@ -1,0 +1,110 @@
+---
+import { estadisticas } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="kd-stats kd-wrap">
+  <div class="kd-stats__grid">
+    {estadisticas.map((s: { n: number; sufijo: string; t: string; icono: string }, i: number) => (
+      <div class={`kd-stats__item kd-reveal kd-reveal--${i + 1}`}>
+        <span class="kd-stats__ico"><Icono nombre={s.icono} size={18} /></span>
+        <div>
+          <b class="kd-stats__num" data-hasta={s.n} data-sufijo={s.sufijo}>0{s.sufijo}</b>
+          <span>{s.t}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const nums = document.querySelectorAll<HTMLElement>('.kd-stats__num');
+
+  function animar(el: HTMLElement) {
+    const hasta = Number(el.dataset.hasta || '0');
+    const sufijo = el.dataset.sufijo || '';
+    const duracion = 1100;
+    const inicio = performance.now();
+
+    function paso(ahora: number) {
+      const progreso = Math.min(1, (ahora - inicio) / duracion);
+      const facilitado = 1 - Math.pow(1 - progreso, 3);
+      const valor = Math.round(hasta * facilitado);
+      el.textContent = `${valor.toLocaleString('es-PE')}${sufijo}`;
+      if (progreso < 1) requestAnimationFrame(paso);
+    }
+    requestAnimationFrame(paso);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (entrada.isIntersecting) {
+            animar(entrada.target as HTMLElement);
+            observer.unobserve(entrada.target);
+          }
+        }
+      },
+      { threshold: 0.5 },
+    );
+    nums.forEach((n) => observer.observe(n));
+  } else {
+    nums.forEach((n) => animar(n));
+  }
+</script>
+
+<style>
+  .kd-stats {
+    padding-block: clamp(2.25rem, 6vw, 3.25rem);
+    border-bottom: 2px solid var(--kd-linea);
+  }
+
+  .kd-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .kd-stats__item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .kd-stats__ico {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--kd-coral-suave);
+    color: var(--kd-coral-osc);
+    flex-shrink: 0;
+  }
+
+  .kd-stats__item div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .kd-stats__num {
+    font-family: var(--kd-display);
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+    font-weight: 800;
+    color: var(--kd-tinta);
+  }
+
+  .kd-stats__item span:last-child {
+    font-size: 0.78rem;
+    color: var(--kd-gris);
+    font-weight: 500;
+  }
+
+  @media (max-width: 760px) {
+    .kd-stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.75rem 1.25rem;
+    }
+  }
+</style>

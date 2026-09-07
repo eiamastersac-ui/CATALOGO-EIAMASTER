@@ -1,0 +1,34 @@
+---
+import { intro } from '../datos/clinica.js';
+---
+
+<section class="sd-seccion sd-wrap sd-intro">
+  <h2 class="sd-titulo sd-titulo--linea sd-reveal">{intro.titulo}</h2>
+  <div class="sd-intro__cols sd-reveal sd-reveal--2">
+    <p>{intro.p1}</p>
+    <p>{intro.p2}</p>
+  </div>
+</section>
+
+<style>
+  .sd-intro {
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .sd-intro__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-top: 1.5rem;
+  }
+
+  .sd-intro__cols p {
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 720px) {
+    .sd-intro__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

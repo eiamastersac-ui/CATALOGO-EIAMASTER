@@ -1,0 +1,199 @@
+---
+import Marco from '../componentes/Marco.astro';
+import Icono from '../componentes/Icono.astro';
+import { marca, horario } from '../datos/clinica.js';
+
+export const titulo = 'Contacto | tu tienda.com Dental Care';
+export const descripcion = 'Resuelve tus dudas o agenda una cita con tu tienda.com Dental Care.';
+---
+
+<Marco>
+  <section class="sd-seccion sd-wrap sd-contacto">
+    <div class="sd-contacto__info sd-reveal">
+      <h1>Resuelve tus dudas o agenda una cita</h1>
+
+      <div class="sd-contacto__datos">
+        <p><Icono nombre="mapa" size={16} /> Dirección: {marca.direccion}</p>
+        <p><Icono nombre="telefono" size={16} /> Llámanos: {marca.telFijo}</p>
+        <p><Icono nombre="correo" size={16} /> Correo: {marca.correo}</p>
+        <p><Icono nombre="whatsapp" size={16} /> WhatsApp: {marca.tel}</p>
+      </div>
+
+      <div class="sd-contacto__horario">
+        <p><Icono nombre="reloj" size={16} /> Horarios: (Previa cita) {horario.semana.replace('Lunes a Viernes: ', 'L-V ')} {horario.sabado.replace('Sábado: ', '· Sáb ')}</p>
+        <p><Icono nombre="auto" size={16} /> Estacionamiento gratuito*</p>
+        <span class="sd-contacto__nota">* Previa coordinación.</span>
+      </div>
+    </div>
+
+    <div class="sd-contacto__form-col sd-reveal sd-reveal--2">
+      <h2>¡Envíanos un mensaje y te responderemos en menos de 24h!</h2>
+      <form class="sd-contacto__form" onsubmit="return false">
+        <div class="sd-contacto__grid2">
+          <label>
+            <span class="sd-visually-oculto">Nombres y Apellidos</span>
+            <input type="text" placeholder="Nombres y Apellidos *" required />
+          </label>
+          <label>
+            <span class="sd-visually-oculto">WhatsApp</span>
+            <input type="tel" placeholder="WhatsApp *" required />
+          </label>
+          <label>
+            <span class="sd-visually-oculto">Correo</span>
+            <input type="email" placeholder="Correo (opcional)" />
+          </label>
+          <label>
+            <span class="sd-visually-oculto">Tratamiento</span>
+            <select>
+              <option value="">Seleccionar tratamiento</option>
+              <option>Ortodoncia</option>
+              <option>Implantes Dentales</option>
+              <option>Endodoncia</option>
+              <option>Estética dental</option>
+              <option>Otro</option>
+            </select>
+          </label>
+        </div>
+        <label class="sd-contacto__mensaje">
+          <span class="sd-visually-oculto">Mensaje</span>
+          <textarea rows="5" placeholder="Mensaje"></textarea>
+        </label>
+        <label class="sd-contacto__check">
+          <input type="checkbox" />
+          Requiero estacionamiento
+        </label>
+        <button type="submit" class="sd-btn sd-btn--teal-solido sd-contacto__enviar">Enviar</button>
+        <p class="sd-contacto__legal">En tu tienda.com Dental Care cumplimos con la <a href="#top">política de privacidad</a>. Tu información está segura con nosotros.</p>
+      </form>
+    </div>
+  </section>
+</Marco>
+
+<style>
+  .sd-contacto {
+    display: grid;
+    grid-template-columns: 0.9fr 1.4fr;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .sd-contacto__info h1 {
+    font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+    margin-bottom: 1.75rem;
+  }
+
+  .sd-contacto__datos,
+  .sd-contacto__horario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .sd-contacto__datos {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--sd-linea);
+  }
+
+  .sd-contacto__datos p,
+  .sd-contacto__horario p {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-contacto__datos svg,
+  .sd-contacto__horario svg {
+    color: var(--sd-teal);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .sd-contacto__nota {
+    font-size: 0.75rem;
+    color: var(--sd-texto);
+    padding-left: 1.9rem;
+  }
+
+  .sd-contacto__form-col h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .sd-contacto__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .sd-contacto__grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .sd-visually-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .sd-contacto__form input,
+  .sd-contacto__form select,
+  .sd-contacto__form textarea {
+    width: 100%;
+    border: 1.5px solid var(--sd-linea);
+    border-radius: 6px;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.88rem;
+    background: #fff;
+  }
+
+  .sd-contacto__form input:focus,
+  .sd-contacto__form select:focus,
+  .sd-contacto__form textarea:focus {
+    outline: none;
+    border-color: var(--sd-teal);
+  }
+
+  .sd-contacto__check {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-contacto__check input {
+    width: auto;
+  }
+
+  .sd-contacto__enviar {
+    align-self: flex-start;
+    padding-inline: 2.5rem;
+  }
+
+  .sd-contacto__legal {
+    font-size: 0.76rem;
+    color: var(--sd-texto);
+  }
+
+  .sd-contacto__legal a {
+    color: var(--sd-teal-oscuro);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 860px) {
+    .sd-contacto {
+      grid-template-columns: 1fr;
+    }
+
+    .sd-contacto__grid2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,145 @@
+---
+import { humores } from '../datos/clinica.js';
+
+interface Humor {
+  id: string;
+  emoji: string;
+  t: string;
+  titulo: string;
+  texto: string;
+  cta: string;
+  href: string;
+}
+const lista = humores as Humor[];
+---
+
+<section class="kd-seccion kd-humor">
+  <div class="kd-wrap">
+    <div class="kd-cab kd-cab--centro kd-reveal">
+      <span class="kd-kicker">Antes de venir</span>
+      <h2 class="kd-titulo kd-titulo--centro">¿Cómo se siente tu peque con la idea?</h2>
+      <p class="kd-sub kd-sub--centro">Cuéntanos y te mostramos cómo lo acompañamos en cada caso.</p>
+    </div>
+
+    <div class="kd-humor__botones kd-reveal kd-reveal--2" role="tablist" aria-label="Elige el estado de ánimo">
+      {lista.map((h: Humor, i: number) => (
+        <button type="button" class={`kd-humor__btn${i === 0 ? ' is-on' : ''}`} data-humor={h.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>
+          <span class="kd-humor__emoji" aria-hidden="true">{h.emoji}</span>
+          {h.t}
+        </button>
+      ))}
+    </div>
+
+    <div class="kd-humor__panel kd-reveal kd-reveal--3">
+      {lista.map((h: Humor, i: number) => (
+        <div class="kd-humor__resultado" data-humor-panel={h.id} hidden={i !== 0}>
+          <h3>{h.titulo}</h3>
+          <p>{h.texto}</p>
+          <a href={h.href} class="kd-btn kd-btn--primario">{h.cta}</a>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <span class="kd-blob kd-humor__blob" aria-hidden="true"></span>
+</section>
+
+<script>
+  const botones = Array.from(document.querySelectorAll<HTMLButtonElement>('.kd-humor__btn'));
+  const paneles = Array.from(document.querySelectorAll<HTMLElement>('[data-humor-panel]'));
+
+  botones.forEach((b) => {
+    b.addEventListener('click', () => {
+      const id = b.dataset.humor;
+      botones.forEach((x) => {
+        const activo = x === b;
+        x.classList.toggle('is-on', activo);
+        x.setAttribute('aria-selected', String(activo));
+      });
+      paneles.forEach((p) => (p.hidden = p.dataset.humorPanel !== id));
+    });
+  });
+</script>
+
+<style>
+  .kd-humor {
+    position: relative;
+    background: var(--kd-crema);
+    overflow: hidden;
+  }
+
+  .kd-humor__blob {
+    width: 280px;
+    height: 280px;
+    background: var(--kd-menta-suave);
+    top: -60px;
+    left: -80px;
+  }
+
+  .kd-humor__botones {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .kd-humor__btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.1rem 1.4rem;
+    border-radius: 20px;
+    background: #fff;
+    border: 2px solid var(--kd-linea);
+    font-family: var(--kd-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--kd-tinta);
+    min-width: 108px;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .kd-humor__btn:hover {
+    transform: translateY(-3px);
+  }
+
+  .kd-humor__btn.is-on {
+    border-color: var(--kd-coral);
+    box-shadow: 0 14px 28px -18px rgba(255, 107, 122, 0.6);
+  }
+
+  .kd-humor__emoji {
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+
+  .kd-humor__panel {
+    position: relative;
+    z-index: 1;
+    max-width: 40rem;
+    margin-inline: auto;
+    text-align: center;
+    background: #fff;
+    border: 2px solid var(--kd-linea);
+    border-radius: 24px;
+    padding: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .kd-humor__resultado[hidden] {
+    display: none;
+  }
+
+  .kd-humor__resultado h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .kd-humor__resultado p {
+    color: var(--kd-gris);
+    margin-bottom: 1.5rem;
+  }
+</style>

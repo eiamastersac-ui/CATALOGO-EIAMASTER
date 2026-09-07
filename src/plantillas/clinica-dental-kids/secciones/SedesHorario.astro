@@ -1,0 +1,289 @@
+---
+import { horario, sedes, marca } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Dia {
+  dia: string;
+  horas: string;
+}
+interface Sede {
+  t: string;
+  dir: string;
+}
+const diasHorario = horario as Dia[];
+const listaSedes = sedes as Sede[];
+---
+
+<section class="kd-seccion kd-sedes kd-wrap" id="sedes">
+  <div class="kd-cab kd-reveal">
+    <span class="kd-kicker">Sedes en Perú</span>
+    <h2 class="kd-titulo">Encuentra tu sede más cercana</h2>
+    <p class="kd-sub">10 consultorios a nivel nacional, mismo protocolo pensado para niños en todos.</p>
+  </div>
+
+  <div class="kd-sedes__grid">
+    <div class="kd-sedes__panel kd-reveal kd-reveal--2">
+      <div class="kd-sedes__estado" id="kd-sedes-estado">
+        <span class="kd-sedes__punto" id="kd-sedes-punto" aria-hidden="true"></span>
+        <b id="kd-sedes-texto">Consultando horario…</b>
+      </div>
+
+      <ul class="kd-sedes__horario" id="kd-sedes-horario-lista">
+        {diasHorario.map((d: Dia) => (
+          <li data-dia-nombre={d.dia}>
+            <span>{d.dia}</span>
+            <b>{d.horas}</b>
+          </li>
+        ))}
+      </ul>
+
+      <a href={`tel:${marca.tel.replace(/\s/g, '')}`} class="kd-btn kd-btn--claro kd-sedes__tel">
+        <Icono nombre="whatsapp" size={16} />
+        {marca.tel}
+      </a>
+    </div>
+
+    <div class="kd-sedes__lista">
+      <div class="kd-sedes__buscador">
+        <Icono nombre="lupa" size={16} />
+        <input type="search" id="kd-sedes-buscar" placeholder="Busca tu ciudad o distrito…" aria-label="Buscar sede" />
+      </div>
+
+      <ul class="kd-sedes__items" id="kd-sedes-items">
+        {listaSedes.map((s: Sede) => (
+          <li data-sede-nombre={s.t.toLowerCase()}>
+            <span class="kd-sedes__ico"><Icono nombre="mapa" size={15} /></span>
+            <div>
+              <b>{s.t}</b>
+              <span>{s.dir}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="kd-sedes__vacio" id="kd-sedes-vacio" hidden>No encontramos esa sede. Escríbenos y te decimos la más cercana 💬</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+  function parsearHoras(texto: string): [number, number] | null {
+    const m = texto.match(/(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})/);
+    if (!m) return null;
+    return [Number(m[1]) * 60 + Number(m[2]), Number(m[3]) * 60 + Number(m[4])];
+  }
+
+  const ahora = new Date();
+  const diaHoy = dias[ahora.getDay()];
+  const minutosAhora = ahora.getHours() * 60 + ahora.getMinutes();
+
+  const filas = Array.from(document.querySelectorAll<HTMLElement>('#kd-sedes-horario-lista li'));
+  const filaHoy = filas.find((li) => li.dataset.diaNombre === diaHoy);
+  filaHoy?.classList.add('is-hoy');
+
+  const punto = document.getElementById('kd-sedes-punto');
+  const texto = document.getElementById('kd-sedes-texto');
+  const horasHoy = filaHoy?.querySelector('b')?.textContent ?? '';
+  const rango = parsearHoras(horasHoy);
+
+  let abierto = false;
+  if (rango) {
+    abierto = minutosAhora >= rango[0] && minutosAhora < rango[1];
+  }
+
+  if (punto && texto) {
+    punto.classList.toggle('is-abierto', abierto);
+    texto.textContent = abierto ? `Abierto ahora · ${diaHoy} ${horasHoy}` : `Cerrado ahora · ${diaHoy} ${horasHoy || 'con cita previa'}`;
+  }
+
+  const buscador = document.getElementById('kd-sedes-buscar') as HTMLInputElement | null;
+  const items = Array.from(document.querySelectorAll<HTMLElement>('#kd-sedes-items li'));
+  const vacio = document.getElementById('kd-sedes-vacio');
+
+  buscador?.addEventListener('input', () => {
+    const q = buscador.value.trim().toLowerCase();
+    let visibles = 0;
+    for (const li of items) {
+      const ok = (li.dataset.sedeNombre ?? '').includes(q);
+      li.hidden = !ok;
+      if (ok) visibles++;
+    }
+    if (vacio) vacio.hidden = visibles > 0;
+  });
+</script>
+
+<style>
+  .kd-sedes__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: start;
+  }
+
+  .kd-sedes__panel {
+    background: var(--kd-tinta);
+    color: #fff;
+    border-radius: 24px;
+    padding: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .kd-sedes__estado {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-bottom: 1.1rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.86rem;
+  }
+
+  .kd-sedes__punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--kd-gris);
+    flex-shrink: 0;
+  }
+
+  .kd-sedes__punto.is-abierto {
+    background: var(--kd-menta);
+    box-shadow: 0 0 0 4px rgba(53, 183, 160, 0.25);
+  }
+
+  .kd-sedes__horario {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .kd-sedes__horario li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 0.3rem 0;
+  }
+
+  .kd-sedes__horario li b {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+  }
+
+  .kd-sedes__horario li.is-hoy {
+    color: #fff;
+  }
+
+  .kd-sedes__horario li.is-hoy span {
+    color: var(--kd-sol);
+    font-weight: 700;
+  }
+
+  .kd-sedes__horario li.is-hoy b {
+    color: var(--kd-sol);
+  }
+
+  .kd-sedes__tel {
+    width: 100%;
+  }
+
+  .kd-sedes__buscador {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border: 2px solid var(--kd-linea);
+    border-radius: var(--kd-pill);
+    padding: 0.75rem 1.1rem;
+    margin-bottom: 1.1rem;
+    color: var(--kd-gris);
+  }
+
+  .kd-sedes__buscador input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    color: var(--kd-tinta);
+    background: none;
+  }
+
+  .kd-sedes__items {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  .kd-sedes__items[hidden],
+  .kd-sedes__items li[hidden] {
+    display: none;
+  }
+
+  .kd-sedes__items li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.85rem;
+    border: 2px solid var(--kd-linea);
+    border-radius: 16px;
+  }
+
+  .kd-sedes__items li div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .kd-sedes__items li b {
+    font-family: var(--kd-display);
+    font-size: 0.86rem;
+  }
+
+  .kd-sedes__items li span {
+    font-size: 0.76rem;
+    color: var(--kd-gris);
+  }
+
+  .kd-sedes__ico {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--kd-cielo-suave);
+    color: var(--kd-cielo);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .kd-sedes__vacio {
+    text-align: center;
+    color: var(--kd-gris);
+    font-size: 0.86rem;
+    padding-top: 1rem;
+  }
+
+  .kd-sedes__vacio[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .kd-sedes__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .kd-sedes__items {
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .kd-sedes__items {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

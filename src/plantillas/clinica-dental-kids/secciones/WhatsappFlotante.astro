@@ -1,0 +1,65 @@
+---
+import { marca } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<a
+  href={`https://wa.me/51${marca.tel.replace(/\s/g, '')}`}
+  target="_blank"
+  rel="noopener"
+  class="kd-whats"
+  aria-label="Escríbenos por WhatsApp"
+>
+  <span class="kd-whats__tip">¿Tu peque tiene miedo? <b>Escríbenos</b></span>
+  <Icono nombre="whatsapp" size={26} />
+</a>
+
+<style>
+  .kd-whats {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 150;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 32px -10px rgba(37, 211, 102, 0.65);
+    transition: transform 0.2s ease;
+  }
+
+  .kd-whats:hover {
+    transform: scale(1.06);
+  }
+
+  .kd-whats__tip {
+    position: absolute;
+    right: 68px;
+    bottom: 0;
+    background: #fff;
+    color: var(--kd-tinta);
+    font-size: 0.76rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    white-space: nowrap;
+    box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .kd-whats:hover .kd-whats__tip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    .kd-whats__tip {
+      display: none;
+    }
+  }
+</style>

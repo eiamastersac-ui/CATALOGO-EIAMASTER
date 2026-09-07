@@ -1,0 +1,13 @@
+{
+  "titulo": "tu tienda.com — Dental (Estilo Odontología Perú)",
+  "categoria": "salud-dental",
+  "descripcion": "Clínica dental con estética editorial minimalista: paleta casi monocroma (tinta, crema, un solo acento dorado) donde el color lo pone la fotografia, no gradientes decorativos. Hero de foto completa a pantalla entera con cabecera superpuesta transparente que se vuelve solida al hacer scroll, tarjeta de confianza flotante con rating del especialista, tags rapidos y contador de slides. Especialidades como tarjetas fotograficas con etiqueta superpuesta, contador animado de estadisticas, comparador interactivo de casos antes/despues con slider, carrusel de testimonios, bio de la doctora, banner final con imagen real y preguntas frecuentes en acordeon nativo. Navegacion por anclas instantanea, sin transiciones pesadas. Inspirada en el contenido de una clinica real, repensada con un lenguaje visual premium contemporaneo. Incluye boton flotante de WhatsApp. Sin login.",
+  "thumbnail": "/previews/clinica-dental.jpg",
+  "previewVideo": "/previews/clinica-dental.webm",
+  "tags": ["dental", "clinica", "salud", "servicios", "landing", "premium", "animaciones", "minimalista"],
+  "paleta": ["#15161a", "#f6f4ee", "#b28a46", "#e6e2d8"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "odontologiaperu.com",
+  "orden": 62
+}

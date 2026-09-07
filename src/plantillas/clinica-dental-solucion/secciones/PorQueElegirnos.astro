@@ -1,0 +1,93 @@
+---
+import { razones } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Razon {
+  t: string;
+  icono: string;
+  d: string;
+}
+const lista = razones as Razon[];
+---
+
+<section class="sd-porque">
+  <div class="sd-porque__banda sd-reveal">
+    <h2 class="sd-titulo--linea sd-centro sd-porque__titulo">¿Por qué elegirnos?</h2>
+    <p class="sd-porque__sub">3 razones para elegir nuestra clínica dental en Lima, Perú:</p>
+  </div>
+
+  <div class="sd-wrap sd-porque__grid">
+    {lista.map((r: Razon, i: number) => (
+      <div class={`sd-porque__card sd-reveal sd-reveal--${i + 1}`}>
+        <span class="sd-porque__ico"><Icono nombre={r.icono} size={30} /></span>
+        <h3>{r.t}</h3>
+        <p>{r.d}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .sd-porque__banda {
+    background: var(--sd-teal);
+    padding-block: clamp(2rem, 5vw, 2.75rem);
+    text-align: center;
+  }
+
+  .sd-porque__titulo {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .sd-porque__titulo::after {
+    background: var(--sd-amarillo);
+  }
+
+  .sd-porque__sub {
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+  }
+
+  .sd-porque__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .sd-porque__card {
+    border: 1px solid var(--sd-linea);
+    border-radius: 10px;
+    padding: clamp(1.5rem, 4vw, 2rem);
+    text-align: center;
+  }
+
+  .sd-porque__ico {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--sd-amarillo);
+    color: var(--sd-tinta);
+    display: grid;
+    place-items: center;
+    margin-inline: auto;
+    margin-bottom: 1.1rem;
+  }
+
+  .sd-porque__card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .sd-porque__card p {
+    font-size: 0.87rem;
+    color: var(--sd-texto);
+  }
+
+  @media (max-width: 780px) {
+    .sd-porque__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

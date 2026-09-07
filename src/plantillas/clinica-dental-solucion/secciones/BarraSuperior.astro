@@ -1,0 +1,80 @@
+---
+import { redes } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<div class="sd-topbar">
+  <div class="sd-wrap sd-topbar__fila">
+    <div class="sd-topbar__redes">
+      {redes.map((r: { t: string; icono: string; href: string }) => (
+        <a href={r.href} aria-label={r.t}>
+          <Icono nombre={r.icono} size={15} />
+        </a>
+      ))}
+    </div>
+    <form class="sd-topbar__busca" onsubmit="return false" role="search">
+      <input type="search" placeholder="¿Qué estás buscando?" aria-label="Buscar" />
+      <button type="submit" aria-label="Buscar">
+        <Icono nombre="busqueda" size={15} />
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .sd-topbar {
+    background: var(--sd-teal-oscuro);
+  }
+
+  .sd-topbar__fila {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    padding-block: 0.55rem;
+  }
+
+  .sd-topbar__redes {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .sd-topbar__redes a {
+    color: #fff;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .sd-topbar__redes a:hover {
+    opacity: 1;
+  }
+
+  .sd-topbar__busca {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .sd-topbar__busca input {
+    border: none;
+    outline: none;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+    width: 160px;
+    background: transparent;
+    color: var(--sd-tinta);
+  }
+
+  .sd-topbar__busca button {
+    padding: 0.4rem 0.6rem;
+    color: var(--sd-teal-oscuro);
+  }
+
+  @media (max-width: 640px) {
+    .sd-topbar__busca input {
+      width: 110px;
+    }
+  }
+</style>

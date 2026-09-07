@@ -1,0 +1,198 @@
+---
+import { marca, footerEspecialidades, sedes } from '../datos/clinica.js';
+---
+
+<footer class="od-foot">
+  <div class="od-wrap od-foot__grid">
+    <div class="od-foot__marca">
+      <span class="od-foot__logo">{marca.nombre}</span>
+      <p>{marca.claim}</p>
+      <div class="od-foot__redes" aria-label="Redes sociales">
+        <a href="#" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.3h-3V8.4c0-.9.3-1.6 1.7-1.6h1.5V3.8C16.5 3.7 15.4 3.6 14.2 3.6c-2.6 0-4.4 1.6-4.4 4.5v2.6H7v3.3h2.8v8Z"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3c.3 2 1.7 3.6 4 3.9v2.5c-1.4 0-2.8-.4-4-1.2v6.3a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.6a2.8 2.8 0 1 0 2 2.7V3Z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav class="od-foot__col" aria-label="Especialidades">
+      <h3>Especialidades</h3>
+      <ul>
+        {footerEspecialidades.map((e: string) => <li><a href="#especialidades">{e}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="od-foot__col">
+      <h3>Sedes en Lima</h3>
+      <ul class="od-foot__sedes">
+        {sedes.map((s: { t: string; dir: string }) => (
+          <li>
+            <b>{s.t}</b>
+            <span>{s.dir}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="od-foot__col">
+      <h3>Contacto</h3>
+      <p class="od-foot__linea">WhatsApp: {marca.tel}</p>
+      <p class="od-foot__linea">{marca.correo}</p>
+      <a href="#" class="od-foot__lr">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l3 3v15H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+        Libro de reclamaciones
+      </a>
+    </div>
+  </div>
+
+  <div class="od-wrap od-foot__base">
+    <span>© {marca.nombre} {marca.sub} 2026. Todos los derechos reservados.</span>
+    <div class="od-foot__legales">
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Política de privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .od-foot {
+    background: var(--od-crema);
+    border-top: 1px solid var(--od-linea);
+    margin-top: 2rem;
+  }
+
+  .od-foot__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    gap: 2.25rem;
+    padding-block: 3rem 2rem;
+  }
+
+  .od-foot__logo {
+    font-family: var(--od-display);
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--od-tinta);
+  }
+
+  .od-foot__marca p {
+    font-size: 0.85rem;
+    color: var(--od-gris);
+    margin: 0.75rem 0 1.1rem;
+    max-width: 26ch;
+  }
+
+  .od-foot__redes {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .od-foot__redes a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--od-linea);
+    display: grid;
+    place-items: center;
+    background: #fff;
+  }
+
+  .od-foot__redes a:hover {
+    border-color: var(--od-acento);
+    color: var(--od-acento);
+  }
+
+  .od-foot__col h3 {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .od-foot__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .od-foot__col a {
+    font-size: 0.82rem;
+    color: var(--od-gris);
+  }
+
+  .od-foot__col a:hover {
+    color: var(--od-acento);
+  }
+
+  .od-foot__sedes li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .od-foot__sedes b {
+    font-size: 0.85rem;
+  }
+
+  .od-foot__sedes span {
+    font-size: 0.78rem;
+    color: var(--od-gris);
+  }
+
+  .od-foot__linea {
+    font-size: 0.82rem;
+    color: var(--od-gris);
+    margin-bottom: 0.55rem;
+  }
+
+  .od-foot__lr {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--od-gris);
+    margin-top: 0.4rem;
+  }
+
+  .od-foot__lr:hover {
+    color: var(--od-acento);
+  }
+
+  .od-foot__base {
+    border-top: 1px solid var(--od-linea);
+    padding-block: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.74rem;
+    color: var(--od-gris);
+  }
+
+  .od-foot__legales {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .od-foot__legales a:hover {
+    color: var(--od-acento);
+  }
+
+  @media (max-width: 900px) {
+    .od-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .od-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
