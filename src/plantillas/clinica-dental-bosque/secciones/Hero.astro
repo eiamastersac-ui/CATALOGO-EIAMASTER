@@ -1,0 +1,114 @@
+---
+import { hero } from '../datos/clinica.js';
+
+const slides = hero.slides as string[];
+---
+
+<section class="bq-hero" id="top">
+  <div class="bq-hero__track" id="bq-hero-track">
+    {slides.map((img: string, i: number) => (
+      <div class="bq-hero__slide">
+        <img src={img} alt={hero.titulo} loading={i === 0 ? 'eager' : 'lazy'} />
+      </div>
+    ))}
+  </div>
+  <span class="bq-hero__scrim" aria-hidden="true"></span>
+
+  <div class="bq-wrap bq-hero__body">
+    <span class="bq-hero__kicker">{hero.kicker}</span>
+    <h1>{hero.titulo}</h1>
+    <p>{hero.sub}</p>
+    <div class="bq-hero__cta">
+      <a href="#contacto" class="bq-btn bq-btn--dorado">{hero.cta1}</a>
+      <a href="#contacto" class="bq-btn bq-btn--linea">{hero.cta2}</a>
+      <a href="#galeria" class="bq-btn bq-btn--linea">{hero.cta3}</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('bq-hero-track');
+  const total = track ? track.children.length : 0;
+  let idx = 0;
+
+  function ir(n: number) {
+    if (!track || total < 2) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+  }
+
+  if (total > 1) {
+    window.setInterval(() => ir(idx + 1), 6500);
+  }
+</script>
+
+<style>
+  .bq-hero {
+    position: relative;
+    height: clamp(520px, 70vw, 720px);
+    overflow: hidden;
+    background: var(--bq-tinta);
+  }
+
+  .bq-hero__track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .bq-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+  }
+
+  .bq-hero__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bq-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(22, 26, 27, 0.75) 0%, rgba(22, 26, 27, 0.2) 45%, rgba(22, 26, 27, 0.55) 100%);
+  }
+
+  .bq-hero__body {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  .bq-hero__kicker {
+    color: var(--bq-dorado);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .bq-hero__body h1 {
+    color: #fff;
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    max-width: 20ch;
+    margin-bottom: 1.25rem;
+  }
+
+  .bq-hero__body p {
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 38ch;
+    margin-bottom: 1.75rem;
+  }
+
+  .bq-hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+import CollageFotos from './CollageFotos.astro';
+
+interface Props {
+  titulo: string;
+  texto: string;
+  imgs: string[];
+  invertido?: boolean;
+}
+const { titulo, texto, imgs, invertido = false } = Astro.props as Props;
+---
+
+<div class:list={['rc-bloque', 'rc-reveal', { 'rc-bloque--inv': invertido }]}>
+  <div class="rc-bloque__texto">
+    <span class="rc-kicker" style="font-size:clamp(1.6rem,3vw,2.1rem)">{titulo}</span>
+    <span class="rc-regla" style="margin-left:0"></span>
+    <p>{texto}</p>
+  </div>
+  <div class="rc-bloque__foto">
+    <CollageFotos fotos={imgs} alt={titulo} />
+  </div>
+</div>
+
+<style>
+  .rc-bloque {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .rc-bloque--inv {
+    direction: rtl;
+  }
+
+  .rc-bloque--inv > * {
+    direction: ltr;
+  }
+
+  .rc-bloque__texto p {
+    margin-top: 1.2rem;
+    max-width: 46ch;
+  }
+
+  .rc-bloque__texto .rc-regla {
+    margin-inline: 0;
+  }
+
+  @media (max-width: 780px) {
+    .rc-bloque,
+    .rc-bloque--inv {
+      grid-template-columns: 1fr;
+      direction: ltr;
+    }
+
+    .rc-bloque__foto {
+      order: -1;
+    }
+  }
+</style>

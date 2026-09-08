@@ -1,0 +1,88 @@
+---
+import { serviciosTeaser, base } from '../datos/restaurante.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Item {
+  t: string;
+  img: string;
+}
+const lista = serviciosTeaser as Item[];
+---
+
+<section class="rc-seccion" style="background:var(--rc-crema)">
+  <div class="rc-wrap rc-centro">
+    <span class="rc-kicker rc-reveal">Nuestros servicios</span>
+    <span class="rc-regla rc-reveal"></span>
+
+    <div class="rc-servt__grid">
+      {lista.map((s, i) => (
+        <a href={`${base}/servicios/`} class:list={['rc-servt__item', 'rc-reveal']} style={`transition-delay:${i * 0.06}s`}>
+          <img src={s.img} alt={s.t} loading="lazy" />
+          <span class="rc-servt__scrim" aria-hidden="true"></span>
+          <span class="rc-servt__icono"><Icono nombre="mesa" size={26} /></span>
+          <span class="rc-servt__t">{s.t}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .rc-servt__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.4rem;
+    margin-top: clamp(2rem, 5vw, 3rem);
+  }
+
+  .rc-servt__item {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    text-align: center;
+  }
+
+  .rc-servt__item img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .rc-servt__item:hover img {
+    transform: scale(1.06);
+  }
+
+  .rc-servt__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(15, 11, 9, 0.82) 0%, rgba(15, 11, 9, 0.35) 60%);
+  }
+
+  .rc-servt__icono {
+    position: relative;
+    color: var(--rc-rojo);
+  }
+
+  .rc-servt__t {
+    position: relative;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding-inline: 0.8rem;
+  }
+
+  @media (max-width: 860px) {
+    .rc-servt__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

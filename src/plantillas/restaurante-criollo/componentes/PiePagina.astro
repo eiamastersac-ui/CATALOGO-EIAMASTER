@@ -1,0 +1,151 @@
+---
+import { marca, base, sedes } from '../datos/restaurante.js';
+import Icono from './Icono.astro';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="rc-foot">
+  <div class="rc-wrap rc-foot__grid">
+    <div class="rc-foot__marca">
+      <span class="rc-foot__logo">{marca.nombre}</span>
+      <p class="rc-foot__desc">
+        {marca.sub} es más que un restaurante, es un hogar, y lo demostramos en la calidez de nuestra atención en cada visita a esta casa.
+      </p>
+      <div class="rc-foot__redes">
+        <a href="#top" aria-label="Facebook"><Icono nombre="facebook" size={15} /></a>
+        <a href="#top" aria-label="Tripadvisor"><Icono nombre="tripadvisor" size={15} /></a>
+        <a href="#top" aria-label="Instagram"><Icono nombre="instagram" size={15} /></a>
+      </div>
+    </div>
+
+    <div>
+      <h4 class="rc-foot__titulo">Mapa del Sitio</h4>
+      <ul class="rc-foot__lista">
+        <li><a href={`${base}/`}>Inicio</a></li>
+        <li><a href={`${base}/historia/`}>Nuestra historia</a></li>
+        <li><a href={`${base}/carta/`}>Nuestra carta</a></li>
+        <li><a href={`${base}/servicios/`}>Te brindamos</a></li>
+        <li><a href={`${base}/casas/`}>Nuestras casas</a></li>
+        <li><a href={`${base}/galeria/`}>Galería</a></li>
+        <li><a href={`${base}/reservaciones/`}>Reservaciones</a></li>
+      </ul>
+    </div>
+
+    {sedes.map((s) => (
+      <div>
+        <h4 class="rc-foot__titulo">{s.nombre}</h4>
+        <ul class="rc-foot__lista rc-foot__lista--datos">
+          <li><Icono nombre="mapa" size={14} /> <span>{s.direccion}</span></li>
+          <li><Icono nombre="telefono" size={14} /> <span>{s.telefono}</span></li>
+          <li><Icono nombre="correo" size={14} /> <a href={`mailto:${s.correo}`}>{s.correo}</a></li>
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="rc-wrap rc-foot__legal">
+    <span>&copy; {anio} {marca.nombre}. Plantilla de referencia, no es un negocio real.</span>
+    <span>Inspirada en el estilo de un restaurante criollo limeño.</span>
+  </div>
+</footer>
+
+<style>
+  .rc-foot {
+    background: var(--rc-tinta);
+    color: rgba(255, 255, 255, 0.72);
+    padding-top: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .rc-foot__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: clamp(1.8rem, 4vw, 2.5rem);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .rc-foot__logo {
+    font-family: var(--rc-font-script);
+    font-size: 1.9rem;
+    color: #fff;
+  }
+
+  .rc-foot__desc {
+    margin-block: 0.9rem 1.2rem;
+    font-size: 0.85rem;
+    max-width: 32ch;
+  }
+
+  .rc-foot__redes {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .rc-foot__redes a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .rc-foot__redes a:hover {
+    background: var(--rc-rojo);
+  }
+
+  .rc-foot__titulo {
+    color: #fff;
+    font-size: 0.95rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .rc-foot__lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    font-size: 0.85rem;
+  }
+
+  .rc-foot__lista a:hover {
+    color: var(--rc-rojo);
+  }
+
+  .rc-foot__lista--datos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .rc-foot__lista--datos svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    color: var(--rc-rojo);
+  }
+
+  .rc-foot__legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block: 1.25rem;
+    font-size: 0.74rem;
+  }
+
+  @media (max-width: 900px) {
+    .rc-foot__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rc-foot__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,122 @@
+---
+import { galeria } from '../datos/clinica.js';
+
+interface Caso {
+  t: string;
+  antes: string;
+  despues: string;
+}
+const lista = galeria as Caso[];
+---
+
+<section class="bq-seccion bq-wrap bq-centro" id="galeria">
+  <span class="bq-kicker bq-centro">Antes y después</span>
+  <h2 class="bq-titulo bq-centro bq-reveal">Nuestra Galería de Sonrisas</h2>
+  <p class="bq-sub bq-centro bq-reveal bq-reveal--2">Desliza sobre cada foto para ver la transformación.</p>
+
+  <div class="bq-galeria__grid bq-reveal bq-reveal--3">
+    {lista.map((c: Caso) => (
+      <figure class="bq-galeria__item">
+        <div class="bq-galeria__circulo" data-comparador>
+          <img src={c.despues} alt={`${c.t} - después`} class="bq-galeria__despues" loading="lazy" />
+          <div class="bq-galeria__antes-wrap" data-antes-wrap>
+            <img src={c.antes} alt={`${c.t} - antes`} class="bq-galeria__antes" loading="lazy" />
+          </div>
+          <span class="bq-galeria__linea" data-linea aria-hidden="true"></span>
+          <input type="range" min="0" max="100" value="50" class="bq-galeria__slider" data-slider aria-label={`Comparar antes y después: ${c.t}`} />
+        </div>
+        <figcaption>{c.t}</figcaption>
+      </figure>
+    ))}
+  </div>
+
+  <a href="#preguntas" class="bq-btn bq-btn--verde">Ver Galería</a>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-comparador]').forEach((comparador) => {
+    const slider = comparador.querySelector<HTMLInputElement>('[data-slider]');
+    const antesWrap = comparador.querySelector<HTMLElement>('[data-antes-wrap]');
+    const linea = comparador.querySelector<HTMLElement>('[data-linea]');
+    if (!slider || !antesWrap || !linea) return;
+
+    function actualizar() {
+      if (!slider || !antesWrap || !linea) return;
+      const v = slider.value;
+      antesWrap.style.clipPath = `inset(0 ${100 - Number(v)}% 0 0)`;
+      linea.style.left = `${v}%`;
+    }
+
+    slider.addEventListener('input', actualizar);
+    actualizar();
+  });
+</script>
+
+<style>
+  .bq-galeria__grid {
+    display: flex;
+    justify-content: center;
+    gap: clamp(2rem, 6vw, 4rem);
+    margin-block: clamp(2rem, 5vw, 2.75rem);
+    flex-wrap: wrap;
+  }
+
+  .bq-galeria__item figcaption {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--bq-verde-oscuro);
+    font-size: 0.92rem;
+  }
+
+  .bq-galeria__circulo {
+    position: relative;
+    width: min(280px, 60vw);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--bq-dorado);
+    user-select: none;
+  }
+
+  .bq-galeria__despues,
+  .bq-galeria__antes {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bq-galeria__antes-wrap {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .bq-galeria__linea {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: #fff;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .bq-galeria__slider {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 3;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+  }
+</style>

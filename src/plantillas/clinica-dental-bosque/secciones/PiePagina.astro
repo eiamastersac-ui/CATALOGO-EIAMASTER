@@ -1,0 +1,93 @@
+---
+import { marca, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="bq-foot">
+  <div class="bq-wrap bq-foot__fila">
+    <div>
+      <span class="bq-foot__logo">{marca.nombre}</span>
+      <span class="bq-foot__sub">{marca.sub}</span>
+    </div>
+
+    <div class="bq-foot__redes">
+      <a href={`${base}/#top`} aria-label="Facebook"><Icono nombre="facebook" size={16} /></a>
+      <a href={`${base}/#top`} aria-label="Instagram"><Icono nombre="instagram" size={16} /></a>
+      <a href={marca.whatsappHref} target="_blank" rel="noopener" aria-label="WhatsApp"><Icono nombre="whatsapp" size={16} /></a>
+    </div>
+  </div>
+
+  <div class="bq-wrap bq-foot__legal">
+    <span>&copy; {anio} {marca.nombre}. Plantilla de referencia, no es un negocio real.</span>
+    <span>Invisalign® es una marca registrada de Align Technology, Inc.</span>
+  </div>
+</footer>
+
+<style>
+  .bq-foot {
+    background: var(--bq-tinta);
+    color: rgba(255, 255, 255, 0.75);
+    padding-top: clamp(2rem, 5vw, 2.75rem);
+  }
+
+  .bq-foot__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: clamp(1.5rem, 4vw, 2rem);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .bq-foot__logo {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.1rem;
+    margin-right: 0.6rem;
+  }
+
+  .bq-foot__sub {
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--bq-dorado);
+  }
+
+  .bq-foot__redes {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .bq-foot__redes a {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .bq-foot__redes a:hover {
+    background: var(--bq-verde);
+  }
+
+  .bq-foot__legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block: 1.25rem;
+    font-size: 0.74rem;
+  }
+
+  @media (max-width: 640px) {
+    .bq-foot__fila {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

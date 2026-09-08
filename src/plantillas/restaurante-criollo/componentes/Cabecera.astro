@@ -1,0 +1,344 @@
+---
+import { marca, nav, base } from '../datos/restaurante.js';
+import Icono from './Icono.astro';
+
+interface ItemNav {
+  t: string;
+  href?: string;
+  dropdown?: { t: string; href: string }[];
+}
+const lista = nav as ItemNav[];
+---
+
+<header class="rc-hdr">
+  <div class="rc-hdr__top">
+    <div class="rc-wrap rc-hdr__top-fila">
+      <a href={marca.telHref} class="rc-hdr__top-item">
+        <Icono nombre="telefono" size={13} /> ¡Llámanos hoy! {marca.tel}
+      </a>
+      <a href={`mailto:${marca.correo}`} class="rc-hdr__top-item rc-hdr__top-item--correo">
+        <Icono nombre="correo" size={13} /> {marca.correo}
+      </a>
+      <div class="rc-hdr__redes">
+        <a href={marca.whatsappHref} target="_blank" rel="noopener" aria-label="WhatsApp"><Icono nombre="whatsapp" size={14} /></a>
+        <a href="#top" aria-label="Facebook"><Icono nombre="facebook" size={14} /></a>
+        <a href="#top" aria-label="Instagram"><Icono nombre="instagram" size={14} /></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="rc-hdr__nav" id="rc-hdr-nav">
+    <div class="rc-wrap rc-hdr__nav-fila">
+      <a href={`${base}/`} class="rc-logo">
+        <span class="rc-logo__marca">{marca.nombre}</span>
+        <span class="rc-logo__sub">{marca.sub}</span>
+      </a>
+
+      <button type="button" class="rc-hdr__burger" id="rc-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="rc-nav" id="rc-nav" aria-label="Navegación principal">
+        <ul class="rc-nav__lista">
+          {lista.map((item) => (
+            <li class:list={['rc-nav__item', { 'tiene-dropdown': item.dropdown }]}>
+              {item.dropdown ? (
+                <>
+                  <button type="button" class="rc-nav__link rc-nav__link--btn">
+                    {item.t} <Icono nombre="chevron" size={13} />
+                  </button>
+                  <div class="rc-nav__dropdown">
+                    {item.dropdown.map((d) => (
+                      <a href={d.href} class="rc-nav__dropdown-link">{d.t}</a>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <a href={item.href} class="rc-nav__link">{item.t}</a>
+              )}
+            </li>
+          ))}
+          <li class="rc-nav__item rc-nav__item--reserva">
+            <a href={`${base}/reservaciones/`} class="rc-nav__reserva">Reservaciones</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const burger = document.getElementById('rc-burger');
+  const nav = document.getElementById('rc-nav');
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  nav?.querySelectorAll<HTMLAnchorElement>('.rc-nav__link, .rc-nav__dropdown-link, .rc-nav__reserva').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+
+  document.querySelectorAll<HTMLElement>('.rc-nav__item.tiene-dropdown').forEach((item) => {
+    const boton = item.querySelector('.rc-nav__link--btn');
+    boton?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const yaAbierto = item.classList.contains('is-abierto');
+      document.querySelectorAll('.rc-nav__item.tiene-dropdown').forEach((otro) => otro.classList.remove('is-abierto'));
+      if (!yaAbierto) item.classList.add('is-abierto');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.rc-nav__item.tiene-dropdown').forEach((otro) => otro.classList.remove('is-abierto'));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.rc-nav__item.tiene-dropdown').forEach((otro) => otro.classList.remove('is-abierto'));
+    }
+  });
+</script>
+
+<style>
+  .rc-hdr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+  }
+
+  .rc-hdr__top {
+    background: var(--rc-rojo);
+    color: #fff;
+  }
+
+  .rc-hdr__top-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    padding-block: 0.55rem;
+    font-size: 0.78rem;
+  }
+
+  .rc-hdr__top-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .rc-hdr__redes {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-left: auto;
+  }
+
+  .rc-hdr__nav {
+    background: var(--rc-tinta);
+  }
+
+  .rc-hdr__nav-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.6rem;
+  }
+
+  .rc-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    padding-block: 0.3rem;
+  }
+
+  .rc-logo__marca {
+    font-family: var(--rc-font-script);
+    font-weight: 400;
+    font-size: 1.6rem;
+    color: #fff;
+  }
+
+  .rc-logo__sub {
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rc-rojo);
+  }
+
+  .rc-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .rc-hdr__burger span {
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+  }
+
+  .rc-nav__lista {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    list-style: none;
+  }
+
+  .rc-nav__item {
+    position: relative;
+  }
+
+  .rc-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #fff;
+    padding-block: 0.6rem;
+  }
+
+  .rc-nav__link:hover {
+    color: var(--rc-rojo);
+  }
+
+  .rc-nav__link--btn svg {
+    transition: transform 0.2s ease;
+  }
+
+  .rc-nav__item.is-abierto .rc-nav__link--btn svg {
+    transform: rotate(180deg);
+  }
+
+  .rc-nav__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: var(--rc-tinta);
+    border-top: 2px solid var(--rc-rojo);
+    box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 40;
+  }
+
+  .rc-nav__item.is-abierto .rc-nav__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .rc-nav__dropdown-link {
+    display: block;
+    padding: 0.8rem 1.1rem;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .rc-nav__dropdown-link:hover {
+    color: var(--rc-rojo);
+  }
+
+  .rc-nav__reserva {
+    display: inline-block;
+    background: var(--rc-rojo);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.2rem;
+    border-radius: 3px;
+  }
+
+  .rc-nav__reserva:hover {
+    background: var(--rc-rojo-oscuro);
+  }
+
+  @media (max-width: 960px) {
+    .rc-hdr__top-item--correo {
+      display: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .rc-hdr__burger {
+      display: flex;
+    }
+
+    .rc-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--rc-tinta);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .rc-nav.is-abierto {
+      display: block;
+    }
+
+    .rc-nav__lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.5rem 1.1rem 1.2rem;
+    }
+
+    .rc-nav__item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .rc-nav__link {
+      width: 100%;
+      justify-content: space-between;
+      padding-block: 0.9rem;
+    }
+
+    .rc-nav__dropdown {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      display: none;
+      box-shadow: none;
+      border-top: none;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .rc-nav__item.is-abierto .rc-nav__dropdown {
+      display: block;
+    }
+
+    .rc-nav__item--reserva {
+      border-bottom: none;
+      margin-top: 0.8rem;
+    }
+
+    .rc-nav__reserva {
+      display: block;
+      text-align: center;
+    }
+  }
+</style>

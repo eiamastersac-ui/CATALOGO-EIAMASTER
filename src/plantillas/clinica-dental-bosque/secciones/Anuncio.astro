@@ -1,0 +1,50 @@
+---
+import { anuncio, base } from '../datos/clinica.js';
+---
+
+<div class="bq-anuncio">
+  <div class="bq-wrap bq-anuncio__fila">
+    <p>{anuncio.texto} <b>{anuncio.precio}</b></p>
+    <a href={`${base}/#contacto`} class="bq-anuncio__cta">{anuncio.cta}</a>
+  </div>
+</div>
+
+<style>
+  .bq-anuncio {
+    background: var(--bq-teal);
+    color: #fff;
+  }
+
+  .bq-anuncio__fila {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    padding-block: 0.75rem;
+    text-align: center;
+  }
+
+  .bq-anuncio__fila p {
+    font-size: 0.86rem;
+  }
+
+  .bq-anuncio__fila b {
+    font-weight: 700;
+  }
+
+  .bq-anuncio__cta {
+    background: #fff;
+    color: var(--bq-teal);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--bq-pill);
+    white-space: nowrap;
+  }
+
+  .bq-anuncio__cta:hover {
+    background: var(--bq-crema);
+  }
+</style>

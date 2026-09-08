@@ -1,0 +1,209 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Playball&display=swap");
+
+.tpl-restaurante-criollo {
+  --rc-tinta: #211a16;
+  --rc-texto: #56493f;
+  --rc-linea: #e8dfcd;
+  --rc-blanco: #ffffff;
+  --rc-crema: #f8f1e4;
+  --rc-crema-oscura: #efe4cf;
+
+  --rc-rojo: #b3211f;
+  --rc-rojo-oscuro: #8c1a18;
+
+  --rc-font: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --rc-font-script: "Playball", cursive;
+  --rc-maxw: 1240px;
+  --rc-pill: 999px;
+
+  background: var(--rc-blanco);
+  color: var(--rc-texto);
+  font-family: var(--rc-font);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-restaurante-criollo {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-restaurante-criollo *,
+.tpl-restaurante-criollo *::before,
+.tpl-restaurante-criollo *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-restaurante-criollo h1,
+.tpl-restaurante-criollo h2,
+.tpl-restaurante-criollo h3,
+.tpl-restaurante-criollo h4 {
+  line-height: 1.2;
+  color: var(--rc-tinta);
+  font-weight: 600;
+}
+
+.tpl-restaurante-criollo img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-restaurante-criollo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-restaurante-criollo button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-restaurante-criollo input,
+.tpl-restaurante-criollo textarea,
+.tpl-restaurante-criollo select {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-restaurante-criollo [hidden] {
+  display: none !important;
+}
+
+.tpl-restaurante-criollo .rc-wrap {
+  max-width: var(--rc-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-restaurante-criollo .rc-seccion {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+  position: relative;
+}
+
+.tpl-restaurante-criollo .rc-centro {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.tpl-restaurante-criollo .rc-kicker {
+  display: block;
+  font-family: var(--rc-font-script);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--rc-rojo);
+  line-height: 1.1;
+  margin-bottom: 0.6rem;
+}
+
+.tpl-restaurante-criollo .rc-regla {
+  width: 90px;
+  height: 2px;
+  background: var(--rc-linea);
+  margin: 0.9rem auto 0;
+  position: relative;
+}
+
+.tpl-restaurante-criollo .rc-regla::before {
+  content: "❖";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  top: -10px;
+  color: var(--rc-rojo);
+  font-size: 0.8rem;
+  background: var(--rc-blanco);
+  width: 22px;
+  margin-inline: auto;
+}
+
+.tpl-restaurante-criollo .rc-titulo {
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+}
+
+.tpl-restaurante-criollo .rc-sub {
+  color: var(--rc-texto);
+  font-size: clamp(0.94rem, 1.6vw, 1.02rem);
+}
+
+.tpl-restaurante-criollo .rc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.9rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.tpl-restaurante-criollo .rc-btn--rojo {
+  background: var(--rc-rojo);
+  color: #fff;
+}
+
+.tpl-restaurante-criollo .rc-btn--rojo:hover {
+  background: var(--rc-rojo-oscuro);
+  transform: translateY(-2px);
+}
+
+.tpl-restaurante-criollo .rc-btn--linea {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.tpl-restaurante-criollo .rc-btn--linea:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.tpl-restaurante-criollo .rc-btn--tinta {
+  border-color: var(--rc-tinta);
+  color: var(--rc-tinta);
+}
+
+.tpl-restaurante-criollo .rc-btn--tinta:hover {
+  background: var(--rc-tinta);
+  color: #fff;
+}
+
+/* --- Reveal on scroll --- */
+.tpl-restaurante-criollo .rc-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-restaurante-criollo .rc-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-restaurante-criollo .rc-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- Chips de burbuja de WhatsApp / pedidos creados por JS en runtime --- */
+.tpl-restaurante-criollo .rc-flotantes {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.7rem;
+}

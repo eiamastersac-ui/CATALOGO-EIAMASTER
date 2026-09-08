@@ -1,0 +1,12 @@
+{
+  "titulo": "tu tienda.com — Restaurante Criollo (Estilo Sabores Peruanos)",
+  "categoria": "restaurante-criollo",
+  "descripcion": "Sitio multipágina de un restaurante familiar de comida criolla: hero con carrusel a sangre completa, franja de horario y sellos de recomendación, bloques alternados de \"Te Brindamos\" (eventos, catering, buffet), plato de la casa destacado, sección de delivery, chef master, newsletter, carta completa por categorías, galería filtrable, dos sedes y reservaciones en línea. Sin login. Marca propia tu tienda.com.",
+  "thumbnail": "/previews/restaurante-criollo.jpg",
+  "tags": ["restaurante", "comida criolla", "peruano", "reservaciones", "delivery", "multipágina", "nuevo"],
+  "paleta": ["#211a16", "#b3211f", "#f8f1e4", "#ffffff"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "saboresperuanos.pe",
+  "orden": 68
+}

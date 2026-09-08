@@ -6,7 +6,7 @@
   "tags": ["dental", "clinica", "salud", "mapa", "landing", "corporativo", "resenas", "interactivo"],
   "paleta": ["#0046a2", "#008fff", "#fbf3de", "#002347"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "dentalia.com",
   "orden": 65
 }

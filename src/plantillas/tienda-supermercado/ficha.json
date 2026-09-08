@@ -6,7 +6,7 @@
   "tags": ["supermercado", "organico", "saludable", "suplementos", "ecommerce", "mega-menu", "carrito", "whatsapp"],
   "paleta": ["#c49705", "#1c1c1c", "#c6304e", "#0f7a5c"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "florayfauna.pe",
   "orden": 58
 }

@@ -1,0 +1,117 @@
+---
+import { horario, sellos } from '../datos/restaurante.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Horario {
+  grupo: string;
+  horas: string;
+}
+interface Sello {
+  t: string;
+  d: string;
+}
+const lista = horario as Horario[];
+const insignias = sellos as Sello[];
+---
+
+<section class="rc-info">
+  <div class="rc-wrap rc-info__fila">
+    <div class="rc-info__sello rc-reveal">
+      <span class="rc-info__sello-anio">{insignias[0].t}</span>
+      <span>{insignias[0].d}</span>
+    </div>
+
+    <div class="rc-info__horario rc-reveal">
+      <h3><Icono nombre="reloj" size={18} /> Nuestro horario de atención</h3>
+      <div class="rc-info__horario-grid">
+        {lista.map((h) => (
+          <div>
+            <strong>{h.grupo}</strong>
+            <span>{h.horas}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="rc-info__sello rc-reveal">
+      <span class="rc-info__sello-anio">{insignias[1].t}</span>
+      <span>{insignias[1].d}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rc-info {
+    background: var(--rc-tinta);
+    padding-block: clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  .rc-info__fila {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .rc-info__sello {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.78rem;
+    gap: 0.3rem;
+  }
+
+  .rc-info__sello-anio {
+    font-weight: 700;
+    color: var(--rc-rojo);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .rc-info__horario {
+    text-align: center;
+    color: #fff;
+  }
+
+  .rc-info__horario h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #fff;
+    font-size: 1.05rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .rc-info__horario-grid {
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    flex-wrap: wrap;
+  }
+
+  .rc-info__horario-grid div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .rc-info__horario-grid strong {
+    color: var(--rc-rojo);
+    font-size: 0.82rem;
+  }
+
+  .rc-info__horario-grid span {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  @media (max-width: 780px) {
+    .rc-info__fila {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

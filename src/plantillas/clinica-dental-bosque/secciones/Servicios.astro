@@ -1,0 +1,84 @@
+---
+import { servicios } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Servicio {
+  t: string;
+  icono: string;
+}
+const lista = servicios as Servicio[];
+---
+
+<section class="bq-serv" id="servicios">
+  <div class="bq-wrap bq-centro">
+    <h2 class="bq-titulo bq-centro bq-reveal" style="color:#fff">Servicios Que Ofrecemos</h2>
+
+    <div class="bq-serv__grid">
+      {lista.map((s: Servicio, i: number) => (
+        <a href="#preguntas" class={`bq-serv__item bq-reveal bq-reveal--${i + 1}`}>
+          <span class="bq-serv__circulo"><Icono nombre={s.icono} size={40} /></span>
+          <span class="bq-serv__t">{s.t}</span>
+        </a>
+      ))}
+    </div>
+
+    <a href="#preguntas" class="bq-btn bq-btn--linea bq-reveal">Ver Todos Los Servicios</a>
+  </div>
+</section>
+
+<style>
+  .bq-serv {
+    background: var(--bq-verde);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .bq-serv__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-block: clamp(2rem, 5vw, 3rem);
+  }
+
+  .bq-serv__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+  }
+
+  .bq-serv__circulo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid var(--bq-verde-suave);
+    display: grid;
+    place-items: center;
+    color: var(--bq-dorado);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .bq-serv__item:hover .bq-serv__circulo {
+    transform: translateY(-4px);
+    border-color: var(--bq-dorado);
+  }
+
+  .bq-serv__t {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 780px) {
+    .bq-serv__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .bq-serv__circulo {
+      width: 100px;
+      height: 100px;
+    }
+  }
+</style>

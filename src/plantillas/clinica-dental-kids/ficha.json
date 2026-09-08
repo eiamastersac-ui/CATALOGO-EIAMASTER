@@ -6,7 +6,7 @@
   "tags": ["dental", "kids", "odontopediatria", "clinica", "salud", "landing", "premium", "animaciones", "interactivo"],
   "paleta": ["#2b2140", "#ff6b7a", "#ffc93c", "#35b7a0"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "laserdentkids.com",
   "orden": 63
 }

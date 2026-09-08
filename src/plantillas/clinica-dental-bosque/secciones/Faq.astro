@@ -1,0 +1,95 @@
+---
+import { faq } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Pregunta {
+  p: string;
+  r: string;
+}
+const lista = faq as Pregunta[];
+---
+
+<section class="bq-seccion bq-wrap" id="preguntas">
+  <div class="bq-cab bq-centro bq-reveal">
+    <span class="bq-kicker bq-centro">Recursos para pacientes</span>
+    <h2 class="bq-titulo">Preguntas Frecuentes</h2>
+  </div>
+
+  <div class="bq-faq bq-reveal bq-reveal--2">
+    {lista.map((f: Pregunta) => (
+      <details class="bq-faq__item">
+        <summary>
+          {f.p}
+          <span class="bq-faq__toggle">
+            <span class="bq-faq__mas"><Icono nombre="mas" size={16} /></span>
+            <span class="bq-faq__menos"><Icono nombre="menos" size={16} /></span>
+          </span>
+        </summary>
+        <p>{f.r}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .bq-cab {
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .bq-faq {
+    max-width: 42rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .bq-faq__item {
+    border: 1.5px solid var(--bq-linea);
+    border-radius: 10px;
+    padding: 1.1rem 1.4rem;
+  }
+
+  .bq-faq__item[open] {
+    border-color: var(--bq-dorado);
+  }
+
+  .bq-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 600;
+    font-size: 0.94rem;
+    color: var(--bq-tinta);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .bq-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .bq-faq__toggle {
+    flex-shrink: 0;
+    color: var(--bq-dorado);
+  }
+
+  .bq-faq__menos {
+    display: none;
+  }
+
+  .bq-faq__item[open] .bq-faq__mas {
+    display: none;
+  }
+
+  .bq-faq__item[open] .bq-faq__menos {
+    display: block;
+  }
+
+  .bq-faq__item p {
+    color: var(--bq-texto);
+    font-size: 0.87rem;
+    margin-top: 0.9rem;
+  }
+</style>

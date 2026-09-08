@@ -1,0 +1,25 @@
+---
+import Marco from '../componentes/Marco.astro';
+import BannerPagina from '../componentes/BannerPagina.astro';
+import BloqueServicio from '../componentes/BloqueServicio.astro';
+import { serviciosDetalle } from '../datos/restaurante.js';
+
+export const titulo = 'Te Brindamos | tu tienda.com';
+export const descripcion = 'Eventos especiales, catering y buffet con reserva en tu tienda.com Restaurante Criollo.';
+
+interface Servicio {
+  t: string;
+  texto: string;
+  imgs: string[];
+}
+const lista = serviciosDetalle as Servicio[];
+---
+
+<Marco>
+  <BannerPagina titulo="Te Brindamos" />
+  <div class="rc-wrap">
+    {lista.map((s, i) => (
+      <BloqueServicio titulo={s.t} texto={s.texto} imgs={s.imgs} invertido={i % 2 === 1} />
+    ))}
+  </div>
+</Marco>

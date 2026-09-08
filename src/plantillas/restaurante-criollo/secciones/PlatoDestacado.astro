@@ -1,0 +1,135 @@
+---
+import { platosDestacados } from '../datos/restaurante.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Plato {
+  kicker: string;
+  nombre: string;
+  descripcion: string;
+  img: string;
+}
+const lista = platosDestacados as Plato[];
+---
+
+<section class="rc-plato">
+  <div class="rc-wrap rc-plato__fila">
+    <button type="button" class="rc-plato__flecha" id="rc-plato-prev" aria-label="Plato anterior">
+      <Icono nombre="flechaIzq" size={20} />
+    </button>
+
+    <div class="rc-plato__track" id="rc-plato-track">
+      {lista.map((p) => (
+        <div class="rc-plato__item">
+          <div class="rc-plato__foto">
+            <img src={p.img} alt={p.nombre} loading="lazy" />
+          </div>
+          <div class="rc-plato__texto">
+            <span class="rc-kicker" style="text-align:left">{p.kicker}</span>
+            <h2 class="rc-plato__nombre">{p.nombre}</h2>
+            <p>{p.descripcion}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <button type="button" class="rc-plato__flecha" id="rc-plato-next" aria-label="Siguiente plato">
+      <Icono nombre="flechaDer" size={20} />
+    </button>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('rc-plato-track');
+  const total = track ? track.children.length : 0;
+  let idx = 0;
+
+  function ir(n: number) {
+    if (!track || total < 2) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+  }
+
+  document.getElementById('rc-plato-prev')?.addEventListener('click', () => ir(idx - 1));
+  document.getElementById('rc-plato-next')?.addEventListener('click', () => ir(idx + 1));
+</script>
+
+<style>
+  .rc-plato {
+    background: var(--rc-tinta);
+    padding-block: clamp(3rem, 7vw, 5rem);
+    overflow: hidden;
+  }
+
+  .rc-plato__fila {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2rem);
+  }
+
+  .rc-plato__flecha {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .rc-plato__flecha:hover {
+    border-color: var(--rc-rojo);
+    color: var(--rc-rojo);
+  }
+
+  .rc-plato__track {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .rc-plato__item {
+    flex: 0 0 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .rc-plato__foto {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .rc-plato__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rc-plato__texto {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .rc-plato__nombre {
+    font-family: var(--rc-font-script);
+    font-weight: 400;
+    color: #fff;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .rc-plato__item {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-plato__flecha {
+      display: none;
+    }
+  }
+</style>

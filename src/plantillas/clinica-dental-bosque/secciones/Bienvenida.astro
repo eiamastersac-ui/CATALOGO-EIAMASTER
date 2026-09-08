@@ -1,0 +1,40 @@
+---
+import { bienvenida } from '../datos/clinica.js';
+---
+
+<section class="bq-seccion bq-wrap bq-bienvenida bq-centro bq-reveal">
+  <span class="bq-kicker bq-centro">{bienvenida.kicker}</span>
+  <h2 class="bq-titulo">
+    <span class="bq-bienvenida__m1">{bienvenida.marca1}</span>
+    <span class="bq-bienvenida__m2">{bienvenida.marca2}</span>
+  </h2>
+  <p class="bq-bienvenida__p">{bienvenida.p}</p>
+  <a href="#doctora" class="bq-btn bq-btn--dorado">{bienvenida.cta}</a>
+</section>
+
+<style>
+  .bq-bienvenida {
+    max-width: 52rem;
+  }
+
+  .bq-bienvenida__m1 {
+    display: block;
+    color: var(--bq-verde-oscuro);
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+  }
+
+  .bq-bienvenida__m2 {
+    display: block;
+    color: var(--bq-tinta);
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+  }
+
+  .bq-bienvenida__p {
+    margin-block: 1.75rem 2rem;
+    font-size: 0.98rem;
+    line-height: 1.8;
+  }
+</style>

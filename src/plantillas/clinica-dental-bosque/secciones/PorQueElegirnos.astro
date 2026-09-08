@@ -1,0 +1,82 @@
+---
+import { porQueElegirnos } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Item {
+  t: string;
+  d: string;
+}
+const items = porQueElegirnos.items as Item[];
+---
+
+<section class="bq-porque">
+  <div class="bq-wrap bq-centro">
+    <h2 class="bq-titulo bq-reveal" style="color:#fff">{porQueElegirnos.titulo}</h2>
+    <p class="bq-porque__sub bq-reveal bq-reveal--2">{porQueElegirnos.kicker}</p>
+
+    <div class="bq-porque__grid">
+      {items.map((it: Item, i: number) => (
+        <div class={`bq-porque__item bq-reveal bq-reveal--${i + 1}`}>
+          <span class="bq-porque__check"><Icono nombre="check" size={16} /></span>
+          <div>
+            <h3>{it.t}</h3>
+            <p>{it.d}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .bq-porque {
+    background: var(--bq-verde-oscuro);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .bq-porque__sub {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .bq-porque__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    text-align: left;
+  }
+
+  .bq-porque__item {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .bq-porque__check {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--bq-dorado);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .bq-porque__item h3 {
+    color: #fff;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .bq-porque__item p {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 780px) {
+    .bq-porque__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

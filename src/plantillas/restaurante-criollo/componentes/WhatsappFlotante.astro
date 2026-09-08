@@ -1,0 +1,56 @@
+---
+import { marca, base } from '../datos/restaurante.js';
+import Icono from './Icono.astro';
+---
+
+<div class="rc-flotantes">
+  <a href={`${base}/reservaciones/`} class="rc-pedido">
+    Informes y pedidos
+  </a>
+  <a href={marca.whatsappHref} target="_blank" rel="noopener" class="rc-whats" aria-label="Escríbenos por WhatsApp">
+    <Icono nombre="whatsapp" size={26} />
+  </a>
+</div>
+
+<style>
+  .rc-pedido {
+    background: var(--rc-rojo);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 0.75rem 1.1rem;
+    border-radius: var(--rc-pill);
+    box-shadow: 0 14px 28px -14px rgba(179, 33, 31, 0.6);
+    transition: transform 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .rc-pedido:hover {
+    background: var(--rc-rojo-oscuro);
+    transform: translateY(-2px);
+  }
+
+  .rc-whats {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 32px -10px rgba(37, 211, 102, 0.65);
+    transition: transform 0.2s ease;
+  }
+
+  .rc-whats:hover {
+    transform: scale(1.06);
+  }
+
+  @media (max-width: 640px) {
+    .rc-pedido {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "titulo": "tu tienda.com — Dental & Ortodoncia (Estilo Sunrise Mountain)",
+  "categoria": "salud-dental",
+  "descripcion": "Clínica dental y de ortodoncia familiar con estética natural (verde salvia y dorado, ilustración de pinos): hero fotográfico a pantalla completa, servicios en círculos, sección \"por qué elegirnos\", testimonios en carrusel sobre foto, galería circular de antes/después interactiva y mapa real (Leaflet + OpenStreetMap) con horario de atención. Sin login. Marca propia tu tienda.com.",
+  "thumbnail": "/previews/clinica-dental-bosque.jpg",
+  "tags": ["dental", "clinica", "salud", "ortodoncia", "landing", "familiar", "mapa"],
+  "paleta": ["#6b805f", "#b89d68", "#0c414f", "#f7f7f2"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "sunrisemountaindentalandorthodontics.com",
+  "orden": 67
+}

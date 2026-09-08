@@ -1,0 +1,182 @@
+---
+import { marca, horario } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Dia {
+  dia: string;
+  horas: string;
+}
+const dias = horario as Dia[];
+---
+
+<section class="bq-cta" id="contacto">
+  <div class="bq-wrap bq-cta__fila">
+    <h2>Conecta Con Nosotros Hoy</h2>
+    <div class="bq-cta__acciones">
+      <a href={marca.whatsappHref} target="_blank" rel="noopener" class="bq-btn bq-btn--dorado">Solicitar Cita</a>
+      <a href={`tel:${marca.tel.replace(/\D/g, '')}`} class="bq-btn bq-btn--linea" style="color:var(--bq-tinta);border-color:var(--bq-tinta)">Contáctanos</a>
+    </div>
+  </div>
+</section>
+
+<div class="bq-mapa" id="bq-mapa" role="application" aria-label="Mapa de ubicación"></div>
+
+<section class="bq-seccion bq-wrap bq-horario">
+  <div class="bq-horario__lista bq-reveal">
+    <h3><Icono nombre="reloj" size={20} /> Horario de Atención</h3>
+    <ul>
+      {dias.map((d: Dia) => (
+        <li><span>{d.dia}</span><b>{d.horas}</b></li>
+      ))}
+    </ul>
+    <p class="bq-horario__nota">Almuerzo 12:00 p.m. - 1:00 p.m.</p>
+  </div>
+
+  <div class="bq-horario__datos bq-reveal bq-reveal--2">
+    <h3>Datos de Contacto</h3>
+    <a href={`tel:${marca.tel.replace(/\D/g, '')}`}><Icono nombre="telefono" size={16} /> {marca.tel}</a>
+    <a href={`mailto:${marca.correo}`}><Icono nombre="correo" size={16} /> {marca.correo}</a>
+    <a href={`https://www.google.com/maps?q=${marca.lat},${marca.lng}`} target="_blank" rel="noopener"><Icono nombre="mapa" size={16} /> {marca.direccion}</a>
+  </div>
+</section>
+
+<script define:vars={{ lat: marca.lat, lng: marca.lng, direccion: marca.direccion, nombre: marca.nombre }} is:inline>
+  window.__bqMapaData = { lat, lng, direccion, nombre };
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" is:inline></script>
+<script is:inline>
+  (function () {
+    var datos = window.__bqMapaData;
+    var mapEl = document.getElementById('bq-mapa');
+    var L = window.L;
+    if (!L || !mapEl || !datos) return;
+
+    var map = L.map(mapEl, { scrollWheelZoom: false }).setView([datos.lat, datos.lng], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    var icono = L.divIcon({
+      className: 'bq-pin',
+      html: '<span></span>',
+      iconSize: [26, 26],
+      iconAnchor: [13, 26],
+      popupAnchor: [0, -24],
+    });
+
+    L.marker([datos.lat, datos.lng], { icon: icono })
+      .addTo(map)
+      .bindPopup('<b>' + datos.nombre + '</b><br>' + datos.direccion)
+      .openPopup();
+
+    setTimeout(function () {
+      map.invalidateSize();
+    }, 200);
+  })();
+</script>
+
+<style>
+  .bq-cta {
+    background: var(--bq-crema);
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .bq-cta__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .bq-cta__fila h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .bq-cta__acciones {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .bq-mapa {
+    height: 420px;
+    width: 100%;
+  }
+
+  :global(.bq-pin span) {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--bq-dorado);
+    transform: rotate(-45deg);
+    border: 3px solid #fff;
+    box-shadow: 0 3px 8px -2px rgba(22, 26, 27, 0.6);
+  }
+
+  :global(.leaflet-popup-content) {
+    font-family: var(--bq-font);
+    font-size: 0.85rem;
+    color: var(--bq-tinta);
+  }
+
+  .bq-horario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .bq-horario h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.15rem;
+    margin-bottom: 1.25rem;
+    color: var(--bq-verde-oscuro);
+  }
+
+  .bq-horario__lista ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .bq-horario__lista li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    padding-block: 0.35rem;
+    border-bottom: 1px solid var(--bq-linea);
+  }
+
+  .bq-horario__nota {
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 1rem;
+    color: var(--bq-texto);
+  }
+
+  .bq-horario__datos a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    margin-bottom: 0.9rem;
+    color: var(--bq-texto);
+  }
+
+  .bq-horario__datos a:hover {
+    color: var(--bq-verde-oscuro);
+  }
+
+  @media (max-width: 720px) {
+    .bq-horario {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

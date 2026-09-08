@@ -6,7 +6,7 @@
   "tags": ["moda", "departamental", "lujo", "ecommerce", "mega-menu", "buscador", "multipagina"],
   "paleta": ["#171717", "#faf9f7", "#6e6e6e", "#a02332"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "nordstrom.com",
   "orden": 60
 }

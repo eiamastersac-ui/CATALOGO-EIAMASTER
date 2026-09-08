@@ -1,0 +1,102 @@
+---
+import { newsletter } from '../datos/restaurante.js';
+---
+
+<section class="rc-news" style={`--rc-news-img:url(${newsletter.img})`}>
+  <span class="rc-news__scrim" aria-hidden="true"></span>
+  <div class="rc-wrap rc-centro rc-news__body rc-reveal">
+    <h2 class="rc-news__titulo">{newsletter.titulo}</h2>
+    <span class="rc-regla" style="filter:brightness(0) invert(1)"></span>
+
+    <form class="rc-news__form" id="rc-news-form">
+      <label class="rc-news__campo">
+        <input type="email" name="email" placeholder="Email" required />
+      </label>
+      <label class="rc-news__campo">
+        <input type="text" name="nombre" placeholder="Nombres" required />
+      </label>
+      <button type="submit" class="rc-btn rc-btn--rojo">Suscribirse</button>
+      <p class="rc-news__ok" id="rc-news-ok" hidden>¡Gracias por suscribirte! Te avisaremos de nuestras promociones.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('rc-news-form') as HTMLFormElement | null;
+  const ok = document.getElementById('rc-news-ok');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.querySelectorAll('input, button').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .rc-news {
+    position: relative;
+    padding-block: clamp(3.5rem, 8vw, 5.5rem);
+    background-image: var(--rc-news-img);
+    background-size: cover;
+    background-position: center;
+  }
+
+  .rc-news__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 15, 12, 0.72);
+  }
+
+  .rc-news__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .rc-news__titulo {
+    color: #fff;
+    font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+  }
+
+  .rc-news__form {
+    max-width: 640px;
+    margin: clamp(1.8rem, 4vw, 2.5rem) auto 0;
+    background: rgba(20, 15, 12, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: clamp(1.5rem, 4vw, 2rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .rc-news__campo {
+    display: block;
+  }
+
+  .rc-news__campo input {
+    width: 100%;
+    background: #fff;
+    padding: 0.85rem 1rem;
+    border-radius: 3px;
+  }
+
+  .rc-news__form button {
+    grid-column: span 2;
+  }
+
+  .rc-news__ok {
+    grid-column: span 2;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  @media (max-width: 560px) {
+    .rc-news__form {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-news__form button,
+    .rc-news__ok {
+      grid-column: span 1;
+    }
+  }
+</style>

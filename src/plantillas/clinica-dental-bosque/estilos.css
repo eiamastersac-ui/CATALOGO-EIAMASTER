@@ -1,0 +1,182 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap");
+
+.tpl-clinica-dental-bosque {
+  --bq-tinta: #161a1b;
+  --bq-texto: #4a534a;
+  --bq-linea: #e2e6e0;
+  --bq-blanco: #ffffff;
+  --bq-crema: #f7f7f2;
+
+  --bq-verde: #6b805f;
+  --bq-verde-oscuro: #52644a;
+  --bq-verde-suave: #eef2ea;
+  --bq-dorado: #b89d68;
+  --bq-dorado-oscuro: #97814f;
+  --bq-teal: #0c414f;
+
+  --bq-font: "Josefin Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --bq-maxw: 1220px;
+  --bq-pill: 999px;
+  --bq-hdr-h: 82px;
+
+  background: var(--bq-blanco);
+  color: var(--bq-texto);
+  font-family: var(--bq-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-dental-bosque {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-clinica-dental-bosque *,
+.tpl-clinica-dental-bosque *::before,
+.tpl-clinica-dental-bosque *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-clinica-dental-bosque h1,
+.tpl-clinica-dental-bosque h2,
+.tpl-clinica-dental-bosque h3,
+.tpl-clinica-dental-bosque h4 {
+  font-family: var(--bq-font);
+  line-height: 1.2;
+  color: var(--bq-tinta);
+  font-weight: 600;
+}
+
+.tpl-clinica-dental-bosque img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-clinica-dental-bosque a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-clinica-dental-bosque button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-clinica-dental-bosque input,
+.tpl-clinica-dental-bosque textarea,
+.tpl-clinica-dental-bosque select {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-clinica-dental-bosque .bq-wrap {
+  max-width: var(--bq-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-clinica-dental-bosque .bq-seccion {
+  padding-block: clamp(3rem, 7vw, 5rem);
+  position: relative;
+}
+
+.tpl-clinica-dental-bosque .bq-kicker {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bq-verde-oscuro);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-clinica-dental-bosque .bq-titulo {
+  font-size: clamp(1.8rem, 3.8vw, 2.7rem);
+  margin-bottom: 1rem;
+}
+
+.tpl-clinica-dental-bosque .bq-centro {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.tpl-clinica-dental-bosque .bq-sub {
+  color: var(--bq-texto);
+  font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+}
+
+.tpl-clinica-dental-bosque .bq-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.9rem;
+  border-radius: var(--bq-pill);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.tpl-clinica-dental-bosque .bq-btn--dorado {
+  background: var(--bq-dorado);
+  color: #fff;
+}
+
+.tpl-clinica-dental-bosque .bq-btn--dorado:hover {
+  background: var(--bq-dorado-oscuro);
+  transform: translateY(-2px);
+}
+
+.tpl-clinica-dental-bosque .bq-btn--linea {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.tpl-clinica-dental-bosque .bq-btn--linea:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.tpl-clinica-dental-bosque .bq-btn--verde {
+  border-color: var(--bq-verde);
+  color: var(--bq-verde-oscuro);
+}
+
+.tpl-clinica-dental-bosque .bq-btn--verde:hover {
+  background: var(--bq-verde);
+  color: #fff;
+}
+
+/* --- Reveal on scroll --- */
+.tpl-clinica-dental-bosque .bq-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-clinica-dental-bosque .bq-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-clinica-dental-bosque .bq-reveal--1 { transition-delay: 0.05s; }
+.tpl-clinica-dental-bosque .bq-reveal--2 { transition-delay: 0.1s; }
+.tpl-clinica-dental-bosque .bq-reveal--3 { transition-delay: 0.15s; }
+.tpl-clinica-dental-bosque .bq-reveal--4 { transition-delay: 0.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-dental-bosque .bq-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

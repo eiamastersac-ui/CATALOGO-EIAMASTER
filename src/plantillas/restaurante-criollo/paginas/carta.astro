@@ -1,0 +1,128 @@
+---
+import Marco from '../componentes/Marco.astro';
+import BannerPagina from '../componentes/BannerPagina.astro';
+import { carta } from '../datos/restaurante.js';
+
+export const titulo = 'Nuestra Carta | tu tienda.com';
+export const descripcion = 'Entradas, fondos, postres y bebidas de la carta criolla de tu tienda.com.';
+
+interface Item {
+  nombre: string;
+  precio: string;
+  desc: string;
+  img?: string;
+}
+interface Categoria {
+  categoria: string;
+  items: Item[];
+}
+const lista = carta as Categoria[];
+---
+
+<Marco>
+  <BannerPagina titulo="Nuestra Carta" />
+
+  <section class="rc-seccion">
+    <div class="rc-wrap rc-carta">
+      {lista.map((cat) => (
+        <div class="rc-carta__cat rc-reveal">
+          <h2 class="rc-kicker" style="text-align:left">{cat.categoria}</h2>
+          <span class="rc-regla" style="margin-left:0"></span>
+
+          <div class="rc-carta__items">
+            {cat.items.map((it) => (
+              <div class:list={['rc-carta__item', { 'rc-carta__item--foto': it.img }]}>
+                {it.img && (
+                  <div class="rc-carta__foto">
+                    <img src={it.img} alt={it.nombre} loading="lazy" />
+                  </div>
+                )}
+                <div class="rc-carta__texto">
+                  <div class="rc-carta__fila">
+                    <h3>{it.nombre}</h3>
+                    <span class="rc-carta__linea" aria-hidden="true"></span>
+                    <span class="rc-carta__precio">{it.precio}</span>
+                  </div>
+                  <p>{it.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Marco>
+
+<style>
+  .rc-carta__cat {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .rc-carta__cat:last-child {
+    margin-bottom: 0;
+  }
+
+  .rc-carta__items {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.2rem);
+    margin-top: clamp(1.5rem, 4vw, 2.2rem);
+  }
+
+  .rc-carta__item {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .rc-carta__item--foto {
+    grid-template-columns: 140px 1fr;
+    gap: 1.2rem;
+    align-items: center;
+  }
+
+  .rc-carta__foto {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .rc-carta__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rc-carta__fila {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .rc-carta__fila h3 {
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
+
+  .rc-carta__linea {
+    flex: 1;
+    border-bottom: 1px dotted var(--rc-linea);
+    transform: translateY(-4px);
+  }
+
+  .rc-carta__precio {
+    color: var(--rc-rojo);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .rc-carta__texto p {
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 560px) {
+    .rc-carta__item--foto {
+      grid-template-columns: 90px 1fr;
+    }
+  }
+</style>

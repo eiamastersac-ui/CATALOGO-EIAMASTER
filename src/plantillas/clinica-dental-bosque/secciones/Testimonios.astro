@@ -1,0 +1,132 @@
+---
+import { testimonios } from '../datos/clinica.js';
+
+interface Testimonio {
+  texto: string;
+  autor: string;
+}
+const lista = testimonios.lista as Testimonio[];
+---
+
+<section class="bq-testi">
+  <img src={testimonios.img} alt="Equipo de tu tienda.com Dental & Ortodoncia" class="bq-testi__foto" loading="lazy" />
+  <span class="bq-testi__scrim" aria-hidden="true"></span>
+
+  <div class="bq-testi__panel bq-reveal">
+    <span class="bq-kicker">{testimonios.kicker}</span>
+    <div class="bq-testi__slides" id="bq-testi-slides">
+      {lista.map((t: Testimonio, i: number) => (
+        <div class="bq-testi__slide" data-slide={i} hidden={i !== 0}>
+          <p>&ldquo;{t.texto}&rdquo;</p>
+          <b>{t.autor}</b>
+        </div>
+      ))}
+    </div>
+
+    <div class="bq-testi__dots" id="bq-testi-dots">
+      {lista.map((_, i: number) => (
+        <button type="button" class={`bq-testi__dot${i === 0 ? ' is-on' : ''}`} data-dot={i} aria-label={`Testimonio ${i + 1}`}></button>
+      ))}
+    </div>
+
+    <a href="#preguntas" class="bq-btn bq-btn--verde">Ver Todas Las Reseñas</a>
+  </div>
+</section>
+
+<script>
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('#bq-testi-slides [data-slide]'));
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#bq-testi-dots [data-dot]'));
+  let idx = 0;
+
+  function mostrar(n: number) {
+    idx = (n + slides.length) % slides.length;
+    slides.forEach((s, i) => (s.hidden = i !== idx));
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+  }
+
+  dots.forEach((d) => d.addEventListener('click', () => mostrar(Number(d.dataset.dot))));
+
+  if (slides.length > 1) {
+    window.setInterval(() => mostrar(idx + 1), 6000);
+  }
+</script>
+
+<style>
+  .bq-testi {
+    position: relative;
+    min-height: 32rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .bq-testi__foto {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bq-testi__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(22, 26, 27, 0.55) 0%, rgba(22, 26, 27, 0.1) 60%);
+  }
+
+  .bq-testi__panel {
+    position: relative;
+    z-index: 2;
+    max-width: 26rem;
+    margin-left: clamp(1.5rem, 6vw, 6rem);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+    border-radius: 14px;
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .bq-testi__slides {
+    min-height: 8rem;
+  }
+
+  .bq-testi__slide p {
+    font-size: 1.05rem;
+    color: var(--bq-tinta);
+    margin-bottom: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .bq-testi__slide[hidden] {
+    display: none;
+  }
+
+  .bq-testi__slide b {
+    color: var(--bq-verde-oscuro);
+    font-size: 0.9rem;
+  }
+
+  .bq-testi__dots {
+    display: flex;
+    gap: 0.5rem;
+    margin-block: 1.5rem;
+  }
+
+  .bq-testi__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--bq-linea);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .bq-testi__dot.is-on {
+    background: var(--bq-dorado);
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 640px) {
+    .bq-testi__panel {
+      margin-inline: 1.25rem;
+      max-width: none;
+    }
+  }
+</style>

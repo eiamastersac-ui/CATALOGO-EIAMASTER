@@ -1,0 +1,177 @@
+---
+import { marca, nav, base } from '../datos/clinica.js';
+import Icono from '../componentes/Icono.astro';
+
+interface ItemNav {
+  t: string;
+  href: string;
+}
+const lista = nav as ItemNav[];
+---
+
+<header class="bq-hdr" id="cabecera">
+  <div class="bq-wrap bq-hdr__fila">
+    <a href={`${base}/#top`} class="bq-logo">
+      <span class="bq-logo__marca">{marca.nombre}</span>
+      <span class="bq-logo__sub">{marca.sub}</span>
+    </a>
+
+    <div class="bq-hdr__datos">
+      <span><Icono nombre="mapa" size={14} /> {marca.direccion}</span>
+      <span><Icono nombre="telefono" size={14} /> {marca.tel}</span>
+    </div>
+
+    <button type="button" class="bq-hdr__burger" id="bq-burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="bq-nav" id="bq-nav" aria-label="Navegación principal">
+    <div class="bq-wrap bq-nav__fila">
+      {lista.map((item) => (
+        <a href={item.href.startsWith('#') ? `${base}/${item.href}` : item.href} class="bq-nav__link">{item.t}</a>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<script>
+  const burger = document.getElementById('bq-burger');
+  const nav = document.getElementById('bq-nav');
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .bq-hdr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(6px);
+  }
+
+  .bq-hdr__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1rem;
+  }
+
+  .bq-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .bq-logo__marca {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--bq-tinta);
+    letter-spacing: 0.02em;
+  }
+
+  .bq-logo__sub {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bq-verde-oscuro);
+  }
+
+  .bq-hdr__datos {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--bq-texto);
+  }
+
+  .bq-hdr__datos span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .bq-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .bq-hdr__burger span {
+    height: 2px;
+    background: var(--bq-tinta);
+    border-radius: 2px;
+  }
+
+  .bq-nav {
+    background: var(--bq-verde);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .bq-nav__fila {
+    display: flex;
+    justify-content: center;
+    gap: 2.25rem;
+    padding-block: 0.75rem;
+  }
+
+  .bq-nav__link {
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .bq-nav__link:hover {
+    border-color: var(--bq-dorado);
+  }
+
+  @media (max-width: 860px) {
+    .bq-hdr__datos {
+      display: none;
+    }
+
+    .bq-hdr__burger {
+      display: flex;
+    }
+
+    .bq-nav {
+      display: none;
+    }
+
+    .bq-nav.is-abierto {
+      display: block;
+    }
+
+    .bq-nav__fila {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    .bq-nav__link {
+      width: 100%;
+      padding-block: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  }
+</style>

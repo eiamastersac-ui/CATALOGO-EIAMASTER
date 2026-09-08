@@ -6,7 +6,7 @@
   "tags": ["dental", "clinica", "salud", "ortodoncia", "landing", "corporativo", "formulario"],
   "paleta": ["#06b6d4", "#0f172a", "#f8fafc", "#0891b2"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "clinicadarser.com",
   "orden": 66
 }

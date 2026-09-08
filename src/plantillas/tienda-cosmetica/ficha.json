@@ -6,7 +6,7 @@
   "tags": ["cosmetica", "belleza", "cabello", "ecommerce", "mega-menu", "carrito", "whatsapp"],
   "paleta": ["#6b21a8", "#e6118c", "#f1e4fb", "#201a2b"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "boniteza.pe",
   "orden": 56
 }

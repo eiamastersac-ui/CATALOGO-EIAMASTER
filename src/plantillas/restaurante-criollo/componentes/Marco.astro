@@ -1,0 +1,18 @@
+---
+import '../estilos.css';
+
+import Cabecera from './Cabecera.astro';
+import PiePagina from './PiePagina.astro';
+import WhatsappFlotante from './WhatsappFlotante.astro';
+import RevelarScroll from './RevelarScroll.astro';
+---
+
+<div class="tpl-restaurante-criollo" id="top">
+  <Cabecera />
+  <main>
+    <slot />
+  </main>
+  <PiePagina />
+  <WhatsappFlotante />
+  <RevelarScroll />
+</div>

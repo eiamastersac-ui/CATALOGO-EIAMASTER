@@ -1,0 +1,160 @@
+---
+import Marco from '../componentes/Marco.astro';
+import BannerPagina from '../componentes/BannerPagina.astro';
+import Icono from '../componentes/Icono.astro';
+import { sedes } from '../datos/restaurante.js';
+
+export const titulo = 'Reservaciones | tu tienda.com';
+export const descripcion = 'Reserva tu mesa en línea en tu tienda.com Restaurante Criollo.';
+
+interface Sede {
+  id: string;
+  nombre: string;
+}
+const lista = sedes as Sede[];
+---
+
+<Marco>
+  <BannerPagina titulo="Reservaciones" />
+
+  <section class="rc-seccion">
+    <div class="rc-wrap rc-centro">
+      <span class="rc-kicker rc-reveal">¡Reserve una mesa en línea!</span>
+      <span class="rc-regla rc-reveal"></span>
+
+      <form class="rc-resv__form rc-reveal" id="rc-resv-form">
+        <label class="rc-resv__campo">
+          <Icono nombre="calendario" size={17} />
+          <input type="date" name="fecha" required />
+        </label>
+        <label class="rc-resv__campo">
+          <Icono nombre="reloj" size={17} />
+          <input type="time" name="hora" required />
+        </label>
+        <label class="rc-resv__campo">
+          <Icono nombre="usuario" size={17} />
+          <input type="text" name="nombre" placeholder="Nombre" required />
+        </label>
+        <label class="rc-resv__campo">
+          <Icono nombre="telefono" size={17} />
+          <input type="tel" name="celular" placeholder="Celular" required />
+        </label>
+        <label class="rc-resv__campo">
+          <Icono nombre="personas" size={17} />
+          <select name="personas" required>
+            <option value="" disabled selected>Cantidad de personas</option>
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+              <option value={n}>{n} {n === 1 ? 'persona' : 'personas'}</option>
+            ))}
+          </select>
+        </label>
+        <label class="rc-resv__campo">
+          <Icono nombre="mesa" size={17} />
+          <select name="sede" required>
+            <option value="" disabled selected>Elige una casa</option>
+            {lista.map((s) => <option value={s.id}>{s.nombre}</option>)}
+          </select>
+        </label>
+        <label class="rc-resv__campo rc-resv__campo--full rc-resv__campo--textarea">
+          <Icono nombre="mensaje" size={17} />
+          <textarea name="mensaje" rows="4" placeholder="Mensaje (ocasión especial, alguna alergia, etc.)"></textarea>
+        </label>
+
+        <button type="submit" class="rc-btn rc-btn--rojo rc-resv__campo--full">Reservar Mesa</button>
+
+        <div class="rc-resv__ok rc-resv__campo--full" id="rc-resv-ok" hidden>
+          <Icono nombre="check" size={22} />
+          <p>¡Gracias! Hemos recibido tu solicitud de reserva, te confirmaremos por teléfono o WhatsApp.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</Marco>
+
+<script>
+  const form = document.getElementById('rc-resv-form') as HTMLFormElement | null;
+  const ok = document.getElementById('rc-resv-ok');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.querySelectorAll('label, button').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .rc-resv__form {
+    max-width: 760px;
+    margin: clamp(2rem, 5vw, 3rem) auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    text-align: left;
+  }
+
+  .rc-resv__campo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border: 1px solid var(--rc-linea);
+    border-radius: 3px;
+    padding-inline: 1rem;
+    color: var(--rc-texto);
+  }
+
+  .rc-resv__campo svg {
+    flex-shrink: 0;
+    color: var(--rc-rojo);
+  }
+
+  .rc-resv__campo--textarea {
+    align-items: flex-start;
+    padding-block: 0.9rem;
+  }
+
+  .rc-resv__campo--textarea svg {
+    margin-top: 0.3rem;
+  }
+
+  .rc-resv__campo input,
+  .rc-resv__campo select,
+  .rc-resv__campo textarea {
+    flex: 1;
+    width: 100%;
+    padding-block: 0.85rem;
+    background: transparent;
+    border: none;
+  }
+
+  .rc-resv__campo textarea {
+    resize: vertical;
+  }
+
+  .rc-resv__campo:focus-within {
+    border-color: var(--rc-rojo);
+  }
+
+  .rc-resv__campo--full {
+    grid-column: span 2;
+  }
+
+  .rc-resv__ok {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    justify-content: center;
+    color: var(--rc-rojo);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  @media (max-width: 640px) {
+    .rc-resv__form {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-resv__campo--full {
+      grid-column: span 1;
+    }
+  }
+</style>

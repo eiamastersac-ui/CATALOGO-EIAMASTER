@@ -1,0 +1,62 @@
+---
+import { delivery, marca } from '../datos/restaurante.js';
+import Icono from '../componentes/Icono.astro';
+
+const telefonos = delivery.telefonos as string[];
+---
+
+<section class="rc-delivery">
+  <div class="rc-wrap rc-delivery__fila">
+    <span class="rc-delivery__icono"><Icono nombre="moto" size={64} /></span>
+    <div>
+      <h2 class="rc-delivery__titulo">{delivery.titulo}</h2>
+      <p>{delivery.texto}</p>
+      <a href={marca.telHref} class="rc-delivery__tel">{telefonos.join(' / ')}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rc-delivery {
+    background: var(--rc-tinta);
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .rc-delivery__fila {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .rc-delivery__icono {
+    color: var(--rc-rojo);
+    flex-shrink: 0;
+  }
+
+  .rc-delivery__titulo {
+    font-family: var(--rc-font-script);
+    font-weight: 400;
+    color: var(--rc-rojo);
+    font-size: clamp(2rem, 4.5vw, 2.8rem);
+  }
+
+  .rc-delivery p {
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 0.3rem;
+  }
+
+  .rc-delivery__tel {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    margin-top: 0.2rem;
+  }
+
+  @media (max-width: 560px) {
+    .rc-delivery__fila {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

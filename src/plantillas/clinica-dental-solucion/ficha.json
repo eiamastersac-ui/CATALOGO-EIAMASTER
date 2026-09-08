@@ -6,7 +6,7 @@
   "tags": ["dental", "clinica", "salud", "servicios", "landing", "corporativo", "resenas", "formulario"],
   "paleta": ["#1399b1", "#ffc932", "#1b1b1b", "#dff4f7"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "soluciondental.pe",
   "orden": 64
 }

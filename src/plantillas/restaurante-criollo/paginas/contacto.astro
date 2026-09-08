@@ -1,0 +1,157 @@
+---
+import Marco from '../componentes/Marco.astro';
+import BannerPagina from '../componentes/BannerPagina.astro';
+import Icono from '../componentes/Icono.astro';
+import { contactoOpciones, marca } from '../datos/restaurante.js';
+
+export const titulo = 'Contáctanos | tu tienda.com';
+export const descripcion = 'Atención al cliente, proveedores y trabaja con nosotros en tu tienda.com.';
+
+interface Opcion {
+  t: string;
+  d: string;
+  correo: string;
+  icono: string;
+}
+const lista = contactoOpciones as Opcion[];
+---
+
+<Marco>
+  <BannerPagina titulo="Contáctanos" />
+
+  <section class="rc-seccion">
+    <div class="rc-wrap">
+      <div class="rc-cont__grid">
+        {lista.map((o, i) => (
+          <div class:list={['rc-cont__card', 'rc-reveal']} style={`transition-delay:${i * 0.08}s`}>
+            <span class="rc-cont__icono"><Icono nombre={o.icono} size={26} /></span>
+            <h3>{o.t}</h3>
+            <p>{o.d}</p>
+            <a href={`mailto:${o.correo}`}>{o.correo}</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rc-seccion" style="background:var(--rc-crema)">
+    <div class="rc-wrap rc-centro">
+      <span class="rc-kicker rc-reveal">Escríbenos</span>
+      <span class="rc-regla rc-reveal"></span>
+
+      <form class="rc-cont__form rc-reveal" id="rc-contacto-form">
+        <label class="rc-cont__campo">
+          <input type="text" name="nombre" placeholder="Nombre completo" required />
+        </label>
+        <label class="rc-cont__campo">
+          <input type="email" name="email" placeholder="Correo" required />
+        </label>
+        <label class="rc-cont__campo rc-cont__campo--full">
+          <textarea name="mensaje" rows="4" placeholder="Mensaje" required></textarea>
+        </label>
+        <button type="submit" class="rc-btn rc-btn--rojo rc-cont__campo--full">Enviar Mensaje</button>
+        <p class="rc-cont__ok" id="rc-contacto-ok" hidden>¡Gracias! Te responderemos al correo lo antes posible.</p>
+      </form>
+
+      <p style="margin-top:2rem">
+        También puedes llamarnos al <a href={marca.telHref} style="color:var(--rc-rojo);font-weight:600">{marca.tel}</a>
+      </p>
+    </div>
+  </section>
+</Marco>
+
+<script>
+  const form = document.getElementById('rc-contacto-form') as HTMLFormElement | null;
+  const ok = document.getElementById('rc-contacto-ok');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.querySelectorAll('input, textarea, button').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .rc-cont__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+
+  .rc-cont__card {
+    text-align: center;
+    padding: clamp(1.8rem, 4vw, 2.4rem);
+    border: 1px solid var(--rc-linea);
+    border-radius: 4px;
+  }
+
+  .rc-cont__icono {
+    display: inline-grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--rc-crema);
+    color: var(--rc-rojo);
+    margin-bottom: 1rem;
+  }
+
+  .rc-cont__card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .rc-cont__card a {
+    display: inline-block;
+    margin-top: 0.7rem;
+    color: var(--rc-rojo);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .rc-cont__form {
+    max-width: 640px;
+    margin: clamp(1.8rem, 4vw, 2.5rem) auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .rc-cont__campo--full {
+    grid-column: span 2;
+  }
+
+  .rc-cont__campo input,
+  .rc-cont__campo textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--rc-linea);
+    border-radius: 3px;
+    background: #fff;
+    resize: vertical;
+  }
+
+  .rc-cont__ok {
+    grid-column: span 2;
+    color: var(--rc-rojo);
+    font-weight: 600;
+  }
+
+  @media (max-width: 780px) {
+    .rc-cont__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rc-cont__form {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-cont__campo--full,
+    .rc-cont__ok {
+      grid-column: span 1;
+    }
+  }
+</style>

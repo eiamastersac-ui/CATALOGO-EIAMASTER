@@ -1,0 +1,69 @@
+---
+import { chef } from '../datos/restaurante.js';
+---
+
+<section class="rc-seccion">
+  <div class="rc-wrap rc-centro">
+    <span class="rc-kicker rc-reveal">{chef.kicker}</span>
+    <span class="rc-regla rc-reveal"></span>
+  </div>
+
+  <div class="rc-wrap rc-chef rc-reveal">
+    <div class="rc-chef__foto">
+      <img src={chef.img} alt={chef.nombre} loading="lazy" />
+    </div>
+    <div class="rc-chef__tarjeta">
+      <h3>{chef.nombre}</h3>
+      <p>{chef.texto}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rc-chef {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    display: grid;
+    grid-template-columns: 0.8fr 1fr;
+    align-items: center;
+  }
+
+  .rc-chef__foto {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .rc-chef__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rc-chef__tarjeta {
+    background: var(--rc-tinta);
+    color: rgba(255, 255, 255, 0.85);
+    padding: clamp(2rem, 5vw, 3rem);
+    margin-left: -3rem;
+    position: relative;
+    z-index: 1;
+    border-top: 3px solid var(--rc-rojo);
+  }
+
+  .rc-chef__tarjeta h3 {
+    color: var(--rc-rojo);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 780px) {
+    .rc-chef {
+      grid-template-columns: 1fr;
+    }
+
+    .rc-chef__tarjeta {
+      margin-left: 0;
+      margin-top: -2rem;
+      width: 90%;
+      margin-inline: auto;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import { hero } from '../datos/restaurante.js';
+
+interface Props {
+  titulo: string;
+  img?: string;
+}
+const { titulo, img } = Astro.props as Props;
+const fondo = img ?? (hero.slides as string[])[0];
+---
+
+<section class="rc-banner" style={`--rc-banner-img:url(${fondo})`}>
+  <span class="rc-banner__scrim" aria-hidden="true"></span>
+  <div class="rc-wrap rc-banner__body">
+    <h1 class="rc-banner__titulo">{titulo}</h1>
+    <span class="rc-regla" style="filter:brightness(0) invert(1)"></span>
+  </div>
+</section>
+
+<style>
+  .rc-banner {
+    position: relative;
+    height: clamp(220px, 32vw, 340px);
+    background-image: var(--rc-banner-img);
+    background-size: cover;
+    background-position: center;
+  }
+
+  .rc-banner__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(24, 18, 15, 0.72);
+  }
+
+  .rc-banner__body {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .rc-banner__titulo {
+    font-family: var(--rc-font-script);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    color: #fff;
+  }
+</style>
