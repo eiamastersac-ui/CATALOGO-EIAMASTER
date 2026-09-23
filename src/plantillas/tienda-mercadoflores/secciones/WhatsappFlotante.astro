@@ -1,0 +1,85 @@
+---
+import { marca, rating } from '../datos/mercadoflores.js';
+
+const wa = marca.tel.replace(/[^\d]/g, '');
+---
+
+<div class="mf-flotantes">
+  <a class="mf-rating" href="#testimonios" aria-label="Ver reseñas en Google">
+    <span class="mf-rating__num">{rating.valor}</span>
+    <span class="mf-rating__estrellas" aria-hidden="true">★★★★★</span>
+    <span class="mf-rating__txt">{rating.cantidad} reseñas en Google</span>
+  </a>
+
+  <a class="mf-wa" href={`https://wa.me/${wa}`} target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.7 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.6-.1 1.2Z"/></svg>
+  </a>
+</div>
+
+<style>
+  .mf-flotantes {
+    position: fixed;
+    z-index: 150;
+    left: clamp(0.75rem, 3vw, 1.5rem);
+    bottom: clamp(0.75rem, 3vw, 1.5rem);
+    right: clamp(0.75rem, 3vw, 1.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+  }
+
+  .mf-flotantes > * {
+    pointer-events: auto;
+  }
+
+  .mf-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    background: var(--mf-blanco);
+    border: 1px solid var(--mf-linea);
+    border-radius: 8px;
+    padding: 0.55rem 0.85rem;
+    box-shadow: 0 14px 30px -18px rgba(36, 31, 27, 0.45);
+  }
+
+  .mf-rating__num {
+    font-family: var(--mf-serif);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--mf-tinta);
+  }
+
+  .mf-rating__estrellas {
+    color: var(--mf-acento);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
+
+  .mf-rating__txt {
+    font-size: 0.64rem;
+    color: var(--mf-tinta-suave);
+  }
+
+  .mf-wa {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 16px 32px -14px rgba(37, 211, 102, 0.6);
+  }
+
+  .mf-wa:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 520px) {
+    .mf-rating {
+      display: none;
+    }
+  }
+</style>

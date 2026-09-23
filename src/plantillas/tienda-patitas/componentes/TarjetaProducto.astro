@@ -1,0 +1,165 @@
+---
+import { soles } from '../datos/patitas.js';
+
+interface Producto {
+  marca: string;
+  nombre: string;
+  precio: number;
+  antes: number | null;
+  dscto: string | null;
+  img: string;
+  tag?: string;
+}
+const { producto } = Astro.props as { producto: Producto };
+const { marca, nombre, precio, antes, dscto, img, tag } = producto;
+---
+
+<article class="pt-prod" data-nombre={nombre.toLowerCase()} data-precio={precio}>
+  <div class="pt-prod__img">
+    <img src={img} alt={nombre} loading="lazy" />
+    {dscto && <span class="pt-prod__dscto">-{dscto}</span>}
+    {tag && <span class="pt-prod__tag">{tag}</span>}
+  </div>
+  <div class="pt-prod__tx">
+    <span class="pt-prod__marca">{marca}</span>
+    <p class="pt-prod__nombre">{nombre}</p>
+    <div class="pt-prod__precio">
+      {antes && <s>{soles(antes)}</s>}
+      <b>{soles(precio)}</b>
+    </div>
+    <div class="pt-prod__qty">
+      <button type="button" class="pt-qty__b" data-step="-1" aria-label="Restar">−</button>
+      <span class="pt-qty__n">1</span>
+      <button type="button" class="pt-qty__b" data-step="1" aria-label="Sumar">+</button>
+    </div>
+    <button type="button" class="pt-prod__add">Añadir al carrito</button>
+  </div>
+</article>
+
+<style>
+  .pt-prod {
+    background: #fff;
+    border: 1px solid var(--pt-linea);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pt-prod[hidden] {
+    display: none;
+  }
+
+  .pt-prod__img {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--pt-crema);
+  }
+
+  .pt-prod__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pt-prod__dscto {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background: var(--pt-rojo);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0.22rem 0.5rem;
+    border-radius: 6px;
+  }
+
+  .pt-prod__tag {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--pt-naranja-osc);
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .pt-prod__tx {
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .pt-prod__marca {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--pt-gris);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .pt-prod__nombre {
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.3;
+    min-height: 2.6em;
+  }
+
+  .pt-prod__precio {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+  }
+
+  .pt-prod__precio s {
+    font-size: 0.75rem;
+    color: var(--pt-gris-tenue);
+  }
+
+  .pt-prod__precio b {
+    font-size: 1.05rem;
+    color: var(--pt-rojo);
+  }
+
+  .pt-prod__qty {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.15rem;
+  }
+
+  .pt-qty__b {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--pt-crema);
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+
+  .pt-qty__n {
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-width: 1ch;
+    text-align: center;
+  }
+
+  .pt-prod__add {
+    margin-top: 0.3rem;
+    background: var(--pt-negro);
+    color: #fff;
+    padding: 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .pt-prod__add.is-ok {
+    background: var(--pt-verde);
+  }
+</style>

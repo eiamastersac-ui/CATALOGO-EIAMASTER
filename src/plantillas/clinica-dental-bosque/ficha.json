@@ -6,7 +6,7 @@
   "tags": ["dental", "clinica", "salud", "ortodoncia", "landing", "familiar", "mapa"],
   "paleta": ["#6b805f", "#b89d68", "#0c414f", "#f7f7f2"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "sunrisemountaindentalandorthodontics.com",
   "orden": 67
 }

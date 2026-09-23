@@ -1,0 +1,82 @@
+---
+import { blog } from '../datos/patitas.js';
+
+interface Post { fecha: string; titulo: string; extracto: string; img: string }
+const lista = blog as Post[];
+---
+
+<section class="pt-seccion">
+  <div class="pt-wrap">
+    <div class="pt-blog__cabecera">
+      <h2 class="pt-titulo" style="margin-bottom:0">Entérate de nuestras novedades</h2>
+      <a href="#top" class="pt-btn pt-btn--outline">Ir a blog</a>
+    </div>
+
+    <div class="pt-blog__grid">
+      {lista.map((p: Post) => (
+        <article class="pt-blog__card">
+          <img src={p.img} alt={p.titulo} loading="lazy" />
+          <span class="pt-blog__fecha">{p.fecha.toUpperCase()}</span>
+          <h3>{p.titulo}</h3>
+          <p>{p.extracto}</p>
+          <a href="#top" class="pt-blog__leer">Leer más</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pt-blog__cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .pt-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .pt-blog__card img {
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 0.9rem;
+  }
+
+  .pt-blog__fecha {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--pt-naranja);
+    letter-spacing: 0.04em;
+  }
+
+  .pt-blog__card h3 {
+    font-size: 1.02rem;
+    margin-block: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .pt-blog__card p {
+    font-size: 0.85rem;
+    color: var(--pt-gris);
+    margin-bottom: 0.7rem;
+  }
+
+  .pt-blog__leer {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 860px) {
+    .pt-blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

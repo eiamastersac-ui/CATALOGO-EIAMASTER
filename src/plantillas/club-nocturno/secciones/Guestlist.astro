@@ -1,0 +1,86 @@
+---
+import { IMG } from '../datos/club.js';
+---
+
+<section class="cn-guest" style={`--cn-guest-img:url(${IMG.rooftop1})`}>
+  <span class="cn-guest__scrim" aria-hidden="true"></span>
+  <div class="cn-wrap cn-guest__body cn-reveal">
+    <h2>Únete a la guestlist</h2>
+    <p>Recibe acceso preferencial y promociones exclusivas para nuestros próximos eventos.</p>
+
+    <form class="cn-guest__form" id="cn-guest-form">
+      <input type="email" name="email" placeholder="Tu email" required />
+      <button type="submit" class="cn-btn cn-btn--acento">Unirme</button>
+      <p class="cn-guest__ok" id="cn-guest-ok" hidden>¡Listo! Te avisaremos de nuestros próximos eventos.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('cn-guest-form') as HTMLFormElement | null;
+  const ok = document.getElementById('cn-guest-ok');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.querySelectorAll('input, button').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .cn-guest {
+    position: relative;
+    padding-block: clamp(3.5rem, 8vw, 5.5rem);
+    background-image: var(--cn-guest-img);
+    background-size: cover;
+    background-position: center;
+  }
+
+  .cn-guest__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 10, 16, 0.78);
+  }
+
+  .cn-guest__body {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  .cn-guest__body h2 {
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  }
+
+  .cn-guest__body p {
+    color: var(--cn-texto);
+    margin-block: 0.8rem 1.8rem;
+  }
+
+  .cn-guest__form {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cn-guest__form input {
+    flex: 1;
+    min-width: 220px;
+    padding: 0.85rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--cn-linea);
+    background: rgba(11, 10, 16, 0.6);
+    color: var(--cn-blanco);
+    font-family: var(--cn-font);
+  }
+
+  .cn-guest__ok {
+    width: 100%;
+    color: var(--cn-blanco);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+</style>

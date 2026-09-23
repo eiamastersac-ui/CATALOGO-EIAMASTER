@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Club (Estilo Tomorrowland)",
+  "categoria": "discoteca-nightclub",
+  "descripcion": "Discoteca/club nocturno inspirado en el lenguaje visual minimalista de un festival global: paleta monocroma (negro, blanco y grises) donde el color lo aporta solo la fotografia, scroll suave, hero con carrusel a sangre completa y texto centrado, carruseles horizontales con flechas y barra de progreso con entrada escalonada para eventos, ambientes y DJs, bloque destacado \"tienda.com presenta\", DJs con reproductor demo, reservas de mesa VIP con formulario, galeria de momentos, tienda oficial de merch, resenas de clientes, guestlist por email, reproductor de radio flotante y footer con disclaimer de edad. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/club-nocturno.jpg",
+  "tags": ["discoteca", "nightclub", "eventos", "djs", "vip", "reservas", "minimalista", "nuevo"],
+  "paleta": ["#0a0a0b", "#f5f3f0", "#29292b", "#131314"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "tomorrowland.com",
+  "orden": 70
+}

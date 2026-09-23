@@ -1,0 +1,176 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { IMG } from '../datos/club.js';
+---
+
+<section class="cn-seccion" id="reservas" style="background:var(--cn-panel)">
+  <div class="cn-wrap cn-resv cn-reveal">
+    <div class="cn-resv__foto">
+      <img src={IMG.vip1} alt="Reserva tu mesa VIP" loading="lazy" />
+    </div>
+
+    <div class="cn-resv__form-wrap">
+      <span class="cn-presenta__kicker" style="display:block;font-size:.75rem;font-weight:700;letter-spacing:.15em;color:var(--cn-texto-tenue);margin-bottom:.6rem">RESERVAS VIP</span>
+      <h2 class="cn-titulo">Reserva tu mesa</h2>
+      <p class="cn-sub" style="margin-bottom:1.6rem">Asegura tu lugar en la terraza VIP o el rooftop antes de que se agoten.</p>
+
+      <form class="cn-resv__form" id="cn-resv-form">
+        <label class="cn-resv__campo">
+          <Icono name="calendario" size={17} />
+          <input type="date" name="fecha" required />
+        </label>
+        <label class="cn-resv__campo">
+          <Icono name="reloj" size={17} />
+          <input type="time" name="hora" required />
+        </label>
+        <label class="cn-resv__campo">
+          <Icono name="usuario" size={17} />
+          <input type="text" name="nombre" placeholder="Nombre" required />
+        </label>
+        <label class="cn-resv__campo">
+          <Icono name="telefono" size={17} />
+          <input type="tel" name="celular" placeholder="Celular" required />
+        </label>
+        <label class="cn-resv__campo">
+          <Icono name="personas" size={17} />
+          <select name="personas" required>
+            <option value="" disabled selected>Cantidad de personas</option>
+            {Array.from({ length: 10 }, (_, i) => i + 2).map((n) => (
+              <option value={n}>{n} personas</option>
+            ))}
+          </select>
+        </label>
+        <label class="cn-resv__campo">
+          <Icono name="copa" size={17} />
+          <select name="zona" required>
+            <option value="" disabled selected>Elige una zona</option>
+            <option value="terraza">Terraza VIP</option>
+            <option value="rooftop">Rooftop Panorámico</option>
+            <option value="pista">Pista Principal</option>
+          </select>
+        </label>
+        <label class="cn-resv__campo cn-resv__campo--full">
+          <Icono name="mensaje" size={17} />
+          <textarea name="mensaje" rows="3" placeholder="Mensaje (ocasión especial, botella preferida, etc.)"></textarea>
+        </label>
+
+        <button type="submit" class="cn-btn cn-btn--acento cn-resv__campo--full">Reservar Mesa</button>
+
+        <div class="cn-resv__ok cn-resv__campo--full" id="cn-resv-ok" hidden>
+          <Icono name="check" size={20} />
+          <p>¡Gracias! Hemos recibido tu solicitud, te confirmaremos por WhatsApp.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('cn-resv-form') as HTMLFormElement | null;
+  const ok = document.getElementById('cn-resv-ok');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.querySelectorAll('label, button').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .cn-resv {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .cn-resv__foto {
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .cn-resv__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cn-resv__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+
+  .cn-resv__campo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border: 1px solid var(--cn-linea);
+    border-radius: 8px;
+    padding-inline: 1rem;
+    background: var(--cn-tinta);
+    color: var(--cn-blanco);
+    transition: border-color 0.25s ease;
+  }
+
+  .cn-resv__campo svg {
+    flex-shrink: 0;
+    color: var(--cn-acento);
+  }
+
+  .cn-resv__campo input,
+  .cn-resv__campo select,
+  .cn-resv__campo textarea {
+    flex: 1;
+    width: 100%;
+    padding-block: 0.85rem;
+    background: transparent;
+    border: none;
+    color: var(--cn-blanco);
+    font-family: var(--cn-font);
+  }
+
+  .cn-resv__campo select option {
+    background: var(--cn-tinta);
+  }
+
+  .cn-resv__campo textarea {
+    resize: vertical;
+    padding-block: 0.85rem;
+  }
+
+  .cn-resv__campo:focus-within {
+    border-color: var(--cn-acento);
+  }
+
+  .cn-resv__campo--full {
+    grid-column: span 2;
+  }
+
+  .cn-resv__ok {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--cn-blanco);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .cn-resv {
+      grid-template-columns: 1fr;
+    }
+    .cn-resv__foto {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .cn-resv__form {
+      grid-template-columns: 1fr;
+    }
+    .cn-resv__campo--full {
+      grid-column: span 1;
+    }
+  }
+</style>

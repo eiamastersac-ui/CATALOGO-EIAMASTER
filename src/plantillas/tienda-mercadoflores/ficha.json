@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Flores (Estilo Mercado Flores)",
+  "categoria": "floreria",
+  "descripcion": "Floreria premium editorial: cabecera fija transparente que se vuelve solida al hacer scroll, hero a pantalla completa con carrusel de 3 slides, bloque de promesa de marca, carrusel de seleccion de productos, tres grillas de colecciones foto-primero (ocasiones, tipos de flor, homenajes de condolencia), testimonios con calificacion de Google, galeria de entregas reales, seccion sobre nosotros y banner de experiencia con doble CTA. Boton flotante de WhatsApp y insignia de reseñas. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/tienda-mercadoflores.jpg",
+  "tags": ["floreria", "regalos", "ecommerce", "delivery", "editorial", "whatsapp"],
+  "paleta": ["#241f1b", "#faf5ec", "#efe2cd", "#7c2635"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "mercadoflores.pe",
+  "orden": 72
+}

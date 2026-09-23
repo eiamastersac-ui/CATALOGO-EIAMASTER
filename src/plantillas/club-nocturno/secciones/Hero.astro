@@ -1,0 +1,163 @@
+---
+import { heroSlides } from '../datos/club.js';
+
+interface Slide { kicker: string; titulo: string; sub: string; img: string }
+const slides = heroSlides as Slide[];
+---
+
+<section class="cn-hero">
+  <div class="cn-hero__track" id="cn-hero-track">
+    {slides.map((s: Slide, i: number) => (
+      <div class="cn-hero__slide">
+        <img src={s.img} alt={s.titulo} loading={i === 0 ? 'eager' : 'lazy'} />
+      </div>
+    ))}
+  </div>
+  <span class="cn-hero__scrim" aria-hidden="true"></span>
+
+  <div class="cn-wrap cn-hero__body">
+    <span class="cn-hero__kicker" id="cn-hero-kicker">{slides[0].kicker}</span>
+    <h1 id="cn-hero-titulo">{slides[0].titulo}</h1>
+    <p id="cn-hero-sub">{slides[0].sub}</p>
+    <div class="cn-hero__cta">
+      <a href="#reservas" class="cn-btn cn-btn--claro">Reservar Mesa</a>
+      <a href="#eventos" class="cn-btn cn-btn--linea">Ver Eventos</a>
+    </div>
+  </div>
+
+  <div class="cn-hero__dots" id="cn-hero-dots">
+    {slides.map((_s: Slide, i: number) => (
+      <button type="button" class={`cn-hero__dot${i === 0 ? ' is-on' : ''}`} data-idx={i} aria-label={`Ir a la diapositiva ${i + 1}`}></button>
+    ))}
+  </div>
+</section>
+
+<script define:vars={{ datos: slides }}>
+  const track = document.getElementById('cn-hero-track');
+  const dots = Array.from(document.querySelectorAll('#cn-hero-dots .cn-hero__dot'));
+  const kicker = document.getElementById('cn-hero-kicker');
+  const titulo = document.getElementById('cn-hero-titulo');
+  const sub = document.getElementById('cn-hero-sub');
+  const total = dots.length;
+  let idx = 0;
+  let timer;
+
+  function ir(n) {
+    idx = (n + total) % total;
+    if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+    const s = datos[idx];
+    if (kicker) kicker.textContent = s.kicker;
+    if (titulo) titulo.textContent = s.titulo;
+    if (sub) sub.textContent = s.sub;
+  }
+
+  function play() {
+    timer = setInterval(() => ir(idx + 1), 6500);
+  }
+
+  dots.forEach((d) => d.addEventListener('click', () => {
+    ir(Number(d.dataset.idx));
+    clearInterval(timer);
+    play();
+  }));
+
+  if (total > 1) play();
+</script>
+
+<style>
+  .cn-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    background: var(--cn-tinta);
+  }
+
+  .cn-hero__track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .cn-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+  }
+
+  .cn-hero__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cn-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(11, 10, 16, 0.9) 0%, rgba(11, 10, 16, 0.35) 45%, rgba(11, 10, 16, 0.55) 100%);
+  }
+
+  .cn-hero__body {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cn-hero__kicker {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: rgba(245, 243, 240, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  .cn-hero__body h1 {
+    font-size: clamp(2.1rem, 6vw, 4rem);
+    max-width: 20ch;
+    margin-bottom: 1.1rem;
+  }
+
+  .cn-hero__body p {
+    color: rgba(245, 243, 240, 0.85);
+    max-width: 42ch;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .cn-hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .cn-hero__dots {
+    position: absolute;
+    bottom: 1.8rem;
+    left: 50%;
+    translate: -50% 0;
+    z-index: 3;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .cn-hero__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(245, 243, 240, 0.4);
+    transition: background 0.2s ease, width 0.2s ease;
+  }
+
+  .cn-hero__dot.is-on {
+    background: var(--cn-blanco);
+    width: 22px;
+    border-radius: 4px;
+  }
+</style>

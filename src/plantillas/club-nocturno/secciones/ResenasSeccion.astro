@@ -1,0 +1,71 @@
+---
+import CarruselSeccion from '../componentes/CarruselSeccion.astro';
+import Icono from '../componentes/Icono.astro';
+import { resenas } from '../datos/club.js';
+
+interface Resena { texto: string; autor: string; tag: string }
+const lista = resenas as Resena[];
+---
+
+<CarruselSeccion titulo="Nuestros clientes lo viven así" sub="5.0 estrellas basadas en cientos de reseñas.">
+  {lista.map((r: Resena) => (
+    <article class="cn-resena">
+      <div class="cn-resena__estrellas">
+        {Array.from({ length: 5 }).map(() => <Icono name="estrella" size={14} />)}
+      </div>
+      <p>&ldquo;{r.texto}&rdquo;</p>
+      <footer>
+        <b>{r.autor}</b>
+        <span>{r.tag}</span>
+      </footer>
+    </article>
+  ))}
+</CarruselSeccion>
+
+<style>
+  .cn-resena {
+    background: var(--cn-panel);
+    border: 1px solid var(--cn-linea);
+    border-radius: 12px;
+    padding: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    height: 100%;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .cn-resena:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245, 243, 240, 0.3);
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+  }
+
+  .cn-resena__estrellas {
+    display: flex;
+    gap: 0.2rem;
+    color: var(--cn-blanco);
+  }
+
+  .cn-resena p {
+    font-size: 0.9rem;
+    color: var(--cn-texto);
+    flex: 1;
+  }
+
+  .cn-resena footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .cn-resena footer b {
+    font-size: 0.85rem;
+    color: var(--cn-blanco);
+  }
+
+  .cn-resena footer span {
+    font-size: 0.76rem;
+    color: var(--cn-acento);
+  }
+</style>

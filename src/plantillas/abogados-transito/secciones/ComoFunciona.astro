@@ -1,0 +1,120 @@
+---
+import { metodosContacto } from '../datos/contenido.js';
+
+const iconos: Record<string, string> = {
+  texto: '<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>',
+  form: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/>',
+  correo: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  persona: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/>',
+};
+---
+
+<section class="at-seccion at-como" id="como-funciona">
+  <div class="at-wrap">
+    <div class="at-como__cabecera">
+      <span class="at-como__badge" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <h2 class="at-titulo at-titulo--centro">Lo hacemos fácil</h2>
+      <p class="at-sub at-sub--centro">
+        Después de elegir una de las siguientes opciones, solo te tomará de 2 a 3 minutos enviarnos
+        tu información. Luego te avisamos por correo cada paso del proceso.
+      </p>
+    </div>
+
+    <div class="at-como__grid">
+      {metodosContacto.map((m) => (
+        <article class="at-como__card">
+          <span class="at-como__ico" set:html={`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${iconos[m.icono] ?? ''}</svg>`} />
+          <h3>{m.titulo}</h3>
+          <p>{m.texto}</p>
+          <span class="at-como__nota">{m.nota}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .at-como__cabecera {
+    max-width: 640px;
+    margin-inline: auto;
+    text-align: center;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .at-como__badge {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--at-amarillo);
+    color: var(--at-tinta);
+    margin: 0 auto 1.1rem;
+  }
+
+  .at-como__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.1rem;
+  }
+
+  .at-como__card {
+    background: var(--at-crema);
+    border: 1px solid var(--at-linea);
+    border-radius: 12px;
+    padding: 1.75rem 1.4rem;
+    text-align: center;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .at-como__card:hover {
+    border-color: var(--at-amarillo);
+    transform: translateY(-3px);
+  }
+
+  .at-como__ico {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--at-tinta);
+    color: var(--at-amarillo);
+    margin: 0 auto 1rem;
+  }
+
+  .at-como__card h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.55rem;
+  }
+
+  .at-como__card p {
+    font-size: 0.85rem;
+    color: var(--at-gris);
+    margin-bottom: 0.85rem;
+  }
+
+  .at-como__nota {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--at-amarillo-osc);
+  }
+
+  @media (max-width: 860px) {
+    .at-como__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .at-como__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

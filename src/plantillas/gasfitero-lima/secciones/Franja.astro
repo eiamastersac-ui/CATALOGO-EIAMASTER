@@ -1,0 +1,59 @@
+---
+import { stats } from '../datos/gasfitero.js';
+---
+
+<section class="gl-franja">
+  <div class="gl-wrap gl-franja__grid">
+    {stats.map((s: { n: string; t: string }, i: number) => (
+      <div class={`gl-franja__item gl-reveal gl-reveal--${i + 1}`}>
+        <b>{s.n}</b>
+        <span>{s.t}</span>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .gl-franja {
+    background: var(--gl-tinta);
+    color: var(--gl-blanco);
+    padding-block: clamp(2rem, 5vw, 2.75rem);
+  }
+
+  .gl-franja__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .gl-franja__item {
+    background: var(--gl-tinta);
+    padding: 1.4rem clamp(1rem, 3vw, 1.75rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .gl-franja__item b {
+    font-family: var(--gl-display);
+    font-weight: 800;
+    font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+    letter-spacing: -0.02em;
+  }
+
+  .gl-franja__item span {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 760px) {
+    .gl-franja__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

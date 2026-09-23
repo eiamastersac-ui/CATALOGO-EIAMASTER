@@ -1,0 +1,174 @@
+---
+import { marca, footerCols, aviso, base } from '../datos/club.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+const cols = [footerCols.eventos, footerCols.experiencias, footerCols.tienda, footerCols.mas];
+---
+
+<footer class="cn-pie">
+  <div class="cn-wrap cn-pie__grid">
+    <div class="cn-pie__marca">
+      <span class="cn-pie__logo">{marca.nombre}<b>{marca.sub}</b></span>
+      <div class="cn-pie__datos">
+        <span><Icono name="mapa" size={14} /> {marca.direccion}</span>
+        <span><Icono name="telefono" size={14} /> {marca.tel}</span>
+      </div>
+      <div class="cn-pie__redes">
+        <a href={marca.whatsappHref} target="_blank" rel="noopener" aria-label="WhatsApp"><Icono name="whatsapp" size={16} /></a>
+        <a href="#top" aria-label="Instagram"><Icono name="instagram" size={16} /></a>
+        <a href="#top" aria-label="TikTok"><Icono name="tiktok" size={16} /></a>
+        <a href="#top" aria-label="Facebook"><Icono name="facebook" size={16} /></a>
+      </div>
+    </div>
+
+    {cols.map((c) => (
+      <div class="cn-pie__col">
+        <b>{c.titulo.toUpperCase()}</b>
+        <ul>
+          {c.items.map((it: string) => <li><a href={`${base}/#top`}>{it}</a></li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="cn-wrap cn-pie__aviso">
+    <Icono name="ticket" size={15} /> {aviso}
+  </div>
+
+  <div class="cn-wrap cn-pie__bottom">
+    <span>&copy; {anio} {marca.nombre}. Plantilla de referencia, no es un negocio real.</span>
+    <span>Diseño inspirado en el lenguaje visual de un festival global.</span>
+  </div>
+</footer>
+
+<style>
+  .cn-pie {
+    background: var(--cn-panel);
+    padding-top: clamp(2.5rem, 6vw, 3.5rem);
+    border-top: 1px solid var(--cn-linea);
+  }
+
+  .cn-pie__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: clamp(1.8rem, 4vw, 2.5rem);
+  }
+
+  .cn-pie__logo {
+    font-family: var(--cn-font-titulo);
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #fff;
+  }
+
+  .cn-pie__logo b {
+    display: block;
+    font-family: var(--cn-font);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--cn-texto-tenue);
+    margin-top: 0.2rem;
+  }
+
+  .cn-pie__datos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-block: 1rem;
+    font-size: 0.82rem;
+    color: var(--cn-texto);
+  }
+
+  .cn-pie__datos span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cn-pie__datos svg {
+    color: var(--cn-texto-tenue);
+    flex-shrink: 0;
+  }
+
+  .cn-pie__redes {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .cn-pie__redes a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(245, 243, 240, 0.08);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+  }
+
+  .cn-pie__redes a:hover {
+    background: var(--cn-acento);
+    color: var(--cn-tinta);
+  }
+
+  .cn-pie__col b {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--cn-texto-tenue);
+    margin-bottom: 1rem;
+  }
+
+  .cn-pie__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    font-size: 0.85rem;
+    color: var(--cn-texto);
+  }
+
+  .cn-pie__col a {
+    transition: color 0.25s ease;
+  }
+
+  .cn-pie__col a:hover {
+    color: #fff;
+  }
+
+  .cn-pie__aviso {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    border-top: 1px solid var(--cn-linea);
+    padding-block: 1rem;
+    font-size: 0.78rem;
+    color: var(--cn-texto-tenue);
+    text-align: center;
+  }
+
+  .cn-pie__bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block: 1.25rem;
+    font-size: 0.72rem;
+    color: var(--cn-texto-tenue);
+  }
+
+  @media (max-width: 900px) {
+    .cn-pie__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .cn-pie__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

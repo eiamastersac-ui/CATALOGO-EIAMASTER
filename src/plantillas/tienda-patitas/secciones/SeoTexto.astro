@@ -1,0 +1,83 @@
+---
+import { seoTexto } from '../datos/patitas.js';
+
+interface Sub { titulo: string; texto: string }
+---
+
+<section class="pt-seccion" style="background:var(--pt-crema)">
+  <div class="pt-wrap">
+    <div class="pt-seo" id="pt-seo">
+      <h2>{seoTexto.titulo}</h2>
+      {seoTexto.parrafos.map((p: string) => <p>{p}</p>)}
+      {seoTexto.subsecciones.map((s: Sub) => (
+        <>
+          <h3>{s.titulo}</h3>
+          <p>{s.texto}</p>
+        </>
+      ))}
+    </div>
+    <button type="button" class="pt-btn pt-btn--outline pt-seo__toggle" id="pt-seo-toggle">
+      <span>Ver más</span>
+    </button>
+  </div>
+</section>
+
+<script>
+  const box = document.getElementById('pt-seo');
+  const btn = document.getElementById('pt-seo-toggle');
+  const label = btn?.querySelector('span');
+
+  btn?.addEventListener('click', () => {
+    const abierto = box?.classList.toggle('is-open');
+    if (label) label.textContent = abierto ? 'Resumir información' : 'Ver más';
+  });
+</script>
+
+<style>
+  .pt-seo {
+    max-height: 150px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pt-seo::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(255, 244, 234, 0), var(--pt-crema));
+  }
+
+  .pt-seo.is-open {
+    max-height: none;
+  }
+
+  .pt-seo.is-open::after {
+    display: none;
+  }
+
+  .pt-seo h2 {
+    font-size: 1.1rem;
+  }
+
+  .pt-seo h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--pt-naranja-osc);
+    margin-top: 0.4rem;
+  }
+
+  .pt-seo p {
+    font-size: 0.82rem;
+    color: var(--pt-gris);
+    line-height: 1.6;
+  }
+
+  .pt-seo__toggle {
+    margin-top: 1.25rem;
+    display: flex;
+  }
+</style>

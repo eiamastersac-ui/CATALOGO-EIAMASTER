@@ -1,0 +1,66 @@
+---
+import { entregas, distritos } from '../datos/mercadoflores.js';
+
+const fotos = entregas as string[];
+---
+
+<section class="mf-entregas mf-seccion" id="entregas">
+  <div class="mf-wrap mf-entregas__cab">
+    <div>
+      <span class="mf-kicker">La confianza de grandes empresas</span>
+      <h2>Así entregamos en Lima y Callao.</h2>
+      <p class="mf-sub">Fotografías reales, tomadas al momento de cada entrega.</p>
+    </div>
+    <a href="#seleccion" class="mf-btn mf-btn--outline">Ver todas nuestras entregas</a>
+  </div>
+
+  <div class="mf-entregas__tira">
+    {fotos.map((f: string) => <img src={f} alt="Entrega de arreglo floral tienda.com" loading="lazy" width="480" height="480" />)}
+  </div>
+
+  <p class="mf-wrap mf-entregas__distritos">
+    Cobertura en {distritos.join(', ')} y el resto de Lima Metropolitana.
+  </p>
+</section>
+
+<style>
+  .mf-entregas__cab {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .mf-entregas__cab h2 {
+    font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .mf-entregas__tira {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(180px, 1fr);
+    gap: 0.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    max-width: 100%;
+    padding-inline: clamp(1.1rem, 4vw, 2rem);
+  }
+
+  .mf-entregas__tira img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+    scroll-snap-align: start;
+  }
+
+  .mf-entregas__distritos {
+    margin-top: clamp(1.5rem, 4vw, 2rem);
+    font-size: 0.78rem;
+    color: var(--mf-tinta-suave);
+  }
+</style>

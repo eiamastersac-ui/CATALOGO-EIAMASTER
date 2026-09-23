@@ -1,0 +1,71 @@
+---
+interface Props {
+  titulo: string;
+  texto: string;
+  img: string;
+}
+const { titulo, texto, img } = Astro.props as Props;
+---
+
+<article class="cn-hist">
+  <div class="cn-hist__foto">
+    <img src={img} alt={titulo} loading="lazy" />
+    <span class="cn-hist__scrim" aria-hidden="true"></span>
+  </div>
+  <div class="cn-hist__tx">
+    <h3>{titulo}</h3>
+    <p>{texto}</p>
+  </div>
+</article>
+
+<style>
+  .cn-hist {
+    background: var(--cn-panel);
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  }
+
+  .cn-hist:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+  }
+
+  .cn-hist__foto {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .cn-hist__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .cn-hist:hover .cn-hist__foto img {
+    transform: scale(1.05);
+  }
+
+  .cn-hist__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(11, 10, 16, 0.5), transparent 60%);
+  }
+
+  .cn-hist__tx {
+    padding: 1.1rem;
+  }
+
+  .cn-hist__tx h3 {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .cn-hist__tx p {
+    font-size: 0.85rem;
+    color: var(--cn-texto);
+  }
+</style>

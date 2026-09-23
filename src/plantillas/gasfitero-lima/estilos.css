@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap");
+
+/* ==========================================================================
+   gasfitero-lima — gasfitero 24 h en Lima (inspirada en gasfitero.pe/lima)
+   Estetica: casi monocroma (tinta calida + papel) + UN acento cobre.
+   El color lo ponen las fotos reales de gasfiteria, no gradientes inventados.
+   Todo namespaced bajo .tpl-gasfitero-lima.
+   ========================================================================== */
+
+.tpl-gasfitero-lima {
+  --gl-tinta: #191512;
+  --gl-tinta-2: #221d18;
+  --gl-humo: #6b6357;
+  --gl-linea: #ddd4c4;
+  --gl-papel: #f5f1e8;
+  --gl-papel-2: #ece5d7;
+  --gl-blanco: #fffdf8;
+
+  --gl-cobre: #b0603a;
+  --gl-cobre-suave: #ecdccf;
+
+  --gl-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --gl-display: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --gl-maxw: 1240px;
+  --gl-pill: 999px;
+  --gl-hdr-h: 78px;
+
+  background: var(--gl-papel);
+  color: var(--gl-tinta);
+  font-family: var(--gl-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-gasfitero-lima {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-gasfitero-lima *,
+.tpl-gasfitero-lima *::before,
+.tpl-gasfitero-lima *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-gasfitero-lima h1,
+.tpl-gasfitero-lima h2,
+.tpl-gasfitero-lima h3,
+.tpl-gasfitero-lima h4 {
+  font-family: var(--gl-display);
+  line-height: 1.1;
+  color: var(--gl-tinta);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.tpl-gasfitero-lima img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-gasfitero-lima a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-gasfitero-lima button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-gasfitero-lima input,
+.tpl-gasfitero-lima select,
+.tpl-gasfitero-lima textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* --- layout utils --- */
+.tpl-gasfitero-lima .gl-wrap {
+  max-width: var(--gl-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-gasfitero-lima .gl-seccion {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  position: relative;
+}
+
+.tpl-gasfitero-lima .gl-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--gl-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gl-cobre);
+  margin-bottom: 1rem;
+}
+
+.tpl-gasfitero-lima .gl-kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--gl-cobre);
+}
+
+.tpl-gasfitero-lima .gl-kicker--claro {
+  color: var(--gl-blanco);
+}
+
+.tpl-gasfitero-lima .gl-kicker--claro::before {
+  background: var(--gl-cobre);
+}
+
+.tpl-gasfitero-lima .gl-titulo {
+  font-size: clamp(1.75rem, 4vw, 2.7rem);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-gasfitero-lima .gl-sub {
+  color: var(--gl-humo);
+  font-size: clamp(0.95rem, 1.6vw, 1.06rem);
+  max-width: 46ch;
+}
+
+.tpl-gasfitero-lima .gl-sub--centro {
+  margin-inline: auto;
+  text-align: center;
+  max-width: 48ch;
+}
+
+.tpl-gasfitero-lima .gl-cab {
+  margin-bottom: clamp(2rem, 5vw, 3.25rem);
+}
+
+.tpl-gasfitero-lima .gl-cab--centro {
+  text-align: center;
+}
+
+.tpl-gasfitero-lima .gl-cab--centro .gl-kicker {
+  justify-content: center;
+}
+
+.tpl-gasfitero-lima .gl-cab--centro .gl-sub {
+  margin-inline: auto;
+}
+
+/* --- botones --- */
+.tpl-gasfitero-lima .gl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.7rem;
+  border-radius: var(--gl-pill);
+  font-family: var(--gl-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.tpl-gasfitero-lima .gl-btn:hover {
+  transform: translateY(-1px);
+}
+
+.tpl-gasfitero-lima .gl-btn--primario {
+  background: var(--gl-tinta);
+  color: var(--gl-blanco);
+}
+
+.tpl-gasfitero-lima .gl-btn--primario:hover {
+  opacity: 0.88;
+}
+
+.tpl-gasfitero-lima .gl-btn--cobre {
+  background: var(--gl-cobre);
+  color: #fff;
+}
+
+.tpl-gasfitero-lima .gl-btn--cobre:hover {
+  opacity: 0.9;
+}
+
+.tpl-gasfitero-lima .gl-btn--claro {
+  background: var(--gl-blanco);
+  color: var(--gl-tinta);
+  border: 1.5px solid var(--gl-linea);
+}
+
+.tpl-gasfitero-lima .gl-btn--claro:hover {
+  border-color: var(--gl-tinta);
+}
+
+.tpl-gasfitero-lima .gl-btn--linea {
+  border: 1.5px solid currentColor;
+  color: var(--gl-tinta);
+}
+
+.tpl-gasfitero-lima .gl-btn--linea:hover {
+  background: var(--gl-tinta);
+  color: var(--gl-blanco);
+}
+
+.tpl-gasfitero-lima .gl-btn--sobre-foto {
+  background: rgba(255, 253, 248, 0.95);
+  color: var(--gl-tinta);
+}
+
+.tpl-gasfitero-lima .gl-btn--sobre-foto:hover {
+  background: #fff;
+}
+
+.tpl-gasfitero-lima .gl-btn--claro-linea {
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.tpl-gasfitero-lima .gl-btn--claro-linea:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* --- flechas carrusel --- */
+.tpl-gasfitero-lima .gl-flecha {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--gl-linea);
+  display: grid;
+  place-items: center;
+  color: var(--gl-tinta);
+  flex-shrink: 0;
+  background: var(--gl-blanco);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.tpl-gasfitero-lima .gl-flecha:hover {
+  border-color: var(--gl-tinta);
+  background: var(--gl-tinta);
+  color: var(--gl-blanco);
+}
+
+/* --- fila con scroll-snap (resenas) --- */
+.tpl-gasfitero-lima .gl-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(300px, 1fr);
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.tpl-gasfitero-lima .gl-fila > * {
+  scroll-snap-align: start;
+}
+
+/* --- reveal on scroll (toggle por IntersectionObserver en RevelarScroll.astro) --- */
+.tpl-gasfitero-lima .gl-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-gasfitero-lima .gl-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-gasfitero-lima .gl-reveal--1 { transition-delay: 0.08s; }
+.tpl-gasfitero-lima .gl-reveal--2 { transition-delay: 0.16s; }
+.tpl-gasfitero-lima .gl-reveal--3 { transition-delay: 0.24s; }
+.tpl-gasfitero-lima .gl-reveal--4 { transition-delay: 0.32s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-gasfitero-lima .gl-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- boton flotante de WhatsApp (definido aqui porque su tip lo puede
+       tocar JS y los <style> scoped no alcanzan nodos creados en runtime) --- */
+.tpl-gasfitero-lima .gl-whats {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 150;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #1faf54;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 16px 34px -12px rgba(31, 175, 84, 0.6);
+  transition: transform 0.2s ease;
+}
+
+.tpl-gasfitero-lima .gl-whats:hover {
+  transform: scale(1.06);
+}
+
+.tpl-gasfitero-lima .gl-whats__tip {
+  position: absolute;
+  right: 70px;
+  bottom: 4px;
+  background: var(--gl-blanco);
+  color: var(--gl-tinta);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.35;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--gl-linea);
+}
+
+.tpl-gasfitero-lima .gl-whats__tip b {
+  color: var(--gl-cobre);
+}
+
+@media (max-width: 640px) {
+  .tpl-gasfitero-lima .gl-whats__tip {
+    display: none;
+  }
+}

@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Jost:wght@400;500;600;700&display=swap");
+
+.tpl-tienda-mercadoflores {
+  --mf-tinta: #241f1b;
+  --mf-tinta-suave: #55493f;
+  --mf-papel: #faf5ec;
+  --mf-papel-osc: #efe2cd;
+  --mf-linea: #e4d8c2;
+  --mf-blanco: #ffffff;
+
+  --mf-acento: #7c2635;
+  --mf-acento-osc: #5e1c28;
+  --mf-acento-suave: #f1e1e0;
+
+  --mf-font: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --mf-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --mf-maxw: 1240px;
+  --mf-pill: 999px;
+  --mf-fila-top-h: 76px;
+  --mf-nav-h: 46px;
+  --mf-hdr-h: calc(var(--mf-fila-top-h) + var(--mf-nav-h));
+
+  background: var(--mf-papel);
+  color: var(--mf-tinta);
+  font-family: var(--mf-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-tienda-mercadoflores {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-tienda-mercadoflores *,
+.tpl-tienda-mercadoflores *::before,
+.tpl-tienda-mercadoflores *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-tienda-mercadoflores h1,
+.tpl-tienda-mercadoflores h2,
+.tpl-tienda-mercadoflores h3,
+.tpl-tienda-mercadoflores h4 {
+  font-family: var(--mf-serif);
+  line-height: 1.14;
+  color: var(--mf-tinta);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.tpl-tienda-mercadoflores img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-tienda-mercadoflores a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-tienda-mercadoflores button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-tienda-mercadoflores input {
+  font: inherit;
+}
+
+.tpl-tienda-mercadoflores .mf-wrap {
+  max-width: var(--mf-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-tienda-mercadoflores .mf-seccion {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+}
+
+.tpl-tienda-mercadoflores section[id] {
+  scroll-margin-top: var(--mf-hdr-h);
+}
+
+.tpl-tienda-mercadoflores .mf-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mf-acento);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-tienda-mercadoflores .mf-kicker::before {
+  content: "";
+  width: 20px;
+  height: 1.5px;
+  background: var(--mf-acento);
+}
+
+.tpl-tienda-mercadoflores .mf-kicker--claro {
+  color: #fff;
+}
+
+.tpl-tienda-mercadoflores .mf-kicker--claro::before {
+  background: #fff;
+}
+
+.tpl-tienda-mercadoflores .mf-titulo {
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-style: italic;
+  text-align: center;
+}
+
+.tpl-tienda-mercadoflores .mf-sub {
+  color: var(--mf-tinta-suave);
+  font-size: 0.98rem;
+  max-width: 46ch;
+}
+
+.tpl-tienda-mercadoflores .mf-sub--centro {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.tpl-tienda-mercadoflores .mf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.7rem;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--mf-pill);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  border: 1.5px solid transparent;
+}
+
+.tpl-tienda-mercadoflores .mf-btn:hover {
+  transform: translateY(-2px);
+}
+
+.tpl-tienda-mercadoflores .mf-btn--tinta {
+  background: var(--mf-tinta);
+  color: #fff;
+}
+
+.tpl-tienda-mercadoflores .mf-btn--tinta:hover {
+  background: var(--mf-acento);
+}
+
+.tpl-tienda-mercadoflores .mf-btn--claro {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.tpl-tienda-mercadoflores .mf-btn--claro:hover {
+  background: #fff;
+  color: var(--mf-tinta);
+}
+
+.tpl-tienda-mercadoflores .mf-btn--outline {
+  border-color: var(--mf-tinta);
+  color: var(--mf-tinta);
+  background: transparent;
+}
+
+.tpl-tienda-mercadoflores .mf-btn--outline:hover {
+  background: var(--mf-tinta);
+  color: #fff;
+}
+
+.tpl-tienda-mercadoflores .mf-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(230px, 1fr);
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  max-width: 100%;
+}
+
+.tpl-tienda-mercadoflores .mf-fila > * {
+  scroll-snap-align: start;
+}
+
+.tpl-tienda-mercadoflores .mf-flecha {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--mf-tinta);
+  background: var(--mf-blanco);
+  box-shadow: 0 10px 26px -14px rgba(36, 31, 27, 0.4);
+  flex-shrink: 0;
+  border: 1px solid var(--mf-linea);
+}
+
+.tpl-tienda-mercadoflores .mf-flecha:hover {
+  background: var(--mf-tinta);
+  color: #fff;
+}
+
+.tpl-tienda-mercadoflores .mf-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .tpl-tienda-mercadoflores .mf-grid-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .tpl-tienda-mercadoflores .mf-grid-cards {
+    grid-template-columns: 1fr;
+  }
+}

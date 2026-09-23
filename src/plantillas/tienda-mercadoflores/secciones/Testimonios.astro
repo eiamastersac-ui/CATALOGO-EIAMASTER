@@ -1,0 +1,109 @@
+---
+import { testimonios, rating } from '../datos/mercadoflores.js';
+
+interface T {
+  nombre: string;
+  tiempo: string;
+  texto: string;
+}
+const items = testimonios as T[];
+
+const estrella = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.7 4.3L18.3 21 12 16.6 5.7 21l2-7.7L2 9h7z"/></svg>';
+---
+
+<section class="mf-testi mf-seccion" id="testimonios">
+  <div class="mf-wrap">
+    <h2 class="mf-titulo">Lo que dicen nuestros clientes</h2>
+    <p class="mf-sub mf-sub--centro mf-testi__rating">
+      Únete a los +{rating.cantidad} usuarios que nos califican con {rating.valor}
+      <span class="mf-testi__estrellas" set:html={estrella.repeat(5)} /> en Google.
+    </p>
+
+    <div class="mf-fila mf-testi__fila">
+      {items.map((t: T) => (
+        <article class="mf-testi__card">
+          <span class="mf-testi__estrellas mf-testi__estrellas--card" set:html={estrella.repeat(5)} />
+          <p class="mf-testi__texto">{t.texto}</p>
+          <div class="mf-testi__pie">
+            <span class="mf-testi__avatar">{t.nombre.charAt(0)}</span>
+            <div>
+              <b>{t.nombre}</b>
+              <span>{t.tiempo} · Verificada</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mf-testi__rating {
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .mf-testi__estrellas {
+    display: inline-flex;
+    gap: 2px;
+    vertical-align: -2px;
+    color: var(--mf-acento);
+  }
+
+  .mf-testi__fila {
+    grid-auto-columns: minmax(280px, 1fr);
+  }
+
+  .mf-testi__card {
+    background: var(--mf-blanco);
+    border: 1px solid var(--mf-linea);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .mf-testi__estrellas--card {
+    font-size: 0.7rem;
+  }
+
+  .mf-testi__texto {
+    font-size: 0.88rem;
+    color: var(--mf-tinta-suave);
+    flex: 1;
+  }
+
+  .mf-testi__pie {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .mf-testi__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--mf-acento-suave);
+    color: var(--mf-acento-osc);
+    font-family: var(--mf-serif);
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .mf-testi__pie div {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.78rem;
+  }
+
+  .mf-testi__pie b {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .mf-testi__pie span {
+    color: var(--mf-tinta-suave);
+  }
+</style>

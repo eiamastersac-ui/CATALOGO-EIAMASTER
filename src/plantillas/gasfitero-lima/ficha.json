@@ -1,0 +1,12 @@
+{
+  "titulo": "Cauce — Gasfitero 24 h en Lima (Estilo gasfitero.pe)",
+  "categoria": "servicios-hogar",
+  "descripcion": "Landing de captación para un gasfitero 24 h en Lima, rehecha en clave minimalista premium: paleta casi monocroma (tinta cálida + papel) con un único acento cobre, tipografía Bricolage Grotesque. Cabecera fija transparente que se vuelve sólida al scrollear, hero carrusel a 100svh con foto a sangre, tarjeta de confianza flotante y contador de slide; franja de indicadores, grilla de servicios foto-primero con etiqueta superpuesta, bloque oscuro de emergencia, proceso en 4 pasos, cobertura por distritos de Lima y Callao, criterios para elegir gasfitero, reseñas en carrusel, formulario de contacto demo (sin envío real) y footer con formas de pago y libro de reclamaciones. Botón flotante de WhatsApp. Sin login. Marca propia inventada Cauce.",
+  "thumbnail": "/previews/gasfitero-lima.jpg",
+  "tags": ["gasfitero", "servicios", "hogar", "lima", "24 horas", "emergencias", "minimalista", "landing"],
+  "paleta": ["#191512", "#b0603a", "#f5f1e8", "#ece5d7"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "gasfitero.pe",
+  "orden": 71
+}

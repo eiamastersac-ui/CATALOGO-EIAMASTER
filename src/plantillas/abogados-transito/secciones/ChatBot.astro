@@ -1,0 +1,203 @@
+---
+import { marca } from '../datos/contenido.js';
+---
+
+<div class="at-chat" id="at-chat">
+  <button type="button" class="at-chat__toggle" id="at-chat-toggle" aria-label="Abrir chat de ayuda" aria-expanded="false">
+    <svg class="at-chat__i-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+    </svg>
+    <span class="at-chat__i-close" aria-hidden="true">&times;</span>
+  </button>
+
+  <section class="at-chat__panel" id="at-chat-panel" hidden aria-label="Chat de ayuda">
+    <header class="at-chat__head">
+      <span class="at-chat__ava" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg>
+      </span>
+      <div>
+        <b>Asistente {marca.nombre} {marca.sub}</b>
+        <small>En línea</small>
+      </div>
+    </header>
+
+    <div class="at-chat__body" id="at-chat-body">
+      <p class="at-chat__msg at-chat__msg--bot">Hola, ¿tienes una multa o una orden de tránsito?</p>
+      <p class="at-chat__msg at-chat__msg--bot">Cuéntame brevemente qué pasó y te digo cómo seguimos.</p>
+    </div>
+
+    <form class="at-chat__form" id="at-chat-form">
+      <input type="text" id="at-chat-input" placeholder="Escribe aquí..." aria-label="Mensaje" autocomplete="off" />
+      <button type="submit" aria-label="Enviar">&#10148;</button>
+    </form>
+    <p class="at-chat__pow">Demo — respuestas automáticas</p>
+  </section>
+</div>
+
+<script>
+  import { chatCanned } from '../datos/contenido.js';
+
+  const toggle = document.getElementById('at-chat-toggle');
+  const panel = document.getElementById('at-chat-panel');
+  const body = document.getElementById('at-chat-body');
+  const form = document.getElementById('at-chat-form');
+  const input = document.getElementById('at-chat-input') as HTMLInputElement | null;
+  let paso = 0;
+
+  function abrir(v: boolean) {
+    if (!panel || !toggle) return;
+    panel.hidden = !v;
+    toggle.classList.toggle('is-open', v);
+    toggle.setAttribute('aria-expanded', String(v));
+    if (v) input?.focus();
+  }
+
+  toggle?.addEventListener('click', () => abrir(panel?.hidden ?? true));
+
+  function push(texto: string, quien: 'bot' | 'yo') {
+    if (!body) return;
+    const p = document.createElement('p');
+    p.className = `at-chat__msg at-chat__msg--${quien}`;
+    p.textContent = texto;
+    body.appendChild(p);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const txt = (input?.value || '').trim();
+    if (!txt) return;
+    push(txt, 'yo');
+    if (input) input.value = '';
+    const reply = chatCanned[Math.min(paso, chatCanned.length - 1)];
+    paso++;
+    window.setTimeout(() => push(reply, 'bot'), 650);
+  });
+</script>
+
+<style>
+  .at-chat {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  .at-chat__toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--at-amarillo);
+    color: var(--at-tinta);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 12px 30px -10px rgba(20, 23, 31, 0.55);
+    order: 2;
+  }
+
+  .at-chat__i-close {
+    display: none;
+    font-size: 1.7rem;
+    line-height: 1;
+  }
+
+  .at-chat__toggle.is-open .at-chat__i-open { display: none; }
+  .at-chat__toggle.is-open .at-chat__i-close { display: block; }
+
+  .at-chat__panel[hidden] {
+    display: none;
+  }
+
+  .at-chat__panel {
+    width: min(340px, 88vw);
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    order: 1;
+  }
+
+  .at-chat__head {
+    background: var(--at-tinta);
+    color: #fff;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .at-chat__ava {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--at-amarillo);
+    display: grid;
+    place-items: center;
+  }
+
+  .at-chat__head b {
+    color: #fff;
+    font-size: 0.86rem;
+    display: block;
+  }
+
+  .at-chat__head small {
+    font-size: 0.7rem;
+    opacity: 0.75;
+  }
+
+  .at-chat__body {
+    background: var(--at-crema);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 320px;
+    min-height: 180px;
+    overflow-y: auto;
+  }
+
+  .at-chat__form {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem;
+    border-top: 1px solid var(--at-linea);
+  }
+
+  .at-chat__form input {
+    flex: 1;
+    border: 1px solid var(--at-linea);
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.82rem;
+    outline: none;
+  }
+
+  .at-chat__form input:focus {
+    border-color: var(--at-amarillo-osc);
+  }
+
+  .at-chat__form button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--at-amarillo);
+    color: var(--at-tinta);
+    flex-shrink: 0;
+  }
+
+  .at-chat__pow {
+    text-align: center;
+    font-size: 0.62rem;
+    color: var(--at-gris);
+    padding: 0 0 0.6rem;
+  }
+</style>

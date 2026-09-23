@@ -1,0 +1,242 @@
+---
+import { contacto, marca } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+
+const waHref = `https://wa.me/51${marca.telCrudo}?text=Hola,%20quiero%20agendar%20un%20servicio`;
+---
+
+<section class="gl-seccion gl-cont" id="contacto">
+  <div class="gl-wrap gl-cont__grid">
+    <div class="gl-cont__info gl-reveal">
+      <span class="gl-kicker">{contacto.kicker}</span>
+      <h2 class="gl-titulo">{contacto.titulo}</h2>
+
+      <ul class="gl-cont__datos">
+        <li>
+          <Icono nombre="telefono" size={18} />
+          <div>
+            <small>Teléfono / WhatsApp</small>
+            <a href={`tel:${marca.telCrudo}`}>{marca.tel}</a>
+          </div>
+        </li>
+        <li>
+          <Icono nombre="reloj" size={18} />
+          <div>
+            <small>Horario</small>
+            {marca.horario}
+          </div>
+        </li>
+        <li>
+          <Icono nombre="pin" size={18} />
+          <div>
+            <small>Base</small>
+            {marca.direccion}
+          </div>
+        </li>
+        <li>
+          <Icono nombre="estrella" size={18} />
+          <div>
+            <small>Valoración</small>
+            {marca.rating} / 5 · {marca.resenas} reseñas
+          </div>
+        </li>
+      </ul>
+
+      <a href={waHref} target="_blank" rel="noopener" class="gl-btn gl-btn--cobre">
+        <Icono nombre="whatsapp" size={16} />
+        Escribir ahora
+      </a>
+    </div>
+
+    <form class="gl-cont__form gl-reveal gl-reveal--2" id="gl-form" novalidate>
+      <div class="gl-campo">
+        <label for="gl-nombre">Nombre</label>
+        <input type="text" id="gl-nombre" name="nombre" autocomplete="name" required />
+      </div>
+      <div class="gl-campo gl-campo--fila">
+        <div>
+          <label for="gl-tel">Teléfono</label>
+          <input type="tel" id="gl-tel" name="telefono" autocomplete="tel" required />
+        </div>
+        <div>
+          <label for="gl-distrito">Distrito</label>
+          <select id="gl-distrito" name="distrito">
+            {contacto.distritos.map((d: string) => <option>{d}</option>)}
+          </select>
+        </div>
+      </div>
+      <div class="gl-campo">
+        <label for="gl-asunto">¿Qué necesitas?</label>
+        <select id="gl-asunto" name="asunto">
+          {contacto.asuntos.map((a: string) => <option>{a}</option>)}
+        </select>
+      </div>
+      <div class="gl-campo">
+        <label for="gl-msg">Cuéntanos brevemente</label>
+        <textarea id="gl-msg" name="mensaje" rows="3"></textarea>
+      </div>
+      <button type="submit" class="gl-btn gl-btn--primario">Pedir que me llamen</button>
+      <p class="gl-cont__ok" id="gl-form-ok" hidden>
+        <Icono nombre="check" size={16} />
+        Listo. Te llamamos en los próximos minutos.
+      </p>
+      <p class="gl-cont__nota">Demostración: el formulario no envía datos a ningún servidor.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('gl-form') as HTMLFormElement | null;
+  const ok = document.getElementById('gl-form-ok');
+
+  form?.addEventListener('submit', (e: Event) => {
+    e.preventDefault();
+    const nombre = form.querySelector('#gl-nombre') as HTMLInputElement | null;
+    const tel = form.querySelector('#gl-tel') as HTMLInputElement | null;
+    if (!nombre?.value.trim() || !tel?.value.trim()) {
+      if (!nombre?.value.trim()) nombre?.focus();
+      else tel?.focus();
+      return;
+    }
+    ok?.removeAttribute('hidden');
+    form.reset();
+  });
+</script>
+
+<style>
+  .gl-cont__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .gl-cont__datos {
+    list-style: none;
+    margin: 1.75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .gl-cont__datos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .gl-cont__datos li :global(svg) {
+    color: var(--gl-cobre);
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .gl-cont__datos div {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .gl-cont__datos small {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gl-humo);
+    margin-bottom: 0.1rem;
+  }
+
+  .gl-cont__datos a:hover {
+    color: var(--gl-cobre);
+  }
+
+  .gl-cont__form {
+    background: var(--gl-blanco);
+    border: 1px solid var(--gl-linea);
+    border-radius: 18px;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .gl-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .gl-campo--fila {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .gl-campo--fila > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .gl-cont__form label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gl-humo);
+  }
+
+  .gl-cont__form input,
+  .gl-cont__form select,
+  .gl-cont__form textarea {
+    border: 1px solid var(--gl-linea);
+    border-radius: 10px;
+    padding: 0.7rem 0.85rem;
+    background: var(--gl-papel);
+    transition: border-color 0.2s ease;
+  }
+
+  .gl-cont__form input:focus,
+  .gl-cont__form select:focus,
+  .gl-cont__form textarea:focus {
+    outline: none;
+    border-color: var(--gl-cobre);
+  }
+
+  .gl-cont__form textarea {
+    resize: vertical;
+  }
+
+  .gl-cont__form .gl-btn {
+    margin-top: 0.25rem;
+  }
+
+  .gl-cont__ok {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--gl-cobre);
+  }
+
+  .gl-cont__ok[hidden] {
+    display: none;
+  }
+
+  .gl-cont__nota {
+    font-size: 0.74rem;
+    color: var(--gl-humo);
+  }
+
+  @media (max-width: 860px) {
+    .gl-cont__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .gl-campo--fila {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Pet Shop (Estilo Qué Patas)",
+  "categoria": "mascotas-accesorios",
+  "descripcion": "Tienda de accesorios para mascotas con ticker de código de descuento, mega-menu de Perros y Gatos con banners, hero con carrusel y porcentaje de descuento gigante, franja de beneficios, contador de oferta por tiempo limitado, banner de temporada, carruseles de productos con stepper y carrito lateral, banners por categoria de mascota (Perros, Gatos, Paseo), grilla circular de categorias, galeria de Instagram, carrusel de reseñas con foto, tarjetas de blog, bloque SEO expandible y banner de cuotas sin intereses. Botones flotantes de ofertas y WhatsApp. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/tienda-patitas.jpg",
+  "tags": ["mascotas", "perros", "gatos", "accesorios", "ecommerce", "carrito", "ofertas", "nuevo"],
+  "paleta": ["#ff6a13", "#221812", "#fff4ea", "#e02020"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "quepatas.com",
+  "orden": 69
+}

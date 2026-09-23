@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap");
+
+.tpl-tienda-patitas {
+  --pt-naranja: #ff6a13;
+  --pt-naranja-osc: #e85a00;
+  --pt-rojo: #e02020;
+  --pt-negro: #221812;
+  --pt-crema: #fff4ea;
+  --pt-fondo: #fbfaf8;
+  --pt-verde: #2fb673;
+  --pt-morado: #7b3fe4;
+  --pt-texto: #3a2f27;
+  --pt-gris: #7a6f66;
+  --pt-gris-tenue: #b3a89e;
+  --pt-linea: #eee3d6;
+
+  --pt-font-titulo: 'Baloo 2', 'Nunito', sans-serif;
+  --pt-font: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+
+  background: #fff;
+  color: var(--pt-texto);
+  font-family: var(--pt-font);
+  overflow-x: hidden;
+}
+
+.tpl-tienda-patitas *,
+.tpl-tienda-patitas *::before,
+.tpl-tienda-patitas *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-tienda-patitas h1,
+.tpl-tienda-patitas h2,
+.tpl-tienda-patitas h3 {
+  font-family: var(--pt-font-titulo);
+  color: var(--pt-negro);
+}
+
+.tpl-tienda-patitas img {
+  display: block;
+  max-width: 100%;
+}
+
+.tpl-tienda-patitas a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-tienda-patitas button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tpl-tienda-patitas ul {
+  list-style: none;
+}
+
+.tpl-tienda-patitas .pt-wrap {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+.tpl-tienda-patitas .pt-seccion {
+  padding-block: clamp(2rem, 5vw, 3rem);
+}
+
+.tpl-tienda-patitas .pt-titulo {
+  font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  font-weight: 700;
+  color: var(--pt-negro);
+  margin-bottom: 1.1rem;
+}
+
+.tpl-tienda-patitas .pt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.86rem;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.tpl-tienda-patitas .pt-btn--naranja {
+  background: var(--pt-naranja);
+  color: #fff;
+}
+
+.tpl-tienda-patitas .pt-btn--naranja:hover {
+  background: var(--pt-naranja-osc);
+  transform: translateY(-1px);
+}
+
+.tpl-tienda-patitas .pt-btn--negro {
+  background: var(--pt-negro);
+  color: #fff;
+}
+
+.tpl-tienda-patitas .pt-btn--outline {
+  background: #fff;
+  color: var(--pt-naranja);
+  border: 1.5px solid var(--pt-naranja);
+}
+
+.tpl-tienda-patitas .pt-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 230px);
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
+}
+
+.tpl-tienda-patitas .pt-fila::-webkit-scrollbar {
+  display: none;
+}
+
+.tpl-tienda-patitas .pt-fila > * {
+  scroll-snap-align: start;
+}
+
+.tpl-tienda-patitas .pt-carr-area {
+  position: relative;
+}
+
+.tpl-tienda-patitas .pt-flecha {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--pt-negro);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.35);
+  z-index: 5;
+}
+
+.tpl-tienda-patitas .pt-flecha[data-dir='-1'] {
+  left: -16px;
+}
+
+.tpl-tienda-patitas .pt-flecha[data-dir='1'] {
+  right: -16px;
+}
+
+@media (min-width: 1340px) {
+  .tpl-tienda-patitas .pt-flecha[data-dir='-1'] {
+    left: -48px;
+  }
+  .tpl-tienda-patitas .pt-flecha[data-dir='1'] {
+    right: -48px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tpl-tienda-patitas .pt-flecha {
+    display: none;
+  }
+}
+
+.tpl-tienda-patitas [hidden] {
+  display: none !important;
+}
+
+/* Clases creadas por JS en runtime (carrito, mega-menu) viven aqui */
+.tpl-tienda-patitas .pt-cart__item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.tpl-tienda-patitas .pt-cart__item img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--pt-crema);
+  flex-shrink: 0;
+}
+
+.tpl-tienda-patitas .pt-cart__item-tx {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tpl-tienda-patitas .pt-cart__item-tx b {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.tpl-tienda-patitas .pt-cart__item-tx span {
+  font-size: 0.76rem;
+  color: var(--pt-gris);
+}

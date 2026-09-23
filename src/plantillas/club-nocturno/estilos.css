@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
+.tpl-club-nocturno {
+  --cn-tinta: #0a0a0b;
+  --cn-panel: #131314;
+  --cn-linea: #29292b;
+  --cn-blanco: #f5f3f0;
+  --cn-texto: rgba(245, 243, 240, 0.72);
+  --cn-texto-tenue: rgba(245, 243, 240, 0.5);
+  --cn-acento: #f5f3f0;
+  --cn-acento-osc: #d9d6d0;
+
+  --cn-font-titulo: 'Poppins', sans-serif;
+  --cn-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --cn-maxw: 1280px;
+
+  background: var(--cn-tinta);
+  color: var(--cn-texto);
+  font-family: var(--cn-font);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-club-nocturno {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-club-nocturno *,
+.tpl-club-nocturno *::before,
+.tpl-club-nocturno *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-club-nocturno h1,
+.tpl-club-nocturno h2,
+.tpl-club-nocturno h3 {
+  font-family: var(--cn-font-titulo);
+  color: var(--cn-blanco);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.tpl-club-nocturno img {
+  display: block;
+  max-width: 100%;
+}
+
+.tpl-club-nocturno a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-club-nocturno button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tpl-club-nocturno ul {
+  list-style: none;
+}
+
+.tpl-club-nocturno [hidden] {
+  display: none !important;
+}
+
+.tpl-club-nocturno .cn-wrap {
+  max-width: var(--cn-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-club-nocturno .cn-seccion {
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.tpl-club-nocturno .cn-cabecera-seccion {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.2rem);
+  flex-wrap: wrap;
+}
+
+.tpl-club-nocturno .cn-titulo {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+}
+
+.tpl-club-nocturno .cn-sub {
+  color: var(--cn-texto-tenue);
+  font-size: 0.92rem;
+  margin-top: 0.3rem;
+}
+
+.tpl-club-nocturno .cn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.tpl-club-nocturno .cn-btn--claro {
+  background: var(--cn-blanco);
+  color: var(--cn-tinta);
+}
+
+.tpl-club-nocturno .cn-btn--claro:hover {
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.tpl-club-nocturno .cn-btn--linea {
+  border: 1.5px solid rgba(245, 243, 240, 0.4);
+  color: var(--cn-blanco);
+}
+
+.tpl-club-nocturno .cn-btn--linea:hover {
+  border-color: var(--cn-blanco);
+  background: rgba(245, 243, 240, 0.08);
+}
+
+.tpl-club-nocturno .cn-btn--acento {
+  background: var(--cn-acento);
+  color: var(--cn-tinta);
+}
+
+.tpl-club-nocturno .cn-btn--acento:hover {
+  background: var(--cn-acento-osc);
+  transform: translateY(-2px);
+}
+
+/* --- Carrusel horizontal reutilizable --- */
+.tpl-club-nocturno .cn-carr {
+  position: relative;
+}
+
+.tpl-club-nocturno .cn-carr__fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 300px);
+  gap: 1.2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
+}
+
+.tpl-club-nocturno .cn-carr__fila::-webkit-scrollbar {
+  display: none;
+}
+
+.tpl-club-nocturno .cn-carr__fila > * {
+  scroll-snap-align: start;
+}
+
+.tpl-club-nocturno .cn-carr__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.2rem;
+}
+
+.tpl-club-nocturno .cn-carr__flecha {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cn-linea);
+  background: transparent;
+  color: var(--cn-blanco);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-club-nocturno .cn-carr__flecha:hover {
+  border-color: var(--cn-blanco);
+  background: var(--cn-blanco);
+  color: var(--cn-tinta);
+}
+
+.tpl-club-nocturno .cn-carr__progreso {
+  flex: 1;
+  height: 2px;
+  background: var(--cn-linea);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tpl-club-nocturno .cn-carr__progreso-barra {
+  position: absolute;
+  inset: 0;
+  width: 30%;
+  background: var(--cn-blanco);
+  border-radius: 2px;
+  transition: transform 0.25s ease, width 0.25s ease;
+}
+
+/* --- Reveal on scroll --- */
+.tpl-club-nocturno .cn-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-club-nocturno .cn-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Entrada escalonada para tarjetas dentro de carruseles y grillas */
+.tpl-club-nocturno .cn-carr__fila > .cn-reveal:nth-child(1) { transition-delay: 0s; }
+.tpl-club-nocturno .cn-carr__fila > .cn-reveal:nth-child(2) { transition-delay: 0.08s; }
+.tpl-club-nocturno .cn-carr__fila > .cn-reveal:nth-child(3) { transition-delay: 0.16s; }
+.tpl-club-nocturno .cn-carr__fila > .cn-reveal:nth-child(4) { transition-delay: 0.24s; }
+.tpl-club-nocturno .cn-carr__fila > .cn-reveal:nth-child(5) { transition-delay: 0.32s; }
+.tpl-club-nocturno .cn-carr__fila > .cn-reveal:nth-child(n+6) { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-club-nocturno .cn-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Elementos creados por JS en runtime (radio flotante) viven aqui */
+.tpl-club-nocturno .cn-radio__barra {
+  width: 3px;
+  background: var(--cn-acento);
+  border-radius: 2px;
+  animation: cn-eq 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes cn-eq {
+  from { height: 4px; }
+  to { height: 14px; }
+}

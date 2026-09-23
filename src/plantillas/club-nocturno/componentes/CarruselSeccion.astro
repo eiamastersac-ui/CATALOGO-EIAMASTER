@@ -1,0 +1,76 @@
+---
+import Icono from './Icono.astro';
+
+interface Props {
+  id?: string;
+  titulo: string;
+  sub?: string;
+  ctaTexto?: string;
+  ctaHref?: string;
+  oscuro?: boolean;
+}
+const { id, titulo, sub, ctaTexto, ctaHref, oscuro = false } = Astro.props as Props;
+const carrId = `cn-carr-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<section class="cn-seccion" id={id} style={oscuro ? 'background:var(--cn-panel)' : ''}>
+  <div class="cn-wrap">
+    <div class="cn-cabecera-seccion cn-reveal">
+      <div>
+        <h2 class="cn-titulo">{titulo}</h2>
+        {sub && <p class="cn-sub">{sub}</p>}
+      </div>
+      {ctaTexto && ctaHref && (
+        <a href={ctaHref} class="cn-btn cn-btn--linea">{ctaTexto}</a>
+      )}
+    </div>
+
+    <div class="cn-carr cn-reveal" data-carr={carrId}>
+      <div class="cn-carr__fila" id={`${carrId}-fila`}>
+        <slot />
+      </div>
+      <div class="cn-carr__nav">
+        <button type="button" class="cn-carr__flecha" data-carr-prev={carrId} aria-label="Anterior">
+          <Icono name="flechaIzq" size={16} />
+        </button>
+        <div class="cn-carr__progreso">
+          <div class="cn-carr__progreso-barra" id={`${carrId}-barra`}></div>
+        </div>
+        <button type="button" class="cn-carr__flecha" data-carr-next={carrId} aria-label="Siguiente">
+          <Icono name="flechaDer" size={16} />
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carr]').forEach((carr) => {
+    if (carr.dataset.wired) return;
+    carr.dataset.wired = '1';
+
+    const id = carr.dataset.carr;
+    const fila = document.getElementById(`${id}-fila`);
+    const barra = document.getElementById(`${id}-barra`);
+    const prev = document.querySelector<HTMLButtonElement>(`[data-carr-prev="${id}"]`);
+    const next = document.querySelector<HTMLButtonElement>(`[data-carr-next="${id}"]`);
+
+    if (!fila) return;
+
+    function actualizarBarra() {
+      if (!fila || !barra) return;
+      const max = fila.scrollWidth - fila.clientWidth;
+      const pct = max > 0 ? (fila.scrollLeft / max) * 70 + 20 : 100;
+      const pos = max > 0 ? (fila.scrollLeft / max) * 30 : 0;
+      barra.style.width = `${Math.min(100, pct)}%`;
+      barra.style.transform = `translateX(${pos}%)`;
+    }
+
+    fila.addEventListener('scroll', actualizarBarra, { passive: true });
+    actualizarBarra();
+
+    const paso = () => Math.min(320, fila.clientWidth * 0.8);
+    prev?.addEventListener('click', () => fila.scrollBy({ left: -paso(), behavior: 'smooth' }));
+    next?.addEventListener('click', () => fila.scrollBy({ left: paso(), behavior: 'smooth' }));
+  });
+</script>

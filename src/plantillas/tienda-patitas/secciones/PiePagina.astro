@@ -1,0 +1,193 @@
+---
+import { marca, footerCols } from '../datos/patitas.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="pt-pie" id="footer">
+  <div class="pt-wrap pt-pie__grid">
+    <div class="pt-pie__col">
+      <b>{footerCols.marca.titulo}</b>
+      <ul>
+        {footerCols.marca.items.map((it: string) => <li><a href="#top">{it}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="pt-pie__col">
+      <b>{footerCols.ayuda.titulo}</b>
+      <ul>
+        {footerCols.ayuda.items.map((it: string) => <li><a href="#top">{it}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="pt-pie__col">
+      <b>{footerCols.categorias.titulo}</b>
+      <ul>
+        {footerCols.categorias.items.map((it: string) => <li><a href="#recomendados">{it}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="pt-pie__col">
+      <b>{footerCols.legales.titulo}</b>
+      <ul>
+        {footerCols.legales.items.map((it: string) => <li><a href="#top">{it}</a></li>)}
+        <li>
+          <a href="#top" class="pt-pie__libro">
+            <Icono name="catalogo" size={16} /> Libro de Reclamaciones
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="pt-pie__col pt-pie__news">
+      <b>¡Suscríbete ahora!</b>
+      <p>Déjanos tu email y te enviaremos las mejores promociones</p>
+      <form class="pt-pie__form" id="pt-news-form">
+        <input type="email" placeholder="Email" required />
+        <button type="submit" class="pt-btn pt-btn--naranja">Suscribirse</button>
+        <p class="pt-pie__ok" id="pt-news-ok" hidden>¡Gracias por suscribirte!</p>
+      </form>
+    </div>
+  </div>
+
+  <div class="pt-wrap pt-pie__bottom">
+    <a href="#top" class="pt-pie__logo">
+      <Icono name="pelota" size={20} /> {marca.nombre}
+    </a>
+    <span>&copy; {anio} {marca.nombre}. Plantilla de referencia, no es un negocio real.</span>
+    <div class="pt-pie__social">
+      <a href="#top" aria-label="Facebook"><Icono name="facebook" size={16} /></a>
+      <a href="#top" aria-label="Instagram"><Icono name="instagram" size={16} /></a>
+      <a href="#top" aria-label="TikTok"><Icono name="tiktok" size={16} /></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('pt-news-form') as HTMLFormElement | null;
+  const ok = document.getElementById('pt-news-ok');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.querySelectorAll('input, button').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .pt-pie {
+    background: var(--pt-crema);
+    padding-top: 2.75rem;
+  }
+
+  .pt-pie__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1.3fr;
+    gap: 1.75rem;
+    padding-bottom: 2rem;
+  }
+
+  .pt-pie__col b {
+    display: block;
+    font-family: var(--pt-font-titulo);
+    font-size: 0.95rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .pt-pie__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--pt-gris);
+  }
+
+  .pt-pie__col a:hover {
+    color: var(--pt-naranja-osc);
+  }
+
+  .pt-pie__libro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--pt-naranja-osc);
+    font-weight: 700;
+  }
+
+  .pt-pie__news p {
+    font-size: 0.78rem;
+    color: var(--pt-gris);
+    margin-bottom: 0.9rem;
+  }
+
+  .pt-pie__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .pt-pie__form input {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--pt-linea);
+    border-radius: 999px;
+    background: #fff;
+    font-family: var(--pt-font);
+  }
+
+  .pt-pie__ok {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--pt-naranja-osc);
+  }
+
+  .pt-pie__bottom {
+    border-top: 1px solid var(--pt-linea);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    font-size: 0.78rem;
+    color: var(--pt-gris);
+  }
+
+  .pt-pie__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--pt-naranja-osc);
+    font-weight: 800;
+    font-size: 1.05rem;
+    font-family: var(--pt-font-titulo);
+  }
+
+  .pt-pie__social {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .pt-pie__social a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--pt-linea);
+    display: grid;
+    place-items: center;
+    color: var(--pt-texto);
+  }
+
+  @media (max-width: 960px) {
+    .pt-pie__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .pt-pie__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,15 @@
+---
+import { marca } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<a
+  href={`https://wa.me/51${marca.telCrudo}?text=Hola,%20vi%20el%20descuento%20del%2015%25`}
+  target="_blank"
+  rel="noopener"
+  class="gl-whats"
+  aria-label="Escríbenos por WhatsApp"
+>
+  <span class="gl-whats__tip">15% dcto. si <b>agendas hoy</b></span>
+  <Icono nombre="whatsapp" size={26} />
+</a>

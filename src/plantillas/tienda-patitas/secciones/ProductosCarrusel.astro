@@ -1,0 +1,38 @@
+---
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+
+interface Producto { marca: string; nombre: string; precio: number; antes: number | null; dscto: string | null; img: string; tag?: string }
+interface Props {
+  titulo: string;
+  lista: Producto[];
+  id?: string;
+}
+const { titulo, lista, id } = Astro.props as Props;
+---
+
+<section class="pt-seccion" id={id}>
+  <div class="pt-wrap">
+    <h2 class="pt-titulo">{titulo}</h2>
+    <div class="pt-carr-area">
+      <button type="button" class="pt-flecha" data-dir="-1" aria-label="Anterior">‹</button>
+      <div class="pt-fila">
+        {lista.map((p: Producto) => <TarjetaProducto producto={p} />)}
+      </div>
+      <button type="button" class="pt-flecha" data-dir="1" aria-label="Siguiente">›</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.pt-carr-area').forEach((area) => {
+    if (area.dataset.wired) return;
+    area.dataset.wired = '1';
+    const row = area.querySelector<HTMLElement>('.pt-fila');
+    area.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const dir = Number(b.dataset.dir || '1');
+        row?.scrollBy({ left: dir * 250, behavior: 'smooth' });
+      });
+    });
+  });
+</script>

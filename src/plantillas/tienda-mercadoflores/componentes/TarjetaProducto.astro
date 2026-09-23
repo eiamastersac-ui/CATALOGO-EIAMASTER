@@ -1,0 +1,126 @@
+---
+import { soles } from '../datos/mercadoflores.js';
+
+interface Props {
+  nombre: string;
+  desc: string;
+  precio: number;
+  img: string;
+}
+const { nombre, desc, precio, img } = Astro.props as Props;
+---
+
+<article class="mf-prod" data-nombre={nombre.toLowerCase()}>
+  <button type="button" class="mf-prod__foto" aria-label={`Añadir ${nombre} al carrito`}>
+    <img src={img} alt={nombre} loading="lazy" width="520" height="520" />
+    <span class="mf-prod__add">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 5v14M5 12h14"/></svg>
+      Añadir
+    </span>
+  </button>
+  <h3 class="mf-prod__nombre">{nombre}</h3>
+  <p class="mf-prod__desc">{desc}</p>
+  <div class="mf-prod__pie">
+    <span class="mf-prod__precio">{soles(precio)}</span>
+    <a href="#seleccion" class="mf-prod__link">Ver producto →</a>
+  </div>
+</article>
+
+<style>
+  .mf-prod {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mf-prod__foto {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background: var(--mf-papel-osc);
+  }
+
+  .mf-prod__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .mf-prod__foto:hover img {
+    transform: scale(1.05);
+  }
+
+  .mf-prod__add {
+    position: absolute;
+    left: 0.7rem;
+    bottom: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(250, 245, 236, 0.95);
+    color: var(--mf-tinta);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--mf-pill);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .mf-prod__foto:hover .mf-prod__add,
+  .mf-prod__foto:focus-visible .mf-prod__add {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mf-prod__add.is-ok {
+    background: var(--mf-acento);
+    color: #fff;
+  }
+
+  .mf-prod__nombre {
+    font-size: 1.02rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+
+  .mf-prod__desc {
+    font-size: 0.82rem;
+    color: var(--mf-tinta-suave);
+    margin-bottom: 0.6rem;
+  }
+
+  .mf-prod__pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .mf-prod__precio {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .mf-prod__link {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--mf-acento);
+    white-space: nowrap;
+  }
+
+  .mf-prod__link:hover {
+    text-decoration: underline;
+  }
+
+  .mf-prod[hidden] {
+    display: none;
+  }
+</style>

@@ -1,0 +1,211 @@
+---
+import { marca, footerCols } from '../datos/contenido.js';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="at-pie">
+  <div class="at-wrap at-pie__top">
+    <div class="at-pie__marca">
+      <a href="#top" class="at-logo">
+        <span class="at-logo__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 17l1.6-6.4A2 2 0 0 1 7.5 9h9a2 2 0 0 1 1.9 1.6L20 17" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M3 17h18v2a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1v-1h-11v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2Z"></path>
+            <circle cx="7.5" cy="17.5" r="1.4"></circle>
+            <circle cx="16.5" cy="17.5" r="1.4"></circle>
+          </svg>
+        </span>
+        <span class="at-logo__tx">{marca.nombre}<b>{marca.sub}</b></span>
+      </a>
+      <p>
+        Te ayudamos con cualquier citación de tránsito que tengas. ¿Tienes una orden de arresto?
+        Podemos ayudarte. Nuestro equipo se dedica a que no pierdas puntos en tu récord, no tengas
+        que ir a la corte, ni lidiar con la escuela de tráfico.
+      </p>
+      <a href="#como-funciona" class="at-btn at-btn--amarillo">Saber más</a>
+    </div>
+
+    <div class="at-pie__col">
+      <h4>Catálogo de casos</h4>
+      <ul>
+        {footerCols.catalogo.map((l) => <li><a href={l.href}>{l.t}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="at-pie__col">
+      <h4>Cobertura</h4>
+      <ul>
+        {footerCols.cobertura.map((l) => <li><a href={l.href}>{l.t}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="at-pie__col at-pie__contacto">
+      <h4>Contáctanos</h4>
+      <p>{marca.direccion}</p>
+      <p><a href={`tel:${marca.telHref}`}>{marca.telOficina}</a></p>
+      <p>{marca.horario}</p>
+      <p><a href={`mailto:${marca.correo}`}>{marca.correo}</a></p>
+      <div class="at-pie__resena">
+        <span class="at-pie__estrellas" aria-hidden="true">★★★★★</span>
+        <span>4.8 sobre 21 reseñas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="at-wrap at-pie__bottom">
+    <p>© {anio} {marca.nombre} {marca.sub}. Maqueta de demostración — Todos los derechos reservados.</p>
+    <ul>
+      {footerCols.politicas.map((l) => <li><a href={l.href}>{l.t}</a></li>)}
+    </ul>
+  </div>
+
+  <p class="at-pie__disclaimer">
+    Aviso: este sitio es una plantilla de demostración con fines ilustrativos. Ningún dato enviado
+    desde este formulario se procesa ni constituye asesoría legal real. tienda.com no es un
+    despacho de abogados operativo.
+  </p>
+</footer>
+
+<style>
+  .at-pie {
+    background: var(--at-tinta);
+    color: #c7cad6;
+  }
+
+  .at-pie__top {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
+    gap: 2.5rem;
+    padding-block: clamp(2.75rem, 6vw, 4rem);
+  }
+
+  .at-pie__marca .at-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .at-pie__marca .at-logo__ico {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: grid;
+    place-items: center;
+    background: var(--at-amarillo);
+    color: var(--at-tinta);
+    border-radius: 8px;
+  }
+
+  .at-pie__marca .at-logo__ico svg {
+    width: 62%;
+    height: 62%;
+  }
+
+  .at-pie__marca .at-logo__tx {
+    font-family: var(--at-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .at-pie__marca .at-logo__tx b {
+    display: block;
+    font-family: var(--at-font);
+    font-weight: 700;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--at-amarillo);
+  }
+
+  .at-pie__marca p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+    max-width: 42ch;
+  }
+
+  .at-pie h4 {
+    color: #fff;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.1rem;
+  }
+
+  .at-pie__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    font-size: 0.85rem;
+  }
+
+  .at-pie__col a:hover {
+    color: var(--at-amarillo);
+  }
+
+  .at-pie__contacto p {
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.5;
+  }
+
+  .at-pie__resena {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    font-size: 0.78rem;
+  }
+
+  .at-pie__estrellas {
+    color: var(--at-amarillo);
+    letter-spacing: 0.1em;
+  }
+
+  .at-pie__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  .at-pie__bottom ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .at-pie__bottom a:hover {
+    color: var(--at-amarillo);
+  }
+
+  .at-pie__disclaimer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.68rem;
+    color: #7d8294;
+    padding: 1rem clamp(1rem, 4vw, 2rem) 1.5rem;
+    max-width: var(--at-maxw);
+    margin-inline: auto;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 980px) {
+    .at-pie__top {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .at-pie__top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

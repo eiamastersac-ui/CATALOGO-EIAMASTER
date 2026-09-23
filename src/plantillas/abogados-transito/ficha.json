@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Tránsito (Estilo Traffic Ticket Pro)",
+  "categoria": "servicios-profesionales",
+  "descripcion": "Sitio de gestoría legal especializada en multas y órdenes de tránsito: cabecera con franja de contacto, hero fotográfico a pantalla completa con doble CTA, banner urgente para órdenes de arresto, 4 formas de enviar el caso, contador de estadísticas sobre foto de carretera, listado extenso de infracciones que se manejan, beneficios de contratar, cobertura por cortes/ciudades, testimonios sobre mosaico de fotos, recursos/artículos y FAQ con chatbot de ayuda. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/abogados-transito.jpg",
+  "tags": ["abogados", "transito", "multas", "legal", "servicios", "conversion"],
+  "paleta": ["#14171f", "#f4b400", "#fdfbf6", "#5c6272"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "trafficticketpro.com",
+  "orden": 73
+}

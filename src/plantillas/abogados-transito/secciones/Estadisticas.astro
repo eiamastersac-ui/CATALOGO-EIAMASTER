@@ -1,0 +1,123 @@
+---
+import { IMG, estadisticas } from '../datos/contenido.js';
+---
+
+<section class="at-stats" aria-label="Estadísticas de tránsito">
+  <img class="at-stats__img" src={IMG.ciudadTrafico} alt="Calle de ciudad con tráfico y semáforos" loading="lazy" />
+  <div class="at-stats__scrim" aria-hidden="true"></div>
+
+  <div class="at-wrap at-stats__grid">
+    {estadisticas.map((s) => (
+      <div class="at-stats__item">
+        <span class="at-stats__num" data-valor={s.valor} data-decimales={s.decimales} data-sufijo={s.sufijo ?? ''}>0</span>
+        <p>{s.etiqueta}</p>
+      </div>
+    ))}
+  </div>
+
+  <p class="at-stats__fuente">
+    Fuente: datos de referencia sobre casos de tránsito procesados por gestorías similares. Cifras
+    de ejemplo con fines demostrativos.
+  </p>
+</section>
+
+<script>
+  const nums = Array.from(document.querySelectorAll<HTMLElement>('.at-stats__num'));
+
+  function animar(el: HTMLElement) {
+    const meta = Number(el.dataset.valor || '0');
+    const dec = Number(el.dataset.decimales || '0');
+    const sufijo = el.dataset.sufijo || '';
+    const dur = 1400;
+    const t0 = performance.now();
+
+    function paso(t: number) {
+      const p = Math.min(1, (t - t0) / dur);
+      const val = meta * (1 - Math.pow(1 - p, 3));
+      el.textContent = val.toLocaleString('es-PE', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + sufijo;
+      if (p < 1) requestAnimationFrame(paso);
+    }
+    requestAnimationFrame(paso);
+  }
+
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animar(entry.target as HTMLElement);
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.4 }
+  );
+
+  nums.forEach((n) => obs.observe(n));
+</script>
+
+<style>
+  .at-stats {
+    position: relative;
+    color: #fff;
+    overflow: hidden;
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .at-stats__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .at-stats__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12, 14, 20, 0.86), rgba(12, 14, 20, 0.72));
+  }
+
+  .at-stats__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .at-stats__num {
+    display: block;
+    font-family: var(--at-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    color: var(--at-amarillo);
+    line-height: 1;
+    margin-bottom: 0.65rem;
+  }
+
+  .at-stats__item p {
+    font-size: 0.8rem;
+    color: #dcdfe8;
+    max-width: 22ch;
+    margin-inline: auto;
+  }
+
+  .at-stats__fuente {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #b8bccb;
+    margin-top: 2.25rem;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 760px) {
+    .at-stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 2rem;
+    }
+  }
+</style>

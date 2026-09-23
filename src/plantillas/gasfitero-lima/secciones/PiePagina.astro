@@ -1,0 +1,175 @@
+---
+import { footer, marca } from '../datos/gasfitero.js';
+---
+
+<footer class="gl-pie">
+  <div class="gl-wrap">
+    <div class="gl-pie__top">
+      <div class="gl-pie__marca">
+        <a href="#top" class="gl-logo">
+          <span class="gl-logo__mark" aria-hidden="true"></span>
+          <span class="gl-logo__txt">
+            <b>{marca.nombre}</b>
+            <span>{marca.sub}</span>
+          </span>
+        </a>
+        <p>{marca.claim}</p>
+        <a href={`tel:${marca.telCrudo}`} class="gl-pie__tel">{marca.tel}</a>
+      </div>
+
+      <div class="gl-pie__cols">
+        {footer.cols.map((c: { t: string; links: string[] }) => (
+          <div class="gl-pie__col">
+            <h3>{c.t}</h3>
+            <ul>
+              {c.links.map((l: string) => <li><a href="#contacto">{l}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="gl-pie__pagos">
+      <span>Formas de pago</span>
+      <div>
+        {footer.pagos.map((p: string) => <b>{p}</b>)}
+      </div>
+    </div>
+
+    <div class="gl-pie__legal">
+      <p>© 2026 {marca.nombre} Gasfitería · Lima, Perú. Maqueta de demostración.</p>
+      <a href="#contacto" class="gl-pie__reclamo">📗 Libro de reclamaciones</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .gl-pie {
+    background: var(--gl-tinta);
+    color: rgba(255, 255, 255, 0.72);
+    padding-block: clamp(3rem, 6vw, 4.5rem) 2rem;
+    font-size: 0.88rem;
+  }
+
+  .gl-pie__top {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 2.5rem 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .gl-pie .gl-logo {
+    color: #fff;
+    margin-bottom: 0.9rem;
+  }
+
+  .gl-pie .gl-logo__mark {
+    border-color: #fff;
+  }
+
+  .gl-pie__marca p {
+    max-width: 30ch;
+    margin-bottom: 0.75rem;
+  }
+
+  .gl-pie__tel {
+    font-family: var(--gl-display);
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #fff;
+  }
+
+  .gl-pie__tel:hover {
+    color: var(--gl-cobre-suave);
+  }
+
+  .gl-pie__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .gl-pie__col h3 {
+    color: #fff;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+
+  .gl-pie__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .gl-pie__col a:hover {
+    color: #fff;
+  }
+
+  .gl-pie__pagos {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .gl-pie__pagos > span {
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gl-pie__pagos > div {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .gl-pie__pagos b {
+    font-family: var(--gl-display);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .gl-pie__legal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .gl-pie__reclamo {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    padding: 0.45rem 0.8rem;
+  }
+
+  .gl-pie__reclamo:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (max-width: 820px) {
+    .gl-pie__top {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .gl-pie__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

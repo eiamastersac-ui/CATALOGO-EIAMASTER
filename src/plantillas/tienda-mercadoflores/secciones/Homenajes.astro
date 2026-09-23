@@ -1,0 +1,39 @@
+---
+import { homenajes } from '../datos/mercadoflores.js';
+import TarjetaColeccion from '../componentes/TarjetaColeccion.astro';
+
+interface Item {
+  t: string;
+  cta: string;
+  img: string;
+}
+const items = homenajes as Item[];
+---
+
+<section class="mf-homenajes mf-seccion" id="homenajes">
+  <div class="mf-wrap">
+    <div class="mf-homenajes__intro">
+      <h2>Un homenaje floral, con respeto y cuidado.</h2>
+      <p class="mf-sub mf-sub--centro">Diseños pensados para acompañar en los momentos más difíciles, con la delicadeza que la ocasión merece.</p>
+    </div>
+
+    <div class="mf-grid-cards">
+      {items.map((it: Item) => <TarjetaColeccion t={it.t} cta={it.cta} img={it.img} href="#homenajes" />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mf-homenajes__intro {
+    text-align: center;
+    max-width: 42rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .mf-homenajes__intro h2 {
+    font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+</style>

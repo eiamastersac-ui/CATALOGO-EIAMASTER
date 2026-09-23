@@ -1,0 +1,81 @@
+---
+import { cobertura } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="gl-seccion gl-cob" id="cobertura">
+  <div class="gl-wrap gl-cob__grid">
+    <div class="gl-cob__intro gl-reveal">
+      <span class="gl-kicker">Dónde llegamos</span>
+      <h2 class="gl-titulo">Cobertura en toda Lima y Callao</h2>
+      <p class="gl-sub">{cobertura.nota}</p>
+      <a href="#contacto" class="gl-btn gl-btn--linea gl-cob__cta">
+        Consultar por mi zona
+        <Icono nombre="flecha" size={15} />
+      </a>
+    </div>
+
+    <ul class="gl-cob__lista gl-reveal gl-reveal--2">
+      {cobertura.distritos.map((d: string) => (
+        <li>
+          <Icono nombre="pin" size={15} />
+          {d}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .gl-cob {
+    background: var(--gl-papel-2);
+  }
+
+  .gl-cob__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .gl-cob__cta {
+    margin-top: 1.5rem;
+  }
+
+  .gl-cob__lista {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem 1.5rem;
+  }
+
+  .gl-cob__lista li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--gl-linea);
+  }
+
+  .gl-cob__lista li :global(svg) {
+    color: var(--gl-cobre);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 860px) {
+    .gl-cob__grid {
+      grid-template-columns: 1fr;
+    }
+    .gl-cob__lista {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 460px) {
+    .gl-cob__lista {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

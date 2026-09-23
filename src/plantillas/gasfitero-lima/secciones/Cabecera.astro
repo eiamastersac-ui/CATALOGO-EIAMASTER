@@ -1,0 +1,231 @@
+---
+import { marca, nav } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<header class="gl-hdr" id="cabecera">
+  <div class="gl-wrap gl-hdr__row">
+    <a href="#top" class="gl-logo" aria-label={`${marca.nombre} — inicio`}>
+      <span class="gl-logo__mark" aria-hidden="true"></span>
+      <span class="gl-logo__txt">
+        <b>{marca.nombre}</b>
+        <span>{marca.sub}</span>
+      </span>
+    </a>
+
+    <nav class="gl-nav" id="gl-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }) => <a href={n.href}>{n.t}</a>)}
+    </nav>
+
+    <div class="gl-hdr__acc">
+      <a href={`tel:${marca.telCrudo}`} class="gl-hdr__tel">
+        <Icono nombre="telefono" size={16} />
+        {marca.tel}
+      </a>
+      <a
+        href={`https://wa.me/51${marca.telCrudo}?text=Hola,%20necesito%20un%20gasfitero`}
+        target="_blank"
+        rel="noopener"
+        class="gl-btn gl-btn--cobre gl-hdr__cta"
+      >
+        WhatsApp
+        <Icono nombre="whatsapp" size={15} />
+      </a>
+      <button type="button" class="gl-hdr__burger" id="gl-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('cabecera');
+  const burger = document.getElementById('gl-burger');
+  const nav = document.getElementById('gl-nav');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 60);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+    hdr?.classList.toggle('is-menu-abierto', !!abierto);
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      hdr?.classList.remove('is-menu-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .gl-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: var(--gl-hdr-h);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0));
+    transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  }
+
+  .gl-hdr.is-scrolled,
+  .gl-hdr.is-menu-abierto {
+    background: rgba(245, 241, 232, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--gl-tinta);
+    box-shadow: 0 10px 34px -24px rgba(25, 21, 18, 0.5);
+  }
+
+  .gl-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .gl-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+    color: inherit;
+  }
+
+  .gl-logo__mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 2px solid currentColor;
+    position: relative;
+  }
+
+  .gl-logo__mark::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 3px;
+    background: var(--gl-cobre);
+  }
+
+  .gl-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
+
+  .gl-logo__txt b {
+    font-family: var(--gl-display);
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+
+  .gl-logo__txt span {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .gl-nav {
+    display: flex;
+    gap: 1.9rem;
+    margin-inline: auto;
+    font-family: var(--gl-display);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .gl-nav a:hover {
+    color: var(--gl-cobre);
+  }
+
+  .gl-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .gl-hdr__tel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--gl-display);
+    font-weight: 700;
+    font-size: 0.92rem;
+    white-space: nowrap;
+  }
+
+  .gl-hdr__tel:hover {
+    color: var(--gl-cobre);
+  }
+
+  .gl-hdr__cta {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.84rem;
+  }
+
+  .gl-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .gl-hdr__burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 960px) {
+    .gl-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--gl-papel);
+      color: var(--gl-tinta);
+      border-bottom: 1px solid var(--gl-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+    .gl-nav.is-abierto {
+      display: flex;
+    }
+    .gl-nav a {
+      padding-block: 0.7rem;
+      border-top: 1px solid var(--gl-linea);
+    }
+    .gl-hdr__burger {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .gl-hdr__tel {
+      display: none;
+    }
+    .gl-hdr__cta {
+      padding: 0.55rem 1rem;
+    }
+  }
+</style>

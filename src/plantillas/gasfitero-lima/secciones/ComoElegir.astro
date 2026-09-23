@@ -1,0 +1,72 @@
+---
+import { criterios } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="gl-seccion gl-elegir">
+  <div class="gl-wrap">
+    <div class="gl-cab gl-cab--centro">
+      <span class="gl-kicker">Antes de contratar</span>
+      <h2 class="gl-titulo">Cómo reconocer a un buen gasfitero</h2>
+      <p class="gl-sub gl-sub--centro">
+        Tres cosas que deberías pedir siempre, contrates con nosotros o con cualquiera.
+      </p>
+    </div>
+
+    <div class="gl-elegir__grid">
+      {criterios.map((c: { icono: string; t: string; d: string }, i: number) => (
+        <div class={`gl-elegir__item gl-reveal gl-reveal--${i + 1}`}>
+          <span class="gl-elegir__ic">
+            <Icono nombre={c.icono} size={22} />
+          </span>
+          <h3>{c.t}</h3>
+          <p>{c.d}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .gl-elegir__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .gl-elegir__item {
+    background: var(--gl-blanco);
+    border: 1px solid var(--gl-linea);
+    border-radius: 16px;
+    padding: 1.6rem 1.5rem 1.8rem;
+  }
+
+  .gl-elegir__ic {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    border: 1.5px solid var(--gl-cobre);
+    color: var(--gl-cobre);
+    margin-bottom: 1rem;
+  }
+
+  .gl-elegir__item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .gl-elegir__item p {
+    font-size: 0.88rem;
+    color: var(--gl-humo);
+  }
+
+  @media (max-width: 820px) {
+    .gl-elegir__grid {
+      grid-template-columns: 1fr;
+      max-width: 32rem;
+      margin-inline: auto;
+    }
+  }
+</style>

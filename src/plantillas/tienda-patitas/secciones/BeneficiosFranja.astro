@@ -1,0 +1,55 @@
+---
+import { beneficios } from '../datos/patitas.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Beneficio { ico: string; titulo: string; sub: string }
+---
+
+<section class="pt-benef">
+  <div class="pt-wrap pt-benef__grid">
+    {beneficios.map((b: Beneficio) => (
+      <div class="pt-benef__item">
+        <span class="pt-benef__ico"><Icono name={b.ico} size={22} /></span>
+        <div>
+          <b>{b.titulo}</b>
+          <span>{b.sub}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .pt-benef {
+    border-bottom: 1px solid var(--pt-linea);
+    padding-block: 1.1rem;
+  }
+
+  .pt-benef__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .pt-benef__item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .pt-benef__ico {
+    color: var(--pt-naranja);
+    flex-shrink: 0;
+  }
+
+  .pt-benef__item b {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .pt-benef__item span {
+    font-size: 0.76rem;
+    color: var(--pt-gris);
+  }
+</style>

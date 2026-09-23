@@ -1,0 +1,25 @@
+---
+// Observa cada .cn-reveal del documento y agrega .is-in cuando entra en
+// viewport. Un solo observer global, sin dependencias por seccion.
+---
+
+<script>
+  const elementos = document.querySelectorAll<HTMLElement>('.cn-reveal');
+
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    elementos.forEach((el) => el.classList.add('is-in'));
+  } else {
+    const observer = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (entrada.isIntersecting) {
+            entrada.target.classList.add('is-in');
+            observer.unobserve(entrada.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' },
+    );
+    elementos.forEach((el) => observer.observe(el));
+  }
+</script>

@@ -1,0 +1,43 @@
+---
+import { tiposFlor } from '../datos/mercadoflores.js';
+import TarjetaColeccion from '../componentes/TarjetaColeccion.astro';
+
+interface Item {
+  t: string;
+  cta: string;
+  img: string;
+}
+const items = tiposFlor as Item[];
+---
+
+<section class="mf-tipos mf-seccion" id="tipos-flor">
+  <div class="mf-wrap">
+    <div class="mf-tipos__intro">
+      <h2>Un ramo para cada tipo de flor favorita.</h2>
+      <p class="mf-sub mf-sub--centro">Cada especie tiene su propio carácter. Elige la que mejor represente lo que quieres transmitir.</p>
+    </div>
+
+    <div class="mf-grid-cards">
+      {items.map((it: Item) => <TarjetaColeccion t={it.t} cta={it.cta} img={it.img} href="#seleccion" />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mf-tipos {
+    background: var(--mf-papel-osc);
+  }
+
+  .mf-tipos__intro {
+    text-align: center;
+    max-width: 42rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .mf-tipos__intro h2 {
+    font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+</style>

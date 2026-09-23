@@ -1,0 +1,121 @@
+---
+import { recursos } from '../datos/contenido.js';
+---
+
+<section class="at-seccion at-recursos" id="recursos">
+  <div class="at-wrap">
+    <div class="at-cabecera-seccion" style="text-align:center;">
+      <p class="at-kicker" style="justify-content:center;">Recursos</p>
+      <h2 class="at-titulo at-titulo--centro">Consejos y respuestas sobre tránsito</h2>
+    </div>
+
+    <div class="at-recursos__grid">
+      {recursos.map((r) => (
+        <article class="at-recursos__card">
+          <div class="at-recursos__foto">
+            <img src={r.imagen} alt={r.titulo} loading="lazy" />
+            <span class="at-recursos__pill">{r.categoria}</span>
+          </div>
+          <div class="at-recursos__cuerpo">
+            <time>{r.fecha}</time>
+            <h3>{r.titulo}</h3>
+            <p>{r.resumen}</p>
+            <a href="#" class="at-recursos__link">Leer más &rarr;</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .at-recursos__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .at-recursos__card {
+    background: #fff;
+    border: 1px solid var(--at-linea);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .at-recursos__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -24px rgba(20, 23, 31, 0.35);
+  }
+
+  .at-recursos__foto {
+    position: relative;
+    aspect-ratio: 16 / 10;
+  }
+
+  .at-recursos__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .at-recursos__pill {
+    position: absolute;
+    left: 0.9rem;
+    bottom: 0.9rem;
+    background: var(--at-amarillo);
+    color: var(--at-tinta);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+  }
+
+  .at-recursos__cuerpo {
+    padding: 1.35rem 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .at-recursos__cuerpo time {
+    font-size: 0.7rem;
+    color: var(--at-gris-claro);
+    margin-bottom: 0.5rem;
+  }
+
+  .at-recursos__cuerpo h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .at-recursos__cuerpo p {
+    font-size: 0.85rem;
+    color: var(--at-gris);
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+
+  .at-recursos__link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--at-tinta);
+    align-self: flex-start;
+  }
+
+  .at-recursos__link:hover {
+    color: var(--at-amarillo-osc);
+  }
+
+  @media (max-width: 900px) {
+    .at-recursos__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

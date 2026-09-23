@@ -1,0 +1,227 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap");
+
+/* tienda.com Tránsito — inspirada en trafficticketpro.com
+   Paleta casi monocroma (tinta oscura + papel) con UN acento amarillo
+   mostaza, tal como lo usa el sitio real en botones y franjas. Nada de
+   gradientes ni blobs inventados: el color de fondo siempre es solido o
+   una foto real. */
+.tpl-abogados-transito {
+  --at-tinta: #14171f;
+  --at-tinta-2: #1d212c;
+  --at-amarillo: #f4b400;
+  --at-amarillo-osc: #d99e00;
+  --at-papel: #fdfbf6;
+  --at-crema: #f3f1ea;
+  --at-gris: #5c6272;
+  --at-gris-claro: #8a90a0;
+  --at-linea: #e7e4da;
+  --at-blanco: #ffffff;
+
+  --at-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --at-display: "Oswald", var(--at-font);
+  --at-maxw: 1240px;
+  --at-radio: 10px;
+
+  background: var(--at-papel);
+  color: var(--at-tinta);
+  font-family: var(--at-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tpl-abogados-transito *,
+.tpl-abogados-transito *::before,
+.tpl-abogados-transito *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-abogados-transito img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-abogados-transito a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-abogados-transito button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-abogados-transito input,
+.tpl-abogados-transito textarea {
+  font: inherit;
+}
+
+.tpl-abogados-transito h1,
+.tpl-abogados-transito h2,
+.tpl-abogados-transito h3,
+.tpl-abogados-transito h4 {
+  font-family: var(--at-display);
+  line-height: 1.15;
+  color: var(--at-tinta);
+  font-weight: 600;
+}
+
+/* ---------- utilidades compartidas ---------- */
+
+.tpl-abogados-transito .at-wrap {
+  max-width: var(--at-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-abogados-transito .at-seccion {
+  padding-block: clamp(2.75rem, 6vw, 4.5rem);
+}
+
+.tpl-abogados-transito .at-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--at-amarillo-osc);
+  margin-bottom: 0.75rem;
+}
+
+.tpl-abogados-transito .at-kicker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--at-amarillo);
+  flex-shrink: 0;
+}
+
+.tpl-abogados-transito .at-titulo {
+  font-size: clamp(1.6rem, 3.4vw, 2.35rem);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-abogados-transito .at-titulo--centro {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.tpl-abogados-transito .at-sub {
+  color: var(--at-gris);
+  font-size: 1rem;
+  max-width: 620px;
+}
+
+.tpl-abogados-transito .at-sub--centro {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.tpl-abogados-transito .at-cabecera-seccion {
+  margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.tpl-abogados-transito .at-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.7rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1.5px solid transparent;
+}
+
+.tpl-abogados-transito .at-btn:hover {
+  transform: translateY(-2px);
+}
+
+.tpl-abogados-transito .at-btn--amarillo {
+  background: var(--at-amarillo);
+  color: var(--at-tinta);
+}
+
+.tpl-abogados-transito .at-btn--amarillo:hover {
+  background: var(--at-amarillo-osc);
+}
+
+.tpl-abogados-transito .at-btn--oscuro {
+  background: var(--at-tinta);
+  color: var(--at-papel);
+}
+
+.tpl-abogados-transito .at-btn--oscuro:hover {
+  background: #000;
+}
+
+.tpl-abogados-transito .at-btn--outline {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+  background: transparent;
+}
+
+.tpl-abogados-transito .at-btn--outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tpl-abogados-transito .at-btn--bloque {
+  width: 100%;
+}
+
+.tpl-abogados-transito .at-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--at-radio);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* guarda: si un selector fija display, [hidden] debe ganar igual */
+.tpl-abogados-transito [hidden] {
+  display: none !important;
+}
+
+/* Burbujas del chat: se crean con document.createElement en runtime, por lo
+   que NO reciben el data-astro-cid-* del <style scoped> de ChatBot.astro.
+   Van aqui, en el CSS global del tpl (trampa conocida del playbook). */
+.tpl-abogados-transito .at-chat__msg {
+  max-width: 82%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.tpl-abogados-transito .at-chat__msg--bot {
+  background: #fff;
+  color: var(--at-tinta);
+  align-self: flex-start;
+  border: 1px solid var(--at-linea);
+  border-bottom-left-radius: 3px;
+}
+
+.tpl-abogados-transito .at-chat__msg--yo {
+  background: var(--at-tinta);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 3px;
+}
+
+@media (max-width: 720px) {
+  .tpl-abogados-transito .at-seccion {
+    padding-block: 2.25rem;
+  }
+}

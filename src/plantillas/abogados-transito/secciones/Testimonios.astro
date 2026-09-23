@@ -1,0 +1,201 @@
+---
+import { AVATARES, testimonios } from '../datos/contenido.js';
+
+const mosaico = [...AVATARES, ...AVATARES, ...AVATARES].slice(0, 12);
+---
+
+<section class="at-testi" aria-label="Testimonios de clientes">
+  <div class="at-testi__mosaico" aria-hidden="true">
+    {mosaico.map((src) => (
+      <img src={src} alt="" loading="lazy" />
+    ))}
+  </div>
+  <div class="at-testi__scrim" aria-hidden="true"></div>
+
+  <div class="at-wrap at-testi__contenido">
+    <h2 class="at-titulo at-titulo--centro">Lo que dicen nuestros clientes</h2>
+
+    <div class="at-testi__carrusel" id="at-testi-carrusel">
+      <div class="at-testi__track" id="at-testi-track">
+        {testimonios.map((t) => (
+          <figure class="at-testi__slide">
+            <img class="at-testi__avatar" src={t.avatar} alt={`Foto de ${t.nombre}`} loading="lazy" />
+            <blockquote>&ldquo;{t.texto}&rdquo;</blockquote>
+            <figcaption>{t.nombre}</figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="at-testi__controles">
+        <button type="button" id="at-testi-prev" aria-label="Testimonio anterior">&larr;</button>
+        <div class="at-testi__dots" id="at-testi-dots">
+          {testimonios.map((_, i) => (
+            <button type="button" data-i={i} class={i === 0 ? 'is-on' : ''} aria-label={`Ir al testimonio ${i + 1}`}></button>
+          ))}
+        </div>
+        <button type="button" id="at-testi-next" aria-label="Siguiente testimonio">&rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('at-testi-track');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#at-testi-dots button'));
+  const prev = document.getElementById('at-testi-prev');
+  const next = document.getElementById('at-testi-next');
+  let idx = 0;
+  let timer: number | undefined;
+
+  function ir(i: number) {
+    if (!track) return;
+    idx = (i + dots.length) % dots.length;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, di) => d.classList.toggle('is-on', di === idx));
+  }
+
+  function auto() {
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  }
+
+  function pausa() {
+    if (timer) window.clearInterval(timer);
+  }
+
+  prev?.addEventListener('click', () => { ir(idx - 1); pausa(); auto(); });
+  next?.addEventListener('click', () => { ir(idx + 1); pausa(); auto(); });
+  dots.forEach((d) => d.addEventListener('click', () => { ir(Number(d.dataset.i)); pausa(); auto(); }));
+
+  const carrusel = document.getElementById('at-testi-carrusel');
+  carrusel?.addEventListener('mouseenter', pausa);
+  carrusel?.addEventListener('mouseleave', auto);
+
+  auto();
+</script>
+
+<style>
+  .at-testi {
+    position: relative;
+    color: #fff;
+    overflow: hidden;
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .at-testi__mosaico {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 1fr;
+  }
+
+  .at-testi__mosaico img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.3);
+  }
+
+  .at-testi__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 12, 18, 0.9), rgba(10, 12, 18, 0.86));
+  }
+
+  .at-testi__contenido {
+    position: relative;
+    z-index: 1;
+  }
+
+  .at-testi__contenido .at-titulo {
+    color: #fff;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .at-testi__carrusel {
+    max-width: 640px;
+    margin-inline: auto;
+    overflow: hidden;
+  }
+
+  .at-testi__track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .at-testi__slide {
+    flex: 0 0 100%;
+    text-align: center;
+  }
+
+  .at-testi__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1.25rem;
+    border: 2px solid var(--at-amarillo);
+  }
+
+  .at-testi__slide blockquote {
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    line-height: 1.55;
+    font-family: var(--at-display);
+    font-weight: 500;
+    color: #f4f2ea;
+    margin-bottom: 1.1rem;
+  }
+
+  .at-testi__slide figcaption {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--at-amarillo);
+  }
+
+  .at-testi__controles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 2.25rem;
+  }
+
+  .at-testi__controles > button {
+    color: #fff;
+    font-size: 1.1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: grid;
+    place-items: center;
+  }
+
+  .at-testi__controles > button:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .at-testi__dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .at-testi__dots button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  .at-testi__dots button.is-on {
+    background: var(--at-amarillo);
+  }
+
+  @media (max-width: 640px) {
+    .at-testi__mosaico {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

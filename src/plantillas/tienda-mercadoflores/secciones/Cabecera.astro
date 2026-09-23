@@ -1,0 +1,241 @@
+---
+import { navPrincipal } from '../datos/mercadoflores.js';
+
+interface Item {
+  t: string;
+  href: string;
+  sub?: { t: string; href: string }[];
+}
+const nav = navPrincipal as Item[];
+---
+
+<nav class="mf-nav" id="mf-nav" aria-label="Navegación principal">
+  <div class="mf-wrap mf-nav__row">
+    <button type="button" class="mf-nav__burger" id="mf-nav-burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="mf-nav__links" id="mf-nav-links">
+      {nav.map((n: Item, i: number) => (
+        <li class="mf-nav__item">
+          {n.sub ? (
+            <>
+              <button type="button" class="mf-nav__drop" data-idx={i}>
+                {n.t}
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="mf-nav__panel" data-panel={i} hidden>
+                <ul>
+                  {n.sub.map((s: { t: string; href: string }) => (
+                    <li><a href={s.href}>{s.t}</a></li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          ) : (
+            <a href={n.href}>{n.t}</a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const burger = document.getElementById('mf-nav-burger');
+  const links = document.getElementById('mf-nav-links');
+  const fila = document.getElementById('mf-fila-top');
+
+  burger?.addEventListener('click', () => {
+    const abierto = links?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  const drops = Array.from(document.querySelectorAll<HTMLButtonElement>('.mf-nav__drop'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('.mf-nav__panel'));
+
+  function cerrarTodos() {
+    panels.forEach((p) => (p.hidden = true));
+    drops.forEach((d) => d.classList.remove('is-on'));
+  }
+
+  drops.forEach((d) => {
+    const panel = panels.find((p) => p.dataset.panel === d.dataset.idx);
+    d.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const yaAbierto = panel ? !panel.hidden : false;
+      cerrarTodos();
+      if (!yaAbierto) {
+        if (panel) panel.hidden = false;
+        d.classList.add('is-on');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as Node;
+    if (!links?.contains(t)) cerrarTodos();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarTodos();
+  });
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      document.getElementById('mf-nav')?.classList.toggle('is-scrolled', window.scrollY > 40);
+      fila?.classList.toggle('is-scrolled', window.scrollY > 40);
+    },
+    { passive: true },
+  );
+
+  links?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      links.classList.remove('is-abierto');
+      cerrarTodos();
+    }),
+  );
+</script>
+
+<style>
+  .mf-nav {
+    position: fixed;
+    top: var(--mf-fila-top-h, 76px);
+    left: 0;
+    right: 0;
+    z-index: 190;
+    height: var(--mf-nav-h, 46px);
+    color: rgba(255, 255, 255, 0.92);
+    transition: color 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .mf-nav.is-scrolled {
+    color: var(--mf-tinta-suave);
+    border-color: var(--mf-linea);
+    background: rgba(250, 245, 236, 0.96);
+  }
+
+  .mf-nav__row {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .mf-nav__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 22px;
+    color: inherit;
+  }
+
+  .mf-nav__burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  .mf-nav__links {
+    display: flex;
+    gap: 1.7rem;
+    list-style: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .mf-nav__item {
+    position: relative;
+  }
+
+  .mf-nav__item > a:hover {
+    opacity: 0.75;
+  }
+
+  .mf-nav__drop {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: inherit;
+    padding-block: 0.2rem;
+  }
+
+  .mf-nav__drop:hover,
+  .mf-nav__drop.is-on {
+    opacity: 0.75;
+  }
+
+  .mf-nav__panel {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    min-width: 210px;
+    background: var(--mf-blanco);
+    border: 1px solid var(--mf-linea);
+    border-radius: 4px;
+    box-shadow: 0 26px 44px -26px rgba(36, 31, 27, 0.4);
+    padding: 0.6rem;
+    z-index: 5;
+  }
+
+  .mf-nav__panel[hidden] {
+    display: none;
+  }
+
+  .mf-nav__panel ul {
+    list-style: none;
+  }
+
+  .mf-nav__panel a {
+    display: block;
+    padding: 0.5rem 0.65rem;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: var(--mf-tinta-suave);
+  }
+
+  .mf-nav__panel a:hover {
+    background: var(--mf-papel-osc);
+    color: var(--mf-acento);
+  }
+
+  @media (max-width: 860px) {
+    .mf-nav {
+      height: auto;
+    }
+    .mf-nav__burger {
+      display: flex;
+    }
+    .mf-nav__links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--mf-blanco);
+      color: var(--mf-tinta);
+      border-bottom: 1px solid var(--mf-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+    .mf-nav__links.is-abierto {
+      display: flex;
+    }
+    .mf-nav__item {
+      border-top: 1px solid var(--mf-linea);
+    }
+    .mf-nav__item > a,
+    .mf-nav__drop {
+      padding-block: 0.7rem;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .mf-nav__panel {
+      position: static;
+      box-shadow: none;
+      border: none;
+      padding: 0 0 0.4rem 0.5rem;
+    }
+  }
+</style>

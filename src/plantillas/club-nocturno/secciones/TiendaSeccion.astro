@@ -1,0 +1,81 @@
+---
+import { tienda, marca } from '../datos/club.js';
+
+interface Producto { nombre: string; precio: string; img: string }
+const lista = tienda as Producto[];
+---
+
+<section class="cn-seccion" id="tienda" style="background:var(--cn-panel)">
+  <div class="cn-wrap">
+    <div class="cn-cabecera-seccion cn-reveal">
+      <div>
+        <h2 class="cn-titulo">Tienda Oficial</h2>
+        <p class="cn-sub">Lleva contigo la noche a todos lados.</p>
+      </div>
+      <a href={marca.whatsappHref} target="_blank" rel="noopener" class="cn-btn cn-btn--linea">Consultar por WhatsApp</a>
+    </div>
+
+    <div class="cn-tienda__grid cn-reveal">
+      {lista.map((p: Producto) => (
+        <article class="cn-tienda__item">
+          <div class="cn-tienda__foto">
+            <img src={p.img} alt={p.nombre} loading="lazy" />
+          </div>
+          <h3>{p.nombre}</h3>
+          <span class="cn-tienda__precio">{p.precio}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cn-tienda__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.3rem;
+  }
+
+  .cn-tienda__foto {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 0.9rem;
+    transition: box-shadow 0.35s ease;
+  }
+
+  .cn-tienda__item:hover .cn-tienda__foto {
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
+  }
+
+  .cn-tienda__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .cn-tienda__item:hover .cn-tienda__foto img {
+    transform: scale(1.05);
+  }
+
+  .cn-tienda__item h3 {
+    font-size: 0.9rem;
+    font-family: var(--cn-font);
+    font-weight: 600;
+    color: var(--cn-blanco);
+  }
+
+  .cn-tienda__precio {
+    display: block;
+    margin-top: 0.3rem;
+    font-weight: 700;
+    color: var(--cn-blanco);
+  }
+
+  @media (max-width: 780px) {
+    .cn-tienda__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

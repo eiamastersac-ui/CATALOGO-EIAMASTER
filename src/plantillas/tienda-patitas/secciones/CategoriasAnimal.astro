@@ -1,0 +1,85 @@
+---
+import { categoriasAnimal } from '../datos/patitas.js';
+
+interface Cat { t: string; img: string; tono: string }
+const lista = categoriasAnimal as Cat[];
+---
+
+<section class="pt-seccion">
+  <div class="pt-wrap pt-catan__grid">
+    {lista.map((c: Cat) => (
+      <a href="#recomendados" class:list={['pt-catan__card', `pt-catan__card--${c.tono}`]}>
+        <img src={c.img} alt={c.t} loading="lazy" />
+        <div class="pt-catan__tx">
+          <span>Lo mejor en</span>
+          <b>{c.t}</b>
+          <span class="pt-catan__ver">Ver productos →</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .pt-catan__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+
+  .pt-catan__card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 14px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .pt-catan__card--azul { background: #d8ecf9; }
+  .pt-catan__card--crema { background: var(--pt-crema); }
+  .pt-catan__card--rosa { background: #fde3ea; }
+
+  .pt-catan__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+  }
+
+  .pt-catan__tx {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.55), transparent 60%);
+    color: #fff;
+    width: 100%;
+    padding: 1rem;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pt-catan__tx span {
+    font-size: 0.8rem;
+  }
+
+  .pt-catan__tx b {
+    font-family: var(--pt-font-titulo);
+    font-size: 1.5rem;
+  }
+
+  .pt-catan__ver {
+    margin-top: 0.3rem;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 780px) {
+    .pt-catan__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

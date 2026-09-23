@@ -1,0 +1,117 @@
+---
+import { tiposCasos } from '../datos/contenido.js';
+---
+
+<section class="at-seccion at-tipos" id="tipos-casos">
+  <div class="at-wrap">
+    <div class="at-cabecera-seccion at-tipos__cab">
+      <p class="at-kicker">Tipos de casos que manejamos</p>
+      <h2 class="at-titulo">¿Multa de tráfico? ¿Exceso de velocidad? ¿Necesitas ayuda con algo más?</h2>
+    </div>
+
+    <div class="at-tipos__grid">
+      {tiposCasos.map((col) => (
+        <div class="at-tipos__col">
+          <h3>{col.columna}</h3>
+          <ul>
+            {col.items.map((item: string) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="at-tipos__cta">
+      <span class="at-tipos__linea" aria-hidden="true"></span>
+      <a href="#como-funciona" class="at-tipos__link">Obtén ayuda con tu cita</a>
+      <span class="at-tipos__linea" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .at-tipos__cab {
+    max-width: 720px;
+  }
+
+  .at-tipos__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .at-tipos__col h3 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--at-amarillo-osc);
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--at-tinta);
+  }
+
+  .at-tipos__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .at-tipos__col li {
+    font-size: 0.85rem;
+    color: var(--at-gris);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .at-tipos__col li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--at-amarillo);
+  }
+
+  .at-tipos__cta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: clamp(2.25rem, 5vw, 3rem);
+  }
+
+  .at-tipos__linea {
+    flex: 1;
+    height: 1px;
+    background: var(--at-linea);
+  }
+
+  .at-tipos__link {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--at-tinta);
+    white-space: nowrap;
+  }
+
+  .at-tipos__link:hover {
+    color: var(--at-amarillo-osc);
+  }
+
+  @media (max-width: 900px) {
+    .at-tipos__grid {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 2rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .at-tipos__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

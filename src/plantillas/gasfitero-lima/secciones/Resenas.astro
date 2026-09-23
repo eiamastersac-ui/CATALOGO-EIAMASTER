@@ -1,0 +1,151 @@
+---
+import { resenas, marca } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Resena {
+  texto: string;
+  nombre: string;
+  zona: string;
+}
+const items = resenas as Resena[];
+---
+
+<section class="gl-seccion gl-res" id="resenas">
+  <div class="gl-wrap">
+    <div class="gl-res__cab">
+      <div class="gl-cab">
+        <span class="gl-kicker">Clientes en Lima</span>
+        <h2 class="gl-titulo">{marca.rating} / 5 · {marca.resenas} reseñas</h2>
+        <p class="gl-sub">Trabajos reales en distintos distritos. Sin filtros ni reseñas compradas.</p>
+      </div>
+      <div class="gl-res__flechas">
+        <button type="button" class="gl-flecha" id="gl-res-prev" aria-label="Anterior">
+          <span style="transform:scaleX(-1);display:grid"><Icono nombre="chevron" size={16} /></span>
+        </button>
+        <button type="button" class="gl-flecha" id="gl-res-next" aria-label="Siguiente">
+          <Icono nombre="chevron" size={16} />
+        </button>
+      </div>
+    </div>
+
+    <div class="gl-fila" id="gl-res-fila">
+      {items.map((r: Resena, i: number) => (
+        <figure class={`gl-res__card gl-reveal gl-reveal--${(i % 4) + 1}`}>
+          <div class="gl-res__stars" aria-label="5 de 5">
+            {[0, 1, 2, 3, 4].map(() => <Icono nombre="estrella" size={14} />)}
+          </div>
+          <blockquote>{r.texto}</blockquote>
+          <figcaption>
+            <b>{r.nombre}</b>
+            <span>{r.zona}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('gl-res-fila');
+  const paso = 340;
+  document.getElementById('gl-res-prev')?.addEventListener('click', () => {
+    fila?.scrollBy({ left: -paso, behavior: 'smooth' });
+  });
+  document.getElementById('gl-res-next')?.addEventListener('click', () => {
+    fila?.scrollBy({ left: paso, behavior: 'smooth' });
+  });
+</script>
+
+<style>
+  .gl-res {
+    background: var(--gl-tinta);
+    color: #fff;
+  }
+
+  .gl-res .gl-titulo,
+  .gl-res__card b {
+    color: #fff;
+  }
+
+  .gl-res .gl-sub {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .gl-res__cab {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .gl-res__cab .gl-cab {
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .gl-res__flechas {
+    display: flex;
+    gap: 0.6rem;
+    padding-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .gl-res__flechas .gl-flecha {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+  }
+
+  .gl-res__flechas .gl-flecha:hover {
+    background: #fff;
+    color: var(--gl-tinta);
+  }
+
+  .gl-res__card {
+    background: var(--gl-tinta-2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .gl-res__stars {
+    display: flex;
+    gap: 0.15rem;
+    color: var(--gl-cobre);
+  }
+
+  .gl-res__card blockquote {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .gl-res__card figcaption {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 0.9rem;
+  }
+
+  .gl-res__card figcaption b {
+    font-family: var(--gl-display);
+    font-size: 0.9rem;
+  }
+
+  .gl-res__card figcaption span {
+    font-size: 0.78rem;
+    color: var(--gl-cobre-suave);
+  }
+
+  @media (max-width: 560px) {
+    .gl-res__cab {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .gl-res__flechas {
+      padding-bottom: 1.25rem;
+    }
+  }
+</style>

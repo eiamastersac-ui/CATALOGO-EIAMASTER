@@ -1,0 +1,42 @@
+---
+import './estilos.css';
+
+import Cabecera from './secciones/Cabecera.astro';
+import HeroCarrusel from './secciones/HeroCarrusel.astro';
+import BeneficiosFranja from './secciones/BeneficiosFranja.astro';
+import CountdownOferta from './secciones/CountdownOferta.astro';
+import BannerTemporada from './secciones/BannerTemporada.astro';
+import ProductosCarrusel from './secciones/ProductosCarrusel.astro';
+import CategoriasAnimal from './secciones/CategoriasAnimal.astro';
+import CategoriasTiles from './secciones/CategoriasTiles.astro';
+import InstagramGrid from './secciones/InstagramGrid.astro';
+import ResenasCarrusel from './secciones/ResenasCarrusel.astro';
+import BlogCards from './secciones/BlogCards.astro';
+import SeoTexto from './secciones/SeoTexto.astro';
+import FinanciamientoBanner from './secciones/FinanciamientoBanner.astro';
+import PiePagina from './secciones/PiePagina.astro';
+import BotonesFlotantes from './secciones/BotonesFlotantes.astro';
+
+import { ofertasProductos, recomendadosProductos, nuevosProductos } from './datos/patitas.js';
+---
+
+<div class="tpl-tienda-patitas">
+  <Cabecera />
+  <HeroCarrusel />
+  <BeneficiosFranja />
+  <CountdownOferta />
+  <BannerTemporada />
+  <ProductosCarrusel id="ofertas" titulo="Top ofertas para tus engreídos" lista={ofertasProductos} />
+  <CategoriasAnimal />
+  <ProductosCarrusel id="recomendados" titulo="Recomendados del mes para tu mascota" lista={recomendadosProductos} />
+  <CategoriasTiles />
+  <ProductosCarrusel id="lo-nuevo" titulo="Lo nuevo en perros y gatos" lista={nuevosProductos} />
+  <InstagramGrid />
+  <ResenasCarrusel />
+  <BlogCards />
+  <SeoTexto />
+  <FinanciamientoBanner />
+  <BeneficiosFranja />
+  <PiePagina />
+  <BotonesFlotantes />
+</div>

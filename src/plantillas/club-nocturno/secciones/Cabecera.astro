@@ -1,0 +1,171 @@
+---
+import { marca, nav, base } from '../datos/club.js';
+import Icono from '../componentes/Icono.astro';
+
+interface ItemNav { t: string; href: string }
+const links = nav as ItemNav[];
+---
+
+<header class="cn-hdr" id="top">
+  <div class="cn-wrap cn-hdr__fila">
+    <a href={`${base}/#top`} class="cn-logo">
+      <span class="cn-logo__marca">{marca.nombre}</span>
+      <span class="cn-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="cn-nav" id="cn-nav" aria-label="Navegación principal">
+      {links.map((l: ItemNav) => (
+        <a href={l.href} class="cn-nav__link">{l.t}</a>
+      ))}
+    </nav>
+
+    <div class="cn-hdr__acc">
+      <a href="#reservas" class="cn-btn cn-btn--acento cn-hdr__reserva">Reservar Mesa</a>
+      <button type="button" class="cn-hdr__burger" id="cn-burger" aria-label="Abrir menú" aria-expanded="false">
+        <Icono name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+
+  <div class="cn-nav-movil" id="cn-nav-movil" hidden>
+    {links.map((l: ItemNav) => (
+      <a href={l.href} class="cn-nav-movil__link">{l.t}</a>
+    ))}
+    <a href="#reservas" class="cn-btn cn-btn--acento">Reservar Mesa</a>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('top');
+  const onScroll = () => {
+    if (!header) return;
+    header.classList.toggle('is-solido', window.scrollY > 40);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const burger = document.getElementById('cn-burger');
+  const navMovil = document.getElementById('cn-nav-movil');
+
+  burger?.addEventListener('click', () => {
+    const abierto = navMovil?.hasAttribute('hidden');
+    if (navMovil) navMovil.hidden = !abierto;
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  navMovil?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      if (navMovil) navMovil.hidden = true;
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .cn-hdr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: linear-gradient(180deg, rgba(11, 10, 16, 0.75), transparent);
+    transition: background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cn-hdr.is-solido {
+    background: rgba(11, 10, 16, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--cn-linea);
+  }
+
+  .cn-hdr__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.1rem;
+  }
+
+  .cn-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .cn-logo__marca {
+    font-family: var(--cn-font-titulo);
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  .cn-logo__sub {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cn-texto-tenue);
+  }
+
+  .cn-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .cn-nav__link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(245, 243, 240, 0.85);
+    letter-spacing: 0.02em;
+    transition: color 0.25s ease;
+  }
+
+  .cn-nav__link:hover {
+    color: #fff;
+  }
+
+  .cn-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .cn-hdr__burger {
+    display: none;
+    color: #fff;
+  }
+
+  .cn-nav-movil[hidden] {
+    display: none;
+  }
+
+  .cn-nav-movil {
+    background: rgba(11, 10, 16, 0.97);
+    border-top: 1px solid var(--cn-linea);
+    padding: 1rem clamp(1.1rem, 4vw, 2rem) 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .cn-nav-movil__link {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    padding-block: 0.3rem;
+  }
+
+  @media (max-width: 860px) {
+    .cn-nav {
+      display: none;
+    }
+    .cn-hdr__reserva {
+      display: none;
+    }
+    .cn-hdr__burger {
+      display: block;
+    }
+  }
+</style>

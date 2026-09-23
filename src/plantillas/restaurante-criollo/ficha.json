@@ -6,7 +6,7 @@
   "tags": ["restaurante", "comida criolla", "peruano", "reservaciones", "delivery", "multipágina", "nuevo"],
   "paleta": ["#211a16", "#b3211f", "#f8f1e4", "#ffffff"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "saboresperuanos.pe",
   "orden": 68
 }

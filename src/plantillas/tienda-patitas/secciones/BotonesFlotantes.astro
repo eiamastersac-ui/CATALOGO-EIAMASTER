@@ -1,0 +1,69 @@
+---
+import { marca } from '../datos/patitas.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<div class="pt-flotantes">
+  <a href="#ofertas" class="pt-flot-ofertas">
+    <Icono name="hueso" size={16} /> Ver ofertas
+  </a>
+  <a href={marca.whatsappHref} target="_blank" rel="noopener" class="pt-whats" aria-label="Escríbenos por WhatsApp">
+    <Icono name="whatsapp" size={26} />
+  </a>
+</div>
+
+<style>
+  .pt-flotantes {
+    position: fixed;
+    left: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 130;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .pt-flot-ofertas {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--pt-naranja);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.75rem 1.1rem;
+    border-radius: 999px;
+    box-shadow: 0 14px 28px -14px rgba(255, 106, 19, 0.6);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .pt-flot-ofertas:hover {
+    background: var(--pt-naranja-osc);
+    transform: translateY(-2px);
+  }
+
+  .pt-whats {
+    position: fixed;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 32px -10px rgba(37, 211, 102, 0.65);
+    transition: transform 0.2s ease;
+  }
+
+  .pt-whats:hover {
+    transform: scale(1.06);
+  }
+
+  @media (max-width: 640px) {
+    .pt-flot-ofertas span {
+      display: none;
+    }
+  }
+</style>

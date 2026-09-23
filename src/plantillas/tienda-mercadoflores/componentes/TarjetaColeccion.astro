@@ -1,0 +1,73 @@
+---
+interface Props {
+  t: string;
+  cta: string;
+  img: string;
+  href?: string;
+}
+const { t, cta, img, href = '#seleccion' } = Astro.props as Props;
+---
+
+<a class="mf-col" href={href}>
+  <span class="mf-col__pill">{t}</span>
+  <div class="mf-col__foto">
+    <img src={img} alt={t} loading="lazy" width="640" height="760" />
+  </div>
+  <span class="mf-col__cta">
+    {cta}
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </span>
+</a>
+
+<style>
+  .mf-col {
+    display: block;
+    position: relative;
+  }
+
+  .mf-col__pill {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    z-index: 2;
+    background: rgba(250, 245, 236, 0.95);
+    color: var(--mf-tinta);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--mf-pill);
+  }
+
+  .mf-col__foto {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--mf-papel-osc);
+  }
+
+  .mf-col__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .mf-col:hover .mf-col__foto img {
+    transform: scale(1.05);
+  }
+
+  .mf-col__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .mf-col:hover .mf-col__cta {
+    color: var(--mf-acento);
+  }
+</style>

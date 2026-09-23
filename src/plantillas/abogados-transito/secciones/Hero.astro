@@ -1,0 +1,149 @@
+---
+import { IMG, marca } from '../datos/contenido.js';
+---
+
+<section class="at-hero" aria-label="Presentación">
+  <img class="at-hero__img" src={IMG.heroCarretera} alt="Autopista y cruce de carreteras vistos desde el aire" loading="eager" />
+  <div class="at-hero__scrim" aria-hidden="true"></div>
+
+  <div class="at-wrap at-hero__contenido">
+    <p class="at-hero__precio">EL PRECIO COMIENZA DESDE <b>$24.99*</b></p>
+    <h1 class="at-hero__titulo">No pague una multa sin hablar con un profesional primero.</h1>
+    <p class="at-hero__sub">
+      En la mayoría de los casos, nuestros clientes NO reciben puntos en su licencia, NO van a
+      escuela de tráfico y NO les sube la tasa de seguro.
+    </p>
+
+    <div class="at-hero__cta">
+      <a href={`tel:${marca.telHref}`} class="at-pill at-hero__tel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.45 2.11L8 9.9a16 16 0 0 0 6 6l1.4-1.15a2 2 0 0 1 2.11-.45c.87.3 1.78.5 2.7.6A2 2 0 0 1 22 16.9Z"></path></svg>
+        Por texto 24/7 · {marca.telTexto}
+      </a>
+      <a href="#banner-urgente" class="at-btn at-btn--amarillo">Llenar formulario en línea</a>
+    </div>
+  </div>
+
+  <a href="#como-funciona" class="at-hero__scroll" aria-label="Bajar a la siguiente sección">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M6 14l6 6 6-6"></path></svg>
+  </a>
+</section>
+
+<style>
+  .at-hero {
+    position: relative;
+    min-height: calc(100svh - 7.3rem);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .at-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .at-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 12, 18, 0.78) 0%,
+      rgba(10, 12, 18, 0.42) 42%,
+      rgba(10, 12, 18, 0.6) 75%,
+      rgba(10, 12, 18, 0.88) 100%
+    );
+  }
+
+  .at-hero__contenido {
+    position: relative;
+    z-index: 2;
+    padding-block: 3rem;
+    max-width: 880px;
+  }
+
+  .at-hero__precio {
+    font-family: var(--at-display);
+    font-size: clamp(1rem, 2.4vw, 1.3rem);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+
+  .at-hero__precio b {
+    color: var(--at-amarillo);
+    font-size: 1.15em;
+  }
+
+  .at-hero__titulo {
+    font-family: var(--at-display);
+    color: #fff;
+    font-size: clamp(2.1rem, 5.4vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    max-width: 18ch;
+  }
+
+  .at-hero__sub {
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+    color: #f0e6c4;
+    max-width: 54ch;
+    margin-bottom: 2rem;
+  }
+
+  .at-hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .at-hero__tel {
+    background: rgba(20, 23, 31, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    backdrop-filter: blur(4px);
+  }
+
+  .at-hero__tel:hover {
+    background: rgba(20, 23, 31, 0.92);
+  }
+
+  .at-hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1.25rem, 3vw, 2rem);
+    transform: translateX(-50%);
+    z-index: 2;
+    color: #fff;
+    opacity: 0.75;
+    animation: at-bob 2.2s ease-in-out infinite;
+  }
+
+  .at-hero__scroll:hover {
+    opacity: 1;
+  }
+
+  @keyframes at-bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  @media (max-width: 640px) {
+    .at-hero {
+      min-height: calc(100svh - 6.6rem);
+    }
+    .at-hero__cta {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .at-hero__cta > * {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+</style>

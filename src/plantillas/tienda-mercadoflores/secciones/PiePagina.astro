@@ -1,0 +1,190 @@
+---
+import { marca, distritos, footerCatalogo, footerPoliticas, pagoMetodos } from '../datos/mercadoflores.js';
+
+interface Link {
+  t: string;
+  href: string;
+}
+const catalogo = footerCatalogo as Link[];
+---
+
+<footer class="mf-footer" id="footer">
+  <div class="mf-wrap mf-footer__top">
+    <div class="mf-footer__marca">
+      <span class="mf-footer__logo">{marca.nombre}<b>{marca.sub}</b></span>
+      <p>Florería online en {marca.ciudad}. Diseñamos y entregamos arreglos florales con flores frescas, cuidando cada envío de principio a fin.</p>
+      <div class="mf-footer__redes">
+        <a href="#top" aria-label="Facebook">Facebook</a>
+        <a href="#top" aria-label="Instagram">Instagram</a>
+        <a href="#top" aria-label="TikTok">TikTok</a>
+      </div>
+    </div>
+
+    <div class="mf-footer__col">
+      <h3>Catálogo y ocasiones</h3>
+      <ul>
+        {catalogo.map((l: Link) => <li><a href={l.href}>{l.t}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="mf-footer__col">
+      <h3>Cobertura en Lima</h3>
+      <ul>
+        {distritos.map((d: string) => <li><a href="#entregas">Flores a domicilio en {d}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="mf-footer__col">
+      <h3>Políticas</h3>
+      <ul>
+        {footerPoliticas.map((p: string) => <li><a href="#top">{p}</a></li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="mf-wrap mf-footer__pago">
+    <p>Formas de pago y seguridad</p>
+    <div class="mf-footer__metodos">
+      {pagoMetodos.map((m: string) => <span>{m}</span>)}
+    </div>
+  </div>
+
+  <div class="mf-wrap mf-footer__base">
+    <a href="#top" class="mf-footer__reclamo">Libro de Reclamaciones</a>
+    <p>© {new Date().getFullYear()} {marca.nombre}®. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<style>
+  .mf-footer {
+    background: var(--mf-tinta);
+    color: rgba(250, 245, 236, 0.82);
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .mf-footer__top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .mf-footer__logo {
+    display: block;
+    font-family: var(--mf-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.9rem;
+  }
+
+  .mf-footer__logo b {
+    display: block;
+    font-family: var(--mf-font);
+    font-style: normal;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-top: 0.2rem;
+  }
+
+  .mf-footer__marca p {
+    font-size: 0.85rem;
+    max-width: 34ch;
+    margin-bottom: 1.25rem;
+  }
+
+  .mf-footer__redes {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .mf-footer__redes a:hover {
+    color: #fff;
+  }
+
+  .mf-footer__col h3 {
+    font-family: var(--mf-font);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.1rem;
+  }
+
+  .mf-footer__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .mf-footer__col a {
+    font-size: 0.83rem;
+  }
+
+  .mf-footer__col a:hover {
+    color: #fff;
+  }
+
+  .mf-footer__pago {
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-block: 1.5rem;
+  }
+
+  .mf-footer__pago p {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    color: rgba(250, 245, 236, 0.6);
+  }
+
+  .mf-footer__metodos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .mf-footer__metodos span {
+    font-size: 0.72rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .mf-footer__base {
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-block: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .mf-footer__reclamo {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .mf-footer__top {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mf-footer__top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

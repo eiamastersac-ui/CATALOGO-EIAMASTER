@@ -1,0 +1,94 @@
+---
+---
+
+<section class="pt-countdown">
+  <div class="pt-wrap pt-countdown__fila">
+    <p class="pt-countdown__tx"><strong>¡Por tiempo limitado!</strong> Hasta 50% de descuento</p>
+    <div class="pt-countdown__reloj" id="pt-countdown">
+      <div><span id="pt-cd-d">00</span><small>d</small></div>
+      <div><span id="pt-cd-h">00</span><small>h</small></div>
+      <div><span id="pt-cd-m">00</span><small>m</small></div>
+      <div><span id="pt-cd-s">00</span><small>s</small></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const destino = Date.now() + 23 * 24 * 60 * 60 * 1000;
+  const elD = document.getElementById('pt-cd-d');
+  const elH = document.getElementById('pt-cd-h');
+  const elM = document.getElementById('pt-cd-m');
+  const elS = document.getElementById('pt-cd-s');
+
+  function pad(n: number) {
+    return String(n).padStart(2, '0');
+  }
+
+  function tick() {
+    const restante = Math.max(0, destino - Date.now());
+    const d = Math.floor(restante / 86400000);
+    const h = Math.floor((restante % 86400000) / 3600000);
+    const m = Math.floor((restante % 3600000) / 60000);
+    const s = Math.floor((restante % 60000) / 1000);
+    if (elD) elD.textContent = pad(d);
+    if (elH) elH.textContent = pad(h);
+    if (elM) elM.textContent = pad(m);
+    if (elS) elS.textContent = pad(s);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+
+<style>
+  .pt-countdown {
+    background: var(--pt-naranja);
+  }
+
+  .pt-countdown__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-block: 1rem;
+  }
+
+  .pt-countdown__tx {
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .pt-countdown__tx strong {
+    font-family: var(--pt-font-titulo);
+    display: block;
+    font-size: 1.15rem;
+  }
+
+  .pt-countdown__reloj {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .pt-countdown__reloj > div {
+    background: #fff;
+    color: var(--pt-negro);
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    min-width: 48px;
+    justify-content: center;
+  }
+
+  .pt-countdown__reloj span {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .pt-countdown__reloj small {
+    font-size: 0.7rem;
+    color: var(--pt-gris);
+  }
+</style>

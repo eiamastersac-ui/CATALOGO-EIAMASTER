@@ -1,0 +1,12 @@
+---
+import CarruselSeccion from '../componentes/CarruselSeccion.astro';
+import TarjetaHistoria from '../componentes/TarjetaHistoria.astro';
+import { ambientes } from '../datos/club.js';
+
+interface Ambiente { titulo: string; texto: string; img: string }
+const lista = ambientes as Ambiente[];
+---
+
+<CarruselSeccion id="ambientes" titulo="Nuestros Ambientes" sub="Cuatro espacios, una sola noche inolvidable." oscuro>
+  {lista.map((a: Ambiente) => <TarjetaHistoria titulo={a.titulo} texto={a.texto} img={a.img} />)}
+</CarruselSeccion>

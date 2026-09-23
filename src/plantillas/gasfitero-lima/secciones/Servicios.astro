@@ -1,0 +1,164 @@
+---
+import { servicios } from '../datos/gasfitero.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Servicio {
+  slug: string;
+  nombre: string;
+  desc: string;
+  img: string;
+  ancho?: boolean;
+}
+const items = servicios as Servicio[];
+---
+
+<section class="gl-seccion gl-serv" id="servicios">
+  <div class="gl-wrap">
+    <div class="gl-cab">
+      <span class="gl-kicker">Lo que resolvemos</span>
+      <h2 class="gl-titulo">Servicios de gasfitería en Lima</h2>
+      <p class="gl-sub">
+        Emergencias y trabajos planificados. Todo con repuestos a bordo, precio cerrado
+        y garantía por escrito.
+      </p>
+    </div>
+
+    <div class="gl-serv__grid">
+      {items.map((s: Servicio, i: number) => (
+        <a
+          href="#contacto"
+          class={`gl-serv__card gl-reveal gl-reveal--${(i % 4) + 1}${s.ancho ? ' is-ancho' : ''}`}
+        >
+          <img src={s.img} alt={s.nombre} loading="lazy" />
+          <span class="gl-serv__scrim" aria-hidden="true"></span>
+          <div class="gl-serv__cont">
+            <span class="gl-serv__pill">{s.nombre}</span>
+            <p class="gl-serv__desc">{s.desc}</p>
+            <span class="gl-serv__ver">
+              Pedir este servicio
+              <Icono nombre="flecha" size={15} />
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .gl-serv__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 240px;
+    gap: 1rem;
+  }
+
+  .gl-serv__card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    display: block;
+    background: var(--gl-tinta);
+  }
+
+  .gl-serv__card.is-ancho {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .gl-serv__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .gl-serv__card:hover img {
+    transform: scale(1.04);
+  }
+
+  .gl-serv__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 16, 13, 0) 30%, rgba(20, 16, 13, 0.82) 100%);
+  }
+
+  .gl-serv__cont {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1.1rem;
+    color: #fff;
+  }
+
+  .gl-serv__pill {
+    align-self: flex-start;
+    font-family: var(--gl-display);
+    font-weight: 700;
+    font-size: 0.92rem;
+    background: rgba(255, 253, 248, 0.96);
+    color: var(--gl-tinta);
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--gl-pill);
+  }
+
+  .gl-serv__desc {
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 42ch;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+  }
+
+  .gl-serv__card:hover .gl-serv__desc,
+  .gl-serv__card:focus-visible .gl-serv__desc,
+  .gl-serv__card.is-ancho .gl-serv__desc {
+    max-height: 6rem;
+    opacity: 1;
+  }
+
+  .gl-serv__ver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--gl-display);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--gl-cobre-suave);
+  }
+
+  .gl-serv__card:hover .gl-serv__ver {
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .gl-serv__grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 220px;
+    }
+    .gl-serv__card.is-ancho {
+      grid-row: span 1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .gl-serv__grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 230px;
+    }
+    .gl-serv__card.is-ancho {
+      grid-column: span 1;
+    }
+    .gl-serv__desc {
+      max-height: 6rem;
+      opacity: 1;
+    }
+  }
+</style>

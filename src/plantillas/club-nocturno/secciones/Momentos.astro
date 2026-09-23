@@ -1,0 +1,68 @@
+---
+import { momentos } from '../datos/club.js';
+import Icono from '../componentes/Icono.astro';
+
+const fotos = momentos as string[];
+---
+
+<section class="cn-seccion">
+  <div class="cn-wrap">
+    <div class="cn-cabecera-seccion cn-reveal" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
+      <h2 class="cn-titulo">Momentos</h2>
+      <p class="cn-sub">Síguenos @tiendadotcomclub y revive cada noche.</p>
+    </div>
+
+    <div class="cn-momentos cn-reveal">
+      {fotos.map((f: string) => (
+        <a href="#top" class="cn-momentos__item">
+          <img src={f} alt="Momento del club" loading="lazy" />
+          <span class="cn-momentos__ico"><Icono name="instagram" size={16} /></span>
+        </a>
+      ))}
+    </div>
+
+    <div class="cn-reveal" style="text-align:center;margin-top:1.6rem">
+      <a href="#top" class="cn-btn cn-btn--linea">Ver Instagram</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cn-momentos {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.7rem;
+  }
+
+  .cn-momentos__item {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .cn-momentos__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .cn-momentos__item:hover img {
+    transform: scale(1.06);
+  }
+
+  .cn-momentos__ico {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: #fff;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  }
+
+  @media (max-width: 780px) {
+    .cn-momentos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

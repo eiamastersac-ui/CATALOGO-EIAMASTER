@@ -1,0 +1,75 @@
+---
+import {
+  IMG,
+} from '../datos/patitas.js';
+import Icono from '../componentes/Icono.astro';
+
+const fotos = [
+  IMG.dogFlowers, IMG.harness, IMG.strollerFace, IMG.dogGate, IMG.catTree1,
+  IMG.sofaDog, IMG.carrierBag, IMG.catsTree3, IMG.leash, IMG.dogStairs,
+];
+---
+
+<section class="pt-seccion pt-insta">
+  <div class="pt-wrap pt-centro">
+    <h2 class="pt-titulo">¡Síguenos en Instagram!</h2>
+    <p class="pt-insta__sub">Únete a nuestra comunidad @tiendapatitas</p>
+
+    <div class="pt-insta__grid">
+      {fotos.map((f: string) => (
+        <a href="#top" class="pt-insta__item">
+          <img src={f} alt="Foto de Instagram" loading="lazy" />
+          <span class="pt-insta__ico"><Icono name="instagram" size={16} /></span>
+        </a>
+      ))}
+    </div>
+
+    <a href="#top" class="pt-btn pt-btn--negro">Ir a Instagram</a>
+  </div>
+</section>
+
+<style>
+  .pt-centro {
+    text-align: center;
+  }
+
+  .pt-insta__sub {
+    color: var(--pt-gris);
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pt-insta__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pt-insta__item {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .pt-insta__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pt-insta__ico {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: #fff;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  }
+
+  @media (max-width: 780px) {
+    .pt-insta__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

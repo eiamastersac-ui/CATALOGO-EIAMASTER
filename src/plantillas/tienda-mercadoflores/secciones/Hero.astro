@@ -1,0 +1,197 @@
+---
+import { heroSlides } from '../datos/mercadoflores.js';
+
+interface Slide {
+  kicker: string;
+  titulo: string;
+  sub: string;
+  cta: string;
+  img: string;
+}
+const slides = heroSlides as Slide[];
+---
+
+<section class="mf-hero" id="hero" aria-roledescription="carrusel">
+  <div class="mf-hero__track" id="mf-hero-track">
+    {slides.map((s: Slide, i: number) => (
+      <article class="mf-hero__slide">
+        <img src={s.img} alt={s.titulo} loading={i === 0 ? 'eager' : 'lazy'} width="1600" height="1000" />
+        <span class="mf-hero__scrim" aria-hidden="true"></span>
+        <div class="mf-hero__body mf-wrap">
+          <span class="mf-kicker mf-kicker--claro">{s.kicker}</span>
+          <h1>{s.titulo}</h1>
+          <p class="mf-hero__sub">{s.sub}</p>
+          <a href="#seleccion" class="mf-btn mf-btn--claro">{s.cta}</a>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="mf-hero__dots" id="mf-hero-dots">
+    {slides.map((_: Slide, i: number) => (
+      <button type="button" class={`mf-hero__dot${i === 0 ? ' is-on' : ''}`} data-idx={i} aria-label={`Ir a la diapositiva ${i + 1}`}></button>
+    ))}
+  </div>
+
+  <div class="mf-hero__nav">
+    <span class="mf-hero__contador"><b id="mf-hero-actual">01</b> — {String(slides.length).padStart(2, '0')}</span>
+    <button type="button" class="mf-flecha mf-flecha--claro" id="mf-hero-prev" aria-label="Anterior">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+    </button>
+    <button type="button" class="mf-flecha mf-flecha--claro" id="mf-hero-next" aria-label="Siguiente">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('mf-hero-track');
+  const actualEl = document.getElementById('mf-hero-actual');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.mf-hero__dot'));
+  const total = track ? track.children.length : 0;
+  let idx = 0;
+
+  function ir(n: number) {
+    if (!track) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    if (actualEl) actualEl.textContent = String(idx + 1).padStart(2, '0');
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+  }
+
+  document.getElementById('mf-hero-prev')?.addEventListener('click', () => ir(idx - 1));
+  document.getElementById('mf-hero-next')?.addEventListener('click', () => ir(idx + 1));
+  dots.forEach((d) => d.addEventListener('click', () => ir(Number(d.dataset.idx))));
+
+  let timer = window.setInterval(() => ir(idx + 1), 6000);
+  const box = document.getElementById('hero');
+  box?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  box?.addEventListener('mouseleave', () => (timer = window.setInterval(() => ir(idx + 1), 6000)));
+</script>
+
+<style>
+  .mf-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    background: var(--mf-tinta);
+  }
+
+  .mf-hero__track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .mf-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+  }
+
+  .mf-hero__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mf-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 11, 9, 0.55) 0%, rgba(15, 11, 9, 0.08) 32%, rgba(15, 11, 9, 0.12) 55%, rgba(15, 11, 9, 0.72) 100%);
+  }
+
+  .mf-hero__body {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-top: var(--mf-hdr-h);
+    padding-bottom: clamp(4rem, 10vw, 6.5rem);
+  }
+
+  .mf-hero__body h1 {
+    color: #fff;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(2.2rem, 5.6vw, 3.9rem);
+    max-width: 18ch;
+    margin-bottom: 1rem;
+  }
+
+  .mf-hero__sub {
+    color: rgba(255, 255, 255, 0.86);
+    max-width: 38ch;
+    font-size: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .mf-hero__dots {
+    position: absolute;
+    left: clamp(1.1rem, 4vw, 2rem);
+    bottom: clamp(1.6rem, 4vw, 2.25rem);
+    z-index: 5;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .mf-hero__dot {
+    width: 26px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+    transition: background 0.2s ease, width 0.2s ease;
+  }
+
+  .mf-hero__dot.is-on {
+    background: #fff;
+    width: 40px;
+  }
+
+  .mf-hero__nav {
+    position: absolute;
+    right: clamp(1.1rem, 4vw, 2rem);
+    bottom: clamp(1.6rem, 4vw, 2.25rem);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .mf-hero__contador {
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    margin-right: 0.3rem;
+  }
+
+  .mf-hero__contador b {
+    font-family: var(--mf-serif);
+    font-style: italic;
+  }
+
+  .mf-flecha--claro {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+  }
+
+  .mf-flecha--claro:hover {
+    background: #fff;
+    color: var(--mf-tinta);
+  }
+
+  @media (max-width: 560px) {
+    .mf-hero__nav {
+      display: none;
+    }
+  }
+</style>

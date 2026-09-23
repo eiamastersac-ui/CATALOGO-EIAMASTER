@@ -1,0 +1,135 @@
+---
+import { marca } from '../datos/club.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<div class="cn-flotantes">
+  <button type="button" class="cn-radio" id="cn-radio-toggle" aria-pressed="false">
+    <span class="cn-radio__ico"><Icono name="play" size={16} /></span>
+    <span class="cn-radio__tx">
+      <b>tienda.com Radio</b>
+      <span class="cn-radio__estado" id="cn-radio-estado">Toca para escuchar</span>
+    </span>
+    <span class="cn-radio__eq" id="cn-radio-eq" hidden>
+      <span class="cn-radio__barra"></span>
+      <span class="cn-radio__barra"></span>
+      <span class="cn-radio__barra"></span>
+    </span>
+  </button>
+
+  <a href={marca.whatsappHref} target="_blank" rel="noopener" class="cn-whats" aria-label="Escríbenos por WhatsApp">
+    <Icono name="whatsapp" size={26} />
+  </a>
+</div>
+
+<script>
+  const btn = document.getElementById('cn-radio-toggle');
+  const ico = btn?.querySelector('.cn-radio__ico');
+  const estado = document.getElementById('cn-radio-estado');
+  const eq = document.getElementById('cn-radio-eq');
+
+  btn?.addEventListener('click', () => {
+    const activo = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', String(!activo));
+    if (estado) estado.textContent = activo ? 'Toca para escuchar' : 'En vivo ahora';
+    if (eq) eq.hidden = activo;
+    if (ico) ico.innerHTML = activo
+      ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7Z"/></svg>'
+      : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5h4v14H7z M13 5h4v14h-4z"/></svg>';
+  });
+</script>
+
+<style>
+  .cn-flotantes {
+    position: fixed;
+    left: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 130;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .cn-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: rgba(19, 17, 24, 0.92);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--cn-linea);
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem 0.55rem 0.55rem;
+    box-shadow: 0 14px 32px -14px rgba(0, 0, 0, 0.6);
+  }
+
+  .cn-radio__ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--cn-acento);
+    color: var(--cn-tinta);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .cn-radio__tx {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .cn-radio__tx b {
+    font-size: 0.78rem;
+    color: #fff;
+  }
+
+  .cn-radio__estado {
+    font-size: 0.7rem;
+    color: var(--cn-texto-tenue);
+  }
+
+  .cn-radio__eq {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+  }
+
+  .cn-radio__eq[hidden] {
+    display: none;
+  }
+
+  .cn-radio__eq :global(.cn-radio__barra:nth-child(2)) {
+    animation-delay: 0.2s;
+  }
+
+  .cn-radio__eq :global(.cn-radio__barra:nth-child(3)) {
+    animation-delay: 0.4s;
+  }
+
+  .cn-whats {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 32px -10px rgba(37, 211, 102, 0.65);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .cn-whats:hover {
+    transform: scale(1.06);
+  }
+
+  @media (max-width: 640px) {
+    .cn-radio__tx {
+      display: none;
+    }
+  }
+</style>

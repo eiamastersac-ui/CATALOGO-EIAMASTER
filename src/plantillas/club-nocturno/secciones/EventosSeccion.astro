@@ -1,0 +1,12 @@
+---
+import CarruselSeccion from '../componentes/CarruselSeccion.astro';
+import TarjetaEvento from '../componentes/TarjetaEvento.astro';
+import { eventos } from '../datos/club.js';
+
+interface Evento { mes: string; dia: string; diaFin: string | null; titulo: string; lugar: string; desc: string; img: string }
+const lista = eventos as Evento[];
+---
+
+<CarruselSeccion id="eventos" titulo="Próximos Eventos" sub="No te quedes fuera, la pista te espera." ctaTexto="Ver calendario" ctaHref="#eventos">
+  {lista.map((e: Evento) => <TarjetaEvento evento={e} />)}
+</CarruselSeccion>

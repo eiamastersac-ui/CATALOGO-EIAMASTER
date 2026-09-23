@@ -1,0 +1,104 @@
+---
+import { productos } from '../datos/mercadoflores.js';
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+
+interface Prod {
+  nombre: string;
+  desc: string;
+  precio: number;
+  img: string;
+}
+const items = productos as Prod[];
+---
+
+<section class="mf-seleccion mf-seccion" id="seleccion">
+  <div class="mf-wrap">
+    <div class="mf-seleccion__cab">
+      <div>
+        <h2 class="mf-titulo">Nuestra selección</h2>
+        <p class="mf-sub mf-sub--centro">Piezas creadas a mano, una por una.</p>
+      </div>
+    </div>
+
+    <p class="mf-seleccion__nota" id="mf-seleccion-nota" hidden></p>
+
+    <div class="mf-seleccion__area">
+      <button type="button" class="mf-flecha mf-seleccion__flecha mf-seleccion__flecha--prev" id="mf-sel-prev" aria-label="Anterior">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+      </button>
+
+      <div class="mf-fila" id="mf-seleccion-grid">
+        {items.map((p: Prod) => <TarjetaProducto nombre={p.nombre} desc={p.desc} precio={p.precio} img={p.img} />)}
+      </div>
+
+      <button type="button" class="mf-flecha mf-seleccion__flecha mf-seleccion__flecha--next" id="mf-sel-next" aria-label="Siguiente">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const row = document.getElementById('mf-seleccion-grid');
+  document.getElementById('mf-sel-prev')?.addEventListener('click', () => row?.scrollBy({ left: -320, behavior: 'smooth' }));
+  document.getElementById('mf-sel-next')?.addEventListener('click', () => row?.scrollBy({ left: 320, behavior: 'smooth' }));
+
+  const badge = document.getElementById('mf-cart-count');
+  let total = 0;
+
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+    const add = el.closest<HTMLButtonElement>('.mf-prod__foto');
+    if (!add) return;
+    total += 1;
+    if (badge) {
+      badge.textContent = String(total);
+      badge.hidden = false;
+    }
+    const label = add.querySelector('.mf-prod__add');
+    if (label) {
+      const prev = label.textContent;
+      label.textContent = 'Añadido';
+      label.classList.add('is-ok');
+      window.setTimeout(() => {
+        label.textContent = prev;
+        label.classList.remove('is-ok');
+      }, 1100);
+    }
+  });
+</script>
+
+<style>
+  .mf-seleccion__cab {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .mf-seleccion__nota {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--mf-tinta-suave);
+    margin-bottom: 1rem;
+  }
+
+  .mf-seleccion__nota[hidden] {
+    display: none;
+  }
+
+  .mf-seleccion__area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mf-seleccion__flecha {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 720px) {
+    .mf-seleccion__flecha {
+      display: none;
+    }
+  }
+</style>

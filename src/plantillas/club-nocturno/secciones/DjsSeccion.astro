@@ -1,0 +1,12 @@
+---
+import CarruselSeccion from '../componentes/CarruselSeccion.astro';
+import TarjetaDJ from '../componentes/TarjetaDJ.astro';
+import { djs } from '../datos/club.js';
+
+interface Dj { nombre: string; show: string; duracion: string; img: string; live: boolean }
+const lista = djs as Dj[];
+---
+
+<CarruselSeccion id="djs" titulo="DJs & Sets" sub="Escucha lo mejor de nuestras cabinas." ctaTexto="Ver todos" ctaHref="#djs">
+  {lista.map((d: Dj) => <TarjetaDJ nombre={d.nombre} show={d.show} duracion={d.duracion} img={d.img} live={d.live} />)}
+</CarruselSeccion>

@@ -1,0 +1,58 @@
+---
+import { historias } from '../datos/mercadoflores.js';
+import TarjetaColeccion from '../componentes/TarjetaColeccion.astro';
+
+interface Item {
+  t: string;
+  cta: string;
+  img: string;
+}
+const items = historias as Item[];
+---
+
+<section class="mf-historias mf-seccion" id="historias">
+  <div class="mf-wrap mf-historias__grid">
+    <div class="mf-historias__intro">
+      <h2>Una flor para cada historia.</h2>
+      <p class="mf-sub">Colecciones pensadas para los momentos que más importan.</p>
+    </div>
+
+    {items.map((it: Item) => <TarjetaColeccion t={it.t} cta={it.cta} img={it.img} href="#seleccion" />)}
+  </div>
+</section>
+
+<style>
+  .mf-historias__grid {
+    display: grid;
+    grid-template-columns: 0.85fr repeat(4, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+  }
+
+  .mf-historias__intro {
+    grid-column: 1 / 2;
+    padding-bottom: 1.5rem;
+  }
+
+  .mf-historias__intro h2 {
+    font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .mf-historias__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .mf-historias__intro {
+      grid-column: 1 / -1;
+      padding-bottom: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mf-historias__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+import { tiles } from '../datos/patitas.js';
+
+interface Tile { t: string; img: string }
+const lista = tiles as Tile[];
+---
+
+<section class="pt-seccion" id="tiles">
+  <div class="pt-wrap pt-tiles__grid">
+    {lista.map((t: Tile) => (
+      <a href="#recomendados" class="pt-tiles__item">
+        <span class="pt-tiles__foto">
+          <img src={t.img} alt={t.t} loading="lazy" />
+        </span>
+        <span class="pt-tiles__t">Lo mejor en<br /><b>{t.t}</b></span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .pt-tiles__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+  }
+
+  .pt-tiles__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    text-align: center;
+  }
+
+  .pt-tiles__foto {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--pt-crema);
+  }
+
+  .pt-tiles__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .pt-tiles__item:hover .pt-tiles__foto img {
+    transform: scale(1.08);
+  }
+
+  .pt-tiles__t {
+    font-size: 0.78rem;
+    color: var(--pt-gris);
+    line-height: 1.3;
+  }
+
+  .pt-tiles__t b {
+    color: var(--pt-negro);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 860px) {
+    .pt-tiles__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pt-tiles__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

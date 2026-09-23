@@ -1,0 +1,118 @@
+---
+import { resenas } from '../datos/patitas.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Resena { texto: string; autor: string; tag: string; img: string }
+const lista = resenas as Resena[];
+---
+
+<section class="pt-seccion pt-centro">
+  <div class="pt-wrap pt-centro">
+    <div class="pt-resenas__estrellas">
+      {Array.from({ length: 5 }).map(() => <Icono name="estrella" size={16} />)}
+      <span>5.0 estrellas basadas en 859 reseñas</span>
+    </div>
+    <h2 class="pt-titulo">Nuestros clientes nos aman</h2>
+  </div>
+
+  <div class="pt-wrap pt-carr-area">
+    <button type="button" class="pt-flecha" data-dir="-1" aria-label="Anterior">‹</button>
+    <div class="pt-fila pt-resenas__fila">
+      {lista.map((r: Resena) => (
+        <article class="pt-resena">
+          <img src={r.img} alt={r.tag} loading="lazy" />
+          <div class="pt-resena__cuerpo">
+            <div class="pt-resenas__estrellas pt-resenas__estrellas--sm">
+              {Array.from({ length: 5 }).map(() => <Icono name="estrella" size={13} />)}
+            </div>
+            <p>&ldquo;{r.texto}&rdquo;</p>
+            <b>{r.autor}</b>
+          </div>
+          <footer>{r.tag}</footer>
+        </article>
+      ))}
+    </div>
+    <button type="button" class="pt-flecha" data-dir="1" aria-label="Siguiente">›</button>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.pt-carr-area').forEach((area) => {
+    if (area.dataset.wired) return;
+    area.dataset.wired = '1';
+    const row = area.querySelector<HTMLElement>('.pt-fila');
+    area.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const dir = Number(b.dataset.dir || '1');
+        row?.scrollBy({ left: dir * 280, behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+
+<style>
+  .pt-resenas__estrellas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    color: #f5b400;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--pt-gris);
+    margin-bottom: 0.6rem;
+  }
+
+  .pt-resenas__estrellas :global(svg) {
+    color: #f5b400;
+    fill: #f5b400;
+  }
+
+  .pt-resenas__estrellas--sm {
+    justify-content: flex-start;
+    margin-bottom: 0.6rem;
+  }
+
+  .pt-resenas__fila {
+    grid-auto-columns: minmax(260px, 300px);
+    margin-top: 1.5rem;
+  }
+
+  .pt-resena {
+    background: #fff;
+    border: 1px solid var(--pt-linea);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pt-resena img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .pt-resena__cuerpo {
+    padding: 1rem;
+    flex: 1;
+  }
+
+  .pt-resena__cuerpo p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+  }
+
+  .pt-resena__cuerpo b {
+    font-size: 0.82rem;
+  }
+
+  .pt-resena footer {
+    background: var(--pt-negro);
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
+  }
+</style>
