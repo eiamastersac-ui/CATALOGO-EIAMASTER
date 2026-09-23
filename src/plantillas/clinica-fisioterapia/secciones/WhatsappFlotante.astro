@@ -1,0 +1,122 @@
+---
+import { marca } from '../datos/fisioterapia.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<button type="button" class="ft-whats" id="ft-whats-btn" aria-label="Escríbenos por WhatsApp">
+  <Icono nombre="whatsapp" size={28} />
+  <span class="ft-whats__badge">1</span>
+</button>
+
+<div class="ft-modal" id="ft-modal" hidden>
+  <div class="ft-modal__caja" role="dialog" aria-modal="true" aria-labelledby="ft-modal-titulo">
+    <div class="ft-modal__cab">
+      <Icono nombre="whatsapp" size={24} />
+      <div>
+        <h3 id="ft-modal-titulo">¡Hablemos por WhatsApp!</h3>
+        <p>Déjanos tus datos para atenderte mejor</p>
+      </div>
+      <button type="button" class="ft-modal__cerrar" id="ft-modal-cerrar" aria-label="Cerrar">
+        <Icono nombre="cerrar" size={18} />
+      </button>
+    </div>
+
+    <form class="ft-modal__cuerpo" id="ft-modal-form">
+      <div class="ft-modal__campo">
+        <label for="ft-modal-nombre">Nombres y Apellidos *</label>
+        <input id="ft-modal-nombre" name="nombre" type="text" required />
+      </div>
+      <div class="ft-modal__campo">
+        <label for="ft-modal-celular">Celular *</label>
+        <input id="ft-modal-celular" name="celular" type="tel" pattern="[0-9]{9}" required />
+      </div>
+      <button type="submit" class="ft-modal__enviar">
+        <Icono nombre="whatsapp" size={18} />
+        Ir a WhatsApp
+      </button>
+      <p class="ft-modal__confianza">Tus datos están seguros con nosotros.</p>
+    </form>
+  </div>
+</div>
+
+<script define:vars={{ tel: marca.tel.replace(/\s/g, '') }}>
+  const boton = document.getElementById('ft-whats-btn');
+  const modal = document.getElementById('ft-modal');
+  const cerrar = document.getElementById('ft-modal-cerrar');
+  const form = document.getElementById('ft-modal-form');
+
+  const abrir = () => {
+    modal?.removeAttribute('hidden');
+    modal?.classList.add('is-abierto');
+  };
+
+  const cerrarModal = () => {
+    modal?.classList.remove('is-abierto');
+    modal?.setAttribute('hidden', '');
+  };
+
+  boton?.addEventListener('click', abrir);
+  cerrar?.addEventListener('click', cerrarModal);
+
+  document.querySelectorAll('[data-abrir-whatsapp]').forEach((el) => {
+    el.addEventListener('click', abrir);
+  });
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) cerrarModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarModal();
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const datos = new FormData(form);
+    const nombre = String(datos.get('nombre') ?? '');
+    const celular = String(datos.get('celular') ?? '');
+    const mensaje = encodeURIComponent(
+      `Hola, soy ${nombre}. Quiero agendar una cita de fisioterapia. Mi celular: ${celular}`,
+    );
+    window.open(`https://wa.me/51${tel}?text=${mensaje}`, '_blank', 'noopener');
+    cerrarModal();
+  });
+</script>
+
+<style>
+  .ft-whats {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 150;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 32px -10px rgba(37, 211, 102, 0.65);
+    transition: transform 0.2s ease;
+  }
+
+  .ft-whats:hover {
+    transform: scale(1.06);
+  }
+
+  .ft-whats__badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ft-ambar);
+    color: var(--ft-marino);
+    font-size: 0.68rem;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    border: 2px solid #fff;
+  }
+</style>

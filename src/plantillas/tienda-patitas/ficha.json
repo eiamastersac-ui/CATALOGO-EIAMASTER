@@ -6,7 +6,7 @@
   "tags": ["mascotas", "perros", "gatos", "accesorios", "ecommerce", "carrito", "ofertas", "nuevo"],
   "paleta": ["#ff6a13", "#221812", "#fff4ea", "#e02020"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "quepatas.com",
   "orden": 69
 }

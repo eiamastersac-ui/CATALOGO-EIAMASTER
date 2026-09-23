@@ -1,0 +1,12 @@
+{
+  "titulo": "tu tienda.com — Fisioterapia (Estilo Recuperación Integral)",
+  "categoria": "fisioterapia-rehabilitacion",
+  "descripcion": "Centro de fisioterapia y rehabilitación con terapia de ondas de choque como tratamiento estrella: hero de tres bloques con formulario de reserva inline, sección de mitos y realidades sobre el dolor crónico, grid de beneficios, bloque de tecnología con badges de certificación, contador de estadísticas, banner de llamado a la acción, preguntas frecuentes en acordeón nativo y botón flotante de WhatsApp con modal de captura de datos. Paleta turquesa y azul marino sobre fondo menta, tipografía redondeada de personalidad. Sin login.",
+  "thumbnail": "/previews/clinica-fisioterapia.jpg",
+  "tags": ["fisioterapia", "rehabilitacion", "salud", "ondas-de-choque", "servicios", "landing", "clinica"],
+  "paleta": ["#0E3A5C", "#14B8A6", "#F5A623", "#E4FBFA"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "insalud.pe",
+  "orden": 65
+}

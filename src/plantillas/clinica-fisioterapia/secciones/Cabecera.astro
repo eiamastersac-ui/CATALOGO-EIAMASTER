@@ -1,0 +1,153 @@
+---
+import { marca, nav } from '../datos/fisioterapia.js';
+---
+
+<header class="ft-hdr" id="cabecera">
+  <div class="ft-wrap ft-hdr__row">
+    <a href="#top" class="ft-logo">
+      <span class="ft-logo__in">In</span><span class="ft-logo__punto">·</span><span class="ft-logo__marca">{marca.sub}</span>
+    </a>
+
+    <nav class="ft-nav" id="ft-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }) => <a href={n.href}>{n.t}</a>)}
+    </nav>
+
+    <div class="ft-hdr__acc">
+      <a href="#top" class="ft-btn ft-btn--turquesa ft-hdr__cta">Agendar cita</a>
+      <button type="button" class="ft-hdr__burger" id="ft-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<span id="top"></span>
+
+<script>
+  const hdr = document.getElementById('cabecera');
+  const burger = document.getElementById('ft-burger');
+  const nav = document.getElementById('ft-nav');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 40);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .ft-hdr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: #fff;
+    border-bottom: 1px solid transparent;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  .ft-hdr.is-scrolled {
+    border-color: var(--ft-linea);
+    box-shadow: 0 8px 30px -24px rgba(14, 58, 92, 0.4);
+  }
+
+  .ft-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 74px;
+  }
+
+  .ft-logo {
+    display: flex;
+    align-items: baseline;
+    flex-shrink: 0;
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: var(--ft-marino);
+  }
+
+  .ft-logo__punto {
+    color: var(--ft-turquesa);
+  }
+
+  .ft-nav {
+    display: flex;
+    gap: 1.9rem;
+    margin-inline: auto;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ft-marino);
+  }
+
+  .ft-nav a:hover {
+    color: var(--ft-turquesa);
+  }
+
+  .ft-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .ft-hdr__cta {
+    padding: 0.65rem 1.3rem;
+    font-size: 0.82rem;
+  }
+
+  .ft-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .ft-hdr__burger span {
+    height: 2px;
+    background: var(--ft-marino);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 860px) {
+    .ft-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--ft-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+    .ft-nav.is-abierto {
+      display: flex;
+    }
+    .ft-nav a {
+      padding-block: 0.65rem;
+      border-top: 1px solid var(--ft-linea);
+    }
+    .ft-hdr__cta {
+      display: none;
+    }
+    .ft-hdr__burger {
+      display: flex;
+    }
+  }
+</style>

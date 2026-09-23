@@ -6,7 +6,7 @@
   "tags": ["dental", "clinica", "salud", "servicios", "landing", "premium", "animaciones", "minimalista"],
   "paleta": ["#15161a", "#f6f4ee", "#b28a46", "#e6e2d8"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "odontologiaperu.com",
   "orden": 62
 }

@@ -1,0 +1,209 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
+.tpl-clinica-doctorlabs {
+  --dl-morado: #8b3a9e;
+  --dl-morado-oscuro: #5c2569;
+  --dl-rosa: #d6528c;
+  --dl-turquesa: #2dd4c8;
+  --dl-tinta: #1e2a3a;
+  --dl-gris: #66707e;
+  --dl-panel: #f8f3fa;
+  --dl-linea: #e9dcee;
+  --dl-blanco: #ffffff;
+
+  --dl-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --dl-display: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --dl-maxw: 1240px;
+  --dl-pill: 999px;
+  --dl-hdr-h: 84px;
+
+  background: var(--dl-blanco);
+  color: var(--dl-tinta);
+  font-family: var(--dl-font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-doctorlabs {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-clinica-doctorlabs *,
+.tpl-clinica-doctorlabs *::before,
+.tpl-clinica-doctorlabs *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-clinica-doctorlabs h1,
+.tpl-clinica-doctorlabs h2,
+.tpl-clinica-doctorlabs h3,
+.tpl-clinica-doctorlabs h4 {
+  font-family: var(--dl-display);
+  line-height: 1.18;
+  color: var(--dl-tinta);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.tpl-clinica-doctorlabs img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-clinica-doctorlabs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-clinica-doctorlabs button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-clinica-doctorlabs ul {
+  list-style: none;
+}
+
+.tpl-clinica-doctorlabs .dl-wrap {
+  max-width: var(--dl-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2rem);
+}
+
+.tpl-clinica-doctorlabs .dl-seccion {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  position: relative;
+}
+
+.tpl-clinica-doctorlabs .dl-seccion--panel {
+  background: var(--dl-panel);
+}
+
+.tpl-clinica-doctorlabs .dl-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dl-morado);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-clinica-doctorlabs .dl-kicker::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dl-turquesa);
+}
+
+.tpl-clinica-doctorlabs .dl-titulo {
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-clinica-doctorlabs .dl-parrafo {
+  color: var(--dl-gris);
+  font-size: 0.98rem;
+  max-width: 46ch;
+}
+
+.tpl-clinica-doctorlabs .dl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: var(--dl-pill);
+  font-weight: 700;
+  font-size: 0.86rem;
+  text-align: center;
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+}
+
+.tpl-clinica-doctorlabs .dl-btn--turquesa {
+  background: var(--dl-turquesa);
+  color: var(--dl-morado-oscuro);
+}
+
+.tpl-clinica-doctorlabs .dl-btn--turquesa:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+.tpl-clinica-doctorlabs .dl-btn--morado {
+  background: var(--dl-morado);
+  color: #fff;
+}
+
+.tpl-clinica-doctorlabs .dl-btn--morado:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+.tpl-clinica-doctorlabs .dl-btn--outline {
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.tpl-clinica-doctorlabs .dl-btn--outline:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.tpl-clinica-doctorlabs .dl-btn--sm {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.78rem;
+}
+
+.tpl-clinica-doctorlabs .dl-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.tpl-clinica-doctorlabs .dl-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-clinica-doctorlabs .dl-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Botón flotante de WhatsApp: creado en SSR, pero por convención del proyecto
+   sus estilos viven globales por si se reutiliza en otras plantillas */
+.tpl-clinica-doctorlabs .dl-whatsapp-flotante {
+  position: fixed;
+  right: clamp(1rem, 4vw, 1.75rem);
+  bottom: clamp(1rem, 4vw, 1.75rem);
+  z-index: 300;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 30px -10px rgba(37, 211, 102, 0.6);
+  transition: transform 0.25s ease;
+}
+
+.tpl-clinica-doctorlabs .dl-whatsapp-flotante:hover {
+  transform: scale(1.08);
+}

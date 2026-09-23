@@ -6,7 +6,7 @@
   "tags": ["gasfitero", "servicios", "hogar", "lima", "24 horas", "emergencias", "minimalista", "landing"],
   "paleta": ["#191512", "#b0603a", "#f5f1e8", "#ece5d7"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "gasfitero.pe",
   "orden": 71
 }

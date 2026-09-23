@@ -1,0 +1,59 @@
+---
+import { mitos } from '../datos/fisioterapia.js';
+---
+
+<section class="ft-seccion ft-wrap ft-mitos">
+  <div class="ft-cab ft-cab--centro ft-reveal">
+    <h2 class="ft-titulo ft-titulo--centro">
+      Lo que <span class="ft-mitos__resaltado">nadie te explica</span> sobre el dolor crónico
+    </h2>
+  </div>
+
+  <div class="ft-mitos__grid">
+    {mitos.map((m: { t: string }, i: number) => (
+      <blockquote class={`ft-mitos__item ft-reveal ft-reveal--${i + 1}`}>
+        <span class="ft-mitos__comilla" aria-hidden="true">“</span>
+        <p>{m.t}</p>
+      </blockquote>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ft-mitos__resaltado {
+    color: var(--ft-turquesa);
+  }
+
+  .ft-mitos__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .ft-mitos__item {
+    background: var(--ft-turquesa-suave);
+    border-radius: 20px;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .ft-mitos__comilla {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--ft-turquesa);
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .ft-mitos__item p {
+    font-weight: 700;
+    color: var(--ft-marino);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 860px) {
+    .ft-mitos__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

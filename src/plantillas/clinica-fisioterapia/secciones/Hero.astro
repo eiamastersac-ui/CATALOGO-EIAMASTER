@@ -1,0 +1,178 @@
+---
+import { hero } from '../datos/fisioterapia.js';
+---
+
+<section class="ft-hero" aria-label="Presentación">
+  <div class="ft-wrap ft-hero__top">
+    <img class="ft-hero__imgIzq" src={hero.imgIzq} alt="Sesión de terapia manual en pierna" width="500" height="620" loading="eager" />
+
+    <div class="ft-hero__texto">
+      <span class="ft-kicker">{hero.kicker}</span>
+      <h1 class="ft-hero__titulo">
+        <span class="ft-hero__tA">{hero.tituloA}</span>
+        <span class="ft-hero__tB">{hero.tituloB}</span>
+      </h1>
+      <p class="ft-sub">{hero.sub}</p>
+    </div>
+
+    <div class="ft-hero__imgDerWrap">
+      <img class="ft-hero__imgDer" src={hero.imgDer} alt="Fisioterapeuta acompañando a paciente" width="480" height="480" />
+    </div>
+  </div>
+
+  <div class="ft-hero__form">
+    <div class="ft-wrap ft-hero__formRow">
+      <h2 class="ft-hero__formTitulo">{hero.form.titulo}</h2>
+      <form class="ft-hero__formCampos" id="ft-form-hero">
+        <input type="text" name="nombre" placeholder="Nombres y Apellidos" required />
+        <input type="tel" name="celular" placeholder="Celular (9 dígitos)" pattern="[0-9]{9}" required />
+        <select name="turno" required>
+          <option value="" disabled selected>Elige el turno</option>
+          {hero.form.turnos.map((t: string) => <option value={t}>{t}</option>)}
+        </select>
+        <button type="submit" class="ft-btn ft-btn--primario">Agendar cita</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('ft-form-hero') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) {
+      const original = btn.textContent;
+      btn.textContent = '¡Solicitud enviada!';
+      setTimeout(() => {
+        btn.textContent = original;
+        form.reset();
+      }, 2200);
+    }
+  });
+</script>
+
+<style>
+  .ft-hero {
+    background: var(--ft-menta);
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .ft-hero__top {
+    display: grid;
+    grid-template-columns: 0.85fr 1.3fr 0.85fr;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    padding-bottom: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .ft-hero__imgIzq {
+    width: 100%;
+    height: clamp(220px, 30vw, 340px);
+    object-fit: cover;
+    border-radius: 24px;
+  }
+
+  .ft-hero__texto {
+    text-align: center;
+  }
+
+  .ft-hero__titulo {
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .ft-hero__tA {
+    color: var(--ft-turquesa);
+    display: block;
+  }
+
+  .ft-hero__tB {
+    color: var(--ft-marino);
+    display: block;
+  }
+
+  .ft-hero__texto .ft-sub {
+    margin-inline: auto;
+  }
+
+  .ft-hero__imgDerWrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ft-hero__imgDer {
+    width: clamp(180px, 22vw, 260px);
+    height: clamp(180px, 22vw, 260px);
+    object-fit: cover;
+    border-radius: 50%;
+    border: 6px solid #fff;
+  }
+
+  .ft-hero__form {
+    background: var(--ft-marino);
+  }
+
+  .ft-hero__formRow {
+    padding-block: clamp(1.75rem, 4vw, 2.25rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .ft-hero__formTitulo {
+    color: #fff;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    max-width: 20ch;
+  }
+
+  .ft-hero__formCampos {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .ft-hero__formCampos input,
+  .ft-hero__formCampos select {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.85rem;
+    min-width: 160px;
+  }
+
+  .ft-hero__formCampos button {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 960px) {
+    .ft-hero__top {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .ft-hero__imgIzq {
+      order: 2;
+    }
+    .ft-hero__imgDerWrap {
+      order: 3;
+    }
+    .ft-hero__formRow {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .ft-hero__formCampos {
+      justify-content: stretch;
+    }
+    .ft-hero__formCampos input,
+    .ft-hero__formCampos select,
+    .ft-hero__formCampos button {
+      flex: 1 1 100%;
+    }
+  }
+</style>

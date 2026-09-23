@@ -1,0 +1,83 @@
+---
+import { faq } from '../datos/fisioterapia.js';
+---
+
+<section class="ft-seccion ft-wrap" id="preguntas">
+  <div class="ft-cab ft-cab--centro ft-reveal">
+    <span class="ft-kicker" style="justify-content:center">Preguntas frecuentes</span>
+    <h2 class="ft-titulo ft-titulo--centro">
+      <span style="color:var(--ft-turquesa)">Resolvemos tus dudas</span> antes de tu primera sesión
+    </h2>
+  </div>
+
+  <div class="ft-faq__grid">
+    {faq.map((f: { p: string; r: string }, i: number) => (
+      <details class={`ft-faq__item ft-reveal ft-reveal--${(i % 4) + 1}`} open={i === 0}>
+        <summary>
+          {f.p}
+          <span class="ft-faq__icono" aria-hidden="true">+</span>
+        </summary>
+        <p>{f.r}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ft-faq__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem;
+  }
+
+  .ft-faq__item {
+    background: var(--ft-menta);
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
+  }
+
+  .ft-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 800;
+    font-size: 0.92rem;
+    color: var(--ft-marino);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ft-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ft-faq__icono {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ft-marino);
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .ft-faq__item[open] .ft-faq__icono {
+    transform: rotate(45deg);
+  }
+
+  .ft-faq__item p {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--ft-gris);
+  }
+
+  @media (max-width: 780px) {
+    .ft-faq__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

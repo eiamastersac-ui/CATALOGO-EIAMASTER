@@ -1,0 +1,17 @@
+---
+import { marca } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+
+const mensaje = encodeURIComponent(`Hola ${marca.nombre}, quisiera consultar disponibilidad de citas.`);
+const numero = marca.tel.replace(/\s+/g, '');
+---
+
+<a
+  class="dl-whatsapp-flotante"
+  href={`https://wa.me/51${numero}?text=${mensaje}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Escribir por WhatsApp"
+>
+  <Icono nombre="whatsapp" size={26} />
+</a>

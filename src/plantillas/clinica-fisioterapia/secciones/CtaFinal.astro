@@ -1,0 +1,62 @@
+---
+import { ctaFinal } from '../datos/fisioterapia.js';
+---
+
+<section class="ft-wrap">
+  <div class="ft-cta ft-reveal">
+    <img src={ctaFinal.img} alt="Sesión de terapia manual" width="1400" height="700" loading="lazy" />
+    <div class="ft-cta__capa">
+      <h2>{ctaFinal.t}</h2>
+      <p>{ctaFinal.d}</p>
+      <button type="button" class="ft-btn ft-btn--primario" data-abrir-whatsapp>Agenda tu cita ahora</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ft-cta {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: clamp(320px, 42vw, 440px);
+    display: flex;
+    align-items: center;
+  }
+
+  .ft-cta img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ft-cta__capa {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(14, 58, 92, 0.92) 0%, rgba(14, 58, 92, 0.78) 55%, rgba(14, 58, 92, 0.15) 100%);
+    width: 100%;
+    height: 100%;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 640px;
+  }
+
+  .ft-cta__capa h2 {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .ft-cta__capa p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.92rem;
+    max-width: 42ch;
+  }
+
+  .ft-cta__capa .ft-btn {
+    align-self: flex-start;
+  }
+</style>

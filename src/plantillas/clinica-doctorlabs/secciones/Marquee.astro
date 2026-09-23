@@ -1,0 +1,92 @@
+---
+import { marquee } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+
+const dobleFila = [...marquee, ...marquee, ...marquee];
+---
+
+<section class="dl-marquee" aria-hidden="true">
+  <div class="dl-marquee__fila dl-marquee__fila--morada">
+    <div class="dl-marquee__track dl-marquee__track--izq">
+      {dobleFila.map((s: string) => (
+        <span class="dl-marquee__item">
+          <Icono nombre="asterisco" size={16} />
+          {s}
+        </span>
+      ))}
+    </div>
+  </div>
+  <div class="dl-marquee__fila dl-marquee__fila--turquesa">
+    <div class="dl-marquee__track dl-marquee__track--der">
+      {dobleFila.map((s: string) => (
+        <span class="dl-marquee__item">
+          <Icono nombre="asterisco" size={16} />
+          {s}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .dl-marquee {
+    padding-block: 0.1rem;
+    overflow: hidden;
+  }
+
+  .dl-marquee__fila {
+    overflow: hidden;
+    padding-block: 0.85rem;
+  }
+
+  .dl-marquee__fila--morada {
+    background: var(--dl-morado);
+    color: #fff;
+  }
+
+  .dl-marquee__fila--turquesa {
+    background: var(--dl-turquesa);
+    color: var(--dl-morado-oscuro);
+  }
+
+  .dl-marquee__track {
+    display: flex;
+    width: max-content;
+    gap: 2.5rem;
+  }
+
+  .dl-marquee__track--izq {
+    animation: dl-marquee-izq 32s linear infinite;
+  }
+
+  .dl-marquee__track--der {
+    animation: dl-marquee-der 32s linear infinite;
+  }
+
+  @keyframes dl-marquee-izq {
+    from { transform: translateX(0); }
+    to { transform: translateX(-33.3333%); }
+  }
+
+  @keyframes dl-marquee-der {
+    from { transform: translateX(-33.3333%); }
+    to { transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dl-marquee__track--izq,
+    .dl-marquee__track--der {
+      animation: none;
+    }
+  }
+
+  .dl-marquee__item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: var(--dl-display);
+    white-space: nowrap;
+  }
+</style>

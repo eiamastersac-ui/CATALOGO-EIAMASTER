@@ -1,0 +1,106 @@
+---
+import { marca, footerCols } from '../datos/fisioterapia.js';
+---
+
+<footer class="ft-pie">
+  <div class="ft-wrap ft-pie__grid">
+    <div>
+      <span class="ft-logo ft-pie__logo">
+        <span class="ft-logo__in">In</span><span class="ft-logo__punto">·</span><span class="ft-logo__marca">{marca.sub}</span>
+      </span>
+      <p class="ft-pie__trust">{footerCols.trust}</p>
+    </div>
+
+    <div>
+      <h3>Conversemos sobre tu caso</h3>
+      <p>{marca.direccion}</p>
+      <p>{marca.tel}</p>
+      <p>{marca.correo}</p>
+    </div>
+
+    <div>
+      <h3>Síguenos</h3>
+      <ul class="ft-pie__redes">
+        {footerCols.redes.map((r: string) => <li><a href="#top">{r}</a></li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="ft-wrap ft-pie__barra">
+    <span>© {new Date().getFullYear()} tu tienda.com — Fisioterapia. Todos los derechos reservados.</span>
+    <span>Sin registro ni contraseñas requeridas para agendar.</span>
+  </div>
+</footer>
+
+<style>
+  .ft-pie {
+    background: var(--ft-menta);
+    padding-top: clamp(3rem, 6vw, 4rem);
+  }
+
+  .ft-pie__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .ft-pie__logo {
+    display: inline-flex;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--ft-marino);
+    margin-bottom: 0.75rem;
+  }
+
+  .ft-pie__trust {
+    color: var(--ft-gris);
+    font-size: 0.85rem;
+    max-width: 34ch;
+  }
+
+  .ft-pie__grid h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ft-pie__grid p {
+    color: var(--ft-gris);
+    font-size: 0.85rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .ft-pie__redes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ft-pie__redes a {
+    color: var(--ft-gris);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .ft-pie__redes a:hover {
+    color: var(--ft-turquesa);
+  }
+
+  .ft-pie__barra {
+    border-top: 1px solid var(--ft-linea);
+    padding-block: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--ft-gris);
+  }
+
+  @media (max-width: 720px) {
+    .ft-pie__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

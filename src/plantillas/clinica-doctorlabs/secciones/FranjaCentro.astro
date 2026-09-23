@@ -1,0 +1,77 @@
+---
+import { franjaCentro } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="dl-seccion dl-franja" id="nosotros">
+  <div class="dl-wrap dl-franja__grid">
+    <div class="dl-franja__texto dl-reveal">
+      <span class="dl-kicker">{franjaCentro.kicker}</span>
+      <h2 class="dl-titulo">{franjaCentro.titulo}</h2>
+      <p class="dl-parrafo">{franjaCentro.parrafo}</p>
+      <ul class="dl-franja__bullets">
+        {franjaCentro.bullets.map((b: string) => (
+          <li>
+            <Icono nombre="check" size={16} />
+            {b}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="dl-franja__foto dl-reveal">
+      <img src={franjaCentro.img} alt="Equipo médico en el laboratorio clínico" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .dl-franja__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .dl-franja__bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 1.6rem;
+  }
+
+  .dl-franja__bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.92rem;
+    color: var(--dl-tinta);
+  }
+
+  .dl-franja__bullets :global(svg) {
+    color: var(--dl-turquesa);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .dl-franja__foto {
+    border-radius: 22px;
+    overflow: hidden;
+    aspect-ratio: 9 / 8;
+  }
+
+  .dl-franja__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 820px) {
+    .dl-franja__grid {
+      grid-template-columns: 1fr;
+    }
+    .dl-franja__foto {
+      order: -1;
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

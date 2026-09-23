@@ -6,7 +6,7 @@
   "tags": ["abogados", "transito", "multas", "legal", "servicios", "conversion"],
   "paleta": ["#14171f", "#f4b400", "#fdfbf6", "#5c6272"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "trafficticketpro.com",
   "orden": 73
 }

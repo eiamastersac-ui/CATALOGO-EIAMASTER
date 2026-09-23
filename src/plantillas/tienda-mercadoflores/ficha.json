@@ -6,7 +6,7 @@
   "tags": ["floreria", "regalos", "ecommerce", "delivery", "editorial", "whatsapp"],
   "paleta": ["#241f1b", "#faf5ec", "#efe2cd", "#7c2635"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "mercadoflores.pe",
   "orden": 72
 }

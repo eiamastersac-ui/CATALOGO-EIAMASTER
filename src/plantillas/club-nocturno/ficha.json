@@ -6,7 +6,7 @@
   "tags": ["discoteca", "nightclub", "eventos", "djs", "vip", "reservas", "minimalista", "nuevo"],
   "paleta": ["#0a0a0b", "#f5f3f0", "#29292b", "#131314"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "tomorrowland.com",
   "orden": 70
 }

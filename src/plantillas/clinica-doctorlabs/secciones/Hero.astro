@@ -1,0 +1,260 @@
+---
+import { hero } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="dl-hero" id="hero">
+  <div class="dl-hero__patron" aria-hidden="true"></div>
+
+  <div class="dl-wrap dl-hero__grid">
+    <div class="dl-hero__texto">
+      <span class="dl-hero__badge">{hero.badge}</span>
+      <h1>{hero.titulo}</h1>
+      <p class="dl-hero__sub">{hero.sub}</p>
+      <div class="dl-hero__acciones">
+        <a href="#contacto" class="dl-btn dl-btn--turquesa">{hero.cta}</a>
+        <div class="dl-hero__confianza">
+          <Icono nombre="trofeo" size={22} />
+          <div>
+            <b>{hero.confianza.dato}</b>
+            <span>{hero.confianza.sub}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dl-hero__foto-box">
+      <img class="dl-hero__foto" src={hero.img} alt="Doctora del staff médico" loading="eager" />
+
+      <div class="dl-hero__badge-flotante dl-reveal">
+        <Icono nombre="check" size={15} />
+        {hero.badgeSatisfaccion}
+      </div>
+
+      <div class="dl-hero__card dl-reveal">
+        <img src={hero.staff.img} alt={hero.staff.nombre} loading="lazy" />
+        <div>
+          <b>{hero.staff.nombre}</b>
+          <span>{hero.staff.sub}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#nosotros" class="dl-hero__scroll" aria-label="Bajar a la siguiente sección">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </a>
+</section>
+
+<style>
+  .dl-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 620px;
+    overflow: hidden;
+    background: radial-gradient(120% 100% at 85% 10%, var(--dl-morado) 0%, var(--dl-morado-oscuro) 65%);
+    display: flex;
+    align-items: center;
+  }
+
+  .dl-hero__patron {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image: repeating-radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.5) 0, transparent 2px, transparent 42px),
+      repeating-radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.4) 0, transparent 2px, transparent 56px);
+    mix-blend-mode: overlay;
+  }
+
+  .dl-hero__grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding-top: var(--dl-hdr-h);
+    width: 100%;
+  }
+
+  .dl-hero__texto {
+    color: #fff;
+    max-width: 34rem;
+  }
+
+  .dl-hero__badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--dl-pill);
+    margin-bottom: 1.1rem;
+  }
+
+  .dl-hero__texto h1 {
+    color: #fff;
+    font-size: clamp(2.1rem, 4.6vw, 3.3rem);
+    margin-bottom: 1rem;
+  }
+
+  .dl-hero__sub {
+    font-size: clamp(0.94rem, 1.5vw, 1.05rem);
+    color: rgba(255, 255, 255, 0.86);
+    max-width: 40ch;
+    margin-bottom: 1.9rem;
+  }
+
+  .dl-hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.4rem;
+  }
+
+  .dl-hero__confianza {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: #fff;
+  }
+
+  .dl-hero__confianza b {
+    display: block;
+    font-size: 0.85rem;
+    font-family: var(--dl-display);
+  }
+
+  .dl-hero__confianza span {
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .dl-hero__foto-box {
+    position: relative;
+    height: min(64svh, 640px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .dl-hero__foto {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: cover;
+    object-position: top center;
+    -webkit-mask-image: radial-gradient(ellipse 62% 78% at 50% 38%, #000 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse 62% 78% at 50% 38%, #000 55%, transparent 100%);
+  }
+
+  .dl-hero__badge-flotante {
+    position: absolute;
+    top: 14%;
+    left: -0.5rem;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #fff;
+    color: var(--dl-morado-oscuro);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--dl-pill);
+    box-shadow: 0 16px 35px -16px rgba(0, 0, 0, 0.45);
+  }
+
+  .dl-hero__badge-flotante :global(svg) {
+    color: var(--dl-turquesa);
+  }
+
+  .dl-hero__card {
+    position: absolute;
+    right: -0.5rem;
+    bottom: 8%;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 0.75rem 1.1rem 0.75rem 0.75rem;
+    box-shadow: 0 20px 45px -20px rgba(0, 0, 0, 0.45);
+  }
+
+  .dl-hero__card img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .dl-hero__card div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .dl-hero__card b {
+    font-size: 0.82rem;
+    color: var(--dl-tinta);
+  }
+
+  .dl-hero__card span {
+    font-size: 0.7rem;
+    color: var(--dl-gris);
+  }
+
+  .dl-hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    z-index: 5;
+    color: rgba(255, 255, 255, 0.75);
+    animation: dl-rebote 2.2s ease-in-out infinite;
+  }
+
+  @keyframes dl-rebote {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 6px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dl-hero__scroll {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .dl-hero__grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding-bottom: 2rem;
+    }
+    .dl-hero__texto {
+      max-width: none;
+      margin-inline: auto;
+    }
+    .dl-hero__acciones {
+      justify-content: center;
+    }
+    .dl-hero__foto-box {
+      height: 40svh;
+      min-height: 280px;
+    }
+    .dl-hero__card,
+    .dl-hero__badge-flotante {
+      display: none;
+    }
+    .dl-hero__scroll {
+      display: none;
+    }
+  }
+</style>

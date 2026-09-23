@@ -1,0 +1,97 @@
+---
+import { tecnologia } from '../datos/fisioterapia.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="ft-seccion ft-wrap ft-tec" id="tecnologia">
+  <div class="ft-tec__texto ft-reveal">
+    <span class="ft-kicker">Tecnología</span>
+    <h2 class="ft-titulo">{tecnologia.t}</h2>
+    <p class="ft-sub">{tecnologia.d}</p>
+  </div>
+
+  <div class="ft-tec__figura ft-reveal ft-reveal--2">
+    <div class="ft-tec__blob" aria-hidden="true"></div>
+    <img src={tecnologia.img} alt="Evaluación clínica de la zona a tratar" width="900" height="1000" />
+
+    <div class="ft-tec__badges">
+      {tecnologia.badges.map((b: string) => (
+        <span class="ft-tec__badge">
+          <Icono nombre="escudo" size={16} />
+          {b}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ft-tec {
+    display: grid;
+    grid-template-columns: 0.75fr 1fr;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .ft-tec__figura {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ft-tec__blob {
+    position: absolute;
+    inset: 6% 8%;
+    background: var(--ft-turquesa-suave);
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  .ft-tec__figura img {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 380px);
+    aspect-ratio: 9 / 10;
+    object-fit: cover;
+    border-radius: 24px;
+  }
+
+  .ft-tec__badges {
+    position: absolute;
+    z-index: 2;
+    bottom: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: min(100%, 300px);
+  }
+
+  .ft-tec__badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border-radius: var(--ft-pill);
+    padding: 0.6rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ft-marino);
+    box-shadow: 0 20px 40px -22px rgba(14, 58, 92, 0.35);
+  }
+
+  .ft-tec__badge :global(svg) {
+    color: var(--ft-turquesa);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 860px) {
+    .ft-tec {
+      grid-template-columns: 1fr;
+    }
+    .ft-tec__figura {
+      margin-top: 2.5rem;
+    }
+  }
+</style>

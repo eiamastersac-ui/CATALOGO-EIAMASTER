@@ -1,0 +1,116 @@
+---
+import { infoPractica, marca } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Sede {
+  nombre: string;
+  direccion: string;
+}
+const sedes = infoPractica.sedes as Sede[];
+---
+
+<section class="dl-seccion dl-seccion--panel" id="rayosx">
+  <div class="dl-wrap">
+    <div class="dl-info__grid">
+      <div class="dl-info__col dl-reveal">
+        <span class="dl-info__icono"><Icono nombre="reloj" size={22} /></span>
+        <h3>{infoPractica.horario.titulo}</h3>
+        <p>{infoPractica.horario.dias}</p>
+        <p><b>{infoPractica.horario.horas}</b></p>
+        <p class="dl-info__extra">{infoPractica.horario.extra}</p>
+      </div>
+
+      <div class="dl-info__col dl-reveal dl-reveal--d1">
+        <span class="dl-info__icono"><Icono nombre="ubicacion" size={22} /></span>
+        <h3>Sedes Disponibles</h3>
+        {sedes.map((s: Sede) => (
+          <p>
+            <b>{s.nombre}:</b> {s.direccion}
+          </p>
+        ))}
+      </div>
+
+      <div class="dl-info__col dl-info__col--cta dl-reveal dl-reveal--d2" id="contacto">
+        <span class="dl-info__icono"><Icono nombre="whatsapp" size={22} /></span>
+        <h3>Reserve una Cita</h3>
+        <p>Escríbenos por WhatsApp o llámanos directamente y coordinamos tu cita el mismo día.</p>
+        <p class="dl-info__tel"><b>{marca.tel}</b></p>
+        <a href="#top" class="dl-btn dl-btn--morado">Reservar Cita</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dl-info__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .dl-info__col {
+    background: #fff;
+    border: 1px solid var(--dl-linea);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+  }
+
+  .dl-info__col--cta {
+    background: var(--dl-morado);
+    border-color: var(--dl-morado);
+    color: #fff;
+  }
+
+  .dl-info__icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--dl-panel);
+    color: var(--dl-morado);
+    margin-bottom: 1rem;
+  }
+
+  .dl-info__col--cta .dl-info__icono {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+  }
+
+  .dl-info__col h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .dl-info__col--cta h3 {
+    color: #fff;
+  }
+
+  .dl-info__col p {
+    font-size: 0.86rem;
+    color: var(--dl-gris);
+    margin-bottom: 0.35rem;
+    line-height: 1.5;
+  }
+
+  .dl-info__col--cta p {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .dl-info__extra {
+    margin-top: 0.4rem;
+  }
+
+  .dl-info__tel {
+    font-size: 1rem !important;
+    color: #fff !important;
+    margin-bottom: 1.1rem !important;
+  }
+
+  @media (max-width: 820px) {
+    .dl-info__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

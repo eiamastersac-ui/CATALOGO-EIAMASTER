@@ -1,0 +1,63 @@
+---
+import { beneficios } from '../datos/fisioterapia.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="ft-seccion ft-wrap" id="beneficios">
+  <div class="ft-cab ft-cab--centro ft-reveal">
+    <span class="ft-kicker" style="justify-content:center">Beneficios</span>
+    <h2 class="ft-titulo ft-titulo--centro">¿Por qué tratarte con ondas de choque?</h2>
+    <p class="ft-sub ft-sub--centro">Tecnología de vanguardia usada en medicina deportiva y rehabilitación, con protocolo médico supervisado en cada sesión.</p>
+  </div>
+
+  <div class="ft-beneficios__grid">
+    {beneficios.map((b: { icono: string; t: string; d: string }, i: number) => (
+      <div class={`ft-tarjeta ft-beneficios__item ft-reveal ft-reveal--${(i % 4) + 1}`}>
+        <span class="ft-beneficios__icono">
+          <Icono nombre={b.icono} size={26} />
+        </span>
+        <h3>{b.t}</h3>
+        <p>{b.d}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ft-beneficios__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .ft-beneficios__item {
+    padding: 1.75rem;
+  }
+
+  .ft-beneficios__icono {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--ft-turquesa), var(--ft-marino-suave));
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .ft-beneficios__item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .ft-beneficios__item p {
+    color: var(--ft-gris);
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 640px) {
+    .ft-beneficios__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

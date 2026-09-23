@@ -1,0 +1,301 @@
+---
+import { marca, nav, dropdownServicios } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<header class="dl-hdr" id="dl-cabecera">
+  <div class="dl-wrap dl-hdr__row">
+    <a href="#top" class="dl-logo">
+      <span class="dl-logo__marca">{marca.nombre}</span>
+      <span class="dl-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="dl-nav" id="dl-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }) =>
+        n.t === 'Servicios' ? (
+          <div class="dl-nav__item dl-nav__item--drop" id="dl-drop">
+            <button type="button" class="dl-nav__drop-btn" id="dl-drop-btn" aria-expanded="false">
+              {n.t}
+              <Icono nombre="chevron" size={13} />
+            </button>
+            <div class="dl-nav__panel" id="dl-drop-panel">
+              {dropdownServicios.map((s: { t: string; href: string; icono: string }) => (
+                <a href={s.href} class="dl-nav__panel-item">
+                  <Icono nombre={s.icono} size={17} />
+                  {s.t}
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a href={n.href}>{n.t}</a>
+        ),
+      )}
+    </nav>
+
+    <div class="dl-hdr__acc">
+      <a href={`tel:${marca.tel.replace(/\s+/g, '')}`} class="dl-hdr__tel">
+        <Icono nombre="telefono" size={16} />
+        {marca.tel}
+      </a>
+      <button type="button" class="dl-hdr__icono" aria-label="Buscar">
+        <Icono nombre="lupa" size={18} />
+      </button>
+      <a href="#contacto" class="dl-btn dl-btn--turquesa dl-btn--sm">
+        <Icono nombre="whatsapp" size={15} />
+        Whatsapp
+      </a>
+      <button type="button" class="dl-hdr__burger" id="dl-burger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<span id="top"></span>
+
+<script>
+  const hdr = document.getElementById('dl-cabecera');
+  const burger = document.getElementById('dl-burger');
+  const nav = document.getElementById('dl-nav');
+  const dropBtn = document.getElementById('dl-drop-btn');
+  const drop = document.getElementById('dl-drop');
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      hdr?.classList.toggle('is-scrolled', window.scrollY > 60);
+    },
+    { passive: true },
+  );
+
+  burger?.addEventListener('click', () => {
+    const abierto = nav?.classList.toggle('is-abierto');
+    burger.setAttribute('aria-expanded', String(!!abierto));
+    hdr?.classList.toggle('is-menu-abierto', !!abierto);
+  });
+
+  dropBtn?.addEventListener('click', () => {
+    const abierto = drop?.classList.toggle('is-abierto');
+    dropBtn.setAttribute('aria-expanded', String(!!abierto));
+  });
+
+  document.addEventListener('click', (ev: MouseEvent) => {
+    if (drop && !drop.contains(ev.target as Node)) {
+      drop.classList.remove('is-abierto');
+      dropBtn?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.addEventListener('keydown', (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      drop?.classList.remove('is-abierto');
+      dropBtn?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-abierto');
+      hdr?.classList.remove('is-menu-abierto');
+      burger?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>
+
+<style>
+  .dl-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: var(--dl-hdr-h);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(30, 10, 40, 0.4), rgba(30, 10, 40, 0));
+    transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  }
+
+  .dl-hdr.is-scrolled,
+  .dl-hdr.is-menu-abierto {
+    background: #fff;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--dl-tinta);
+    box-shadow: 0 8px 30px -22px rgba(21, 22, 26, 0.4);
+  }
+
+  .dl-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .dl-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    color: inherit;
+  }
+
+  .dl-logo__marca {
+    font-family: var(--dl-display);
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+
+  .dl-logo__sub {
+    font-size: 0.7rem;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  .dl-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.9rem;
+    margin-inline: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .dl-nav > a:hover {
+    opacity: 0.75;
+  }
+
+  .dl-nav__item--drop {
+    position: relative;
+  }
+
+  .dl-nav__drop-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font: inherit;
+    color: inherit;
+  }
+
+  .dl-nav__drop-btn:hover {
+    opacity: 0.75;
+  }
+
+  .dl-nav__panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 26px 50px -20px rgba(30, 10, 40, 0.35);
+    padding: 0.5rem;
+    min-width: 220px;
+    color: var(--dl-tinta);
+  }
+
+  .dl-nav__item--drop.is-abierto .dl-nav__panel {
+    display: block;
+  }
+
+  .dl-nav__panel-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dl-tinta);
+  }
+
+  .dl-nav__panel-item:hover {
+    background: var(--dl-panel);
+    color: var(--dl-morado);
+  }
+
+  .dl-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .dl-hdr__tel {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--dl-turquesa);
+  }
+
+  .dl-hdr.is-scrolled .dl-hdr__tel {
+    color: var(--dl-morado);
+  }
+
+  .dl-hdr__icono {
+    display: flex;
+    color: inherit;
+  }
+
+  .dl-hdr__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 24px;
+  }
+
+  .dl-hdr__burger span {
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .dl-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: #fff;
+      color: var(--dl-tinta);
+      border-bottom: 1px solid var(--dl-linea);
+      padding: 0.5rem clamp(1.1rem, 4vw, 2rem) 1rem;
+    }
+    .dl-nav.is-abierto {
+      display: flex;
+    }
+    .dl-nav a,
+    .dl-nav__drop-btn {
+      width: 100%;
+      padding-block: 0.65rem;
+      border-top: 1px solid var(--dl-linea);
+      justify-content: space-between;
+    }
+    .dl-nav__panel {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      display: none;
+      width: 100%;
+      margin-bottom: 0.4rem;
+    }
+    .dl-nav__item--drop.is-abierto .dl-nav__panel {
+      display: block;
+    }
+    .dl-hdr__tel,
+    .dl-hdr__icono {
+      display: none;
+    }
+    .dl-hdr__burger {
+      display: flex;
+    }
+  }
+</style>

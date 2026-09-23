@@ -1,0 +1,171 @@
+---
+import { testimonios, testimoniosImg } from '../datos/doctorlabs.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Testimonio {
+  nombre: string;
+  cargo: string;
+  texto: string;
+}
+const lista = testimonios as Testimonio[];
+---
+
+<section class="dl-testimonios" id="ecografias">
+  <img class="dl-testimonios__fondo" src={testimoniosImg} alt="Personal médico atendiendo a un paciente" loading="lazy" />
+  <span class="dl-testimonios__scrim" aria-hidden="true"></span>
+
+  <div class="dl-wrap dl-testimonios__inner">
+    <div class="dl-testimonios__track" id="dl-testi-track">
+      {lista.map((t: Testimonio) => (
+        <article class="dl-testimonios__card">
+          <Icono nombre="comillas" size={26} />
+          <div class="dl-testimonios__estrellas" aria-hidden="true">
+            <Icono nombre="estrella" size={14} /><Icono nombre="estrella" size={14} /><Icono nombre="estrella" size={14} /><Icono nombre="estrella" size={14} /><Icono nombre="estrella" size={14} />
+          </div>
+          <p>{t.texto}</p>
+          <div class="dl-testimonios__autor">
+            <b>{t.nombre}</b>
+            <span>{t.cargo}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="dl-testimonios__dots" id="dl-testi-dots">
+      {lista.map((_: Testimonio, i: number) => (
+        <button type="button" class="dl-testimonios__dot" data-idx={i} aria-label={`Ver testimonio ${i + 1}`}></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('dl-testi-track');
+  const dots = document.querySelectorAll<HTMLButtonElement>('#dl-testi-dots .dl-testimonios__dot');
+  let idx = 0;
+
+  function pasoPx(): number {
+    if (!track) return 0;
+    const primero = track.children[0] as HTMLElement | undefined;
+    const segundo = track.children[1] as HTMLElement | undefined;
+    if (!primero) return 0;
+    return segundo ? segundo.offsetLeft - primero.offsetLeft : primero.offsetWidth;
+  }
+
+  function offsetMaximoPx(): number {
+    if (!track) return 0;
+    const contenedor = track.parentElement as HTMLElement | null;
+    if (!contenedor) return 0;
+    return Math.max(0, track.scrollWidth - contenedor.clientWidth);
+  }
+
+  function ir(n: number) {
+    if (!track) return;
+    const total = track.children.length;
+    idx = (n + total) % total;
+    const offset = Math.min(idx * pasoPx(), offsetMaximoPx());
+    track.style.transform = `translateX(-${offset}px)`;
+    dots.forEach((d, i) => d.classList.toggle('is-activo', i === idx));
+  }
+
+  dots.forEach((d) => d.addEventListener('click', () => ir(Number(d.dataset.idx))));
+  window.addEventListener('resize', () => ir(idx));
+  ir(0);
+
+  let timer = window.setInterval(() => ir(idx + 1), 6500);
+  const box = document.querySelector('.dl-testimonios');
+  box?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  box?.addEventListener('mouseleave', () => (timer = window.setInterval(() => ir(idx + 1), 6500)));
+</script>
+
+<style>
+  .dl-testimonios {
+    position: relative;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .dl-testimonios__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .dl-testimonios__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(30, 10, 40, 0.78) 0%, rgba(30, 10, 40, 0.35) 55%, rgba(30, 10, 40, 0.1) 100%);
+  }
+
+  .dl-testimonios__inner {
+    position: relative;
+    z-index: 2;
+    padding-block: clamp(3.5rem, 8vw, 5rem);
+  }
+
+  .dl-testimonios__track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .dl-testimonios__card {
+    flex: 0 0 100%;
+    max-width: 30rem;
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 20px;
+    padding: clamp(1.6rem, 3vw, 2.4rem);
+    box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.5);
+  }
+
+  .dl-testimonios__card :global(svg:first-child) {
+    color: var(--dl-turquesa);
+  }
+
+  .dl-testimonios__estrellas {
+    display: flex;
+    gap: 0.2rem;
+    color: #f5b942;
+    margin: 0.9rem 0 1rem;
+  }
+
+  .dl-testimonios__card p {
+    font-size: 1rem;
+    color: var(--dl-tinta);
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+  }
+
+  .dl-testimonios__autor b {
+    display: block;
+    font-family: var(--dl-display);
+    font-size: 0.9rem;
+  }
+
+  .dl-testimonios__autor span {
+    font-size: 0.76rem;
+    color: var(--dl-gris);
+  }
+
+  .dl-testimonios__dots {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .dl-testimonios__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+
+  .dl-testimonios__dot.is-activo {
+    background: var(--dl-turquesa);
+    transform: scale(1.25);
+  }
+</style>

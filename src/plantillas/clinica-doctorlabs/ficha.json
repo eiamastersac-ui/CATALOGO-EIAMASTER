@@ -1,0 +1,12 @@
+{
+  "titulo": "tu tienda.com — Clínica (Estilo Doctor Labs)",
+  "categoria": "clinica-multiespecialidad",
+  "descripcion": "Clínica médica multiespecialidad (cardiología, laboratorio clínico, ecografías y rayos X) con identidad morado + turquesa: cabecera fija transparente que se vuelve sólida al hacer scroll con dropdown de servicios, hero a pantalla completa con foto de doctora difuminada sobre fondo sólido y tarjetas flotantes de confianza, franja de presentación del centro, marquee infinito de dos filas con los servicios, grilla 2x2 de especialidades sobre fondo morado, grilla de 4 banners de servicios especializados, catálogo de exámenes con overlay degradado morado-rosa, testimonios en carrusel sobre foto a sangre completa, bloque de horario/sedes/reserva y footer con wordmark gigante degradado. Botón flotante de WhatsApp. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/clinica-doctorlabs.jpg",
+  "tags": ["clinica", "salud", "multiespecialidad", "cardiologia", "laboratorio", "ecografia", "rayos x", "servicios"],
+  "paleta": ["#8b3a9e", "#2dd4c8", "#1e2a3a", "#d6528c"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "doctorlabs.com.pe",
+  "orden": 74
+}
