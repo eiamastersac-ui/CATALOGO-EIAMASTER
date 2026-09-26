@@ -1,0 +1,104 @@
+---
+import { pie, marca } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Col {
+  icono: string;
+  t: string;
+  l: string[];
+  href?: string;
+}
+const anio = new Date().getFullYear();
+---
+
+<footer class="sg-pie">
+  <div class="sg-wrap">
+    <ul class="sg-pie__cols">
+      {pie.map((c: Col) => (
+        <li>
+          <span class="sg-pie__ico"><Icono nombre={c.icono} size={30} /></span>
+          <h3>{c.t}</h3>
+          {c.l.map((linea: string) =>
+            c.href ? <a href={c.href} class="sg-pie__link">{linea}</a> : <p>{linea}</p>,
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="sg-pie__base">
+    <div class="sg-wrap sg-pie__base-row">
+      <span>Copyright © {anio} {marca.nombre} {marca.sub} Generales</span>
+      <a href="#top" class="sg-pie__arriba">Volver arriba ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .sg-pie {
+    background: var(--sg-tinta);
+    color: var(--sg-blanco);
+  }
+
+  .sg-pie__cols {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding-block: clamp(3rem, 6vw, 4.5rem);
+    text-align: center;
+  }
+
+  .sg-pie__ico {
+    display: inline-grid;
+    color: var(--sg-azul);
+    margin-bottom: 0.9rem;
+  }
+
+  .sg-pie__cols h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+  }
+
+  .sg-pie__cols p,
+  .sg-pie__link {
+    display: block;
+    font-size: 0.84rem;
+    color: var(--sg-humo-claro);
+  }
+
+  .sg-pie__link {
+    color: var(--sg-azul);
+    font-weight: 600;
+  }
+
+  .sg-pie__link:hover {
+    color: var(--sg-blanco);
+  }
+
+  .sg-pie__base {
+    border-top: 1px solid var(--sg-linea-osc);
+    padding-block: 1.4rem 6rem;
+    font-size: 0.78rem;
+    color: var(--sg-humo-claro);
+  }
+
+  .sg-pie__base-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .sg-pie__arriba:hover {
+    color: var(--sg-blanco);
+  }
+
+  @media (max-width: 720px) {
+    .sg-pie__cols {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,549 @@
+---
+import { marca, nav } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface SubItem { t: string; href: string }
+interface NavItem { t: string; href: string; activo?: boolean; sub?: SubItem[] }
+const items = nav as NavItem[];
+---
+
+<header class="co-hdr" id="co-cabecera">
+  <!-- barra superior oscura: telefono, correo, horario y redes -->
+  <div class="co-top">
+    <div class="co-wrap co-top__row">
+      <div class="co-top__info">
+        <a href={`tel:${marca.telCrudo}`}><Icono nombre="telefono" size={12} /> {marca.tel}</a>
+        <a href={`mailto:${marca.correo}`}><Icono nombre="sobre" size={12} /> {marca.correo}</a>
+        <span class="co-top__horario"><Icono nombre="reloj" size={12} /> {marca.horario}</span>
+      </div>
+      <div class="co-top__redes">
+        <a href="#top" aria-label="Facebook"><Icono nombre="facebook" size={14} /></a>
+        <a href="#top" aria-label="X"><Icono nombre="x" size={12} grosor={2} /></a>
+        <a href="#top" aria-label="RSS"><Icono nombre="rss" size={13} /></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="co-bar">
+    <div class="co-wrap co-bar__row">
+      <a href="#top" class="co-logo" aria-label={`${marca.nombre} ${marca.sub} — inicio`}>
+        <span class="co-logo__mark" aria-hidden="true">
+          <Icono nombre="llave" size={20} grosor={2} />
+        </span>
+        <span class="co-logo__txt">
+          <b>{marca.nombre}</b>
+          <span>{marca.sub}</span>
+        </span>
+      </a>
+
+      <nav class="co-nav" id="co-nav" aria-label="Navegación principal">
+        <ul class="co-nav__lista">
+          {items.map((n: NavItem) => (
+            <li class={`co-nav__item${n.sub ? ' co-nav__item--sub' : ''}`}>
+              <a href={n.href} class={n.activo ? 'is-activo' : ''}>
+                {n.t}
+                {n.sub && <Icono nombre="abajo" size={13} grosor={2} />}
+              </a>
+              {n.sub && (
+                <>
+                  <button type="button" class="co-nav__toggle" aria-label={`Ver ${n.t}`} aria-expanded="false">
+                    <Icono nombre="abajo" size={16} grosor={2} />
+                  </button>
+                  <ul class="co-nav__drop">
+                    {n.sub.map((s: SubItem) => (
+                      <li><a href={s.href}>{s.t}</a></li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="co-bar__acc">
+        <button type="button" class="co-bar__icono" id="co-abrir-buscar" aria-label="Buscar servicio" aria-expanded="false">
+          <Icono nombre="buscar" size={19} grosor={2} />
+        </button>
+        <a href={`tel:${marca.telCrudo}`} class="co-btn co-btn--naranja co-bar__cta">
+          <Icono nombre="telefono" size={15} grosor={2} />
+          {marca.tel}
+        </a>
+        <button type="button" class="co-bar__icono co-bar__burger" id="co-burger" aria-label="Abrir menú" aria-expanded="false">
+          <Icono nombre="menu" size={24} grosor={2} />
+        </button>
+      </div>
+    </div>
+
+    <!-- buscador demo: se despliega bajo la barra y filtra la grilla de servicios -->
+    <form class="co-buscar" id="co-buscar" role="search" hidden>
+      <div class="co-wrap co-buscar__row">
+        <Icono nombre="buscar" size={18} grosor={2} />
+        <input type="search" id="co-buscar-input" placeholder="Buscar servicio: apertura, bombín, antibumping…" aria-label="Buscar servicio" autocomplete="off" />
+        <button type="submit" class="co-btn co-btn--oscuro">Buscar</button>
+        <button type="button" class="co-bar__icono" id="co-cerrar-buscar" aria-label="Cerrar buscador">
+          <Icono nombre="cerrar" size={18} grosor={2} />
+        </button>
+      </div>
+    </form>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('co-cabecera');
+  const burger = document.getElementById('co-burger');
+  const nav = document.getElementById('co-nav');
+  const form = document.getElementById('co-buscar') as HTMLFormElement | null;
+  const input = document.getElementById('co-buscar-input') as HTMLInputElement | null;
+  const abrirBuscar = document.getElementById('co-abrir-buscar');
+
+  const alScroll = () => hdr?.classList.toggle('is-solido', window.scrollY > 60);
+  window.addEventListener('scroll', alScroll, { passive: true });
+  alScroll();
+
+  /* --- menu movil --- */
+  const cerrarMenu = () => {
+    nav?.classList.remove('is-abierto');
+    hdr?.classList.remove('is-menu');
+    burger?.setAttribute('aria-expanded', 'false');
+  };
+  burger?.addEventListener('click', () => {
+    const abierto = !!nav?.classList.toggle('is-abierto');
+    hdr?.classList.toggle('is-menu', abierto);
+    burger.setAttribute('aria-expanded', String(abierto));
+  });
+
+  /* --- desplegables: hover en escritorio (CSS) + click/teclado --- */
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.co-nav__item--sub'));
+  const cerrarDrops = (excepto?: HTMLElement) => {
+    items.forEach((li) => {
+      if (li === excepto) return;
+      li.classList.remove('is-abierto');
+      li.querySelector('.co-nav__toggle')?.setAttribute('aria-expanded', 'false');
+    });
+  };
+  items.forEach((li) => {
+    const btn = li.querySelector<HTMLButtonElement>('.co-nav__toggle');
+    btn?.addEventListener('click', (e: MouseEvent) => {
+      e.stopPropagation();
+      const abierto = li.classList.toggle('is-abierto');
+      btn.setAttribute('aria-expanded', String(abierto));
+      cerrarDrops(li);
+    });
+  });
+  document.addEventListener('click', (e: MouseEvent) => {
+    if (!(e.target as HTMLElement).closest('.co-nav__item--sub')) cerrarDrops();
+  });
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      cerrarDrops();
+      cerrarMenu();
+      if (form && !form.hidden) toggleBuscar(false);
+    }
+  });
+  nav?.querySelectorAll('.co-nav__drop a, .co-nav__item > a').forEach((a) =>
+    a.addEventListener('click', () => {
+      cerrarDrops();
+      cerrarMenu();
+    }),
+  );
+
+  /* --- buscador demo --- */
+  function toggleBuscar(abrir: boolean) {
+    if (!form) return;
+    form.hidden = !abrir;
+    hdr?.classList.toggle('is-buscando', abrir);
+    abrirBuscar?.setAttribute('aria-expanded', String(abrir));
+    if (abrir) input?.focus();
+  }
+  abrirBuscar?.addEventListener('click', () => toggleBuscar(!!form?.hidden));
+  document.getElementById('co-cerrar-buscar')?.addEventListener('click', () => toggleBuscar(false));
+
+  const normalizar = (s: string) =>
+    s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  form?.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+    const q = normalizar(input?.value.trim() ?? '');
+    const tarjetas = Array.from(document.querySelectorAll<HTMLElement>('.tpl-cerrajero-online .co-servicio'));
+    let n = 0;
+    tarjetas.forEach((t) => {
+      const ok = !q || normalizar(t.dataset.nombre ?? '').includes(q);
+      t.classList.toggle('is-oculto', !ok);
+      if (ok) n++;
+    });
+    const res = document.getElementById('co-resultados');
+    if (res) {
+      res.hidden = !q;
+      res.innerHTML = q
+        ? `<b>${n}</b> resultado${n === 1 ? '' : 's'} para “${input?.value.trim()}”${
+            n === 0 ? ' — llámenos y se lo presupuestamos igual.' : ''
+          } <button type="button" data-limpiar>Ver todos</button>`
+        : '';
+    }
+    toggleBuscar(false);
+    document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  document.addEventListener('click', (e: MouseEvent) => {
+    const t = e.target as HTMLElement;
+    if (!t.closest('[data-limpiar]')) return;
+    document.querySelectorAll('.tpl-cerrajero-online .co-servicio').forEach((c) => c.classList.remove('is-oculto'));
+    const res = document.getElementById('co-resultados');
+    if (res) res.hidden = true;
+    if (input) input.value = '';
+  });
+</script>
+
+<style>
+  .co-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    color: #fff;
+    transition: transform 0.35s ease;
+  }
+
+  /* --- barra superior --- */
+  .co-top {
+    height: var(--co-top-h);
+    background: rgba(38, 38, 38, 0.55);
+    color: rgba(255, 255, 255, 0.78);
+    font-family: var(--co-nav);
+    font-size: 0.74rem;
+    font-weight: 600;
+    transition: background 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+  }
+
+  .co-top__row {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .co-top__info {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    white-space: nowrap;
+  }
+
+  .co-top__info a,
+  .co-top__info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .co-top__info a:hover,
+  .co-top__redes a:hover {
+    color: #fff;
+  }
+
+  .co-top__redes {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  /* --- barra principal --- */
+  .co-bar {
+    position: relative;
+    transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  }
+
+  .co-bar__row {
+    height: var(--co-hdr-h);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .co-hdr.is-solido .co-top,
+  .co-hdr.is-menu .co-top {
+    background: var(--co-tinta);
+  }
+
+  .co-hdr.is-solido .co-bar,
+  .co-hdr.is-menu .co-bar,
+  .co-hdr.is-buscando .co-bar {
+    background: var(--co-blanco);
+    color: var(--co-titulo);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), 0 10px 26px -18px rgba(0, 0, 0, 0.35);
+  }
+
+  .co-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .co-logo__mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--co-naranja);
+    color: #fff;
+    transform: rotate(-20deg);
+  }
+
+  .co-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
+
+  .co-logo__txt b {
+    font-family: var(--co-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .co-logo__txt span {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--co-naranja);
+  }
+
+  .co-nav {
+    margin-left: auto;
+  }
+
+  .co-nav__lista {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    font-family: var(--co-nav);
+    font-size: 0.93rem;
+    font-weight: 600;
+  }
+
+  .co-nav__item {
+    position: relative;
+  }
+
+  .co-nav__item > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-block: 1.6rem;
+    opacity: 0.92;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .co-nav__item > a:hover,
+  .co-nav__item > a.is-activo {
+    color: var(--co-naranja);
+    opacity: 1;
+  }
+
+  .co-nav__toggle {
+    display: none;
+  }
+
+  /* panel desplegable: blanco con borde superior naranja (igual que el original) */
+  .co-nav__drop {
+    position: absolute;
+    top: 100%;
+    left: -1.1rem;
+    min-width: 240px;
+    background: var(--co-blanco);
+    border-top: 3px solid var(--co-naranja);
+    box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.3);
+    padding: 0.9rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 5;
+  }
+
+  .co-nav__item:last-child .co-nav__drop,
+  .co-nav__item:nth-last-child(2) .co-nav__drop {
+    left: auto;
+    right: -1.1rem;
+  }
+
+  .co-nav__item--sub:hover .co-nav__drop,
+  .co-nav__item--sub:focus-within .co-nav__drop,
+  .co-nav__item--sub.is-abierto .co-nav__drop {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .co-nav__drop a {
+    display: block;
+    padding: 0.5rem 1.4rem;
+    color: #666;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .co-nav__drop a:hover {
+    color: var(--co-naranja);
+    background: var(--co-panel);
+  }
+
+  .co-bar__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .co-bar__icono {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+  }
+
+  .co-bar__icono:hover {
+    background: rgba(127, 127, 127, 0.16);
+  }
+
+  .co-bar__cta {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .co-bar__burger {
+    display: none;
+  }
+
+  /* --- buscador --- */
+  .co-buscar {
+    background: var(--co-blanco);
+    border-top: 1px solid var(--co-linea);
+    color: var(--co-titulo);
+    box-shadow: 0 14px 26px -18px rgba(0, 0, 0, 0.4);
+  }
+
+  .co-buscar__row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-block: 0.85rem;
+  }
+
+  .co-buscar input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    background: transparent;
+  }
+
+  .co-buscar .co-btn {
+    padding: 0.55rem 1.2rem;
+  }
+
+  @media (max-width: 1180px) {
+    .co-nav__lista {
+      gap: 1.15rem;
+      font-size: 0.86rem;
+    }
+    .co-top__horario {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 1040px) {
+    .co-bar__burger {
+      display: grid;
+    }
+    .co-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--co-blanco);
+      color: var(--co-titulo);
+      border-top: 3px solid var(--co-naranja);
+      box-shadow: 0 20px 30px -20px rgba(0, 0, 0, 0.4);
+      max-height: calc(100svh - var(--co-hdr-h) - var(--co-top-h));
+      overflow-y: auto;
+    }
+    .co-nav.is-abierto {
+      display: block;
+    }
+    .co-nav__lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.5rem clamp(1rem, 4vw, 2rem) 1rem;
+      font-size: 0.95rem;
+    }
+    .co-nav__item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      border-bottom: 1px solid var(--co-linea);
+    }
+    .co-nav__item > a {
+      flex: 1;
+      padding-block: 0.85rem;
+    }
+    .co-nav__item > a :global(svg) {
+      display: none;
+    }
+    .co-nav__toggle {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+    }
+    .co-nav__item.is-abierto .co-nav__toggle {
+      transform: rotate(180deg);
+    }
+    .co-nav__drop {
+      position: static;
+      flex-basis: 100%;
+      display: none;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      border-top: none;
+      padding: 0 0 0.6rem;
+      min-width: 0;
+    }
+    .co-nav__item--sub:hover .co-nav__drop,
+    .co-nav__item--sub:focus-within .co-nav__drop {
+      display: none;
+    }
+    .co-nav__item--sub.is-abierto .co-nav__drop {
+      display: block;
+    }
+    .co-nav__drop a {
+      padding: 0.45rem 1rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .co-bar__cta {
+      display: none;
+    }
+    .co-top__info a:nth-child(2) {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,458 @@
+---
+import { img, euros } from '../datos/tienda.js';
+import Icono from './Icono.astro';
+
+export interface Producto {
+  t: string;
+  corto: string;
+  precio: number;
+  antes?: number;
+  img: string;
+  nivel?: number;
+  sup?: string;
+  pack?: boolean;
+  banda: string;
+  stock: string;
+  diasExtra?: number;
+}
+
+interface Props {
+  p: Producto;
+}
+const { p } = Astro.props as Props;
+
+const ahorro = p.antes ? p.antes - p.precio : 0;
+const pctNivel = p.nivel ? Math.round((p.nivel / 5) * 100) : 0;
+const reserva = p.stock !== 'EN STOCK';
+---
+
+<article class="cs-prod" data-cs-nombre={`${p.t} ${p.corto}`.toLowerCase()}>
+  <!-- "ficha" grafica: replica las imagenes compuestas del original
+       (franja NIVEL + estrellas arriba, foto, banda inferior con modelo/precio) -->
+  <div class="cs-prod__media">
+  <a href="#top" class={`cs-ficha cs-ficha--${p.banda}`} aria-label={p.t} data-cs-noop>
+    <span class="cs-ficha__top">
+      {
+        p.nivel ? (
+          <>
+            <b class="cs-ficha__nivel">NIVEL</b>
+            <span class="cs-ficha__nota">{p.nivel.toFixed(p.nivel % 1 === 0.25 ? 2 : 1)}</span>
+            <span class="cs-ficha__estrellas" aria-label={`Nivel ${p.nivel} de 5`}>
+              <span>★★★★★</span>
+              <span class="cs-ficha__estrellas-on" style={`width:${pctNivel}%`}>★★★★★</span>
+            </span>
+          </>
+        ) : (
+          <b class="cs-ficha__sup">{(p.sup ?? '').toUpperCase()}</b>
+        )
+      }
+    </span>
+    <span class="cs-ficha__foto">
+      <img src={img(p.img, 420, 360)} alt="" loading="lazy" />
+      <span class="cs-ficha__anio">2026</span>
+      <span class="cs-ficha__envio">ENVÍO GRATIS</span>
+    </span>
+    <span class="cs-ficha__banda">
+      {
+        p.pack ? (
+          <>
+            <span class="cs-ficha__x5">x5</span>
+            <b class="cs-ficha__precio">{euros(p.precio)}</b>
+            {ahorro > 0 && (
+              <span class="cs-ficha__ahorro">
+                <small>AHORRO</small>
+                {euros(ahorro)}
+              </span>
+            )}
+          </>
+        ) : (
+          <b class="cs-ficha__corto">{p.corto}</b>
+        )
+      }
+    </span>
+  </a>
+    <button type="button" class="cs-prod__add" data-cs-add={p.corto}>
+    <Icono nombre="carrito" size={16} /> <span data-cs-add-txt>Añadir</span>
+    </button>
+  </div>
+
+  <h3 class="cs-prod__t">{p.t}</h3>
+  <p class="cs-prod__precio">
+    {p.antes && <del>{euros(p.antes)}</del>}
+    <span>{euros(p.precio)}</span>
+  </p>
+  <p class={`cs-prod__stock ${reserva ? 'is-reserva' : ''}`}>
+    <Icono nombre="checkCirculo" size={15} />
+    {p.stock}
+  </p>
+
+  <div class="cs-prod__entrega">
+    <span class="cs-prod__camion" aria-hidden="true">
+      <Icono nombre="camion" size={22} />
+    </span>
+    <span>
+      <b>ENVÍO GRATIS</b>
+      <small data-cs-entrega={String(reserva ? (p.diasExtra ?? 12) : 3)}>Entrega en 24-72 h</small>
+    </span>
+  </div>
+</article>
+
+<script>
+  /* fecha de entrega estimada (dias habiles) — como "Entrega martes 29 septiembre" */
+  const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const sumarHabiles = (base: Date, n: number) => {
+    const d = new Date(base);
+    let quedan = n;
+    while (quedan > 0) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() !== 0 && d.getDay() !== 6) quedan--;
+    }
+    return d;
+  };
+  document.querySelectorAll<HTMLElement>('.tpl-cerrajero-seguridad [data-cs-entrega]').forEach((el) => {
+    const n = Number(el.dataset.csEntrega) || 3;
+    const d = sumarHabiles(new Date(), n);
+    el.textContent = `Entrega ${n > 5 ? 'aprox. ' : ''}${DIAS[d.getDay()]} ${d.getDate()} ${MESES[d.getMonth()]}`;
+  });
+
+  /* carrito demo: suma al badge + toast (el toast lo crea JS -> estilos en estilos.css) */
+  let total = 0;
+  let toast: HTMLElement | null = null;
+  let timer = 0;
+  const raiz = document.querySelector<HTMLElement>('.tpl-cerrajero-seguridad');
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement | null;
+    if (t?.closest('[data-cs-noop]')) e.preventDefault();
+    const btn = t?.closest<HTMLButtonElement>('[data-cs-add]');
+    if (!btn || !raiz) return;
+    total++;
+    document.querySelectorAll<HTMLElement>('.tpl-cerrajero-seguridad [data-cs-badge]').forEach((b) => {
+      b.textContent = String(total);
+      b.classList.remove('is-pulso');
+      void b.offsetWidth;
+      b.classList.add('is-pulso');
+      window.setTimeout(() => b.classList.remove('is-pulso'), 220);
+    });
+    const etq = btn.querySelector<HTMLElement>('[data-cs-add-txt]');
+    btn.classList.add('is-ok');
+    if (etq) etq.textContent = 'Añadido';
+    window.setTimeout(() => {
+      btn.classList.remove('is-ok');
+      if (etq) etq.textContent = 'Añadir';
+    }, 1400);
+
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'cs-toast';
+      toast.setAttribute('role', 'status');
+      raiz.appendChild(toast);
+    }
+    toast.innerHTML = `<b>✓</b> ${btn.dataset.csAdd ?? 'Producto'} añadido al carrito`;
+    toast.classList.remove('is-on');
+    void toast.offsetWidth;
+    toast.classList.add('is-on');
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => toast?.classList.remove('is-on'), 2200);
+  });
+</script>
+
+<style>
+  .cs-prod {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 0;
+    position: relative;
+  }
+
+  /* ---- ficha grafica ---- */
+  .cs-ficha {
+    --banda: #0b4a63;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 3px solid var(--banda);
+    border-radius: 3px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cs-ficha--negro {
+    --banda: #262626;
+  }
+
+  .cs-ficha:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 24px -16px rgba(0, 0, 0, 0.55);
+  }
+
+  .cs-ficha__top {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 22px;
+    padding-inline: 3px 4px;
+    background: var(--banda);
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .cs-ficha__nivel,
+  .cs-ficha__sup,
+  .cs-ficha__corto,
+  .cs-ficha__precio {
+    font-family: var(--cs-display);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+  }
+
+  .cs-ficha__nivel {
+    font-size: 0.82rem;
+  }
+
+  .cs-ficha__sup {
+    width: 100%;
+    text-align: center;
+    font-size: 0.86rem;
+    letter-spacing: 0.08em;
+  }
+
+  .cs-ficha__nota {
+    background: var(--cs-naranja);
+    color: #1a1a1a;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0 6px;
+    border-radius: 999px;
+    line-height: 1.35;
+  }
+
+  .cs-ficha__estrellas {
+    position: relative;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: #6b6b6b;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .cs-ficha__estrellas-on {
+    position: absolute;
+    inset: 0 auto 0 0;
+    overflow: hidden;
+    color: var(--cs-naranja);
+  }
+
+  .cs-ficha__foto {
+    position: relative;
+    display: block;
+    aspect-ratio: 7 / 6;
+    overflow: hidden;
+  }
+
+  .cs-ficha__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .cs-ficha:hover .cs-ficha__foto img {
+    transform: scale(1.05);
+  }
+
+  .cs-ficha__anio {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #fff;
+    color: #1a1a1a;
+    font-family: var(--cs-display);
+    font-size: 0.8rem;
+    padding: 0 6px;
+    border: 2px solid #1a1a1a;
+    line-height: 1.3;
+  }
+
+  .cs-ficha__envio {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    background: var(--cs-rosa);
+    color: #fff;
+    font-family: var(--cs-display);
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    padding: 1px 6px;
+    border: 1.5px solid #fff;
+  }
+
+  .cs-ficha__banda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 2px 5px;
+    background: var(--banda);
+    color: #fff;
+  }
+
+  .cs-ficha__corto {
+    font-size: clamp(0.85rem, 1.5vw, 1.12rem);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cs-ficha__x5 {
+    background: #fff;
+    color: #1a1a1a;
+    font-size: 0.62rem;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+
+  .cs-ficha__precio {
+    font-size: clamp(1.1rem, 1.9vw, 1.45rem);
+    line-height: 1;
+  }
+
+  .cs-ficha__ahorro {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.95;
+    font-family: var(--cs-display);
+    color: var(--cs-naranja);
+    font-size: 0.95rem;
+  }
+
+  .cs-ficha__ahorro small {
+    font-size: 0.5rem;
+    color: #fff;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- textos ---- */
+  .cs-prod__t {
+    margin-top: 1.1rem;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1f2937;
+    min-height: 3em;
+    padding-inline: 4px;
+  }
+
+  .cs-prod__precio {
+    margin-top: 0.45rem;
+    font-size: 1.1rem;
+    color: #1f2937;
+    display: flex;
+    gap: 0.35rem;
+    justify-content: center;
+  }
+
+  .cs-prod__precio del {
+    color: #6b7280;
+  }
+
+  .cs-prod__stock {
+    margin: 0.6rem 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--cs-verde);
+  }
+
+  .cs-prod__stock.is-reserva {
+    color: var(--cs-naranja-txt);
+  }
+
+  .cs-prod__media {
+    position: relative;
+    width: 100%;
+  }
+
+  .cs-prod__add {
+    position: absolute;
+    right: 8px;
+    bottom: 48px;
+    background: #fff;
+    box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.5);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--cs-petroleo);
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .cs-prod:hover .cs-prod__add,
+  .cs-prod__add:focus-visible,
+  .cs-prod__add.is-ok {
+    opacity: 1;
+  }
+
+  .cs-prod__add:hover,
+  .cs-prod__add.is-ok {
+    background: var(--cs-petroleo);
+    color: #fff;
+  }
+
+  .cs-prod__entrega {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-align: left;
+    background: #efefef;
+    border-left: 3px solid var(--cs-petroleo);
+    padding: 0.4rem 0.6rem 0.45rem 0.9rem;
+  }
+
+  .cs-prod__camion {
+    color: #b45309;
+    flex-shrink: 0;
+    display: grid;
+  }
+
+  .cs-prod__entrega b {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--cs-petroleo);
+    line-height: 1.2;
+  }
+
+  .cs-prod__entrega small {
+    display: block;
+    font-size: 0.72rem;
+    color: #1f2937;
+    line-height: 1.3;
+  }
+
+  @media (hover: none) {
+    .cs-prod__add {
+      opacity: 1;
+      border: 1px solid var(--cs-petroleo);
+    }
+  }
+</style>

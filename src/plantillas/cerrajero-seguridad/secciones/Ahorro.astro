@@ -1,0 +1,358 @@
+---
+import { comparativa, pasos, kitIncluye, img } from '../datos/tienda.js';
+import Icono from '../componentes/Icono.astro';
+
+type Col = { precio: number; t: string; items: string[] };
+const cols: { k: string; titulo: string; c: Col; signo: string }[] = [
+  { k: 'cerrajero', titulo: 'Con un cerrajero', c: comparativa.cerrajero, signo: '' },
+  { k: 'kit', titulo: 'Con nuestro Kit', c: comparativa.kit, signo: '' },
+  { k: 'ahorro', titulo: 'Te ahorras', c: comparativa.ahorro, signo: '−' },
+];
+---
+
+<!-- Bloque "ahorrate el sablazo": en el original vive en el DOM plegado bajo la
+     franja "Instálalo tú". Aquí se despliega con el boton "¿Cuánto ahorras?". -->
+<section class="cs-ahorro" id="cs-ahorro" aria-labelledby="cs-ahorro-t" hidden>
+  <div class="cs-wrap">
+    <p class="cs-ahorro__kicker">ahórrate el sablazo</p>
+    <h2 id="cs-ahorro-t" class="cs-ahorro__titulo">Lo Instalas Tú y te ahorras el cerrajero</h2>
+    <p class="cs-ahorro__intro">
+      Te damos todo lo necesario para montarlo como un cerrajero profesional: kit de instalación completo, tornillos
+      extrafuertes, discos de refuerzo, contraplaca reforzada y mucho más.
+    </p>
+
+    <div class="cs-ahorro__cols">
+      {
+        cols.map(({ k, titulo, c, signo }) => (
+          <article class={`cs-ahorro__col cs-ahorro__col--${k}`}>
+            <p class="cs-ahorro__etq">{titulo}</p>
+            <p class="cs-ahorro__precio">
+              {signo}
+              {c.precio} €
+            </p>
+            <p class="cs-ahorro__t">{c.t}</p>
+            <ul>
+              {c.items.map((i: string) => (
+                <li>
+                  <Icono nombre={k === 'cerrajero' ? 'cerrar' : 'check'} size={14} />
+                  {i}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+
+    <a class="cs-ahorro__video" href="#cs-ahorro">
+      <img src={img('instalador', 900, 420)} alt="Instalación de un bombín de seguridad" loading="lazy" />
+      <span class="cs-ahorro__play" aria-hidden="true"><Icono nombre="youtube" size={54} /></span>
+      <span class="cs-ahorro__vtxt">
+        Con nuestros tutoriales paso a paso lo dejas mejor montado que la mayoría de cerrajeros <b>Ver tutorial →</b>
+      </span>
+    </a>
+
+    <div class="cs-ahorro__dos">
+      <div>
+        <h3>Así de fácil</h3>
+        <ol class="cs-ahorro__pasos">
+          {
+            pasos.map((p: { t: string; s: string }, i: number) => (
+              <li>
+                <span class="cs-ahorro__n">{i + 1}</span>
+                <span>
+                  <b>{p.t}</b>
+                  <small>{p.s}</small>
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div>
+        <h3>Te damos todo y más</h3>
+        <ul class="cs-ahorro__kit">
+          {
+            kitIncluye.map((k: string) => (
+              <li>
+                <Icono nombre="check" size={14} />
+                {k}
+              </li>
+            ))
+          }
+          <li class="is-mas">+</li>
+        </ul>
+        <p class="cs-ahorro__nota">
+          <b>Personaliza tu pedido:</b> dentro de cada producto encontrarás estos y muchos más extras.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const panel = document.getElementById('cs-ahorro');
+  const toggle = document.getElementById('cs-ahorro-toggle');
+
+  const poner = (abrir: boolean) => {
+    if (!panel || !toggle) return;
+    panel.hidden = !abrir;
+    toggle.setAttribute('aria-expanded', String(abrir));
+  };
+
+  toggle?.addEventListener('click', () => poner(!!panel?.hidden));
+  document.querySelectorAll('[data-cs-abre-ahorro]').forEach((a) =>
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      poner(true);
+      panel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }),
+  );
+</script>
+
+<style>
+  .cs-ahorro {
+    background: #fff;
+    padding: 1.5rem 0 2rem;
+    scroll-margin-top: 140px;
+  }
+
+  .cs-ahorro__kicker {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--cs-naranja-txt);
+  }
+
+  .cs-ahorro__titulo {
+    text-align: center;
+    font-weight: 900;
+    color: var(--cs-navy);
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    margin: 0.3rem 0 0.6rem;
+  }
+
+  .cs-ahorro__intro {
+    max-width: 62ch;
+    margin: 0 auto 1.8rem;
+    text-align: center;
+    color: var(--cs-humo);
+  }
+
+  .cs-ahorro__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .cs-ahorro__col {
+    border: 1px solid var(--cs-linea);
+    border-radius: 10px;
+    padding: 1.3rem 1.3rem 1.4rem;
+    background: #fff;
+  }
+
+  .cs-ahorro__col--kit {
+    border: 2px solid var(--cs-navy);
+  }
+
+  .cs-ahorro__col--ahorro {
+    background: var(--cs-crema);
+    border-color: var(--cs-crema-borde);
+  }
+
+  .cs-ahorro__etq {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cs-humo);
+  }
+
+  .cs-ahorro__precio {
+    font-weight: 900;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    color: var(--cs-navy);
+  }
+
+  .cs-ahorro__col--cerrajero .cs-ahorro__precio {
+    color: #9ca3af;
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+  }
+
+  .cs-ahorro__col--ahorro .cs-ahorro__precio {
+    color: var(--cs-naranja-2);
+  }
+
+  .cs-ahorro__t {
+    font-weight: 700;
+    margin: 0.2rem 0 0.8rem;
+    color: var(--cs-navy);
+  }
+
+  .cs-ahorro__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .cs-ahorro__col li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .cs-ahorro__col--cerrajero li :global(svg) {
+    color: #dc2626;
+  }
+
+  .cs-ahorro__col--kit li :global(svg),
+  .cs-ahorro__col--ahorro li :global(svg) {
+    color: var(--cs-verde);
+  }
+
+  .cs-ahorro__video {
+    position: relative;
+    display: block;
+    margin-top: 1.4rem;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 220px;
+  }
+
+  .cs-ahorro__video img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cs-ahorro__video::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(21, 33, 46, 0.55);
+  }
+
+  .cs-ahorro__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+    color: #e10600;
+    z-index: 1;
+  }
+
+  .cs-ahorro__vtxt {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1.1rem;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    padding-inline: 1rem;
+  }
+
+  .cs-ahorro__vtxt b {
+    color: var(--cs-naranja);
+    margin-left: 0.3rem;
+  }
+
+  .cs-ahorro__dos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.8rem;
+  }
+
+  .cs-ahorro__dos h3 {
+    font-weight: 900;
+    color: var(--cs-navy);
+    font-size: 1.15rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .cs-ahorro__pasos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .cs-ahorro__pasos li {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .cs-ahorro__pasos b {
+    display: block;
+    color: var(--cs-navy);
+  }
+
+  .cs-ahorro__pasos small {
+    color: var(--cs-humo);
+    font-size: 0.85rem;
+  }
+
+  .cs-ahorro__n {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--cs-navy);
+    color: #fff;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+  }
+
+  .cs-ahorro__kit {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .cs-ahorro__kit li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .cs-ahorro__kit li :global(svg) {
+    color: var(--cs-verde);
+    flex-shrink: 0;
+  }
+
+  .cs-ahorro__kit .is-mas {
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--cs-naranja-2);
+  }
+
+  .cs-ahorro__nota {
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+    color: var(--cs-humo);
+  }
+
+  .cs-ahorro__nota b {
+    color: var(--cs-navy);
+  }
+
+  @media (max-width: 760px) {
+    .cs-ahorro__cols,
+    .cs-ahorro__dos {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import { ciudades, marca } from '../datos/reservas.js';
+---
+
+<section class="rb-ciu" id="ciudades">
+  <div class="rb-wrap">
+    <h2 class="rb-h2 rb-ciu__tit">Busca especialistas por ciudad con {marca.nombre}</h2>
+    <ul class="rb-ciu__grid">
+      {ciudades.map((c: { ciudad: string; cats: string[] }) => (
+        <li class="rb-ciu__item">
+          <details>
+            <summary>
+              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>
+              {c.ciudad}
+            </summary>
+            <ul class="rb-ciu__cats">
+              {c.cats.map((cat: string) => (
+                <li><button type="button" data-ciudad={c.ciudad} data-q={cat}>{cat}</button></li>
+              ))}
+            </ul>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.rb-ciu__cats button').forEach((b) =>
+    b.addEventListener('click', () => {
+      document.dispatchEvent(
+        new CustomEvent('rb:filtrar', { detail: { q: b.dataset.q || '', etiqueta: b.dataset.q, ciudad: '' } }),
+      );
+    }),
+  );
+</script>
+
+<style>
+  .rb-ciu { padding: 110px 0 20px; scroll-margin-top: var(--rb-hdr); }
+  .rb-ciu__tit { text-align: center; font-weight: 600; margin-bottom: 40px; }
+  .rb-ciu__grid {
+    columns: 4;
+    column-gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 40px;
+  }
+  .rb-ciu__item { break-inside: avoid; padding-bottom: 18px; }
+  .rb-ciu__item summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    list-style: none;
+    font-size: .98rem;
+    transition: color .2s;
+  }
+  .rb-ciu__item summary::-webkit-details-marker { display: none; }
+  .rb-ciu__item summary:hover { color: var(--rb-cian-osc); }
+  .rb-ciu__item summary svg { color: var(--rb-cian); transition: transform .2s; }
+  .rb-ciu__item details[open] summary svg { transform: rotate(90deg); }
+  .rb-ciu__item details[open] summary { font-weight: 700; }
+  .rb-ciu__cats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0 6px 22px;
+  }
+  .rb-ciu__cats button {
+    font-size: .92rem;
+    color: var(--rb-cian-osc);
+    text-align: left;
+  }
+  .rb-ciu__cats button:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 900px) {
+    .rb-ciu { padding-top: 70px; }
+    .rb-ciu__grid { columns: 2; padding-left: 0; }
+  }
+  @media (max-width: 480px) {
+    .rb-ciu__grid { columns: 1; }
+  }
+</style>

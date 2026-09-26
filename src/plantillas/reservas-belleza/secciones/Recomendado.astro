@@ -1,0 +1,131 @@
+---
+import TarjetaNegocio from '../componentes/TarjetaNegocio.astro';
+import { negocios } from '../datos/reservas.js';
+---
+
+<section class="rb-reco" id="recomendado">
+  <div class="rb-wrap">
+    <div class="rb-reco__cab">
+      <h2 class="rb-h2" id="rb-reco-titulo">Recomendado</h2>
+      <p class="rb-reco__nota" id="rb-reco-nota" hidden>
+        <span id="rb-reco-nota-tx"></span>
+        <button type="button" id="rb-reco-limpiar">Quitar filtro</button>
+      </p>
+    </div>
+
+    <div class="rb-reco__carril">
+      <button type="button" class="rb-flecha rb-flecha--prev" id="rb-reco-prev" aria-label="Anterior" disabled>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      </button>
+      <div class="rb-fila" id="rb-reco-fila">
+        {negocios.map((n) => <TarjetaNegocio n={n} />)}
+      </div>
+      <button type="button" class="rb-flecha rb-flecha--next" id="rb-reco-next" aria-label="Siguiente">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </button>
+      <div class="rb-reco__vacio" id="rb-reco-vacio" hidden>
+        <p><strong>No encontramos negocios con ese filtro.</strong></p>
+        <p>Prueba con otra categoría o ciudad (por ejemplo, “Barbería” en Madrid).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('rb-reco-fila');
+  const prev = document.getElementById('rb-reco-prev') as HTMLButtonElement | null;
+  const next = document.getElementById('rb-reco-next') as HTMLButtonElement | null;
+  const nota = document.getElementById('rb-reco-nota');
+  const notaTx = document.getElementById('rb-reco-nota-tx');
+  const titulo = document.getElementById('rb-reco-titulo');
+  const vacio = document.getElementById('rb-reco-vacio');
+  const tarjetas = Array.from(document.querySelectorAll<HTMLElement>('.rb-neg'));
+
+  const actualizarFlechas = () => {
+    if (!fila || !prev || !next) return;
+    prev.disabled = fila.scrollLeft < 8;
+    next.disabled = fila.scrollLeft + fila.clientWidth >= fila.scrollWidth - 8;
+  };
+  prev?.addEventListener('click', () => fila?.scrollBy({ left: -576, behavior: 'smooth' }));
+  next?.addEventListener('click', () => fila?.scrollBy({ left: 576, behavior: 'smooth' }));
+  fila?.addEventListener('scroll', actualizarFlechas, { passive: true });
+  window.addEventListener('resize', actualizarFlechas);
+  actualizarFlechas();
+
+  const normal = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  function aplicar(d: { q?: string; ciudad?: string; cat?: string; etiqueta?: string }) {
+    const q = normal(d.q || '');
+    let visibles = 0;
+    tarjetas.forEach((t) => {
+      const okQ = !q || normal(t.dataset.busqueda || '').includes(q);
+      const okC = !d.ciudad || t.dataset.ciudad === d.ciudad;
+      const okCat = !d.cat || t.dataset.cat === d.cat;
+      const ok = okQ && okC && okCat;
+      t.hidden = !ok;
+      if (ok) visibles++;
+    });
+    const hayFiltro = Boolean(q || d.ciudad || d.cat);
+    const partes = [d.etiqueta || d.q, d.ciudad ? `en ${d.ciudad}` : ''].filter(Boolean).join(' ');
+    if (titulo) titulo.textContent = hayFiltro ? `Resultados: ${partes || 'todos'}` : 'Recomendado';
+    if (nota) nota.hidden = !hayFiltro;
+    if (notaTx) notaTx.textContent = `${visibles} negocio${visibles === 1 ? '' : 's'} encontrado${visibles === 1 ? '' : 's'}`;
+    if (vacio) vacio.hidden = visibles > 0;
+    fila?.scrollTo({ left: 0 });
+    actualizarFlechas();
+    if (!hayFiltro) {
+      document.querySelectorAll('.rb-cats [data-cat]').forEach((x) => x.classList.remove('is-activa'));
+    }
+  }
+
+  document.addEventListener('rb:filtrar', (e) => {
+    aplicar((e as CustomEvent).detail || {});
+    document.getElementById('recomendado')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  document.getElementById('rb-reco-limpiar')?.addEventListener('click', () => aplicar({}));
+
+  /* favoritos */
+  document.querySelectorAll<HTMLButtonElement>('.rb-neg__fav').forEach((b) =>
+    b.addEventListener('click', () => {
+      b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'));
+    }),
+  );
+</script>
+
+<style>
+  .rb-reco {
+    padding: 44px 0 20px;
+    scroll-margin-top: var(--rb-hdr);
+  }
+  .rb-reco__cab {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-bottom: 26px;
+  }
+  .rb-reco__nota {
+    display: flex;
+    gap: 12px;
+    font-size: .9rem;
+    color: var(--rb-gris);
+  }
+  .rb-reco__nota button {
+    color: var(--rb-cian-osc);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .rb-reco__carril { position: relative; }
+  .rb-reco__vacio {
+    padding: 34px 24px;
+    border: 1px dashed var(--rb-linea);
+    border-radius: 10px;
+    text-align: center;
+    color: var(--rb-gris);
+  }
+  .rb-reco__vacio strong { color: var(--rb-tinta); }
+  @media (max-width: 700px) {
+    .rb-reco__carril .rb-flecha { display: none; }
+  }
+</style>

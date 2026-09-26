@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Fútbol (Estilo Eseful)",
+  "categoria": "escuela-futbol",
+  "descripcion": "Web institucional para una escuela de formación de entrenadores de fútbol en Lima: cabecera blanca fija con menú desplegable de cursos y botón de inscripción, hero en carrusel a pantalla completa con velo verde bosque y textos animados (entrenador, preparador físico, arqueros), bloque ¿Quiénes somos? con foto en blanco y negro, grilla de 4 cursos con foto sobre fondo menta, banda del último evento sobre estadio nocturno, preguntas frecuentes en acordeón y footer oscuro con contacto, enlaces y libro de reclamaciones. Barra lateral de redes y botón flotante de WhatsApp. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/tienda-futbol.jpg",
+  "tags": ["fútbol", "escuela", "cursos", "entrenadores", "deporte", "educación", "lima", "institucional"],
+  "paleta": ["#0a3f1d", "#20a057", "#041d1b", "#ebfcf0", "#ffffff"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "eseful.com.pe",
+  "orden": 81
+}

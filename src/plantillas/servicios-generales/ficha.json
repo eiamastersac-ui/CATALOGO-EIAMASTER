@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Servicios (Estilo Servicios Generales Lima)",
+  "categoria": "servicios-generales",
+  "descripcion": "Landing de captación para una empresa de servicios generales en Lima (gasfitería, electricidad, albañilería y refacciones 24 h): cabecera blanca fija con menú por anclas y botón de llamada, hero partido a pantalla completa (foto del electricista a sangre + panel azul de marca con CTA de WhatsApp y llamada), bandas negras de 'presupuesto sin costo', bloque de compromiso con grilla de servicios foto-primero, 'Por qué elegirnos' con 3 beneficios, banda de contacto y footer con ubicación, horario y teléfono. Botón flotante de WhatsApp y píldora de llamada. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/servicios-generales.jpg",
+  "tags": ["servicios generales", "gasfitería", "electricista", "albañilería", "hogar", "lima", "24 horas", "landing"],
+  "paleta": ["#0a0a0a", "#2171ff", "#f1f3f6", "#ffffff", "#22d375"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "serviciosgeneralesgesaj.igoosites.com",
+  "orden": 80
+}

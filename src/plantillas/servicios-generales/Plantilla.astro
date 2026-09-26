@@ -1,0 +1,29 @@
+---
+import './estilos.css';
+
+import Cabecera from './secciones/Cabecera.astro';
+import Hero from './secciones/Hero.astro';
+import BandaPresupuesto from './secciones/BandaPresupuesto.astro';
+import Compromiso from './secciones/Compromiso.astro';
+import PorQue from './secciones/PorQue.astro';
+import Contacto from './secciones/Contacto.astro';
+import PiePagina from './secciones/PiePagina.astro';
+import Flotantes from './secciones/Flotantes.astro';
+import RevelarScroll from './componentes/RevelarScroll.astro';
+---
+
+<div class="tpl-servicios-generales">
+  <span id="top"></span>
+  <Cabecera />
+  <main>
+    <Hero />
+    <BandaPresupuesto />
+    <Compromiso />
+    <BandaPresupuesto />
+    <PorQue />
+    <Contacto />
+  </main>
+  <PiePagina />
+  <Flotantes />
+  <RevelarScroll />
+</div>

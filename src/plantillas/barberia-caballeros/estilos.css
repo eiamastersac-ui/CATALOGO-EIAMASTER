@@ -1,0 +1,240 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700;125,800;125,900&family=Bebas+Neue&family=Red+Hat+Display:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap");
+
+/* ==========================================================================
+   barberia-caballeros — barberia masculina (inspirada en montalvoformen.com.pe)
+   Paleta real del sitio: negro puro #000 (hero, servicios, opiniones, footer),
+   tinta #1e1e1e (titulos sobre claro), texto #4f4f4f, gris kicker #969696,
+   paneles #f7f7f7 / #eeeeee y blanco. Sin color de acento: el sitio es
+   monocromo y el color lo ponen las fotos (barbas cobrizas, madera, cuero).
+   Titulares en una sans extendida (Archivo 125% ~ Monument Extended),
+   kickers y botones en Bebas Neue, texto en Red Hat Display.
+   Todo namespaced bajo .tpl-barberia-caballeros. SIN overflow-x en la raiz.
+   ========================================================================== */
+
+.tpl-barberia-caballeros {
+  --bc-negro: #000000;
+  --bc-tinta: #1e1e1e;
+  --bc-texto: #4f4f4f;
+  --bc-gris: #969696;
+  --bc-linea: #dcdcdc;
+  --bc-panel: #f7f7f7;
+  --bc-panel-2: #eeeeee;
+  --bc-blanco: #ffffff;
+  --bc-wa: #25d366;
+
+  --bc-font: "Red Hat Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --bc-ext: "Archivo", "Arial Black", Helvetica, Arial, sans-serif;
+  --bc-bebas: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+  --bc-grot: "Space Grotesk", "Red Hat Display", Arial, sans-serif;
+
+  --bc-maxw: 1170px;
+  --bc-hdr-h: 80px;
+
+  background: var(--bc-blanco);
+  color: var(--bc-texto);
+  font-family: var(--bc-font);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-barberia-caballeros {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-barberia-caballeros *,
+.tpl-barberia-caballeros *::before,
+.tpl-barberia-caballeros *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-barberia-caballeros h1,
+.tpl-barberia-caballeros h2,
+.tpl-barberia-caballeros h3,
+.tpl-barberia-caballeros h4 {
+  font-family: var(--bc-ext);
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  color: var(--bc-tinta);
+  line-height: 1.1;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tpl-barberia-caballeros img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-barberia-caballeros a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-barberia-caballeros ul {
+  list-style: none;
+}
+
+.tpl-barberia-caballeros button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tpl-barberia-caballeros input {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-barberia-caballeros :focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.tpl-barberia-caballeros [hidden] {
+  display: none !important;
+}
+
+/* ---------- utilidades ---------- */
+
+.tpl-barberia-caballeros .bc-wrap {
+  width: 100%;
+  max-width: var(--bc-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-barberia-caballeros .bc-kicker {
+  display: block;
+  font-family: var(--bc-bebas);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bc-gris);
+  line-height: 1.2;
+  margin-bottom: 0.9rem;
+}
+
+.tpl-barberia-caballeros .bc-titulo {
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  letter-spacing: 0.01em;
+}
+
+.tpl-barberia-caballeros .bc-titulo span {
+  display: block;
+}
+
+/* boton del original: caja con borde fino + celda cuadrada con flecha */
+.tpl-barberia-caballeros .bc-btn {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid currentColor;
+  font-family: var(--bc-bebas);
+  font-size: 1.12rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.tpl-barberia-caballeros .bc-btn__txt {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.7rem;
+}
+
+.tpl-barberia-caballeros .bc-btn__fl {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  border-left: 1px solid currentColor;
+  transition: transform 0.25s ease;
+}
+
+.tpl-barberia-caballeros .bc-btn--claro {
+  color: var(--bc-blanco);
+}
+
+.tpl-barberia-caballeros .bc-btn--claro:hover {
+  background: var(--bc-blanco);
+  color: var(--bc-negro);
+}
+
+.tpl-barberia-caballeros .bc-btn--oscuro {
+  color: var(--bc-tinta);
+}
+
+.tpl-barberia-caballeros .bc-btn--oscuro:hover {
+  background: var(--bc-tinta);
+  color: var(--bc-blanco);
+}
+
+/* ---------- revelado al hacer scroll ---------- */
+
+.tpl-barberia-caballeros .bc-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-barberia-caballeros .bc-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-barberia-caballeros .bc-reveal--1 { transition-delay: 0.1s; }
+.tpl-barberia-caballeros .bc-reveal--2 { transition-delay: 0.2s; }
+.tpl-barberia-caballeros .bc-reveal--3 { transition-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-barberia-caballeros .bc-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- burbujas del chat (creadas por JS: no reciben estilos scoped) ---------- */
+
+.tpl-barberia-caballeros .bc-burbuja {
+  max-width: 85%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  animation: bc-burbuja-in 0.25s ease;
+}
+
+.tpl-barberia-caballeros .bc-burbuja--bot {
+  align-self: flex-start;
+  background: var(--bc-blanco);
+  color: #303030;
+  border-top-left-radius: 2px;
+}
+
+.tpl-barberia-caballeros .bc-burbuja--yo {
+  align-self: flex-end;
+  background: #d9fdd3;
+  color: #303030;
+  border-top-right-radius: 2px;
+}
+
+@keyframes bc-burbuja-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* anclas del menu: que la cabecera fija no tape el inicio de cada seccion */
+.tpl-barberia-caballeros section[id],
+.tpl-barberia-caballeros footer[id] {
+  scroll-margin-top: 70px;
+}

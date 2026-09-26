@@ -1,0 +1,128 @@
+---
+import { promos } from '../datos/pasteleria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Promo { titulo: string; sub: string; cta: string; tab: string; fondo: string; img: string; alt: string }
+const lista = promos as Promo[];
+---
+
+<!-- 2 banners de color bajo el catalogo, como en el original -->
+<section class="pc-promos" aria-label="Promociones">
+  <div class="pc-wrap pc-promos__grid">
+    {lista.map((p: Promo) => (
+      <article class={`pc-promo pc-f-${p.fondo}`}>
+        <div class="pc-promo__txt">
+          <h2 class="pc-promo__t">{p.titulo}</h2>
+          <p class="pc-promo__s">{p.sub}</p>
+          <a href="#recomendados" class="pc-btn pc-promo__cta" data-tab={p.tab}>{p.cta}</a>
+        </div>
+        <span class="pc-promo__destello" aria-hidden="true"><Icono nombre="destello" size={30} /></span>
+        <div class="pc-promo__foto">
+          <img src={p.img} alt={p.alt} loading="lazy" width="900" height="640" />
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.tpl-pasteleria-cafe .pc-promo [data-tab]').forEach((a) =>
+    a.addEventListener('click', () =>
+      document.dispatchEvent(new CustomEvent('pc:tab', { detail: { tab: a.dataset.tab } })),
+    ),
+  );
+</script>
+
+<style>
+  .pc-promos {
+    padding-block: 1rem 2rem;
+  }
+
+  .pc-promos__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .pc-promo {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    align-items: center;
+    min-height: 222px;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .pc-promo__txt {
+    padding: 1.8rem 0 1.8rem 1.9rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pc-promo__t {
+    font-family: var(--pc-display);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.055em;
+    color: var(--pc-tinta);
+    max-width: 8ch;
+  }
+
+  .pc-promo__s {
+    margin-top: 0.7rem;
+    font-size: 0.88rem;
+    color: var(--pc-tinta);
+  }
+
+  .pc-promo__cta {
+    margin-top: 1.1rem;
+    background: var(--pc-panel);
+    padding: 0.55rem 1.3rem;
+    font-size: 0.72rem;
+  }
+
+  .pc-promo__destello {
+    position: absolute;
+    top: 30px;
+    left: 44%;
+    color: #fff;
+    z-index: 1;
+  }
+
+  .pc-promo__foto {
+    align-self: stretch;
+    position: relative;
+    margin: 14px 14px 14px 0;
+    border-radius: 999px 12px 12px 999px;
+    overflow: hidden;
+  }
+
+  .pc-promo__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .pc-promo:hover .pc-promo__foto img {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 760px) {
+    .pc-promos__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pc-promo {
+      min-height: 190px;
+    }
+
+    .pc-promo__txt {
+      padding-left: 1.2rem;
+    }
+  }
+</style>

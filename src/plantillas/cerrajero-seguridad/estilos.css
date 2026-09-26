@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Roboto:wght@500;700&family=Titan+One&display=swap");
+
+/* ==========================================================================
+   cerrajero-seguridad — tienda online de cerrajeria (inspirada en
+   tucerrajerodeseguridad.com). Paleta real del sitio: navy #19334f + naranja
+   #f59e0b, paneles crema #fefbed y hielo #f1f5f9, footer casi negro.
+   Sin gradientes decorativos. Todo namespaced bajo .tpl-cerrajero-seguridad.
+   NOTA: sin overflow-x en la raiz (rompe el header sticky).
+   ========================================================================== */
+
+.tpl-cerrajero-seguridad {
+  --cs-navy: #19334f;
+  --cs-navy-2: #15212e;
+  --cs-petroleo: #004864;
+  --cs-naranja: #f59e0b;
+  --cs-naranja-2: #d97706;
+  --cs-naranja-txt: #c45309;
+  --cs-crema: #fefbed;
+  --cs-crema-borde: #f3e6bd;
+  --cs-hielo: #f1f5f9;
+  --cs-gris-nav: #e6e6e6;
+  --cs-linea: #e2e8f0;
+  --cs-texto: #1f2937;
+  --cs-humo: #5b6472;
+  --cs-negro: #161616;
+  --cs-verde: #0a8a2a;
+  --cs-rosa: #e6007e;
+
+  --cs-font: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --cs-display: "Titan One", "Nunito", sans-serif;
+  --cs-roboto: "Roboto", "Nunito", Arial, sans-serif;
+  --cs-maxw: 1140px;
+
+  background: #fff;
+  color: var(--cs-texto);
+  font-family: var(--cs-font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tpl-cerrajero-seguridad *,
+.tpl-cerrajero-seguridad *::before,
+.tpl-cerrajero-seguridad *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-cerrajero-seguridad img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-cerrajero-seguridad a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-cerrajero-seguridad ul {
+  list-style: none;
+}
+
+.tpl-cerrajero-seguridad button,
+.tpl-cerrajero-seguridad input {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-cerrajero-seguridad button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.tpl-cerrajero-seguridad [hidden] {
+  display: none !important;
+}
+
+/* --- layout --- */
+.tpl-cerrajero-seguridad .cs-wrap {
+  max-width: var(--cs-maxw);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+.tpl-cerrajero-seguridad .cs-h2 {
+  font-family: var(--cs-font);
+  font-weight: 400;
+  color: var(--cs-navy);
+  font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.tpl-cerrajero-seguridad .cs-sub {
+  color: var(--cs-humo);
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+.tpl-cerrajero-seguridad .cs-centro {
+  text-align: center;
+}
+
+/* --- botones --- */
+.tpl-cerrajero-seguridad .cs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.8rem 1.75rem;
+  border-radius: 3px;
+  background: var(--cs-petroleo);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.tpl-cerrajero-seguridad .cs-btn:hover {
+  background: var(--cs-navy);
+}
+
+.tpl-cerrajero-seguridad .cs-btn--naranja {
+  background: var(--cs-naranja);
+  color: var(--cs-navy-2);
+}
+
+.tpl-cerrajero-seguridad .cs-btn--naranja:hover {
+  background: var(--cs-naranja-2);
+  color: #fff;
+}
+
+.tpl-cerrajero-seguridad .cs-btn--navy {
+  background: var(--cs-navy);
+  border-radius: 6px;
+  padding: 1rem 1.6rem;
+}
+
+.tpl-cerrajero-seguridad .cs-btn--navy:hover {
+  background: var(--cs-petroleo);
+}
+
+/* --- toast del carrito (lo crea JS -> estilos globales) --- */
+.tpl-cerrajero-seguridad .cs-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  z-index: 400;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  background: var(--cs-navy);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  max-width: calc(100vw - 32px);
+}
+
+.tpl-cerrajero-seguridad .cs-toast b {
+  color: var(--cs-naranja);
+}
+
+.tpl-cerrajero-seguridad .cs-toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* --- resultado del buscador (lo pinta JS) --- */
+.tpl-cerrajero-seguridad .cs-oculto-busqueda {
+  display: none !important;
+}
+
+@media (min-width: 900px) {
+  .tpl-cerrajero-seguridad .cs-toast {
+    bottom: 28px;
+  }
+}

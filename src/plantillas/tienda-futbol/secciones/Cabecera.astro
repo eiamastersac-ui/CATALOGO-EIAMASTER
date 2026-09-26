@@ -1,0 +1,366 @@
+---
+import { navPrincipal, marca } from '../datos/escuela.js';
+import Logo from '../componentes/Logo.astro';
+import Icono from '../componentes/Icono.astro';
+
+interface Sub { txt: string; href: string }
+interface Item { txt: string; href: string; activo?: boolean; sub?: Sub[] }
+const items = navPrincipal as Item[];
+---
+
+<header class="tf-hdr" id="tf-hdr">
+  <div class="tf-wrap tf-hdr__inner">
+    <a href="#inicio" class="tf-hdr__logo" aria-label="tienda.com Fútbol, inicio"><Logo /></a>
+
+    <nav class="tf-nav" id="tf-nav" aria-label="Principal">
+      <ul class="tf-nav__lista">
+        {
+          items.map((it: Item) =>
+            it.sub ? (
+              <li class="tf-nav__item tf-nav__item--sub">
+                <a href={it.href} class="tf-nav__link">
+                  {it.txt}
+                </a>
+                <button class="tf-nav__toggle" type="button" aria-expanded="false" aria-label={`Mostrar ${it.txt}`}>
+                  <Icono nombre="abajo" size={14} />
+                </button>
+                <ul class="tf-nav__drop">
+                  {it.sub.map((s: Sub) => (
+                    <li>
+                      <a href={s.href}>{s.txt}</a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li class="tf-nav__item">
+                <a href={it.href} class:list={['tf-nav__link', { 'is-activo': it.activo }]}>
+                  {it.txt}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+      <a href={marca.whatsapp} target="_blank" rel="noopener" class="tf-hdr__cta">Inscríbete</a>
+    </nav>
+
+    <button class="tf-hdr__burger" id="tf-burger" type="button" aria-expanded="false" aria-controls="tf-nav" aria-label="Abrir menú">
+      <span class="tf-ico-abrir"><Icono nombre="menu" size={26} /></span>
+      <span class="tf-ico-cerrar" hidden><Icono nombre="cerrar" size={26} /></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('tf-hdr');
+  const nav = document.getElementById('tf-nav');
+  const burger = document.getElementById('tf-burger');
+  const icoAbrir = burger?.querySelector<HTMLElement>('.tf-ico-abrir');
+  const icoCerrar = burger?.querySelector<HTMLElement>('.tf-ico-cerrar');
+
+  // Sombra al hacer scroll
+  const onScroll = () => hdr?.classList.toggle('is-scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Menu movil
+  const setMenu = (abierto: boolean) => {
+    nav?.classList.toggle('is-open', abierto);
+    burger?.setAttribute('aria-expanded', String(abierto));
+    if (icoAbrir) icoAbrir.hidden = abierto;
+    if (icoCerrar) icoCerrar.hidden = !abierto;
+  };
+  burger?.addEventListener('click', () => setMenu(!nav?.classList.contains('is-open')));
+
+  // Desplegable de cursos: hover en escritorio (CSS) + click en el chevron
+  const subItems = Array.from(document.querySelectorAll<HTMLElement>('#tf-nav .tf-nav__item--sub'));
+  subItems.forEach((li) => {
+    const btn = li.querySelector<HTMLButtonElement>('.tf-nav__toggle');
+    btn?.addEventListener('click', (e: MouseEvent) => {
+      e.stopPropagation();
+      const abierto = li.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(abierto));
+    });
+  });
+
+  // Cerrar todo al elegir un enlace, click fuera o Escape
+  const cerrarTodo = () => {
+    subItems.forEach((li) => {
+      li.classList.remove('is-open');
+      li.querySelector('.tf-nav__toggle')?.setAttribute('aria-expanded', 'false');
+    });
+  };
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      cerrarTodo();
+      setMenu(false);
+    }),
+  );
+  document.addEventListener('click', (e: MouseEvent) => {
+    if (!hdr?.contains(e.target as Node)) {
+      cerrarTodo();
+      setMenu(false);
+    }
+  });
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      cerrarTodo();
+      setMenu(false);
+    }
+  });
+
+  // Enlace activo segun la seccion visible
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('#tf-nav > .tf-nav__lista > li > .tf-nav__link'));
+  const secciones = links
+    .map((a) => document.querySelector<HTMLElement>(a.getAttribute('href') || ''))
+    .filter((s): s is HTMLElement => !!s);
+  if ('IntersectionObserver' in window && secciones.length) {
+    const obs = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((en) => {
+          if (!en.isIntersecting) return;
+          links.forEach((a) => a.classList.toggle('is-activo', a.getAttribute('href') === '#' + en.target.id));
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    secciones.forEach((s) => obs.observe(s));
+  }
+</script>
+
+<style>
+  .tf-hdr {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: var(--tf-blanco);
+    height: var(--tf-hdr-h);
+    transition: box-shadow 0.25s ease;
+  }
+
+  .tf-hdr.is-scrolled {
+    box-shadow: 0 2px 14px rgba(4, 29, 27, 0.1);
+  }
+
+  .tf-hdr__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .tf-hdr__logo {
+    display: inline-flex;
+  }
+
+  .tf-nav {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+  }
+
+  .tf-nav__lista {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .tf-nav__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .tf-nav__link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--tf-tinta);
+    padding: 28px 0;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .tf-nav__link:hover,
+  .tf-nav__link.is-activo,
+  .tf-nav__item--sub:hover > .tf-nav__link {
+    color: var(--tf-verde);
+  }
+
+  .tf-nav__toggle {
+    display: inline-flex;
+    padding: 4px 0;
+    color: var(--tf-tinta);
+    transition: transform 0.2s ease;
+  }
+
+  .tf-nav__item--sub:hover .tf-nav__toggle,
+  .tf-nav__item--sub.is-open .tf-nav__toggle {
+    transform: rotate(180deg);
+    color: var(--tf-verde);
+  }
+
+  .tf-nav__drop {
+    position: absolute;
+    top: calc(100% - 14px);
+    left: -12px;
+    min-width: 262px;
+    white-space: nowrap;
+    background: var(--tf-blanco);
+    border: 1px solid var(--tf-linea);
+    border-radius: 8px;
+    box-shadow: 0 10px 28px rgba(4, 29, 27, 0.12);
+    padding: 6px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  .tf-nav__item--sub:hover .tf-nav__drop,
+  .tf-nav__item--sub:focus-within .tf-nav__drop,
+  .tf-nav__item--sub.is-open .tf-nav__drop {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .tf-nav__drop a {
+    display: block;
+    padding: 11px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--tf-tinta);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+
+  .tf-nav__drop a:hover {
+    color: var(--tf-verde);
+    background: var(--tf-menta);
+  }
+
+  .tf-hdr__cta {
+    background: var(--tf-tinta);
+    color: var(--tf-blanco);
+    font-family: var(--tf-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 8px 20px;
+    border-radius: var(--tf-radio);
+    transition: background 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .tf-hdr__cta:hover {
+    background: var(--tf-verde);
+  }
+
+  .tf-hdr__burger {
+    display: none;
+    color: var(--tf-tinta);
+    padding: 6px;
+  }
+
+  .tf-hdr__burger span {
+    display: inline-flex;
+  }
+
+  .tf-hdr__burger span[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 1100px) {
+    .tf-nav {
+      gap: 22px;
+    }
+    .tf-nav__lista {
+      gap: 18px;
+    }
+    .tf-nav__link {
+      font-size: 0.82rem;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .tf-hdr__burger {
+      display: inline-flex;
+    }
+
+    .tf-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: var(--tf-blanco);
+      border-top: 1px solid var(--tf-linea);
+      box-shadow: 0 16px 30px rgba(4, 29, 27, 0.14);
+      padding: 8px 20px 22px;
+      max-height: calc(100svh - var(--tf-hdr-h));
+      overflow-y: auto;
+      display: none;
+    }
+
+    .tf-nav.is-open {
+      display: flex;
+    }
+
+    .tf-nav__lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .tf-nav__item {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--tf-linea);
+    }
+
+    .tf-nav__link {
+      padding: 14px 0;
+      font-size: 0.92rem;
+    }
+
+    .tf-nav__toggle {
+      padding: 10px;
+    }
+
+    .tf-nav__drop {
+      position: static;
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0 0 8px 12px;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      display: none;
+    }
+
+    .tf-nav__item--sub:hover .tf-nav__drop {
+      display: none;
+    }
+
+    .tf-nav__item--sub.is-open .tf-nav__drop {
+      display: block;
+    }
+
+    .tf-hdr__cta {
+      margin-top: 18px;
+      text-align: center;
+      padding: 12px 20px;
+    }
+  }
+</style>

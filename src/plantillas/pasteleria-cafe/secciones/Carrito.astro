@@ -1,0 +1,258 @@
+---
+import Icono from '../componentes/Icono.astro';
+---
+
+<!-- "Mi carrito": panel lateral demo (estado solo en memoria, sin pago real) -->
+<div class="pc-cart" id="pc-cart" hidden>
+  <div class="pc-cart__fondo" data-cerrar-cart></div>
+  <aside class="pc-cart__panel" role="dialog" aria-modal="true" aria-labelledby="pc-cart-t">
+    <header class="pc-cart__cab">
+      <h2 id="pc-cart-t">Mi carrito</h2>
+      <button type="button" data-cerrar-cart aria-label="Cerrar carrito" class="pc-cart__x">
+        <Icono nombre="cerrar" size={20} grosor={2} />
+      </button>
+    </header>
+
+    <div class="pc-cart__cuerpo">
+      <div class="pc-cart__vacio" id="pc-cart-vacio">
+        <span class="pc-cart__vacio-ico"><Icono nombre="carrito" size={40} grosor={1.3} /></span>
+        <p>No hay productos en el carrito.</p>
+        <a href="#recomendados" class="pc-btn pc-btn--coral" data-cerrar-cart>Ver productos</a>
+      </div>
+      <ul id="pc-cart-lista"></ul>
+    </div>
+
+    <footer class="pc-cart__pie" id="pc-cart-pie" hidden>
+      <p class="pc-cart__sub"><span>Subtotal</span> <b id="pc-cart-total">S/ 0.00</b></p>
+      <p class="pc-cart__nota">Delivery o recojo en tienda: se elige al finalizar la compra.</p>
+      <button type="button" class="pc-btn pc-btn--coral pc-btn--bloque" id="pc-cart-fin">Finalizar compra</button>
+      <button type="button" class="pc-btn pc-btn--bloque" data-cerrar-cart>Seguir comprando</button>
+    </footer>
+  </aside>
+</div>
+
+<script>
+  interface Item { key: string; id: string; n: string; img: string; tam: string; p: number; qty: number }
+
+  const cart = document.getElementById('pc-cart');
+  const lista = document.getElementById('pc-cart-lista');
+  const vacio = document.getElementById('pc-cart-vacio');
+  const pie = document.getElementById('pc-cart-pie');
+  const total = document.getElementById('pc-cart-total');
+  const items: Item[] = [];
+
+  const soles = (n: number) =>
+    'S/ ' + n.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] ?? c);
+
+  /* toast compartido por toda la plantilla (clase en estilos.css) */
+  let toastEl: HTMLElement | null = null;
+  let toastT: number | undefined;
+  const toast = (txt: string) => {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'pc-toast';
+      toastEl.setAttribute('role', 'status');
+      document.querySelector('.tpl-pasteleria-cafe')?.appendChild(toastEl);
+    }
+    toastEl.textContent = txt;
+    toastEl.classList.remove('is-visible');
+    void toastEl.offsetWidth;
+    toastEl.classList.add('is-visible');
+    window.clearTimeout(toastT);
+    toastT = window.setTimeout(() => toastEl?.classList.remove('is-visible'), 2200);
+  };
+  document.addEventListener('pc:toast', ((e: CustomEvent<{ txt: string }>) => toast(e.detail.txt)) as EventListener);
+
+  const pintar = () => {
+    const n = items.reduce((a: number, i: Item) => a + i.qty, 0);
+    const suma = items.reduce((a: number, i: Item) => a + i.qty * i.p, 0);
+    if (vacio) vacio.hidden = items.length > 0;
+    if (pie) pie.hidden = items.length === 0;
+    if (total) total.textContent = soles(suma);
+    if (lista) {
+      lista.innerHTML = items
+        .map(
+          (i: Item) => `
+        <li class="pc-ci" data-key="${esc(i.key)}">
+          <img src="${esc(i.img)}" alt="" width="64" height="64" />
+          <div>
+            <p class="pc-ci__n">${esc(i.n)}</p>
+            <p class="pc-ci__t">${esc(i.tam)}</p>
+            <p class="pc-ci__p">${soles(i.p)}</p>
+            <div class="pc-ci__qty">
+              <button type="button" data-cq="-1" aria-label="Quitar uno">−</button>
+              <span>${i.qty}</span>
+              <button type="button" data-cq="1" aria-label="Agregar uno">+</button>
+            </div>
+          </div>
+          <button type="button" class="pc-ci__x" data-cx aria-label="Eliminar ${esc(i.n)}">✕</button>
+        </li>`,
+        )
+        .join('');
+    }
+    document.dispatchEvent(new CustomEvent('pc:badge', { detail: { tipo: 'carrito', n } }));
+  };
+
+  const abrir = () => {
+    if (!cart) return;
+    cart.hidden = false;
+    document.body.style.overflow = 'hidden';
+    cart.querySelector<HTMLButtonElement>('.pc-cart__x')?.focus();
+  };
+  const cerrar = () => {
+    if (!cart || cart.hidden) return;
+    cart.hidden = true;
+    document.body.style.overflow = '';
+  };
+
+  document.addEventListener('pc:abrir-carrito', abrir);
+  document.addEventListener('pc:agregar', ((e: CustomEvent<Omit<Item, 'key'>>) => {
+    const d = e.detail;
+    const key = `${d.id}|${d.tam}`;
+    const ya = items.find((i: Item) => i.key === key);
+    if (ya) ya.qty += d.qty;
+    else items.push({ ...d, key });
+    pintar();
+    toast(`Añadido: ${d.n}`);
+    window.setTimeout(abrir, 350);
+  }) as EventListener);
+
+  cart?.addEventListener('click', (e: MouseEvent) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-cerrar-cart]')) { cerrar(); return; }
+    const li = t.closest<HTMLElement>('.pc-ci');
+    if (!li) return;
+    const idx = items.findIndex((i: Item) => i.key === li.dataset.key);
+    if (idx < 0) return;
+    const q = t.closest<HTMLElement>('[data-cq]');
+    if (q) {
+      items[idx].qty += Number(q.dataset.cq);
+      if (items[idx].qty < 1) items.splice(idx, 1);
+      pintar();
+    } else if (t.closest('[data-cx]')) {
+      items.splice(idx, 1);
+      pintar();
+    }
+  });
+  document.getElementById('pc-cart-fin')?.addEventListener('click', () =>
+    toast('Demo: aquí iría el checkout (delivery o recojo).'),
+  );
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  pintar();
+</script>
+
+<style>
+  .pc-cart {
+    position: fixed;
+    inset: 0;
+    z-index: 320;
+  }
+
+  .pc-cart__fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(48, 45, 42, 0.5);
+    animation: pc-fade 0.25s ease;
+  }
+
+  @keyframes pc-fade {
+    from { opacity: 0; }
+  }
+
+  .pc-cart__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(400px, 100%);
+    background: var(--pc-blanco);
+    display: flex;
+    flex-direction: column;
+    animation: pc-slide 0.3s ease;
+  }
+
+  @keyframes pc-slide {
+    from { transform: translateX(100%); }
+  }
+
+  .pc-cart__cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.3rem;
+    border-bottom: 1px solid var(--pc-linea);
+  }
+
+  .pc-cart__cab h2 {
+    font-family: var(--pc-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.05em;
+  }
+
+  .pc-cart__x {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+  .pc-cart__x:hover {
+    background: var(--pc-panel);
+  }
+
+  .pc-cart__cuerpo {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 1.3rem;
+  }
+
+  .pc-cart__vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    padding: 3.5rem 0;
+    color: var(--pc-gris);
+    font-size: 0.9rem;
+  }
+
+  .pc-cart__vacio-ico {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--pc-panel);
+    display: grid;
+    place-items: center;
+    color: var(--pc-tinta);
+  }
+
+  .pc-cart__pie {
+    padding: 1.1rem 1.3rem 1.3rem;
+    border-top: 1px solid var(--pc-linea);
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .pc-cart__sub {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+
+  .pc-cart__sub b {
+    color: var(--pc-coral);
+    font-size: 1.1rem;
+  }
+
+  .pc-cart__nota {
+    font-size: 0.74rem;
+    color: var(--pc-gris);
+  }
+</style>

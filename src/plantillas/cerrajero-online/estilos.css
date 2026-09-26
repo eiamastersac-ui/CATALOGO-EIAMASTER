@@ -1,0 +1,366 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap");
+
+/* ==========================================================================
+   cerrajero-online — cerrajeria en Madrid (inspirada en cerrajeronline.com)
+   Paleta real del sitio: tinta #262626 (barra superior / newsletter / footer),
+   titulos #353740, texto gris #747d88, panel #f4f4f4 y UN acento naranja
+   #e95d0e (iconos, item activo, boton de llamada). El tinte pizarra #283d4b
+   del scrim sale del overlay real del hero. El resto del color lo ponen las
+   fotos de cerraduras, llaves y puertas.
+   Todo namespaced bajo .tpl-cerrajero-online. SIN overflow-x en la raiz.
+   ========================================================================== */
+
+.tpl-cerrajero-online {
+  --co-tinta: #262626;
+  --co-tinta-2: #1f1f1f;
+  --co-titulo: #353740;
+  --co-texto: #5b626b;
+  --co-gris: #747d88;
+  --co-linea: #e3e3e3;
+  --co-panel: #f4f4f4;
+  --co-blanco: #ffffff;
+  --co-naranja: #e95d0e;
+  --co-naranja-osc: #c94d08;
+  --co-pizarra: #283d4b;
+
+  --co-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --co-display: "Josefin Sans", "Montserrat", Helvetica, Arial, sans-serif;
+  --co-nav: "Open Sans", "Montserrat", Helvetica, Arial, sans-serif;
+
+  --co-maxw: 1180px;
+  --co-radio: 10px;
+  --co-top-h: 34px;
+  --co-hdr-h: 74px;
+
+  background: var(--co-blanco);
+  color: var(--co-texto);
+  font-family: var(--co-font);
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-cerrajero-online {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-cerrajero-online *,
+.tpl-cerrajero-online *::before,
+.tpl-cerrajero-online *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-cerrajero-online h1,
+.tpl-cerrajero-online h2,
+.tpl-cerrajero-online h3,
+.tpl-cerrajero-online h4 {
+  font-family: var(--co-font);
+  color: var(--co-titulo);
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.tpl-cerrajero-online img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-cerrajero-online a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-cerrajero-online ul {
+  list-style: none;
+}
+
+.tpl-cerrajero-online button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-cerrajero-online input,
+.tpl-cerrajero-online select,
+.tpl-cerrajero-online textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-cerrajero-online [hidden] {
+  display: none !important;
+}
+
+/* --- layout utils --- */
+.tpl-cerrajero-online .co-wrap {
+  max-width: var(--co-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-cerrajero-online .co-seccion {
+  padding-block: clamp(3.5rem, 8vw, 5.5rem);
+  position: relative;
+}
+
+/* las anclas del menu no quedan tapadas por la cabecera fija */
+.tpl-cerrajero-online section[id] {
+  scroll-margin-top: calc(var(--co-top-h) + var(--co-hdr-h) - 20px);
+}
+
+.tpl-cerrajero-online .co-seccion--panel {
+  background: var(--co-panel);
+}
+
+.tpl-cerrajero-online .co-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--co-gris);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-cerrajero-online .co-kicker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--co-naranja);
+}
+
+.tpl-cerrajero-online .co-titulo {
+  font-size: clamp(1.55rem, 3.4vw, 2.1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin-bottom: 1rem;
+}
+
+.tpl-cerrajero-online .co-titulo--normal {
+  text-transform: none;
+}
+
+.tpl-cerrajero-online .co-cab {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.tpl-cerrajero-online .co-cab--centro {
+  text-align: center;
+}
+
+.tpl-cerrajero-online .co-cab--centro .co-kicker {
+  justify-content: center;
+}
+
+.tpl-cerrajero-online .co-sub {
+  color: var(--co-gris);
+  max-width: 60ch;
+}
+
+.tpl-cerrajero-online .co-cab--centro .co-sub {
+  margin-inline: auto;
+}
+
+/* --- botones (el sitio real usa botones de borde con radio 10px
+       y un boton solido naranja para la llamada) --- */
+.tpl-cerrajero-online .co-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--co-radio);
+  font-family: var(--co-font);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.tpl-cerrajero-online .co-btn--naranja {
+  background: var(--co-naranja);
+  color: #fff;
+}
+
+.tpl-cerrajero-online .co-btn--naranja:hover {
+  background: var(--co-naranja-osc);
+}
+
+.tpl-cerrajero-online .co-btn--borde {
+  border-color: var(--co-gris);
+  color: var(--co-texto);
+  background: transparent;
+}
+
+.tpl-cerrajero-online .co-btn--borde:hover {
+  border-color: var(--co-titulo);
+  color: var(--co-titulo);
+  background: var(--co-panel);
+}
+
+.tpl-cerrajero-online .co-btn--claro {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.tpl-cerrajero-online .co-btn--claro:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #fff;
+}
+
+.tpl-cerrajero-online .co-btn--oscuro {
+  background: var(--co-tinta);
+  color: #fff;
+}
+
+.tpl-cerrajero-online .co-btn--oscuro:hover {
+  background: #000;
+}
+
+/* --- flechas carrusel --- */
+.tpl-cerrajero-online .co-flecha {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--co-linea);
+  background: var(--co-blanco);
+  color: var(--co-titulo);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.tpl-cerrajero-online .co-flecha:hover {
+  background: var(--co-tinta);
+  border-color: var(--co-tinta);
+  color: #fff;
+}
+
+.tpl-cerrajero-online .co-flecha--izq svg {
+  transform: scaleX(-1);
+}
+
+/* --- dots (tambien los usa JS para marcar activo) --- */
+.tpl-cerrajero-online .co-dots {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.tpl-cerrajero-online .co-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.tpl-cerrajero-online .co-dot.is-activo {
+  background: #fff;
+  transform: scale(1.2);
+}
+
+.tpl-cerrajero-online .co-dots--oscuro .co-dot {
+  background: #cfcfcf;
+}
+
+.tpl-cerrajero-online .co-dots--oscuro .co-dot.is-activo {
+  background: var(--co-naranja);
+}
+
+/* --- reveal on scroll --- */
+.tpl-cerrajero-online .co-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-cerrajero-online .co-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-cerrajero-online .co-reveal--1 { transition-delay: 0.08s; }
+.tpl-cerrajero-online .co-reveal--2 { transition-delay: 0.16s; }
+.tpl-cerrajero-online .co-reveal--3 { transition-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-cerrajero-online .co-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- mensajes de estado creados/tocados por JS (fuera del scope de Astro) --- */
+.tpl-cerrajero-online .co-aviso {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #2f7a3e;
+}
+
+.tpl-cerrajero-online .co-aviso--error {
+  color: #b3261e;
+}
+
+.tpl-cerrajero-online .co-servicio.is-oculto {
+  display: none;
+}
+
+.tpl-cerrajero-online .co-resultados {
+  margin-top: -1.25rem;
+  margin-bottom: 1.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--co-gris);
+}
+
+.tpl-cerrajero-online .co-resultados b {
+  color: var(--co-naranja);
+}
+
+.tpl-cerrajero-online .co-resultados button {
+  margin-left: 0.5rem;
+  text-decoration: underline;
+  color: var(--co-titulo);
+  font-weight: 600;
+}
+
+/* --- boton flotante de llamada (movil) --- */
+.tpl-cerrajero-online .co-llamar-flotante {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 150;
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: 999px;
+  background: var(--co-naranja);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 14px 30px -12px rgba(233, 93, 14, 0.7);
+}
+
+@media (max-width: 760px) {
+  .tpl-cerrajero-online .co-llamar-flotante {
+    display: inline-flex;
+  }
+}

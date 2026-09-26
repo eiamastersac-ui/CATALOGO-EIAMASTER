@@ -1,0 +1,309 @@
+---
+import { appCards, u, IMG, euros } from '../datos/reservas.js';
+const c = appCards.cliente;
+const b = appCards.negocio;
+
+const agenda = [
+  { h: '09:00', n: 'Lucía M.', s: 'Corte y peinado', col: 1, alto: 2 },
+  { h: '10:00', n: 'Andrés P.', s: 'Degradado', col: 2, alto: 1 },
+  { h: '11:00', n: 'Marta R.', s: 'Color raíz', col: 1, alto: 3 },
+  { h: '12:00', n: 'Hugo S.', s: 'Barba', col: 2, alto: 1 },
+  { h: '13:00', n: 'Sara L.', s: 'Manicura', col: 2, alto: 2 },
+];
+---
+
+<section class="rb-apps" id="apps">
+  <div class="rb-wrap rb-apps__grid">
+    <article class="rb-app rb-app--cliente">
+      <p class="rb-app__kicker">
+        <span class="rb-app__ico rb-app__ico--cian" aria-hidden="true">
+          <svg width="18" height="12" viewBox="0 0 16 10" fill="none"><path d="M1 7.5C3 2 6 2 8 5s5 3 7-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        </span>
+        {c.kicker}
+      </p>
+      <h2 class="rb-app__tit">{c.titulo[0]} <b>{c.titulo[1]}</b></h2>
+      <p class="rb-app__tx">{c.texto}</p>
+
+      <form class="rb-app__form" id="rb-app-form">
+        <span class="rb-app__pref">
+          <span class="rb-app__flag" aria-hidden="true"><i></i><i></i><i></i></span> +34
+        </span>
+        <input type="tel" inputmode="tel" placeholder="Tu número de teléfono" aria-label="Tu número de teléfono" id="rb-app-tel" />
+        <button type="submit" class="rb-btn rb-btn--cian">Descargar</button>
+      </form>
+
+      <div class="rb-movil" aria-hidden="true">
+        <div class="rb-movil__pantalla">
+          <div class="rb-movil__foto">
+            <img src={u(IMG.salonEspejos, 520, 300)} alt="" loading="lazy" />
+            <span class="rb-movil__nota"><b>4.9</b>820 reseñas</span>
+          </div>
+          <div class="rb-movil__cuerpo">
+            <p class="rb-movil__nombre">Estudio Melena</p>
+            <p class="rb-movil__dir">Carrer de Pàdua 41, Barcelona</p>
+            <div class="rb-movil__tabs"><span class="is-on">Servicios</span><span>Reseñas</span><span>Portafolio</span><span>Detalles</span></div>
+            <p class="rb-movil__sec">Servicios populares</p>
+            <div class="rb-movil__serv"><span>Lavar, cortar y peinar<small>60 min</small></span><b>{euros(32)}</b><i>Reservar</i></div>
+            <div class="rb-movil__serv"><span>Mechas balayage<small>2 h 30 min</small></span><b>{euros(95)}</b><i>Reservar</i></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="rb-app rb-app--negocio">
+      <p class="rb-app__kicker">
+        <span class="rb-app__ico" aria-hidden="true">
+          <svg width="18" height="12" viewBox="0 0 16 10" fill="none"><path d="M1 7.5C3 2 6 2 8 5s5 3 7-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        </span>
+        {b.kicker}
+      </p>
+      <h2 class="rb-app__tit">{b.titulo[0]} <b>{b.titulo[1]}</b></h2>
+      <p class="rb-app__tx">{b.texto}</p>
+      <a href="#ciudades" class="rb-btn rb-btn--oscuro">{b.cta}</a>
+
+      <div class="rb-movil" aria-hidden="true">
+        <div class="rb-movil__pantalla rb-movil__pantalla--agenda">
+          <div class="rb-agenda__cab">
+            <b>Hoy</b><small>9:00 – 19:00</small>
+            <div class="rb-agenda__dias">
+              {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d, i) => (
+                <span class={i === 3 ? 'is-on' : ''}><small>{d}</small>{i + 22}</span>
+              ))}
+            </div>
+          </div>
+          <div class="rb-agenda__pros">
+            <span><img src={u(IMG.estilistaOscuro, 80, 80)} alt="" loading="lazy" />Carla</span>
+            <span><img src={u(IMG.barberoSonrie, 80, 80)} alt="" loading="lazy" />Dani</span>
+          </div>
+          <div class="rb-agenda__rejilla">
+            {agenda.map((a) => (
+              <div class={`rb-agenda__cita rb-agenda__cita--c${a.col}`} style={`grid-row: span ${a.alto}`}>
+                <b>{a.h} {a.n}</b>
+                <small>{a.s}</small>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('rb-app-form');
+  const tel = document.getElementById('rb-app-tel') as HTMLInputElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raiz = document.querySelector('.tpl-reservas-belleza');
+    if (!raiz) return;
+    const digitos = (tel?.value || '').replace(/\D/g, '');
+    const toast = document.createElement('div');
+    toast.className = 'rb-toast';
+    toast.textContent = digitos.length >= 9
+      ? 'Demo: aquí se enviaría el enlace de descarga por SMS.'
+      : 'Introduce un número de 9 dígitos para recibir el enlace.';
+    raiz.appendChild(toast);
+    void toast.offsetWidth;
+    toast.classList.add('is-on');
+    setTimeout(() => {
+      toast.classList.remove('is-on');
+      setTimeout(() => toast.remove(), 300);
+    }, 2600);
+    if (digitos.length >= 9 && tel) tel.value = '';
+  });
+</script>
+
+<style>
+  .rb-apps { padding: 70px 0 0; }
+  .rb-apps__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .rb-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 34px 28px 0;
+    border-radius: 16px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .rb-app--cliente { background: var(--rb-cian-cl); }
+  .rb-app--negocio { background: var(--rb-panel); }
+  .rb-app__kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: .92rem;
+  }
+  .rb-app__ico {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    background: var(--rb-tinta);
+    color: #fff;
+  }
+  .rb-app__ico--cian { background: var(--rb-cian); }
+  .rb-app__tit {
+    margin: 40px 0 24px;
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-weight: 500;
+  }
+  .rb-app__tit b { font-weight: 800; }
+  .rb-app__tx {
+    max-width: 440px;
+    margin-bottom: 28px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .rb-app__form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: min(100%, 470px);
+    padding: 8px;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .rb-app__pref {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px 0 6px;
+    border-right: 1px solid var(--rb-linea);
+    font-size: .9rem;
+    white-space: nowrap;
+  }
+  .rb-app__flag { display: flex; flex-direction: column; width: 20px; height: 14px; border-radius: 2px; overflow: hidden; }
+  .rb-app__flag i:nth-child(1), .rb-app__flag i:nth-child(3) { flex: 1; background: #c60b1e; }
+  .rb-app__flag i:nth-child(2) { flex: 2; background: #ffc400; }
+  .rb-app__form input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    border: 0;
+    outline: 0;
+    font-size: .92rem;
+  }
+  .rb-app__form .rb-btn { height: 40px; padding: 0 18px; text-transform: uppercase; font-size: .8rem; letter-spacing: .03em; }
+
+  /* mockup de movil */
+  .rb-movil {
+    width: 300px;
+    height: 330px;
+    margin-top: 40px;
+    padding: 12px 12px 0;
+    border-radius: 40px 40px 0 0;
+    background: #fff;
+    box-shadow: 0 0 0 1px #dcdcdc, 0 20px 50px rgba(0,0,0,.12);
+    overflow: hidden;
+  }
+  .rb-movil__pantalla {
+    height: 100%;
+    border-radius: 30px 30px 0 0;
+    overflow: hidden;
+    background: #fff;
+    text-align: left;
+    border: 1px solid #efefef;
+    border-bottom: 0;
+  }
+  .rb-movil__foto { position: relative; height: 128px; }
+  .rb-movil__foto img { width: 100%; height: 100%; object-fit: cover; }
+  .rb-movil__nota {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 6px 8px;
+    background: rgba(26,26,26,.72);
+    color: #fff;
+    font-size: .55rem;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .rb-movil__nota b { display: block; font-size: .9rem; }
+  .rb-movil__cuerpo { padding: 10px 12px; }
+  .rb-movil__nombre { font-weight: 800; font-size: .9rem; }
+  .rb-movil__dir { font-size: .64rem; color: var(--rb-gris); }
+  .rb-movil__tabs {
+    display: flex;
+    gap: 10px;
+    margin: 8px 0;
+    border-bottom: 1px solid var(--rb-linea);
+    font-size: .6rem;
+    color: var(--rb-gris);
+  }
+  .rb-movil__tabs span { padding-bottom: 4px; }
+  .rb-movil__tabs .is-on { color: var(--rb-tinta); font-weight: 700; border-bottom: 2px solid var(--rb-tinta); }
+  .rb-movil__sec { font-size: .66rem; font-weight: 700; margin-bottom: 4px; }
+  .rb-movil__serv {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: .62rem;
+  }
+  .rb-movil__serv span { flex: 1; font-weight: 600; }
+  .rb-movil__serv small { display: block; font-weight: 400; color: var(--rb-gris); }
+  .rb-movil__serv i {
+    font-style: normal;
+    padding: 3px 7px;
+    border-radius: 4px;
+    background: var(--rb-cian-osc);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .rb-movil__pantalla--agenda { padding: 14px 10px 0; font-size: .62rem; }
+  .rb-agenda__cab small { margin-left: 6px; color: var(--rb-gris); }
+  .rb-agenda__dias { display: flex; justify-content: space-between; margin: 8px 0; }
+  .rb-agenda__dias span {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 34px;
+    border-radius: 8px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .rb-agenda__dias small { display: block; font-weight: 400; color: var(--rb-gris); }
+  .rb-agenda__dias .is-on { background: var(--rb-tinta); color: #fff; }
+  .rb-agenda__dias .is-on small { color: #ccc; }
+  .rb-agenda__pros { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+  .rb-agenda__pros span { display: flex; align-items: center; gap: 5px; font-weight: 700; }
+  .rb-agenda__pros img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+  .rb-agenda__rejilla {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 30px;
+    grid-auto-flow: dense;
+    gap: 4px 6px;
+  }
+  .rb-agenda__cita {
+    padding: 4px 6px;
+    border-left: 3px solid var(--rb-cian);
+    border-radius: 4px;
+    background: var(--rb-cian-cl);
+    overflow: hidden;
+  }
+  .rb-agenda__cita--c1 { grid-column: 1; }
+  .rb-agenda__cita--c2 { grid-column: 2; border-left-color: var(--rb-tinta); background: var(--rb-panel); }
+  .rb-agenda__cita b { display: block; font-size: .58rem; }
+  .rb-agenda__cita small { color: var(--rb-gris); font-size: .55rem; }
+
+  @media (max-width: 900px) {
+    .rb-apps { padding-top: 44px; }
+    .rb-apps__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .rb-app { padding: 26px 16px 0; }
+    .rb-app__tit { margin: 24px 0 14px; }
+    .rb-app__form { flex-wrap: wrap; }
+    .rb-app__form .rb-btn { flex: 1 1 100%; }
+    .rb-movil { width: 260px; }
+  }
+</style>

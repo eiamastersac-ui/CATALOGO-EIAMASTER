@@ -1,0 +1,150 @@
+---
+import { u, nombreCategoria } from '../datos/reservas.js';
+
+interface Negocio {
+  id: string;
+  nombre: string;
+  cat: string;
+  ciudad: string;
+  dir: string;
+  rating: number;
+  resenas: number;
+  img: string;
+  patrocinado: boolean;
+  servicios: { n: string }[];
+}
+const { n } = Astro.props as { n: Negocio };
+const catNombre = (nombreCategoria as Record<string, string>)[n.cat] || '';
+const busqueda = [n.nombre, catNombre, n.ciudad, ...n.servicios.map((s) => s.n)].join(' ').toLowerCase();
+---
+
+<article class="rb-neg" data-id={n.id} data-cat={n.cat} data-ciudad={n.ciudad} data-busqueda={busqueda}>
+  <button type="button" class="rb-neg__abrir" data-reservar={n.id} aria-label={`Reservar en ${n.nombre}`}>
+    <span class="rb-neg__foto">
+      <img src={u(n.img, 560, 380)} alt={`${n.nombre}, ${catNombre} en ${n.ciudad}`} loading="lazy" />
+      <span class="rb-neg__nota">
+        <b>{n.rating.toFixed(1)}</b>
+        <small>{n.resenas.toLocaleString('es-ES')} reseñas</small>
+      </span>
+      <span class="rb-neg__cat">{catNombre}</span>
+    </span>
+  </button>
+  <div class="rb-neg__info">
+    <div class="rb-neg__tx">
+      <h3 class="rb-neg__nombre"><button type="button" data-reservar={n.id}>{n.nombre}</button></h3>
+      <p class="rb-neg__dir">{n.dir}</p>
+    </div>
+    <button type="button" class="rb-neg__fav" aria-label={`Guardar ${n.nombre} en favoritos`} aria-pressed="false">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 20.3 4.6 13a4.7 4.7 0 0 1 6.6-6.6l.8.8.8-.8a4.7 4.7 0 0 1 6.6 6.6Z"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="rb-neg__pie">
+    <span class="rb-neg__chip" title="Reserva online inmediata">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"></path></svg>
+      Reserva al instante
+    </span>
+    {n.patrocinado && <span class="rb-neg__patro">Patrocinado <span aria-hidden="true">ⓘ</span></span>}
+  </div>
+</article>
+
+<style>
+  .rb-neg {
+    width: 272px;
+    display: flex;
+    flex-direction: column;
+  }
+  .rb-neg[hidden] { display: none; }
+  .rb-neg__abrir { display: block; width: 100%; text-align: left; }
+  .rb-neg__foto {
+    position: relative;
+    display: block;
+    aspect-ratio: 272 / 182;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--rb-panel);
+  }
+  .rb-neg__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+  }
+  .rb-neg:hover .rb-neg__foto img { transform: scale(1.04); }
+  .rb-neg__nota {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 80px;
+    padding: 8px 10px 7px;
+    border-bottom-left-radius: 6px;
+    background: rgba(26, 26, 26, .72);
+    color: #fff;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .rb-neg__nota b { display: block; font-size: 1.2rem; font-weight: 700; }
+  .rb-neg__nota small { font-size: .66rem; font-weight: 600; }
+  .rb-neg__cat {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--rb-tinta);
+    font-size: .72rem;
+    font-weight: 700;
+  }
+  .rb-neg__info {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .rb-neg__tx { flex: 1; min-width: 0; }
+  .rb-neg__nombre { font-size: 1rem; font-weight: 700; line-height: 1.3; }
+  .rb-neg__nombre button {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: 700;
+  }
+  .rb-neg__nombre button:hover { text-decoration: underline; }
+  .rb-neg__dir {
+    margin-top: 2px;
+    font-size: .8rem;
+    color: var(--rb-gris);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .rb-neg__fav { color: var(--rb-tinta); flex-shrink: 0; transition: transform .15s; }
+  .rb-neg__fav:active { transform: scale(.85); }
+  .rb-neg__fav[aria-pressed="true"] { color: #d6336c; }
+  .rb-neg__fav[aria-pressed="true"] path { fill: currentColor; }
+  .rb-neg__pie {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: .74rem;
+  }
+  .rb-neg__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--rb-panel);
+    font-weight: 600;
+  }
+  .rb-neg__chip svg { color: var(--rb-cian); }
+  .rb-neg__patro { color: var(--rb-gris); }
+</style>

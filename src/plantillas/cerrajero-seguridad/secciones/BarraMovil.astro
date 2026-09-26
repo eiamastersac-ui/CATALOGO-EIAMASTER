@@ -1,0 +1,247 @@
+---
+import { nav, marca, etiquetaSub } from '../datos/tienda.js';
+import Icono from '../componentes/Icono.astro';
+
+type Item = { t: string; ico?: string; href: string; sub?: string[] };
+---
+
+<!-- Movil: barra inferior fija (Menú / Pedido / Tienda / Cupón / Carrito) + menu lateral
+     con acordeones, como la version movil del original. -->
+<nav class="cs-bm" aria-label="Accesos móviles">
+  <button type="button" class="cs-bm__it" id="cs-menu-abrir" aria-controls="cs-panel" aria-expanded="false">
+    <Icono nombre="menu" size={24} /> Menú
+  </button>
+  <a href="#cs-pie" class="cs-bm__it"><Icono nombre="pedido" size={22} /> Pedido</a>
+  <a href="#categorias" class="cs-bm__it"><Icono nombre="tienda" size={22} /> Tienda</a>
+  <a href="#ofertas" class="cs-bm__it"><Icono nombre="porcentaje" size={22} /> Cupón</a>
+  <button type="button" class="cs-bm__it cs-bm__carro">
+    <span class="cs-bm__badgewrap"><Icono nombre="carrito" size={24} /><b data-cs-badge>0</b></span>
+    Carrito
+  </button>
+</nav>
+
+<div class="cs-panel-velo" id="cs-panel-velo" hidden></div>
+<aside class="cs-panel" id="cs-panel" aria-label="Menú de categorías" hidden>
+  <div class="cs-panel__cab">
+    <b>{marca.nombre} <span>{marca.sub}</span></b>
+    <button type="button" id="cs-menu-cerrar" aria-label="Cerrar menú"><Icono nombre="cerrar" size={24} /></button>
+  </div>
+  <ul class="cs-panel__lista">
+    {
+      nav.map((n: Item) => (
+        <li>
+          {n.sub ? (
+            <details>
+              <summary>
+                {n.ico ?? '🎁'} {n.t.toUpperCase()}
+                <Icono nombre="caret" size={18} />
+              </summary>
+              <ul>
+                {n.sub.map((s: string) => (
+                  <li>
+                    <a href={n.href} data-cs-cierra-panel>
+                      {etiquetaSub(s)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ) : (
+            <a href={n.href} class="cs-panel__link" data-cs-cierra-panel>
+              {n.ico} {n.t.toUpperCase()}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+
+<script>
+  const panel = document.getElementById('cs-panel');
+  const velo = document.getElementById('cs-panel-velo');
+  const abrir = document.getElementById('cs-menu-abrir');
+
+  const poner = (on: boolean) => {
+    if (!panel || !velo) return;
+    if (on) {
+      panel.hidden = false;
+      velo.hidden = false;
+      void panel.offsetWidth;
+      panel.classList.add('is-on');
+      velo.classList.add('is-on');
+    } else {
+      panel.classList.remove('is-on');
+      velo.classList.remove('is-on');
+      window.setTimeout(() => {
+        panel.hidden = true;
+        velo.hidden = true;
+      }, 260);
+    }
+    abrir?.setAttribute('aria-expanded', String(on));
+  };
+
+  abrir?.addEventListener('click', () => poner(true));
+  document.getElementById('cs-menu-cerrar')?.addEventListener('click', () => poner(false));
+  velo?.addEventListener('click', () => poner(false));
+  document.querySelectorAll('[data-cs-cierra-panel]').forEach((a) => a.addEventListener('click', () => poner(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel && !panel.hidden) poner(false);
+  });
+</script>
+
+<style>
+  .cs-bm {
+    display: none;
+  }
+
+  .cs-panel,
+  .cs-panel-velo {
+    display: none;
+  }
+
+  @media (max-width: 899px) {
+    .cs-bm {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 320;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      background: #fff;
+      border-top: 1px solid var(--cs-linea);
+      box-shadow: 0 -8px 20px -14px rgba(0, 0, 0, 0.35);
+      height: 62px;
+    }
+
+    .cs-bm__it {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--cs-navy);
+    }
+
+    .cs-bm__badgewrap {
+      position: relative;
+      display: grid;
+    }
+
+    .cs-bm__badgewrap b {
+      position: absolute;
+      top: -5px;
+      right: -9px;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: var(--cs-naranja);
+      color: var(--cs-navy-2);
+      font-size: 0.62rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .cs-panel-velo {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 330;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .cs-panel-velo.is-on {
+      opacity: 1;
+    }
+
+    .cs-panel {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 340;
+      width: min(340px, 86vw);
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      overflow-y: auto;
+    }
+
+    .cs-panel.is-on {
+      transform: none;
+    }
+
+    .cs-panel[hidden],
+    .cs-panel-velo[hidden] {
+      display: none;
+    }
+
+    .cs-panel__cab {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.1rem;
+      background: var(--cs-navy);
+      color: #fff;
+    }
+
+    .cs-panel__cab b {
+      font-family: var(--cs-display);
+      font-weight: 400;
+      font-size: 1.2rem;
+    }
+
+    .cs-panel__cab b span {
+      color: var(--cs-naranja);
+    }
+
+    .cs-panel__lista > li {
+      border-bottom: 1px solid var(--cs-linea);
+    }
+
+    .cs-panel__link,
+    .cs-panel summary {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.95rem 1.1rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--cs-navy);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .cs-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .cs-panel summary :global(svg) {
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+
+    .cs-panel details[open] summary :global(svg) {
+      transform: rotate(180deg);
+    }
+
+    .cs-panel details ul {
+      padding: 0 1.1rem 0.8rem 1.6rem;
+    }
+
+    .cs-panel details a {
+      display: block;
+      padding: 0.45rem 0;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #33475e;
+    }
+  }
+</style>

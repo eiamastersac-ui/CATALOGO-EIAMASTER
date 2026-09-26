@@ -1,0 +1,122 @@
+---
+import { beneficios } from '../datos/barberia.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="bc-ben" id="beneficios">
+  <div class="bc-ben__txt bc-reveal">
+    <span class="bc-kicker">{beneficios.kicker}</span>
+    <h2 class="bc-titulo">
+      {beneficios.titulo.map((l: string) => <span>{l}</span>)}
+    </h2>
+    <ul class="bc-ben__lista">
+      {beneficios.items.map((t: string) => (
+        <li>
+          <span class="bc-ben__check"><Icono nombre="check" size={16} grosor={1.8} /></span>
+          <span>{t}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- foto a media pantalla, a sangre hasta el borde derecho (igual que el original) -->
+  <figure class="bc-ben__foto">
+    <img src={beneficios.img} alt="Barbero con sombrero haciendo un corte" loading="lazy" />
+  </figure>
+</section>
+
+<style>
+  .bc-ben {
+    display: grid;
+    grid-template-columns: 47% 53%;
+    background: var(--bc-panel);
+    min-height: 580px;
+  }
+
+  .bc-ben__txt {
+    align-self: center;
+    justify-self: end;
+    width: 100%;
+    max-width: 440px;
+    margin-right: clamp(1.5rem, 5vw, 5.5rem);
+    padding-block: clamp(3.5rem, 7vw, 5rem);
+  }
+
+  .bc-ben__txt .bc-titulo {
+    font-size: clamp(1.9rem, 3.3vw, 2.9rem);
+  }
+
+  .bc-ben__lista {
+    margin-top: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .bc-ben__lista li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .bc-ben__check {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--bc-tinta);
+    color: var(--bc-tinta);
+    display: grid;
+    place-items: center;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  .bc-ben__lista li:hover .bc-ben__check {
+    background: var(--bc-tinta);
+    color: #fff;
+  }
+
+  .bc-ben__foto {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bc-ben__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+
+  /* el original funde el borde izquierdo de la foto con el panel claro */
+  .bc-ben__foto::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 60px;
+    z-index: 1;
+    background: linear-gradient(90deg, var(--bc-panel), rgba(247, 247, 247, 0));
+  }
+
+  @media (max-width: 860px) {
+    .bc-ben {
+      grid-template-columns: 1fr;
+    }
+    .bc-ben__txt {
+      justify-self: stretch;
+      max-width: none;
+      margin: 0;
+      padding-inline: clamp(1rem, 4vw, 2rem);
+    }
+    .bc-ben__foto {
+      aspect-ratio: 4 / 3;
+    }
+    .bc-ben__foto::before {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,250 @@
+---
+import { hero, heroSlides } from '../datos/barberia.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Slide { img: string; pos: string }
+const slides = heroSlides as Slide[];
+---
+
+<section class="bc-hero" id="bc-hero" aria-roledescription="carrusel" aria-label="Destacados">
+  <div class="bc-hero__fotos">
+    {slides.map((s: Slide, i: number) => (
+      <img
+        src={s.img}
+        alt=""
+        class={`bc-hero__foto${i === 0 ? ' is-activo' : ''}`}
+        style={`object-position:${s.pos}`}
+        loading={i === 0 ? 'eager' : 'lazy'}
+        fetchpriority={i === 0 ? 'high' : 'auto'}
+      />
+    ))}
+  </div>
+  <div class="bc-hero__scrim" aria-hidden="true"></div>
+
+  <div class="bc-hero__txt">
+    <span class="bc-hero__kicker">{hero.kicker}</span>
+    <h1 class="bc-hero__titulo">
+      {hero.titulo.map((l: string) => <span>{l}</span>)}
+    </h1>
+    <p class="bc-hero__p">{hero.texto}</p>
+    <button type="button" class="bc-btn bc-btn--claro" data-abrir-chat>
+      <span class="bc-btn__txt">{hero.cta}</span>
+      <span class="bc-btn__fl"><Icono nombre="flecha" size={16} grosor={1.5} /></span>
+    </button>
+  </div>
+
+  <div class="bc-hero__dots" role="tablist" aria-label="Elegir slide">
+    {slides.map((_: Slide, i: number) => (
+      <button
+        type="button"
+        role="tab"
+        class={`bc-hero__dot${i === 0 ? ' is-activo' : ''}`}
+        aria-label={`Slide ${i + 1}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        data-slide={i}
+      ></button>
+    ))}
+  </div>
+</section>
+
+<script>
+  const hero = document.getElementById('bc-hero');
+  const fotos = Array.from(hero?.querySelectorAll<HTMLElement>('.bc-hero__foto') ?? []);
+  const dots = Array.from(hero?.querySelectorAll<HTMLButtonElement>('.bc-hero__dot') ?? []);
+  const txt = hero?.querySelector<HTMLElement>('.bc-hero__txt');
+  let idx = 0;
+  let timer: number | undefined;
+
+  const ir = (n: number) => {
+    if (!fotos.length) return;
+    idx = (n + fotos.length) % fotos.length;
+    fotos.forEach((f, i) => f.classList.toggle('is-activo', i === idx));
+    dots.forEach((d, i) => {
+      d.classList.toggle('is-activo', i === idx);
+      d.setAttribute('aria-selected', String(i === idx));
+    });
+    // re-dispara la animacion de entrada del texto (como el slider original)
+    if (txt) {
+      txt.classList.remove('is-anim');
+      void txt.offsetWidth;
+      txt.classList.add('is-anim');
+    }
+  };
+
+  const arrancar = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  };
+
+  dots.forEach((d) =>
+    d.addEventListener('click', () => {
+      ir(Number(d.dataset.slide));
+      arrancar();
+    }),
+  );
+  hero?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  hero?.addEventListener('mouseleave', arrancar);
+  txt?.classList.add('is-anim');
+  arrancar();
+</script>
+
+<style>
+  .bc-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .bc-hero__fotos,
+  .bc-hero__foto,
+  .bc-hero__scrim {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* como el original: la foto vive en la mitad derecha, sobre negro puro */
+  .bc-hero__fotos {
+    left: 30%;
+  }
+
+  .bc-hero__foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 1.2s ease, transform 7s ease-out;
+  }
+
+  .bc-hero__foto.is-activo {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* scrim: oscurece a la izquierda (donde va el texto) y arriba/abajo */
+  .bc-hero__scrim {
+    background:
+      linear-gradient(90deg, #000 30%, rgba(0, 0, 0, 0.55) 42%, rgba(0, 0, 0, 0) 62%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 22%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.55) 100%);
+  }
+
+  .bc-hero__txt {
+    position: relative;
+    z-index: 2;
+    margin-left: clamp(1.25rem, 19vw, 19rem);
+    margin-top: 2rem;
+    max-width: 860px;
+    padding-right: 1.25rem;
+  }
+
+  .bc-hero__txt > * {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+
+  .bc-hero__txt.is-anim > * {
+    animation: bc-hero-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .bc-hero__txt.is-anim > :nth-child(2) { animation-delay: 0.12s; }
+  .bc-hero__txt.is-anim > :nth-child(3) { animation-delay: 0.24s; }
+  .bc-hero__txt.is-anim > :nth-child(4) { animation-delay: 0.36s; }
+
+  @keyframes bc-hero-in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bc-hero__txt > *,
+    .bc-hero__txt.is-anim > * {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+    .bc-hero__foto {
+      transition: opacity 0.4s ease;
+      transform: none;
+    }
+  }
+
+  .bc-hero__kicker {
+    display: block;
+    font-family: var(--bc-bebas);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.6rem;
+  }
+
+  .bc-hero__titulo {
+    color: #fff;
+    font-size: clamp(2.3rem, 4.6vw, 4.1rem);
+    line-height: 1.08;
+    font-weight: 800;
+  }
+
+  .bc-hero__titulo span {
+    display: block;
+  }
+
+  .bc-hero__p {
+    margin: 2.3rem 0 2.6rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .bc-hero__dots {
+    position: absolute;
+    left: clamp(0.9rem, 2.6vw, 2.6rem);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .bc-hero__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+
+  .bc-hero__dot.is-activo {
+    background: #fff !important;
+    transform: scale(1.15);
+  }
+
+  @media (max-width: 960px) {
+    .bc-hero__fotos {
+      left: 0;
+    }
+    .bc-hero__scrim {
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.2) 70%), linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.1) 35%, rgba(0, 0, 0, 0.8) 85%);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .bc-hero {
+      align-items: flex-end;
+      padding-bottom: 14svh;
+    }
+    .bc-hero__txt {
+      margin-left: 2.6rem;
+    }
+    .bc-hero__dots {
+      top: auto;
+      bottom: 16svh;
+      transform: none;
+    }
+  }
+</style>

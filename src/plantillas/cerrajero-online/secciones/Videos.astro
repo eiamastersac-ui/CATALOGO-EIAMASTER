@@ -1,0 +1,179 @@
+---
+import { video } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="co-seccion co-vid" id="videos">
+  <div class="co-wrap">
+    <div class="co-cab co-cab--centro co-reveal">
+      <h2 class="co-titulo">{video.titulo}</h2>
+    </div>
+
+    <div class="co-vid__grid">
+      <div class="co-vid__player co-reveal" id="co-vid">
+        <img src={video.img} alt="" loading="lazy" />
+        <span class="co-vid__scrim" aria-hidden="true"></span>
+        <div class="co-vid__barra">
+          <span class="co-vid__canal" aria-hidden="true"><Icono nombre="llave" size={14} grosor={2} /></span>
+          <b>{video.rotulo}</b>
+        </div>
+        <button type="button" class="co-vid__play" id="co-vid-play" aria-label="Reproducir vídeo demo">
+          <Icono nombre="play" size={30} />
+        </button>
+        <span class="co-vid__dur">{video.duracion}</span>
+        <div class="co-vid__demo" id="co-vid-demo" hidden>
+          <p><b>Vídeo de demostración.</b> En la web final aquí se incrusta el reproductor del canal.</p>
+          <button type="button" class="co-btn co-btn--claro" id="co-vid-cerrar">Cerrar</button>
+        </div>
+      </div>
+
+      <div class="co-vid__lado co-reveal co-reveal--1">
+        <span class="co-kicker">Canal de vídeo</span>
+        <p>{video.texto}</p>
+        <a href="#videos" class="co-btn co-btn--borde">
+          <Icono nombre="youtube" size={18} /> Vea nuestros vídeos
+        </a>
+      </div>
+    </div>
+    <hr class="co-vid__linea" />
+  </div>
+</section>
+
+<script>
+  const demo = document.getElementById('co-vid-demo');
+  const play = document.getElementById('co-vid-play');
+  play?.addEventListener('click', () => {
+    if (demo) demo.hidden = false;
+    play.setAttribute('hidden', '');
+  });
+  document.getElementById('co-vid-cerrar')?.addEventListener('click', () => {
+    if (demo) demo.hidden = true;
+    play?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .co-vid {
+    padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .co-vid__grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  .co-vid__player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--co-radio);
+    overflow: hidden;
+    background: #000;
+  }
+
+  .co-vid__player img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .co-vid__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.2) 100%);
+  }
+
+  .co-vid__barra {
+    position: absolute;
+    top: 0.9rem;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    font-size: 0.95rem;
+  }
+
+  .co-vid__canal {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--co-naranja);
+    flex-shrink: 0;
+  }
+
+  .co-vid__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 76px;
+    height: 54px;
+    border-radius: 14px;
+    background: rgba(20, 20, 20, 0.78);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .co-vid__play:hover {
+    background: #e62117;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+
+  .co-vid__dur {
+    position: absolute;
+    right: 0.8rem;
+    bottom: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .co-vid__demo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(18, 18, 18, 0.88);
+    color: #fff;
+    font-size: 0.95rem;
+  }
+
+  .co-vid__demo[hidden] {
+    display: none;
+  }
+
+  .co-vid__lado p {
+    color: var(--co-gris);
+    text-align: justify;
+    margin-bottom: 1.6rem;
+  }
+
+  .co-vid__linea {
+    border: none;
+    border-top: 1px solid #b9b3e6;
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  @media (max-width: 900px) {
+    .co-vid__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

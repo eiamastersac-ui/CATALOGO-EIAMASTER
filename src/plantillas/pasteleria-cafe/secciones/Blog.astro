@@ -1,0 +1,90 @@
+---
+import { blog } from '../datos/pasteleria.js';
+
+interface Post { t: string; r: string; img: string }
+const posts = blog as Post[];
+---
+
+<section class="pc-seccion pc-blog" id="blog" aria-labelledby="pc-blog-titulo">
+  <div class="pc-wrap">
+    <h2 class="pc-titulo pc-titulo--centro" id="pc-blog-titulo">Nuestro Blog</h2>
+    <div class="pc-blog__grid">
+      {posts.map((p: Post) => (
+        <article class="pc-post">
+          <a href="#blog" class="pc-post__foto">
+            <img src={p.img} alt="" loading="lazy" width="700" height="700" />
+          </a>
+          <h3 class="pc-post__t"><a href="#blog">{p.t}</a></h3>
+          <p class="pc-post__r">{p.r}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pc-blog {
+    padding-top: 3.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .pc-blog .pc-titulo {
+    margin-bottom: 2.1rem;
+  }
+
+  .pc-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .pc-post__foto {
+    display: block;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--pc-foto);
+  }
+
+  .pc-post__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .pc-post:hover .pc-post__foto img {
+    transform: scale(1.05);
+  }
+
+  .pc-post__t {
+    margin-top: 1.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .pc-post__t a:hover {
+    color: var(--pc-coral);
+  }
+
+  .pc-post__r {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: #5e5a57;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .pc-blog__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.8rem 14px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .pc-post__t {
+      font-size: 0.9rem;
+    }
+  }
+</style>

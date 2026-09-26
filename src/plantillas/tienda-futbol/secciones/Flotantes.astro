@@ -1,0 +1,93 @@
+---
+// Barra lateral de redes (derecha, centrada) + boton de WhatsApp, como el sitio real.
+import { redes, marca } from '../datos/escuela.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Red { nombre: string; href: string; label: string }
+---
+
+<ul class="tf-redes-lat" aria-label="Redes sociales">
+  {
+    (redes as Red[]).map((r: Red) => (
+      <li>
+        <a href={r.href} aria-label={r.label}>
+          <Icono nombre={r.nombre} size={22} />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<a class="tf-wa" href={marca.whatsapp} target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <Icono nombre="whatsapp" size={30} />
+</a>
+
+<style>
+  .tf-redes-lat {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tf-redes-lat a {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tf-verde);
+    color: var(--tf-blanco);
+    border-radius: 4px 0 0 4px;
+    transition: width 0.2s ease, background 0.2s ease;
+    margin-left: auto;
+  }
+
+  .tf-redes-lat a:hover {
+    width: 54px;
+    background: var(--tf-bosque);
+  }
+
+  .tf-wa {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 56;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--tf-verde);
+    color: var(--tf-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(4, 29, 27, 0.28);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .tf-wa:hover {
+    transform: scale(1.07);
+    background: var(--tf-bosque);
+  }
+
+  @media (max-width: 640px) {
+    .tf-redes-lat a {
+      width: 38px;
+      height: 38px;
+    }
+    .tf-redes-lat a :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .tf-wa {
+      right: 16px;
+      bottom: 16px;
+      width: 52px;
+      height: 52px;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { contacto } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Linea {
+  icono: string;
+  t: string;
+  v: string;
+  href: string;
+}
+---
+
+<section class="sg-cto" id="contacto" aria-label="Contacto">
+  <div class="sg-wrap sg-cto__row">
+    <ul class="sg-cto__lista">
+      {contacto.map((c: Linea, i: number) => (
+        <li class={`sg-reveal sg-reveal--${i + 1}`}>
+          <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel={c.href.startsWith('http') ? 'noopener' : undefined}>
+            <span class="sg-cto__ico"><Icono nombre={c.icono} size={20} /></span>
+            <span class="sg-cto__txt">{c.t && <span class="sg-cto__t">{c.t}</span>}{c.v}</span>
+            <span class="sg-cto__flecha"><Icono nombre="flecha" size={18} /></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sg-cto {
+    background: var(--sg-tinta);
+    color: var(--sg-blanco);
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    border-bottom: 1px solid var(--sg-linea-osc);
+  }
+
+  .sg-cto__row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .sg-cto__lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .sg-cto__lista a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.55rem;
+  }
+
+  .sg-cto__ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--sg-azul);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .sg-cto__txt {
+    font-size: clamp(1.05rem, 2.6vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  .sg-cto__t {
+    margin-right: 0.4em;
+  }
+
+  .sg-cto__flecha {
+    color: var(--sg-azul);
+    display: grid;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .sg-cto__lista a:hover .sg-cto__flecha {
+    opacity: 1;
+    transform: none;
+  }
+
+  .sg-cto__lista a:hover .sg-cto__txt {
+    color: var(--sg-humo-claro);
+  }
+</style>

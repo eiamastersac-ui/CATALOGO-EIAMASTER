@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Barbería (Estilo Barbería Premium Caballeros)",
+  "categoria": "barberia-premium",
+  "descripcion": "Landing de cadena de barberías masculinas, negra y monocroma: cabecera translúcida fija que pasa a negro al scrollear, con carrito y buscador desplegables y panel lateral en móvil. Hero de foto a 100svh con 3 slides en fundido y puntos verticales, 'Quiénes somos' con dos fotos verticales montadas sobre el hero y 4 valores con iconos de línea, 'Por qué elegirnos' con foto a media pantalla, grilla de 8 servicios a todo el ancho con etiqueta al hover, testimonios en slider con swipe, banda 'Visítanos' con 15% OFF gigante y footer negro con medios de pago. Chat de WhatsApp demo con respuestas automáticas y botón volver arriba. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/barberia-caballeros.jpg",
+  "tags": ["barbería", "barber shop", "cortes", "barba", "afeitado", "caballeros", "perú", "reservas", "landing"],
+  "paleta": ["#000000", "#1e1e1e", "#969696", "#eeeeee", "#ffffff"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "montalvoformen.com.pe",
+  "orden": 78
+}

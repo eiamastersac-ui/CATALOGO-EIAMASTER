@@ -1,0 +1,220 @@
+---
+import { negocios, nombreCategoria, u } from '../datos/reservas.js';
+
+// Datos minimos que necesita el modal en cliente.
+const datos = negocios.map((n) => ({
+  id: n.id,
+  nombre: n.nombre,
+  dir: n.dir,
+  cat: (nombreCategoria as Record<string, string>)[n.cat] || '',
+  rating: n.rating,
+  resenas: n.resenas,
+  img: u(n.img, 1000, 300),
+  servicios: n.servicios,
+}));
+---
+
+<div class="rb-modal" id="rb-modal" role="dialog" aria-modal="true" aria-labelledby="rb-modal-nombre" hidden>
+  <div class="rb-modal__caja">
+    <div class="rb-modal__cab">
+      <img id="rb-modal-img" src="" alt="" />
+      <div class="rb-modal__tit">
+        <h3 id="rb-modal-nombre">Negocio</h3>
+        <p id="rb-modal-meta"></p>
+      </div>
+      <button type="button" class="rb-modal__cerrar" id="rb-modal-cerrar" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.8"></path></svg>
+      </button>
+    </div>
+
+    <div class="rb-modal__cuerpo" id="rb-modal-pasos">
+      <p class="rb-paso">1 · Elige un servicio</p>
+      <div class="rb-bloque" id="rb-modal-servicios"></div>
+
+      <p class="rb-paso">2 · Elige día</p>
+      <div class="rb-bloque rb-dias" id="rb-modal-dias"></div>
+
+      <p class="rb-paso">3 · Elige hora</p>
+      <div class="rb-bloque rb-horas" id="rb-modal-horas"></div>
+
+      <div class="rb-resumen">
+        <p id="rb-modal-resumen">Selecciona servicio, día y hora<strong>—</strong></p>
+        <button type="button" class="rb-btn rb-btn--oscuro" id="rb-modal-confirmar" disabled>Reservar</button>
+      </div>
+    </div>
+
+    <div class="rb-modal__cuerpo" id="rb-modal-ok" hidden>
+      <div class="rb-ok">
+        <div class="rb-ok__ico" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12.5 10 17 19 7"></path></svg>
+        </div>
+        <h4>¡Cita reservada!</h4>
+        <p id="rb-modal-ok-tx"></p>
+        <p>Es una demo: no se ha enviado ninguna reserva real.</p>
+        <button type="button" class="rb-btn rb-btn--cian" id="rb-modal-listo">Listo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline type="application/json" id="rb-negocios-json" set:html={JSON.stringify(datos)}></script>
+
+<script>
+  type Serv = { n: string; d: number; p: number };
+  type Neg = { id: string; nombre: string; dir: string; cat: string; rating: number; resenas: number; img: string; servicios: Serv[] };
+
+  const lista: Neg[] = JSON.parse(document.getElementById('rb-negocios-json')?.textContent || '[]');
+  const modal = document.getElementById('rb-modal');
+  const img = document.getElementById('rb-modal-img') as HTMLImageElement | null;
+  const nombre = document.getElementById('rb-modal-nombre');
+  const meta = document.getElementById('rb-modal-meta');
+  const cajaServ = document.getElementById('rb-modal-servicios');
+  const cajaDias = document.getElementById('rb-modal-dias');
+  const cajaHoras = document.getElementById('rb-modal-horas');
+  const resumen = document.getElementById('rb-modal-resumen');
+  const confirmar = document.getElementById('rb-modal-confirmar') as HTMLButtonElement | null;
+  const pasos = document.getElementById('rb-modal-pasos');
+  const ok = document.getElementById('rb-modal-ok');
+  const okTx = document.getElementById('rb-modal-ok-tx');
+
+  const eur = (n: number) => n.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+  const dur = (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ''}` : `${m} min`);
+  const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+  const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+  let neg: Neg | null = null;
+  let serv: Serv | null = null;
+  let dia: Date | null = null;
+  let hora = '';
+  let ultimoFoco: HTMLElement | null = null;
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls: string, html = '') {
+    const e = document.createElement(tag);
+    e.className = cls;
+    if (html) e.innerHTML = html;
+    return e;
+  }
+
+  function pintarResumen() {
+    if (!resumen || !confirmar) return;
+    const listo = Boolean(serv && dia && hora);
+    confirmar.disabled = !listo;
+    if (!serv) {
+      resumen.innerHTML = 'Selecciona servicio, día y hora<strong>—</strong>';
+      return;
+    }
+    const cuando = dia ? `${DIAS[dia.getDay()]} ${dia.getDate()} ${MESES[dia.getMonth()]}${hora ? ` · ${hora}` : ''}` : 'Elige día y hora';
+    resumen.innerHTML = `${cuando}<strong>${serv.n} · ${eur(serv.p)}</strong>`;
+  }
+
+  function pintarHoras() {
+    if (!cajaHoras || !dia) return;
+    cajaHoras.innerHTML = '';
+    const semilla = dia.getDate() + (neg?.id.length || 0);
+    for (let m = 9 * 60; m <= 19 * 60 + 30; m += 30) {
+      const h = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+      const b = el('button', 'rb-hora', h) as HTMLButtonElement;
+      b.type = 'button';
+      b.disabled = (m / 30 + semilla) % 4 === 0 || (m / 30 + semilla) % 7 === 0;
+      b.addEventListener('click', () => {
+        hora = h;
+        cajaHoras.querySelectorAll('.rb-hora').forEach((x) => x.classList.toggle('is-on', x === b));
+        pintarResumen();
+      });
+      cajaHoras.appendChild(b);
+    }
+  }
+
+  function pintarDias() {
+    if (!cajaDias) return;
+    cajaDias.innerHTML = '';
+    const hoy = new Date();
+    for (let i = 0; i < 10; i++) {
+      const d = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + i);
+      const b = el('button', 'rb-dia', `<small>${i === 0 ? 'hoy' : DIAS[d.getDay()]}</small><b>${d.getDate()}</b>`) as HTMLButtonElement;
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        dia = d;
+        hora = '';
+        cajaDias.querySelectorAll('.rb-dia').forEach((x) => x.classList.toggle('is-on', x === b));
+        pintarHoras();
+        pintarResumen();
+      });
+      cajaDias.appendChild(b);
+      if (i === 0) b.click();
+    }
+  }
+
+  function pintarServicios() {
+    if (!cajaServ || !neg) return;
+    cajaServ.innerHTML = '';
+    neg.servicios.forEach((s, i) => {
+      const b = el(
+        'button',
+        'rb-serv',
+        `<span class="rb-serv__tx"><span class="rb-serv__n">${s.n}</span><span class="rb-serv__d">${dur(s.d)}</span></span><span class="rb-serv__p">${eur(s.p)}</span><span class="rb-serv__b">Reservar</span>`,
+      ) as HTMLButtonElement;
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        serv = s;
+        cajaServ.querySelectorAll('.rb-serv').forEach((x) => x.classList.toggle('is-on', x === b));
+        cajaServ.querySelectorAll<HTMLElement>('.rb-serv__b').forEach((x) => (x.textContent = 'Reservar'));
+        const lbl = b.querySelector('.rb-serv__b');
+        if (lbl) lbl.textContent = 'Elegido';
+        pintarResumen();
+      });
+      cajaServ.appendChild(b);
+      if (i === 0) b.click();
+    });
+  }
+
+  function abrir(id: string, desde: HTMLElement | null) {
+    neg = lista.find((n) => n.id === id) || null;
+    if (!neg || !modal) return;
+    ultimoFoco = desde;
+    serv = null;
+    dia = null;
+    hora = '';
+    if (img) {
+      img.src = neg.img;
+      img.alt = neg.nombre;
+    }
+    if (nombre) nombre.textContent = neg.nombre;
+    if (meta) meta.textContent = `★ ${neg.rating.toFixed(1)} · ${neg.resenas.toLocaleString('es-ES')} reseñas · ${neg.cat} · ${neg.dir}`;
+    if (pasos) pasos.hidden = false;
+    if (ok) ok.hidden = true;
+    pintarServicios();
+    pintarDias();
+    pintarResumen();
+    modal.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    document.getElementById('rb-modal-cerrar')?.focus();
+  }
+
+  function cerrar() {
+    if (!modal || modal.hidden) return;
+    modal.hidden = true;
+    document.documentElement.style.overflow = '';
+    ultimoFoco?.focus();
+  }
+
+  document.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-reservar]');
+    if (t) abrir(t.dataset.reservar || '', t);
+  });
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) cerrar();
+  });
+  document.getElementById('rb-modal-cerrar')?.addEventListener('click', cerrar);
+  document.getElementById('rb-modal-listo')?.addEventListener('click', cerrar);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  confirmar?.addEventListener('click', () => {
+    if (!neg || !serv || !dia || !hora) return;
+    if (okTx) okTx.textContent = `${serv.n} en ${neg.nombre}, el ${DIAS[dia.getDay()]} ${dia.getDate()} de ${MESES[dia.getMonth()]} a las ${hora}. Total: ${eur(serv.p)}.`;
+    if (pasos) pasos.hidden = true;
+    if (ok) ok.hidden = false;
+  });
+</script>

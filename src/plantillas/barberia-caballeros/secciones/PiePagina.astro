@@ -1,0 +1,141 @@
+---
+import { marca, footer } from '../datos/barberia.js';
+import Icono from '../componentes/Icono.astro';
+import Logo from '../componentes/Logo.astro';
+---
+
+<footer class="bc-pie" id="contacto">
+  <div class="bc-pie__grid">
+    <div class="bc-pie__marca">
+      <Logo />
+      <a href={`mailto:${marca.correo}`}>{marca.correo}</a>
+      <a href={`tel:${marca.telCrudo}`}>{marca.tel}</a>
+    </div>
+
+    <div>
+      <h3 class="bc-pie__tit">¿Buscas ayuda?</h3>
+      <ul class="bc-pie__links">
+        {footer.ayuda.map((t: string) => (
+          <li><a href="#top">{t}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="bc-pie__tit">Síguenos</h3>
+      <div class="bc-pie__redes">
+        <a href="#top" aria-label="Facebook"><Icono nombre="facebook" size={15} /></a>
+        <a href="#top" aria-label="Instagram"><Icono nombre="instagram" size={15} grosor={1.8} /></a>
+        <a href="#top" aria-label="TikTok"><Icono nombre="tiktok" size={15} grosor={2} /></a>
+      </div>
+
+      <h3 class="bc-pie__tit bc-pie__tit--pago">Medios de pago</h3>
+      <ul class="bc-pie__pagos" aria-label="Medios de pago aceptados">
+        {footer.pagos.map((p: string) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <p class="bc-pie__legal">
+    Copyright © {marca.anio} {marca.nombre} {marca.sub}. Todos los derechos reservados. Maqueta demo.
+  </p>
+</footer>
+
+<style>
+  .bc-pie {
+    background: #000;
+    color: #fff;
+  }
+
+  .bc-pie__grid {
+    max-width: 960px;
+    margin-inline: auto;
+    padding: clamp(3.5rem, 6vw, 5.5rem) clamp(1rem, 4vw, 2rem) clamp(3rem, 5vw, 4.5rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .bc-pie__marca {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #bbb;
+  }
+
+  .bc-pie__marca > :first-child {
+    margin-bottom: 1rem;
+  }
+
+  .bc-pie__marca a:hover {
+    color: #fff;
+  }
+
+  .bc-pie__tit {
+    color: #fff;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.1rem;
+  }
+
+  .bc-pie__tit--pago {
+    margin-top: 1.6rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .bc-pie__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .bc-pie__links a {
+    transition: opacity 0.2s ease;
+  }
+
+  .bc-pie__links a:hover {
+    opacity: 0.6;
+  }
+
+  .bc-pie__redes {
+    display: flex;
+    gap: 1.3rem;
+  }
+
+  .bc-pie__redes a:hover {
+    opacity: 0.6;
+  }
+
+  .bc-pie__pagos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .bc-pie__pagos li {
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 0.28rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
+  .bc-pie__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    text-align: center;
+    padding: 1.4rem 1.25rem;
+    font-size: 0.82rem;
+    color: #aaa;
+  }
+
+  @media (max-width: 760px) {
+    .bc-pie__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

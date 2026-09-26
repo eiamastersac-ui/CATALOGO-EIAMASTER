@@ -1,0 +1,229 @@
+---
+import { ofertas } from '../datos/tienda.js';
+
+type O = { dcto: number; t: string; s: string; cupon: string };
+---
+
+<!-- Campaña con cuenta atras (en el original: "Ofertas del verano", bloque tcvad).
+     La fecha fin se calcula en cliente: ultimo dia del mes en curso, 23:59. -->
+<section class="cs-of" id="ofertas" aria-labelledby="cs-of-t">
+  <div class="cs-wrap">
+    <div class="cs-of__caja">
+      <div class="cs-of__cab">
+        <div>
+          <p class="cs-of__kicker">OFERTAS DE TEMPORADA</p>
+          <h2 id="cs-of-t" class="cs-of__titulo">Los descuentos no descansan</h2>
+          <p class="cs-of__p">
+            La oferta se aplica automáticamente al añadir el producto al carrito. Hasta el <b data-cs-of-fin>fin de mes</b>.
+          </p>
+        </div>
+        <div class="cs-of__reloj" role="timer" aria-live="off">
+          <p>Termina en</p>
+          <div class="cs-of__cifras">
+            <span><b data-cs-of="d">--</b>Días</span>
+            <span><b data-cs-of="h">--</b>Horas</span>
+            <span><b data-cs-of="m">--</b>Min</span>
+            <span><b data-cs-of="s">--</b>Seg</span>
+          </div>
+        </div>
+      </div>
+
+      <ul class="cs-of__grid">
+        {
+          ofertas.map((o: O) => (
+            <li class="cs-of__card">
+              <p class="cs-of__dcto">
+                <b>{o.dcto}€</b> de descuento
+              </p>
+              <h3>{o.t}</h3>
+              <p class="cs-of__mod">{o.s}</p>
+              <p class="cs-of__cupon">✓ Se aplica solo · {o.cupon}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="cs-of__pie">
+        <a href="#bombines" class="cs-btn cs-btn--naranja">Ver productos con descuento →</a>
+        <small>Comprados de forma individual. No aplicable a Packs Ahorro ni a productos que ya estén en oferta.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const ahora = new Date();
+  const fin = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0, 23, 59, 59);
+  const el = (k: string) => document.querySelector<HTMLElement>(`.tpl-cerrajero-seguridad [data-cs-of="${k}"]`);
+  const finTxt = document.querySelector<HTMLElement>('.tpl-cerrajero-seguridad [data-cs-of-fin]');
+  if (finTxt) finTxt.textContent = fin.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const tick = () => {
+    const ms = Math.max(0, fin.getTime() - Date.now());
+    const s = Math.floor(ms / 1000);
+    const v: Record<string, number> = {
+      d: Math.floor(s / 86400),
+      h: Math.floor((s % 86400) / 3600),
+      m: Math.floor((s % 3600) / 60),
+      s: s % 60,
+    };
+    Object.keys(v).forEach((k) => {
+      const n = el(k);
+      if (n) n.textContent = pad(v[k]);
+    });
+  };
+  tick();
+  setInterval(tick, 1000);
+</script>
+
+<style>
+  .cs-of {
+    padding: 0 0 3rem;
+    background: #fff;
+  }
+
+  .cs-of__caja {
+    background: var(--cs-navy);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.8rem clamp(1.1rem, 3vw, 2.2rem);
+  }
+
+  .cs-of__cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .cs-of__kicker {
+    display: inline-block;
+    background: var(--cs-naranja);
+    color: var(--cs-navy-2);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+  }
+
+  .cs-of__titulo {
+    font-weight: 900;
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    margin: 0.4rem 0 0.3rem;
+  }
+
+  .cs-of__p {
+    color: #c9d6e4;
+    font-size: 0.92rem;
+    max-width: 52ch;
+  }
+
+  .cs-of__p b {
+    color: #fff;
+  }
+
+  .cs-of__reloj p {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #c9d6e4;
+    margin-bottom: 0.35rem;
+  }
+
+  .cs-of__cifras {
+    display: flex;
+    gap: 8px;
+  }
+
+  .cs-of__cifras span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 62px;
+    padding: 0.45rem 0.4rem;
+    background: #fff;
+    color: var(--cs-navy);
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .cs-of__cifras b {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cs-of__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+
+  .cs-of__card {
+    background: var(--cs-crema);
+    color: var(--cs-navy);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    border-left: 4px solid var(--cs-naranja);
+  }
+
+  .cs-of__dcto {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cs-naranja-txt);
+  }
+
+  .cs-of__dcto b {
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+
+  .cs-of__card h3 {
+    font-weight: 900;
+    font-size: 1.1rem;
+  }
+
+  .cs-of__mod {
+    font-size: 0.78rem;
+    color: var(--cs-humo);
+    margin: 0.1rem 0 0.5rem;
+  }
+
+  .cs-of__cupon {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--cs-verde);
+  }
+
+  .cs-of__pie {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: 1.3rem;
+  }
+
+  .cs-of__pie small {
+    color: #a9b9cb;
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 760px) {
+    .cs-of__grid {
+      grid-template-columns: 1fr;
+    }
+    .cs-of__cifras span {
+      min-width: 0;
+      flex: 1;
+    }
+    .cs-of__reloj {
+      width: 100%;
+    }
+  }
+</style>

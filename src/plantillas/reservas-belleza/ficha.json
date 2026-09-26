@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Reservas (Estilo Booksy)",
+  "categoria": "reservas-belleza",
+  "descripcion": "Marketplace de reservas para peluquerias, barberias, unas y estetica: cabecera transparente que se vuelve solida al hacer scroll, hero a pantalla completa con fotos en fundido, titular que se escribe solo y buscador de servicio + ciudad que filtra en cliente, barra de categorias con menu 'Mas...', carrusel de negocios recomendados con rating y resenas, modal de reserva demo (servicio, dia y hora, confirmacion), tarjetas de app cliente/negocio con mockup de movil, bloques de ventajas, directorio de ciudades desplegable, carrusel de blog y footer oscuro. Sin login ni registro. Marca propia tienda.com.",
+  "thumbnail": "/previews/reservas-belleza.jpg",
+  "tags": ["reservas", "belleza", "peluqueria", "barberia", "unas", "spa", "marketplace", "citas"],
+  "paleta": ["#1a1a1a", "#00a3ad", "#effbfc", "#f5f5f5"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "booksy.com",
+  "orden": 77
+}

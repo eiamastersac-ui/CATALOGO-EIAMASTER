@@ -1,0 +1,410 @@
+---
+import { marca, nav, panelLateral } from '../datos/barberia.js';
+import Icono from '../componentes/Icono.astro';
+import Logo from '../componentes/Logo.astro';
+
+interface NavItem { t: string; href: string }
+const items = nav as NavItem[];
+---
+
+<header class="bc-hdr" id="bc-cabecera">
+  <div class="bc-hdr__row">
+    <Logo />
+
+    <nav class="bc-nav" aria-label="Navegación principal">
+      <ul>
+        {items.map((n: NavItem) => (
+          <li><a href={n.href}>{n.t}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="bc-hdr__acc">
+      <div class="bc-pop">
+        <button type="button" class="bc-hdr__ico" id="bc-abrir-carrito" aria-label="Carrito" aria-expanded="false" aria-controls="bc-carrito">
+          <Icono nombre="bolsa" size={19} grosor={1.8} />
+        </button>
+        <div class="bc-pop__panel" id="bc-carrito" hidden>
+          <p>No tienes productos en el carrito</p>
+          <a href="#servicios" class="bc-pop__link">Ver servicios</a>
+        </div>
+      </div>
+
+      <div class="bc-pop">
+        <button type="button" class="bc-hdr__ico" id="bc-abrir-buscar" aria-label="Buscar" aria-expanded="false" aria-controls="bc-buscar">
+          <span class="bc-ico-on"><Icono nombre="buscar" size={19} grosor={1.9} /></span>
+          <span class="bc-ico-off"><Icono nombre="cerrar" size={19} grosor={1.9} /></span>
+        </button>
+        <form class="bc-pop__panel bc-buscar" id="bc-buscar" role="search" hidden>
+          <Icono nombre="buscar" size={15} grosor={2} />
+          <input type="search" id="bc-buscar-input" placeholder="Buscar …" aria-label="Buscar servicio" autocomplete="off" />
+        </form>
+      </div>
+
+      <button type="button" class="bc-hdr__ico bc-hdr__burger" id="bc-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="bc-lateral">
+        <Icono nombre="menu" size={24} grosor={1.8} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- panel lateral (el original lo usa como side panel con lema, contacto y redes) -->
+<div class="bc-velo" id="bc-velo" hidden></div>
+<aside class="bc-lateral" id="bc-lateral" aria-label="Menú" style={`--bc-lat-img:url('${panelLateral.img}')`}>
+  <button type="button" class="bc-lateral__cerrar" id="bc-cerrar-lateral" aria-label="Cerrar menú">
+    <Icono nombre="cerrar" size={22} grosor={1.8} />
+  </button>
+  <nav class="bc-lateral__nav" aria-label="Navegación móvil">
+    <ul>
+      {items.map((n: NavItem) => (
+        <li><a href={n.href}>{n.t}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <div class="bc-lateral__pie">
+    <p class="bc-lateral__lema">{marca.lema}</p>
+    <a href={`mailto:${marca.correo}`}>{marca.correo}</a>
+    <a href={`tel:${marca.telCrudo}`}>{marca.tel}</a>
+    <div class="bc-lateral__redes">
+      <a href="#top" aria-label="Facebook"><Icono nombre="facebook" size={16} /></a>
+      <a href="#top" aria-label="Instagram"><Icono nombre="instagram" size={16} /></a>
+    </div>
+  </div>
+</aside>
+
+<script>
+  const hdr = document.getElementById('bc-cabecera');
+  const alScroll = () => hdr?.classList.toggle('is-solido', window.scrollY > 60);
+  window.addEventListener('scroll', alScroll, { passive: true });
+  alScroll();
+
+  /* --- popovers: carrito y buscador --- */
+  const pares: [HTMLElement | null, HTMLElement | null][] = [
+    [document.getElementById('bc-abrir-carrito'), document.getElementById('bc-carrito')],
+    [document.getElementById('bc-abrir-buscar'), document.getElementById('bc-buscar')],
+  ];
+  const input = document.getElementById('bc-buscar-input') as HTMLInputElement | null;
+
+  const cerrarPops = (excepto?: HTMLElement | null) => {
+    pares.forEach(([btn, panel]) => {
+      if (!btn || !panel || panel === excepto) return;
+      panel.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      btn.classList.remove('is-abierto');
+    });
+  };
+
+  pares.forEach(([btn, panel]) => {
+    btn?.addEventListener('click', (e: MouseEvent) => {
+      e.stopPropagation();
+      if (!panel) return;
+      const abrir = panel.hidden;
+      cerrarPops(panel);
+      panel.hidden = !abrir;
+      btn.setAttribute('aria-expanded', String(abrir));
+      btn.classList.toggle('is-abierto', abrir);
+      if (abrir && panel.id === 'bc-buscar') input?.focus();
+    });
+    panel?.addEventListener('click', (e: MouseEvent) => e.stopPropagation());
+  });
+  document.addEventListener('click', () => cerrarPops());
+
+  /* --- buscador demo: filtra la grilla de servicios --- */
+  const normalizar = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  document.getElementById('bc-buscar')?.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+    const bruto = input?.value.trim() ?? '';
+    const q = normalizar(bruto);
+    const tiles = Array.from(document.querySelectorAll<HTMLElement>('.tpl-barberia-caballeros .bc-srv'));
+    let n = 0;
+    tiles.forEach((t) => {
+      const ok = !q || normalizar(t.dataset.nombre ?? '').includes(q);
+      t.classList.toggle('is-atenuado', !ok);
+      if (ok) n++;
+    });
+    const res = document.getElementById('bc-srv-resultado');
+    if (res) {
+      res.hidden = !q;
+      const txt = res.querySelector('span');
+      if (txt) txt.textContent = `${n} servicio${n === 1 ? '' : 's'} para “${bruto}”`;
+    }
+    cerrarPops();
+    document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  /* --- panel lateral --- */
+  const lateral = document.getElementById('bc-lateral');
+  const velo = document.getElementById('bc-velo');
+  const burger = document.getElementById('bc-burger');
+  const toggleLateral = (abrir: boolean) => {
+    lateral?.classList.toggle('is-abierto', abrir);
+    if (velo) velo.hidden = !abrir;
+    burger?.setAttribute('aria-expanded', String(abrir));
+  };
+  burger?.addEventListener('click', () => toggleLateral(true));
+  velo?.addEventListener('click', () => toggleLateral(false));
+  document.getElementById('bc-cerrar-lateral')?.addEventListener('click', () => toggleLateral(false));
+  lateral?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => toggleLateral(false)));
+
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key !== 'Escape') return;
+    cerrarPops();
+    toggleLateral(false);
+  });
+</script>
+
+<style>
+  .bc-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    color: #fff;
+    background: rgba(18, 18, 18, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .bc-hdr.is-solido {
+    background: #000;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .bc-hdr__row {
+    height: var(--bc-hdr-h);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-inline: clamp(1rem, 4.5vw, 4.2rem);
+  }
+
+  .bc-nav {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 8vw;
+  }
+
+  .bc-nav ul {
+    display: flex;
+    gap: clamp(1.4rem, 3vw, 3rem);
+  }
+
+  .bc-nav a {
+    position: relative;
+    display: block;
+    padding-block: 1.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .bc-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1.45rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  .bc-nav a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .bc-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .bc-pop {
+    position: relative;
+  }
+
+  .bc-hdr__ico {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+  }
+
+  .bc-ico-off {
+    display: none;
+  }
+
+  .bc-hdr__ico.is-abierto .bc-ico-on {
+    display: none;
+  }
+
+  .bc-hdr__ico.is-abierto .bc-ico-off {
+    display: grid;
+  }
+
+  .bc-hdr__burger {
+    display: none;
+  }
+
+  .bc-pop__panel {
+    position: absolute;
+    top: calc(100% + 20px);
+    right: -0.5rem;
+    width: 250px;
+    background: #111;
+    color: #fff;
+    padding: 1.2rem 1.3rem;
+    font-size: 0.85rem;
+    box-shadow: 0 16px 34px -14px rgba(0, 0, 0, 0.7);
+  }
+
+  .bc-pop__link {
+    display: inline-block;
+    margin-top: 0.7rem;
+    font-family: var(--bc-bebas);
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .bc-buscar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1.2rem;
+  }
+
+  .bc-buscar input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 0.35rem 0;
+    font-size: 0.85rem;
+    outline: none;
+  }
+
+  .bc-buscar input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* --- panel lateral --- */
+  .bc-velo {
+    position: fixed;
+    inset: 0;
+    z-index: 290;
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .bc-lateral {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 300;
+    width: min(400px, 88vw);
+    display: flex;
+    flex-direction: column;
+    padding: 4.5rem 2.2rem 2.2rem;
+    color: #fff;
+    background: #1e1e1e;
+    background-image: linear-gradient(rgba(30, 30, 30, 0.86), rgba(30, 30, 30, 0.94)), var(--bc-lat-img);
+    background-size: cover;
+    background-position: center;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    overflow-y: auto;
+  }
+
+  .bc-lateral.is-abierto {
+    transform: none;
+    visibility: visible;
+  }
+
+  .bc-lateral__cerrar {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+  }
+
+  .bc-lateral__nav a {
+    display: block;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: var(--bc-ext);
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+  }
+
+  .bc-lateral__pie {
+    margin-top: auto;
+    padding-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .bc-lateral__lema {
+    font-family: var(--bc-ext);
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
+    font-weight: 800;
+    font-size: 1.2rem;
+    line-height: 1.25;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .bc-lateral__redes {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.8rem;
+  }
+
+  @media (max-width: 1100px) {
+    .bc-nav {
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .bc-nav {
+      display: none;
+    }
+    .bc-hdr__acc {
+      margin-left: auto;
+    }
+    .bc-hdr__burger {
+      display: grid;
+    }
+    .bc-hdr {
+      --bc-hdr-h: 68px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .bc-pop__panel {
+      position: fixed;
+      top: 68px;
+      left: 1rem;
+      right: 1rem;
+      width: auto;
+    }
+  }
+</style>

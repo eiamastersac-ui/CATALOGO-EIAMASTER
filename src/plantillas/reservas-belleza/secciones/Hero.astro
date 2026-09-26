@@ -1,0 +1,303 @@
+---
+import { heroFondos, heroFrases, categorias, categoriasMas, ciudadesBusqueda } from '../datos/reservas.js';
+---
+
+<section class="rb-hero" id="inicio" aria-label="Busca y reserva">
+  <div class="rb-hero__fondos" aria-hidden="true">
+    {heroFondos.map((f: { src: string; alt: string }, i: number) => (
+      <img src={f.src} alt="" class={`rb-hero__img${i === 0 ? ' is-on' : ''}`} loading={i === 0 ? 'eager' : 'lazy'} />
+    ))}
+  </div>
+  <div class="rb-hero__scrim" aria-hidden="true"></div>
+
+  <div class="rb-wrap rb-hero__centro">
+    <p class="rb-hero__frase" aria-live="polite">
+      <span id="rb-typed" data-frases={JSON.stringify(heroFrases)}>{heroFrases[0]}</span><span class="rb-hero__cursor" aria-hidden="true"></span>
+    </p>
+    <h1 class="rb-hero__sub">Descubre y reserva a los profesionales de belleza más cercanos</h1>
+
+    <form class="rb-buscar" id="rb-buscar" role="search">
+      <label class="rb-buscar__campo rb-buscar__campo--q">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="search" id="rb-buscar-q" placeholder="Buscar servicios o negocios" aria-label="Buscar servicios o negocios" list="rb-sugerencias" autocomplete="off" />
+      </label>
+      <datalist id="rb-sugerencias">
+        {[...categorias, ...categoriasMas].map((c: { t: string }) => <option value={c.t}></option>)}
+      </datalist>
+      <label class="rb-buscar__campo rb-buscar__campo--d">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+        <select id="rb-buscar-ciudad" aria-label="¿Dónde?">
+          <option value="">¿Dónde?</option>
+          {ciudadesBusqueda.map((c: string) => <option value={c}>{c}</option>)}
+        </select>
+      </label>
+      <button type="submit" class="rb-buscar__btn">Buscar</button>
+    </form>
+  </div>
+
+  <nav class="rb-cats" aria-label="Categorías">
+    <div class="rb-wrap">
+      <ul class="rb-cats__lista">
+        {categorias.map((c: { id: string; t: string }) => (
+          <li><button type="button" class="rb-cats__link" data-cat={c.id}>{c.t}</button></li>
+        ))}
+        <li class="rb-cats__mas">
+          <button type="button" class="rb-cats__link rb-cats__link--mas" id="rb-mas-btn" aria-expanded="false" aria-controls="rb-mas-menu">Más...</button>
+          <ul class="rb-cats__menu" id="rb-mas-menu" hidden>
+            {categoriasMas.map((c: { id: string; t: string }) => (
+              <li><button type="button" data-cat={c.id}>{c.t}</button></li>
+            ))}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</section>
+
+<script>
+  /* Fundido de fotos de fondo (sustituye al video del original) */
+  const imgs = Array.from(document.querySelectorAll<HTMLImageElement>('.rb-hero__img'));
+  let idx = 0;
+  if (imgs.length > 1) {
+    setInterval(() => {
+      imgs[idx].classList.remove('is-on');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('is-on');
+    }, 6000);
+  }
+
+  /* Titular que se escribe y se borra solo */
+  const typed = document.getElementById('rb-typed');
+  const frases: string[] = JSON.parse(typed?.dataset.frases || '[]');
+  let f = 0;
+  let pos = frases[0]?.length || 0;
+  let borrando = true;
+  let pausa = 14;
+  function tick() {
+    if (!typed || !frases.length) return;
+    if (pausa > 0) {
+      pausa--;
+    } else if (borrando) {
+      pos--;
+      if (pos <= 0) {
+        borrando = false;
+        f = (f + 1) % frases.length;
+        pausa = 3;
+      }
+    } else {
+      pos++;
+      if (pos >= frases[f].length) {
+        borrando = true;
+        pausa = 18;
+      }
+    }
+    typed.textContent = frases[f].slice(0, Math.max(0, pos)) || ' ';
+  }
+  setInterval(tick, 110);
+
+  /* Filtros -> los escucha el carrusel de Recomendado */
+  const emitir = (detalle: { q?: string; ciudad?: string; cat?: string; etiqueta?: string }) => {
+    document.dispatchEvent(new CustomEvent('rb:filtrar', { detail: detalle }));
+  };
+
+  const form = document.getElementById('rb-buscar');
+  const q = document.getElementById('rb-buscar-q') as HTMLInputElement | null;
+  const ciudad = document.getElementById('rb-buscar-ciudad') as HTMLSelectElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    emitir({ q: (q?.value || '').trim(), ciudad: ciudad?.value || '' });
+  });
+
+  const masBtn = document.getElementById('rb-mas-btn');
+  const masMenu = document.getElementById('rb-mas-menu');
+  const abrirMas = (v: boolean) => {
+    if (!masMenu || !masBtn) return;
+    masMenu.hidden = !v;
+    masBtn.setAttribute('aria-expanded', String(v));
+    masBtn.classList.toggle('is-on', v);
+  };
+  masBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    abrirMas(masMenu?.hidden ?? true);
+  });
+  document.addEventListener('click', (e) => {
+    if (masMenu && masBtn && !masMenu.contains(e.target as Node) && !masBtn.contains(e.target as Node)) abrirMas(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') abrirMas(false);
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.rb-cats [data-cat]').forEach((b) => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.rb-cats [data-cat]').forEach((x) => x.classList.toggle('is-activa', x === b));
+      abrirMas(false);
+      emitir({ cat: b.dataset.cat, etiqueta: b.textContent?.trim() });
+    });
+  });
+</script>
+
+<style>
+  .rb-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    background: var(--rb-tinta);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  .rb-hero__fondos { position: absolute; inset: 0; overflow: hidden; }
+  .rb-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.04);
+    filter: brightness(.42) saturate(.9);
+    transition: opacity 1.4s ease, transform 7s ease-out;
+  }
+  .rb-hero__img.is-on { opacity: 1; transform: scale(1); }
+  .rb-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 60%, rgba(0,0,0,.65) 100%);
+  }
+
+  .rb-hero__centro {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: var(--rb-hdr);
+  }
+  .rb-hero__frase {
+    min-height: 1.2em;
+    font-size: clamp(2.6rem, 6.4vw, 4.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 26px;
+  }
+  .rb-hero__cursor {
+    display: inline-block;
+    width: 3px;
+    height: .9em;
+    margin-left: 4px;
+    vertical-align: -0.08em;
+    background: currentColor;
+    animation: rb-parpadeo 1s steps(1) infinite;
+  }
+  @keyframes rb-parpadeo { 50% { opacity: 0; } }
+  .rb-hero__sub {
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+
+  .rb-buscar {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    max-width: 720px;
+    height: 56px;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--rb-tinta);
+    box-shadow: 0 8px 28px rgba(0,0,0,.25);
+    overflow: hidden;
+  }
+  .rb-buscar__campo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    color: var(--rb-gris);
+  }
+  .rb-buscar__campo--q { flex: 1.6; }
+  .rb-buscar__campo--d { flex: 1; border-left: 1px solid var(--rb-linea); }
+  .rb-buscar input,
+  .rb-buscar select {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--rb-tinta);
+    font-size: .95rem;
+  }
+  .rb-buscar select { cursor: pointer; }
+  .rb-buscar input::placeholder { color: #8a8a8a; }
+  .rb-buscar__btn {
+    padding: 0 26px;
+    background: var(--rb-cian-osc);
+    color: #fff;
+    font-weight: 700;
+    transition: background-color .2s;
+  }
+  .rb-buscar__btn:hover { background: #186b86; }
+
+  .rb-cats {
+    position: relative;
+    z-index: 20;
+    padding-bottom: 14px;
+  }
+  .rb-cats__lista {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: .92rem;
+  }
+  .rb-cats__link {
+    padding: 8px 0 14px;
+    border-bottom: 2px solid transparent;
+    color: #fff;
+    white-space: nowrap;
+    transition: border-color .2s;
+  }
+  .rb-cats__link:hover,
+  .rb-cats__link.is-activa,
+  .rb-cats__link.is-on { border-color: #fff; }
+  .rb-cats__link--mas { font-weight: 700; }
+  .rb-cats__mas { position: relative; }
+  .rb-cats__menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% - 6px);
+    min-width: 230px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 8px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--rb-tinta);
+    box-shadow: 0 14px 40px rgba(0,0,0,.3);
+  }
+  .rb-cats__menu button {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: .9rem;
+  }
+  .rb-cats__menu button:hover,
+  .rb-cats__menu button.is-activa { background: var(--rb-panel); }
+
+  @media (max-width: 1100px) {
+    .rb-cats__lista { overflow-x: auto; scrollbar-width: none; justify-content: flex-start; }
+    .rb-cats__mas { position: static; }
+    .rb-cats__menu { right: 24px; }
+  }
+  @media (max-width: 640px) {
+    .rb-buscar { flex-wrap: wrap; height: auto; }
+    .rb-buscar__campo { height: 52px; flex: 1 1 100%; }
+    .rb-buscar__campo--d { border-left: 0; border-top: 1px solid var(--rb-linea); }
+    .rb-buscar__btn { flex: 1 1 100%; height: 48px; }
+  }
+</style>

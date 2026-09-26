@@ -1,0 +1,185 @@
+---
+import { hero, marca } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Dato { n: string; t: string }
+---
+
+<section class="co-hero" id="inicio" aria-label="Portada">
+  <img class="co-hero__img" src={hero.img} alt="Pared de taller de cerrajería con cientos de llaves colgadas" loading="eager" fetchpriority="high" />
+  <span class="co-hero__scrim" aria-hidden="true"></span>
+
+  <div class="co-wrap co-hero__body">
+    <div class="co-hero__texto">
+      <span class="co-hero__kicker">Cerrajería en Madrid · {marca.horarioCorto}</span>
+      <h1>{hero.titulo}</h1>
+      <p class="co-hero__sub">{hero.sub}</p>
+      <div class="co-hero__acciones">
+        <a href={`tel:${marca.telCrudo}`} class="co-btn co-btn--naranja">
+          <Icono nombre="telefono" size={17} grosor={2} />
+          Llámenos: {marca.tel}
+        </a>
+        <a href="#contacto" class="co-btn co-btn--claro">
+          Presupuesto online gratis
+          <Icono nombre="flecha" size={16} grosor={2} />
+        </a>
+      </div>
+    </div>
+
+    <ul class="co-hero__datos">
+      {hero.datos.map((d: Dato) => (
+        <li><b>{d.n}</b><span>{d.t}</span></li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- divisor diagonal blanco, igual al "bottom divider" del sitio original -->
+  <svg class="co-hero__divisor" viewBox="0 0 1280 140" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 140h1280C573.08 140 0 0 0 0z" fill="#fff" fill-opacity=".3" />
+    <path d="M0 140h1280C573.08 140 0 30 0 30z" fill="#fff" fill-opacity=".5" />
+    <path d="M0 140h1280C573.08 140 0 60 0 60z" fill="#fff" />
+  </svg>
+</section>
+
+<style>
+  .co-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 600px;
+    overflow: hidden;
+    background: var(--co-pizarra);
+    color: #fff;
+  }
+
+  .co-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  /* scrim: el tinte pizarra -> marron sale del overlay real del sitio
+     (linear-gradient 70deg #283d4b -> rgba(128,103,79,.5)); el vertical
+     oscurece arriba (cabecera) y abajo (texto) para legibilidad */
+  .co-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(20, 24, 28, 0.62) 0%, rgba(20, 24, 28, 0.1) 32%, rgba(20, 24, 28, 0.2) 60%, rgba(20, 24, 28, 0.55) 100%),
+      linear-gradient(70deg, rgba(40, 61, 75, 0.88) 0%, rgba(40, 61, 75, 0.45) 45%, rgba(128, 103, 79, 0.35) 100%);
+  }
+
+  .co-hero__body {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: calc(var(--co-top-h) + var(--co-hdr-h));
+    padding-bottom: clamp(5rem, 12vw, 8rem);
+  }
+
+  .co-hero__texto {
+    max-width: 50rem;
+  }
+
+  .co-hero__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1.1rem;
+  }
+
+  .co-hero__kicker::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--co-naranja);
+  }
+
+  .co-hero h1 {
+    font-family: var(--co-display);
+    font-weight: 700;
+    color: #fff;
+    font-size: clamp(2.6rem, 6.6vw, 4.6rem);
+    line-height: 1.12;
+    letter-spacing: 0.01em;
+    margin-bottom: 1rem;
+    text-wrap: balance;
+  }
+
+  .co-hero__sub {
+    font-family: var(--co-display);
+    font-size: clamp(1.15rem, 2.4vw, 1.85rem);
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 34ch;
+    margin-bottom: 2rem;
+  }
+
+  .co-hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+
+  .co-hero__acciones .co-btn {
+    padding: 0.95rem 1.7rem;
+    font-size: 1rem;
+  }
+
+  .co-hero__datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.5rem, 4vw, 3.25rem);
+    margin-top: clamp(2.5rem, 6vh, 3.75rem);
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    max-width: 40rem;
+  }
+
+  .co-hero__datos li {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .co-hero__datos b {
+    font-family: var(--co-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+  }
+
+  .co-hero__datos span {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .co-hero__divisor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    width: 100%;
+    height: clamp(60px, 11vw, 140px);
+    z-index: 1;
+  }
+
+  @media (max-width: 560px) {
+    .co-hero__acciones .co-btn {
+      flex: 1 1 100%;
+    }
+    .co-hero__datos {
+      gap: 1.25rem;
+    }
+  }
+</style>

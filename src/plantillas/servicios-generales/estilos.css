@@ -1,0 +1,292 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+
+/* ==========================================================================
+   servicios-generales — servicios generales 24 h en Lince, Lima
+   (inspirada en serviciosgeneralesgesaj.igoosites.com)
+   Paleta del original: tinta casi negra + gris papel + UN azul de marca.
+   El verde solo existe en lo que es WhatsApp. Sin gradientes decorativos.
+   Todo namespaced bajo .tpl-servicios-generales.
+   OJO: sin overflow-x:hidden en la raiz (rompe la cabecera sticky).
+   ========================================================================== */
+
+.tpl-servicios-generales {
+  --sg-tinta: #0a0a0a;
+  --sg-tinta-2: #161616;
+  --sg-humo: #5d6168;
+  --sg-humo-claro: #a3a7ad;
+  --sg-linea: #dfe2e7;
+  --sg-linea-osc: #2a2a2a;
+  --sg-papel: #f1f3f6;
+  --sg-blanco: #ffffff;
+
+  --sg-azul: #2171ff;
+  --sg-azul-osc: #1a5fe0;
+  --sg-whats: #22d375;
+
+  --sg-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --sg-maxw: 1180px;
+  --sg-hdr-h: 84px;
+  --sg-radio: 6px;
+
+  background: var(--sg-blanco);
+  color: var(--sg-tinta);
+  font-family: var(--sg-font);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tpl-servicios-generales *,
+.tpl-servicios-generales *::before,
+.tpl-servicios-generales *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-servicios-generales h1,
+.tpl-servicios-generales h2,
+.tpl-servicios-generales h3,
+.tpl-servicios-generales h4 {
+  font-family: var(--sg-font);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: inherit;
+}
+
+.tpl-servicios-generales img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-servicios-generales a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-servicios-generales button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* anclas: compensar la cabecera sticky */
+.tpl-servicios-generales [id] {
+  scroll-margin-top: var(--sg-hdr-h);
+}
+
+/* --- layout utils --- */
+.tpl-servicios-generales .sg-wrap {
+  max-width: var(--sg-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-servicios-generales .sg-seccion {
+  padding-block: clamp(3.75rem, 8vw, 6.5rem);
+}
+
+.tpl-servicios-generales .sg-titulo {
+  font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+  font-weight: 700;
+}
+
+.tpl-servicios-generales .sg-texto {
+  color: var(--sg-humo);
+  font-size: 0.95rem;
+}
+
+/* --- botones (planos, esquinas cortas como el original) --- */
+.tpl-servicios-generales .sg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: var(--sg-radio);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.tpl-servicios-generales .sg-btn:hover {
+  transform: translateY(-2px);
+}
+
+.tpl-servicios-generales .sg-btn svg:last-child {
+  transition: transform 0.2s ease;
+}
+
+.tpl-servicios-generales .sg-btn:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+.tpl-servicios-generales .sg-btn--whats {
+  background: var(--sg-whats);
+  color: var(--sg-tinta);
+}
+
+.tpl-servicios-generales .sg-btn--tinta {
+  background: var(--sg-tinta);
+  color: var(--sg-blanco);
+}
+
+.tpl-servicios-generales .sg-btn--tinta:hover {
+  background: var(--sg-tinta-2);
+}
+
+.tpl-servicios-generales .sg-btn--azul {
+  background: var(--sg-azul);
+  color: var(--sg-blanco);
+}
+
+.tpl-servicios-generales .sg-btn--azul:hover {
+  background: var(--sg-azul-osc);
+}
+
+.tpl-servicios-generales .sg-btn--blanco-linea {
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  color: var(--sg-blanco);
+}
+
+.tpl-servicios-generales .sg-btn--blanco-linea:hover {
+  background: var(--sg-blanco);
+  color: var(--sg-azul);
+}
+
+/* --- reveal on scroll --- */
+.tpl-servicios-generales .sg-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-servicios-generales .sg-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.tpl-servicios-generales .sg-reveal--1 { transition-delay: 0.08s; }
+.tpl-servicios-generales .sg-reveal--2 { transition-delay: 0.16s; }
+.tpl-servicios-generales .sg-reveal--3 { transition-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-servicios-generales .sg-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- widgets flotantes (globales: fixed + tip que togglea JS) --- */
+.tpl-servicios-generales .sg-whats {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 150;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--sg-whats);
+  color: var(--sg-tinta);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s ease;
+}
+
+.tpl-servicios-generales .sg-whats:hover {
+  transform: scale(1.06);
+}
+
+.tpl-servicios-generales .sg-whats__tip {
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  translate: 0 -50%;
+  background: var(--sg-blanco);
+  color: var(--sg-tinta);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--sg-radio);
+  white-space: nowrap;
+  border: 1px solid var(--sg-linea);
+  box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.tpl-servicios-generales .sg-whats:hover .sg-whats__tip,
+.tpl-servicios-generales .sg-whats__tip.is-visible {
+  opacity: 1;
+}
+
+.tpl-servicios-generales .sg-llamar {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  translate: -50% 0;
+  z-index: 150;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 999px;
+  background: var(--sg-tinta);
+  color: var(--sg-blanco);
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: 1px solid var(--sg-linea-osc);
+  box-shadow: 0 16px 30px -14px rgba(0, 0, 0, 0.55);
+  transition: background 0.2s ease, opacity 0.3s ease, translate 0.3s ease;
+}
+
+.tpl-servicios-generales .sg-llamar svg {
+  color: var(--sg-azul);
+}
+
+.tpl-servicios-generales .sg-llamar:hover {
+  background: var(--sg-azul);
+}
+
+.tpl-servicios-generales .sg-llamar:hover svg {
+  color: var(--sg-blanco);
+}
+
+.tpl-servicios-generales .sg-llamar.is-oculto {
+  opacity: 0;
+  translate: -50% 150%;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .tpl-servicios-generales .sg-whats__tip {
+    display: none;
+  }
+  .tpl-servicios-generales .sg-whats {
+    width: 52px;
+    height: 52px;
+    right: 1rem;
+    bottom: 1rem;
+  }
+  .tpl-servicios-generales .sg-llamar {
+    left: 1rem;
+    translate: 0 0;
+    bottom: 1rem;
+    padding: 0.85rem 1.2rem;
+  }
+  .tpl-servicios-generales .sg-llamar.is-oculto,
+  .tpl-servicios-generales .sg-llamar.is-en-hero {
+    opacity: 0;
+    translate: 0 150%;
+    pointer-events: none;
+  }
+}

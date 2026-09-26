@@ -1,0 +1,248 @@
+---
+import { heroSlides, u, marca } from '../datos/escuela.js';
+
+interface Slide { kicker: string; lineas: string[]; estado: string; img: string; href: string }
+const slides = heroSlides as Slide[];
+---
+
+<section class="tf-hero" id="inicio" aria-roledescription="carrusel" aria-label="Cursos con inscripciones abiertas">
+  <div class="tf-hero__slides" id="tf-hero">
+    {
+      slides.map((s: Slide, i: number) => (
+        <article class:list={['tf-hero__slide', { 'is-activo': i === 0 }]} aria-hidden={i === 0 ? 'false' : 'true'}>
+          <img
+            class="tf-hero__img"
+            src={u(s.img, 2000)}
+            srcset={`${u(s.img, 900)} 900w, ${u(s.img, 1400)} 1400w, ${u(s.img, 2000)} 2000w`}
+            sizes="100vw"
+            alt=""
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+          />
+          <div class="tf-hero__velo" />
+          <div class="tf-wrap tf-hero__contenido">
+            <p class="tf-hero__kicker">{s.kicker}</p>
+            {i === 0 ? (
+              <h1 class="tf-hero__titulo">
+                {s.lineas.map((l: string) => <span>{l}</span>)}
+              </h1>
+            ) : (
+              <h2 class="tf-hero__titulo">
+                {s.lineas.map((l: string) => <span>{l}</span>)}
+              </h2>
+            )}
+            <p class="tf-hero__estado">{s.estado}</p>
+            <div class="tf-hero__acciones">
+              <a class="tf-btn" href={marca.whatsapp} target="_blank" rel="noopener">Contactar</a>
+              <a class="tf-btn tf-btn--blanco" href={s.href}>Más información</a>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  // Carrusel con fundido: autoplay 6s, pausa al pasar el mouse, swipe en movil.
+  const cont = document.getElementById('tf-hero');
+  const slides = Array.from(cont?.querySelectorAll<HTMLElement>('.tf-hero__slide') ?? []);
+  let idx = 0;
+  let timer: number | undefined;
+
+  const ir = (n: number) => {
+    const sig = (n + slides.length) % slides.length;
+    if (sig === idx) return;
+    slides[idx].classList.remove('is-activo');
+    slides[idx].setAttribute('aria-hidden', 'true');
+    const s = slides[sig];
+    void s.offsetWidth; // fuerza reflow para reiniciar la animacion del texto
+    s.classList.add('is-activo');
+    s.setAttribute('aria-hidden', 'false');
+    idx = sig;
+  };
+
+  const play = () => {
+    stop();
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  };
+  const stop = () => {
+    if (timer) window.clearInterval(timer);
+  };
+
+  if (slides.length > 1) {
+    play();
+    cont?.addEventListener('mouseenter', stop);
+    cont?.addEventListener('mouseleave', play);
+
+    let x0: number | null = null;
+    cont?.addEventListener('touchstart', (e: TouchEvent) => (x0 = e.touches[0].clientX), { passive: true });
+    cont?.addEventListener('touchend', (e: TouchEvent) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 45) {
+        ir(dx < 0 ? idx + 1 : idx - 1);
+        play();
+      }
+      x0 = null;
+    });
+  }
+</script>
+
+<style>
+  .tf-hero {
+    position: relative;
+    height: calc(100svh - var(--tf-hdr-h));
+    min-height: 520px;
+    background: var(--tf-tinta);
+    overflow: hidden;
+    scroll-margin-top: var(--tf-hdr-h);
+  }
+
+  .tf-hero__slides {
+    position: absolute;
+    inset: 0;
+  }
+
+  .tf-hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.9s ease, visibility 0.9s;
+  }
+
+  .tf-hero__slide.is-activo {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .tf-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    transform: scale(1.06);
+    transition: transform 7s ease-out;
+  }
+
+  .tf-hero__slide.is-activo .tf-hero__img {
+    transform: scale(1);
+  }
+
+  /* Velo real del sitio: tinta a la izquierda que se abre a verde translucido */
+  .tf-hero__velo {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(4, 29, 27, 0.96) 0%, rgba(4, 29, 27, 0.78) 28%, rgba(10, 63, 29, 0.45) 58%, rgba(32, 160, 87, 0.3) 100%);
+  }
+
+  .tf-hero__contenido {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--tf-blanco);
+  }
+
+  .tf-hero__kicker,
+  .tf-hero__titulo,
+  .tf-hero__estado,
+  .tf-hero__acciones {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  .tf-hero__slide.is-activo .tf-hero__kicker,
+  .tf-hero__slide.is-activo .tf-hero__titulo,
+  .tf-hero__slide.is-activo .tf-hero__estado,
+  .tf-hero__slide.is-activo .tf-hero__acciones {
+    animation: tf-sube 0.8s ease forwards;
+  }
+
+  .tf-hero__slide.is-activo .tf-hero__titulo {
+    animation-delay: 0.15s;
+  }
+  .tf-hero__slide.is-activo .tf-hero__estado {
+    animation-delay: 0.3s;
+  }
+  .tf-hero__slide.is-activo .tf-hero__acciones {
+    animation-delay: 0.45s;
+  }
+
+  @keyframes tf-sube {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .tf-hero__kicker {
+    font-family: var(--tf-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 10px;
+    color: var(--tf-verde);
+    margin-bottom: 14px;
+  }
+
+  .tf-hero__titulo {
+    font-size: clamp(2.6rem, 5.4vw, 4.4rem);
+    font-weight: 700;
+    line-height: 1.02;
+    color: var(--tf-blanco);
+    margin-bottom: 22px;
+  }
+
+  .tf-hero__titulo span {
+    display: block;
+  }
+
+  .tf-hero__estado {
+    font-family: var(--tf-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+
+  .tf-hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tf-hero__kicker,
+    .tf-hero__titulo,
+    .tf-hero__estado,
+    .tf-hero__acciones {
+      opacity: 1;
+      transform: none;
+      animation: none !important;
+    }
+    .tf-hero__img {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .tf-hero {
+      min-height: 480px;
+    }
+    .tf-hero__velo {
+      background: linear-gradient(90deg, rgba(4, 29, 27, 0.92) 0%, rgba(4, 29, 27, 0.72) 60%, rgba(10, 63, 29, 0.5) 100%);
+    }
+    .tf-hero__kicker {
+      letter-spacing: 7px;
+      font-size: 0.95rem;
+    }
+    .tf-hero__acciones .tf-btn {
+      padding: 12px 22px;
+    }
+  }
+</style>

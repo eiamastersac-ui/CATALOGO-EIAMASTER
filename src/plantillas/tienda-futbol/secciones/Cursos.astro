@@ -1,0 +1,114 @@
+---
+import { cursos, u, marca } from '../datos/escuela.js';
+
+interface Curso { id: string; titulo: string; texto: string; img: string }
+const lista = cursos as Curso[];
+---
+
+<section class="tf-seccion tf-cursos" id="cursos">
+  <div class="tf-wrap">
+    <h2 class="tf-titulo tf-reveal">Nuestros <em>cursos</em></h2>
+
+    <div class="tf-cursos__grid">
+      {
+        lista.map((c: Curso) => (
+          <article class="tf-curso tf-reveal" id={c.id}>
+            <div class="tf-curso__img">
+              <img src={u(c.img, 600, 400)} alt={c.titulo} loading="lazy" width="600" height="400" />
+            </div>
+            <h3>{c.titulo}</h3>
+            <p>{c.texto}</p>
+            <a class="tf-btn tf-btn--chico" href={marca.whatsapp} target="_blank" rel="noopener">
+              Más información
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .tf-cursos {
+    background: var(--tf-menta);
+  }
+
+  .tf-cursos__grid {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+
+  .tf-curso {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    scroll-margin-top: calc(var(--tf-hdr-h) + 24px);
+  }
+
+  .tf-curso__img {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  /* Tinte verde suave que el sitio real aplica a sus fotos de curso */
+  .tf-curso__img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(32, 160, 87, 0.14);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .tf-curso__img img {
+    width: 100%;
+    height: auto; /* anula el alto del atributo height */
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .tf-curso:hover .tf-curso__img img {
+    transform: scale(1.06);
+  }
+
+  .tf-curso:hover .tf-curso__img::after {
+    opacity: 0;
+  }
+
+  .tf-curso h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--tf-bosque);
+    margin-bottom: 12px;
+    padding: 0 6px;
+  }
+
+  .tf-curso p {
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--tf-bosque);
+    margin-bottom: 18px;
+    padding: 0 8px;
+    flex: 1;
+  }
+
+  @media (max-width: 980px) {
+    .tf-cursos__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 36px 24px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .tf-cursos__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

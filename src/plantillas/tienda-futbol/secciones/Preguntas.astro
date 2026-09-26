@@ -1,0 +1,158 @@
+---
+import { faqs, marca } from '../datos/escuela.js';
+import Logo from '../componentes/Logo.astro';
+import Icono from '../componentes/Icono.astro';
+
+interface Faq { p: string; pasos: string[] }
+const lista = faqs as Faq[];
+---
+
+<section class="tf-seccion tf-faq" id="preguntas">
+  <div class="tf-wrap tf-faq__grid">
+    <div class="tf-faq__lado tf-reveal">
+      <h2>
+        <span>PREGUNTAS</span>
+        <em>FRECUENTES</em>
+      </h2>
+      <Logo grande />
+      <a class="tf-btn" href={marca.whatsapp} target="_blank" rel="noopener">Más información</a>
+    </div>
+
+    <div class="tf-faq__lista tf-reveal" id="tf-faq">
+      {
+        lista.map((f: Faq, i: number) => (
+          <details class="tf-faq__item" open={i === 0}>
+            <summary>
+              <span class="tf-faq__chev" aria-hidden="true">
+                <Icono nombre="abajo" size={16} />
+              </span>
+              <span>{f.p}</span>
+            </summary>
+            <ol class="tf-faq__resp">
+              {f.pasos.map((p: string) => (
+                <li>{p}</li>
+              ))}
+            </ol>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Acordeon: solo una pregunta abierta a la vez
+  const items = Array.from(document.querySelectorAll<HTMLDetailsElement>('#tf-faq .tf-faq__item'));
+  items.forEach((d) =>
+    d.addEventListener('toggle', () => {
+      if (d.open) items.forEach((o) => o !== d && (o.open = false));
+    }),
+  );
+</script>
+
+<style>
+  .tf-faq__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 980px;
+  }
+
+  .tf-faq__lado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    text-align: center;
+  }
+
+  .tf-faq__lado h2 {
+    font-size: clamp(2rem, 3.2vw, 2.45rem);
+    line-height: 1.05;
+  }
+
+  .tf-faq__lado h2 span {
+    display: block;
+    color: var(--tf-bosque);
+  }
+
+  .tf-faq__lado h2 em {
+    display: block;
+    font-style: normal;
+    color: var(--tf-verde);
+  }
+
+  .tf-faq__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .tf-faq__item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    background: var(--tf-verde);
+    color: var(--tf-blanco);
+    border-radius: var(--tf-radio);
+    font-family: var(--tf-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    transition: background 0.2s ease;
+  }
+
+  .tf-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tf-faq__item summary:hover {
+    background: var(--tf-verde-osc);
+  }
+
+  .tf-faq__item[open] summary {
+    background: var(--tf-bosque);
+  }
+
+  .tf-faq__chev {
+    display: inline-flex;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .tf-faq__item[open] .tf-faq__chev {
+    transform: rotate(180deg);
+  }
+
+  .tf-faq__resp {
+    list-style: decimal;
+    margin-top: 4px;
+    padding: 20px 20px 18px 44px;
+    border: 1px solid var(--tf-linea);
+    border-radius: 10px;
+    color: var(--tf-bosque);
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 820px) {
+    .tf-faq__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tf-faq__lado :global(.tf-logo--grande .tf-logo__escudo) {
+      width: 64px;
+      height: 74px;
+    }
+    .tf-faq__lado :global(.tf-logo--grande .tf-logo__txt b) {
+      font-size: 2.2rem;
+    }
+  }
+</style>

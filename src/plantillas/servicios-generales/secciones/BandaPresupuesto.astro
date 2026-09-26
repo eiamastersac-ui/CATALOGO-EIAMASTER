@@ -1,0 +1,77 @@
+---
+import { banda, marca, telHref } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<a href={telHref} class="sg-banda" aria-label={`${banda}: llamar al ${marca.tel}`}>
+  <span class="sg-wrap sg-banda__row">
+    <span class="sg-banda__ico"><Icono nombre="telefono" size={18} /></span>
+    <span class="sg-banda__txt">{banda} <b>{marca.tel}</b></span>
+    <span class="sg-banda__flecha"><Icono nombre="flecha" size={18} /></span>
+  </span>
+</a>
+
+<style>
+  .sg-banda {
+    display: block;
+    background: var(--sg-tinta);
+    color: var(--sg-blanco);
+    padding-block: 1.9rem;
+    transition: background 0.25s ease;
+  }
+
+  .sg-banda:hover {
+    background: var(--sg-tinta-2);
+  }
+
+  .sg-banda__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    text-align: center;
+  }
+
+  .sg-banda__ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    background: var(--sg-azul);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .sg-banda__txt {
+    font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .sg-banda__txt b {
+    white-space: nowrap;
+  }
+
+  .sg-banda__flecha {
+    color: var(--sg-azul);
+    display: grid;
+    transition: transform 0.25s ease;
+  }
+
+  .sg-banda:hover .sg-banda__flecha {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 560px) {
+    .sg-banda {
+      padding-block: 1.4rem;
+    }
+    .sg-banda__row {
+      justify-content: flex-start;
+      text-align: left;
+    }
+    .sg-banda__flecha {
+      display: none;
+    }
+  }
+</style>

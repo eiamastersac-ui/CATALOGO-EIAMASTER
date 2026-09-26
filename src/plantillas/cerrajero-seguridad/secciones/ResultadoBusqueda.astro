@@ -1,0 +1,31 @@
+<!-- Aviso del buscador demo (lo muestra/oculta el script de Cabecera.astro) -->
+<div class="cs-busq" id="cs-busqueda-info" hidden role="status">
+  <div class="cs-wrap cs-busq__fila">
+    <span data-cs-info-txt></span>
+    <button type="button" id="cs-busqueda-limpiar">Limpiar búsqueda ✕</button>
+  </div>
+</div>
+
+<style>
+  .cs-busq {
+    background: var(--cs-crema);
+    border-block: 1px solid var(--cs-crema-borde);
+    scroll-margin-top: 130px;
+  }
+
+  .cs-busq__fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.8rem;
+    font-weight: 700;
+    color: var(--cs-navy);
+  }
+
+  .cs-busq button {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--cs-naranja-txt);
+  }
+</style>

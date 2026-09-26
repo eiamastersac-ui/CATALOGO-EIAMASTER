@@ -1,0 +1,309 @@
+---
+import { marca, nav, telHref } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<header class="sg-hdr" id="sg-cabecera">
+  <div class="sg-wrap sg-hdr__row">
+    <a href="#top" class="sg-logo" aria-label={`${marca.nombre} ${marca.sub} — inicio`}>
+      <span class="sg-logo__mark" aria-hidden="true"><span></span></span>
+      <span class="sg-logo__txt">
+        <b>{marca.nombre}</b>
+        <span>{marca.sub} generales</span>
+      </span>
+    </a>
+
+    <nav class="sg-nav" id="sg-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }, i: number) => (
+        <a href={n.href} class={i === 0 ? 'is-activo' : ''} data-spy={n.href}>{n.t}</a>
+      ))}
+    </nav>
+
+    <div class="sg-hdr__acc">
+      <a href={telHref} class="sg-hdr__tel">
+        <span class="sg-hdr__tel-ico"><Icono nombre="telefono" size={16} /></span>
+        <span class="sg-hdr__tel-txt">
+          <small>{marca.horas}</small>
+          <b>{marca.tel}</b>
+        </span>
+      </a>
+      <button type="button" class="sg-hdr__burger" id="sg-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="sg-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('sg-cabecera');
+  const burger = document.getElementById('sg-burger');
+  const nav = document.getElementById('sg-nav');
+  const links = Array.from(nav?.querySelectorAll<HTMLAnchorElement>('a[data-spy]') ?? []);
+
+  function cerrar() {
+    nav?.classList.remove('is-abierto');
+    burger?.classList.remove('is-abierto');
+    burger?.setAttribute('aria-expanded', 'false');
+  }
+
+  burger?.addEventListener('click', () => {
+    const abierto = !!nav?.classList.toggle('is-abierto');
+    burger.classList.toggle('is-abierto', abierto);
+    burger.setAttribute('aria-expanded', String(abierto));
+  });
+
+  links.forEach((a) => a.addEventListener('click', cerrar));
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  // Sombra al scrollear + link activo segun la seccion visible (scrollspy)
+  function alScroll() {
+    hdr?.classList.toggle('is-scrolled', window.scrollY > 10);
+    let activo = links[0];
+    let mejor = -Infinity;
+    const alFinal = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    for (const a of links) {
+      const id = a.dataset.spy ?? '';
+      if (id === '#top') continue;
+      const sec = document.querySelector<HTMLElement>(id);
+      if (!sec) continue;
+      const top = sec.getBoundingClientRect().top;
+      // la seccion cuyo borde superior quedo mas cerca por encima del umbral
+      if (top <= 140 && top > mejor) {
+        mejor = top;
+        activo = a;
+      }
+      if (alFinal && id === '#contacto') {
+        activo = a;
+        break;
+      }
+    }
+    links.forEach((a) => a.classList.toggle('is-activo', a === activo));
+  }
+  window.addEventListener('scroll', alScroll, { passive: true });
+  alScroll();
+</script>
+
+<style>
+  .sg-hdr {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    height: var(--sg-hdr-h);
+    display: flex;
+    align-items: center;
+    background: var(--sg-blanco);
+    border-bottom: 1px solid transparent;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .sg-hdr.is-scrolled {
+    border-color: var(--sg-linea);
+    box-shadow: 0 10px 30px -24px rgba(10, 10, 10, 0.5);
+  }
+
+  .sg-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .sg-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-shrink: 0;
+  }
+
+  .sg-logo__mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    background: var(--sg-tinta);
+    display: grid;
+    place-items: center;
+  }
+
+  .sg-logo__mark span {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background: var(--sg-azul);
+    box-shadow: 8px 8px 0 -3px var(--sg-blanco);
+    translate: -2px -2px;
+  }
+
+  .sg-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
+
+  .sg-logo__txt b {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .sg-logo__txt span {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sg-humo);
+    margin-top: 0.2rem;
+  }
+
+  .sg-nav {
+    display: flex;
+    gap: 2rem;
+    margin-left: auto;
+    font-size: 0.86rem;
+    font-weight: 500;
+  }
+
+  .sg-nav a {
+    position: relative;
+    padding-block: 0.35rem;
+    transition: color 0.2s ease;
+  }
+
+  .sg-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background: var(--sg-azul);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .sg-nav a:hover,
+  .sg-nav a.is-activo {
+    color: var(--sg-azul);
+  }
+
+  .sg-nav a.is-activo::after {
+    transform: scaleX(1);
+  }
+
+  .sg-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .sg-hdr__tel {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-left: 1.6rem;
+    border-left: 1px solid var(--sg-linea);
+  }
+
+  .sg-hdr__tel-ico {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--sg-azul);
+    color: var(--sg-blanco);
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease;
+  }
+
+  .sg-hdr__tel:hover .sg-hdr__tel-ico {
+    background: var(--sg-tinta);
+  }
+
+  .sg-hdr__tel-txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .sg-hdr__tel-txt small {
+    font-size: 0.66rem;
+    color: var(--sg-humo);
+    font-weight: 500;
+  }
+
+  .sg-hdr__tel-txt b {
+    font-size: 0.98rem;
+    font-weight: 700;
+  }
+
+  .sg-hdr__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding-inline: 8px;
+  }
+
+  .sg-hdr__burger span {
+    height: 2px;
+    background: var(--sg-tinta);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+
+  .sg-hdr__burger.is-abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .sg-hdr__burger.is-abierto span:nth-child(2) { opacity: 0; }
+  .sg-hdr__burger.is-abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 900px) {
+    .sg-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--sg-blanco);
+      border-top: 1px solid var(--sg-linea);
+      border-bottom: 1px solid var(--sg-linea);
+      padding: 0.25rem clamp(1rem, 4vw, 2rem) 0.75rem;
+      box-shadow: 0 20px 30px -24px rgba(0, 0, 0, 0.4);
+    }
+    .sg-nav.is-abierto {
+      display: flex;
+    }
+    .sg-nav a {
+      padding-block: 0.85rem;
+      border-bottom: 1px solid var(--sg-linea);
+      font-size: 0.95rem;
+    }
+    .sg-nav a:last-child {
+      border-bottom: none;
+    }
+    .sg-nav a::after {
+      display: none;
+    }
+    .sg-hdr__acc {
+      margin-left: auto;
+    }
+    .sg-hdr__burger {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .sg-hdr__tel {
+      padding-left: 0;
+      border-left: none;
+    }
+    .sg-hdr__tel-txt {
+      display: none;
+    }
+  }
+</style>

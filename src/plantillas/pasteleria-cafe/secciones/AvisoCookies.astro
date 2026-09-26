@@ -1,0 +1,76 @@
+<!-- aviso de cookies como el del original (esquina inferior izquierda). Demo:
+     solo se oculta, no guarda nada. -->
+<div class="pc-cookies" id="pc-cookies" role="region" aria-label="Aviso de cookies">
+  <p>
+    Para brindarle una experiencia de compra personalizada, nuestro sitio utiliza cookies.
+    Al continuar usando este sitio, usted acepta nuestra <a href="#pie">política de cookies.</a>
+  </p>
+  <div class="pc-cookies__acc">
+    <button type="button" data-cookies>Rechazar</button>
+    <button type="button" data-cookies>Aceptar</button>
+  </div>
+</div>
+
+<script>
+  const aviso = document.getElementById('pc-cookies');
+  aviso?.querySelectorAll('[data-cookies]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (aviso) aviso.hidden = true;
+    }),
+  );
+</script>
+
+<style>
+  .pc-cookies {
+    position: fixed;
+    left: 10px;
+    bottom: 18px;
+    z-index: 240;
+    width: 256px;
+    background: #fff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 1rem 1.1rem 0.9rem;
+    text-align: center;
+    font-size: 0.74rem;
+    line-height: 1.45;
+    color: var(--pc-texto);
+  }
+
+  .pc-cookies a {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .pc-cookies__acc {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+
+  .pc-cookies__acc button {
+    padding: 0.3rem 1.3rem;
+    border: 1px solid var(--pc-tinta);
+    border-radius: 999px;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .pc-cookies__acc button:hover {
+    background: var(--pc-tinta);
+    color: #fff;
+  }
+
+  @media (max-width: 520px) {
+    .pc-cookies {
+      left: 16px;
+      right: 86px;
+      bottom: 16px;
+      width: auto;
+      padding: 0.8rem;
+    }
+  }
+</style>

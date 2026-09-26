@@ -1,0 +1,306 @@
+---
+import { marca, footerInteres, footerInfo, pagos } from '../datos/tienda.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<footer class="cs-pie" id="cs-pie">
+  <div class="cs-pie__main">
+    <div class="cs-wrap cs-pie__grid">
+      <div class="cs-pie__col">
+        <span class="cs-pie__escudo" aria-hidden="true">
+          <svg viewBox="0 0 100 110" width="110" height="120">
+            <path d="M50 4 94 18v34c0 28-19 46-44 54C25 98 6 80 6 52V18Z" fill="#111" stroke="#111" stroke-width="4" />
+            <path d="M50 12 86 24v28c0 23-15 38-36 45C29 90 14 75 14 52V24Z" fill="#e8742a" />
+            <path d="M50 20 78 30v22c0 18-12 30-28 36C34 82 22 70 22 52V30Z" fill="#111" />
+            <text x="50" y="62" text-anchor="middle" font-family="Titan One, sans-serif" font-size="30" fill="#e8742a">t.</text>
+            <circle cx="50" cy="76" r="5" fill="#e8742a" />
+          </svg>
+        </span>
+        <h3 class="cs-pie__h">📺 Nuestros análisis</h3>
+        <p class="cs-pie__p">Análisis técnicos, comparativas reales, opiniones honestas sin publicidad pagada</p>
+        <a href="#cs-ahorro" class="cs-pie__btn" style="--c:#c62828" data-cs-abre-ahorro>
+          <Icono nombre="youtube" size={18} /> Youtube
+        </a>
+      </div>
+
+      <div class="cs-pie__col">
+        <h3 class="cs-pie__h">Enlaces de interés</h3>
+        <ul class="cs-pie__btns">
+          {
+            footerInteres.map((b: { t: string; color: string; ico: string }) => (
+              <li>
+                <a
+                  href={b.ico === 'wa' ? `https://wa.me/${marca.telCrudo}` : '#ofertas'}
+                  target={b.ico === 'wa' ? '_blank' : undefined}
+                  rel={b.ico === 'wa' ? 'noopener' : undefined}
+                  class="cs-pie__btn"
+                  style={`--c:${b.color}`}
+                >
+                  {b.ico === 'wa' ? (
+                    <Icono nombre="whatsapp" size={17} />
+                  ) : b.ico === '%' ? (
+                    <Icono nombre="porcentaje" size={17} />
+                  ) : (
+                    <Icono nombre="camion" size={17} />
+                  )}
+                  {b.t}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <h3 class="cs-pie__h cs-pie__h--sep">Incidencia</h3>
+        <a href={`mailto:${marca.correo}`} class="cs-pie__btn" style="--c:#8a5418">
+          <Icono nombre="alerta" size={17} /> Incidencia pedido realizado
+        </a>
+      </div>
+
+      <div class="cs-pie__col">
+        <h3 class="cs-pie__h">Información</h3>
+        <ul class="cs-pie__info">
+          {
+            footerInfo.map((i: { t: string; ico: string }) => (
+              <li>
+                <a href="#cs-pie">
+                  <span class="cs-pie__ico">
+                    <Icono nombre={i.ico} size={19} />
+                  </span>
+                  {i.t}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-pie__pagos">
+    <ul class="cs-wrap">
+      {
+        pagos.map((p: string) => (
+          <li class={`cs-pago cs-pago--${p.trim().replace(/\s+/g, '').toLowerCase()}`}>
+            {p === 'TARJETA' && <span class="cs-pago__tarj" aria-hidden="true" />}
+            {p === 'TRANSFER' ? (
+              <>🏛 TRANSFER</>
+            ) : (
+              p
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <p class="cs-pie__lema">Los que valen crean, los que no valen solo nos copian</p>
+
+  <div class="cs-pie__legal">
+    <div class="cs-wrap cs-pie__legal-fila">
+      <nav aria-label="Legal">
+        <a href="#cs-pie">Aviso Legal</a>
+        <span>|</span>
+        <a href="#cs-pie">Privacidad</a>
+        <span>|</span>
+        <a href="#cs-pie">Condiciones de Compra</a>
+        <span>|</span>
+        <a href="#cs-pie">Libro de Reclamaciones</a>
+      </nav>
+      <p>© 2026 {marca.nombre} {marca.sub}. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .cs-pie {
+    background: var(--cs-negro);
+    color: #e5e7eb;
+  }
+
+  .cs-pie__main {
+    padding: 2.6rem 0 3.4rem;
+  }
+
+  .cs-pie__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .cs-pie__escudo {
+    display: block;
+    margin-bottom: 1.2rem;
+  }
+
+  .cs-pie__h {
+    font-family: var(--cs-roboto);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #f3f4f6;
+    margin-bottom: 0.35rem;
+  }
+
+  .cs-pie__h--sep {
+    margin-top: 1.4rem;
+  }
+
+  .cs-pie__p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.1rem;
+    max-width: 36ch;
+  }
+
+  .cs-pie__btns {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.3rem;
+    margin-top: 0.2rem;
+  }
+
+  .cs-pie__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--c);
+    color: #fff;
+    font-family: var(--cs-roboto);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.55rem 0.8rem 0.55rem 0.7rem;
+    border-radius: 3px;
+    transition: filter 0.2s ease, transform 0.2s ease;
+  }
+
+  .cs-pie__btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+  }
+
+  .cs-pie__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: 0.2rem;
+  }
+
+  .cs-pie__info a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--cs-roboto);
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+
+  .cs-pie__info a:hover {
+    color: var(--cs-naranja);
+  }
+
+  .cs-pie__ico {
+    color: #3b82f6;
+    display: grid;
+  }
+
+  .cs-pie__pagos {
+    background: #585c63;
+    padding: 0.55rem 0;
+  }
+
+  .cs-pie__pagos ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .cs-pago {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    color: #111;
+    border-radius: 3px;
+    height: 28px;
+    padding-inline: 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .cs-pago__tarj {
+    width: 28px;
+    height: 16px;
+    border-radius: 2px;
+    background: #1f2937;
+    position: relative;
+  }
+
+  .cs-pago__tarj::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f59e0b;
+  }
+
+  .cs-pago--paypal {
+    font-style: italic;
+    font-weight: 900;
+    font-size: 0.95rem;
+    color: #1e3a8a;
+  }
+
+  .cs-pago--gpay,
+  .cs-pago--applepay {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .cs-pie__lema {
+    background: #fff;
+    color: #111;
+    text-align: center;
+    font-size: 0.95rem;
+    padding: 0.2rem 16px;
+  }
+
+  .cs-pie__legal {
+    background: #1b1b1b;
+    font-size: 0.82rem;
+    color: #b8b8b8;
+  }
+
+  .cs-pie__legal-fila {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    padding-block: 0.7rem;
+  }
+
+  .cs-pie__legal nav {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .cs-pie__legal a:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 860px) {
+    .cs-pie__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .cs-pie__legal-fila {
+      justify-content: center;
+      text-align: center;
+      padding-bottom: 80px;
+    }
+  }
+</style>

@@ -1,0 +1,209 @@
+---
+import Icono from './Icono.astro';
+import { img, soles, DESCUENTO } from '../datos/pasteleria.js';
+
+interface Tam { t: string; p: number }
+interface Props { id: string; cat: string; n: string; img: string; tam: Tam[]; oculto?: boolean }
+const p = Astro.props as Props;
+
+const precios = p.tam.map((t: Tam) => t.p);
+const min = Math.min(...precios);
+const max = Math.max(...precios);
+const conDcto = (n: number) => Math.round(n * (100 - DESCUENTO)) / 100;
+const rango = (a: number, b: number) => (a === b ? soles(a) : `${soles(a)} - ${soles(b)}`);
+const esRango = min !== max;
+---
+
+<article
+  class={`pc-prod${p.oculto ? ' is-oculto' : ''}`}
+  data-id={p.id}
+  data-cat={p.cat}
+  data-nombre={p.n}
+>
+  <div class="pc-prod__media">
+    <span class="pc-prod__badge">-{DESCUENTO}%</span>
+    <button type="button" class="pc-prod__fav" data-fav={p.id} aria-label={`Agregar ${p.n} a favoritos`} aria-pressed="false">
+      <Icono nombre="corazon" size={17} grosor={1.5} />
+    </button>
+    <button type="button" class="pc-prod__ojo" data-ver={p.id} aria-label={`Vista rápida de ${p.n}`}>
+      <Icono nombre="ojo" size={17} grosor={1.5} />
+    </button>
+    <button type="button" class="pc-prod__img" data-ver={p.id} tabindex="-1" aria-hidden="true">
+      <img src={img(p.img, 520, 520)} alt={p.n} loading="lazy" width="520" height="520" />
+    </button>
+  </div>
+  <h3 class="pc-prod__n" title={p.n}>{p.n}</h3>
+  <p class={`pc-prod__precio${esRango ? ' pc-prod__precio--rango' : ''}`}>
+    <del>{rango(min, max)}</del>
+    <ins>{rango(conDcto(min), conDcto(max))}</ins>
+  </p>
+  <button type="button" class="pc-prod__sel" data-ver={p.id}>
+    {esRango ? 'Seleccionar opciones' : 'Añadir al carrito'}
+  </button>
+</article>
+
+<style>
+  .pc-prod {
+    text-align: center;
+    position: relative;
+  }
+
+  .pc-prod__media {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--pc-foto);
+  }
+
+  .pc-prod__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .pc-prod__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .pc-prod:hover .pc-prod__img img {
+    transform: scale(1.04);
+  }
+
+  .pc-prod__badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    background: var(--pc-coral);
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .pc-prod__fav,
+  .pc-prod__ojo {
+    position: absolute;
+    right: 8px;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: var(--pc-tinta);
+    transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .pc-prod__fav {
+    top: 8px;
+  }
+
+  .pc-prod__fav:hover,
+  .pc-prod__ojo:hover {
+    background: #fff;
+  }
+
+  .pc-prod__fav[aria-pressed="true"] {
+    color: var(--pc-coral);
+  }
+
+  .pc-prod__fav[aria-pressed="true"] :global(path) {
+    fill: currentColor;
+  }
+
+  .pc-prod__ojo {
+    top: 42px;
+    opacity: 0;
+    transform: translateX(6px);
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .pc-prod:hover .pc-prod__ojo,
+  .pc-prod__ojo:focus-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pc-prod__n {
+    margin-top: 0.95rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--pc-texto);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-inline: 2px;
+  }
+
+  .pc-prod__precio {
+    margin-top: 0.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.1rem 0.7rem;
+    font-size: 0.82rem;
+  }
+
+  .pc-prod__precio--rango {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pc-prod__precio del {
+    color: var(--pc-gris-2);
+    font-size: 0.72rem;
+  }
+
+  .pc-prod__precio ins {
+    text-decoration: none;
+    color: var(--pc-coral);
+    font-weight: 600;
+  }
+
+  /* boton que el original muestra al pasar el mouse */
+  .pc-prod__sel {
+    margin-top: 0.8rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--pc-coral);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  }
+
+  .pc-prod:hover .pc-prod__sel,
+  .pc-prod__sel:focus-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pc-prod__sel:hover {
+    background: var(--pc-coral-osc);
+  }
+
+  @media (hover: none), (max-width: 760px) {
+    .pc-prod__ojo,
+    .pc-prod__sel {
+      opacity: 1;
+      transform: none;
+    }
+
+    .pc-prod__sel {
+      font-size: 0.62rem;
+      padding: 0.5rem 0.8rem;
+    }
+  }
+</style>

@@ -1,0 +1,239 @@
+@import url("https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@600;700;800&family=Saira:wght@400;500;600;700&display=swap");
+
+/* ==========================================================================
+   tienda-futbol — escuela de formacion de entrenadores de futbol
+   (estructura y estilo inspirados en eseful.com.pe).
+   Paleta real del sitio: verde bosque #0a3f1d (titulos/texto), verde marca
+   #20a057 (acento: kickers, botones, acordeon), tinta #041d1b (footer, boton
+   de la cabecera, velo del hero), panel menta #ebfcf0 (seccion de cursos).
+   El velo verde->tinta del hero y del evento replica el overlay real del
+   sitio sobre sus fotos; el resto del color lo ponen las fotos de futbol.
+   Todo namespaced bajo .tpl-tienda-futbol. SIN overflow-x en la raiz.
+   ========================================================================== */
+
+.tpl-tienda-futbol {
+  --tf-bosque: #0a3f1d;
+  --tf-verde: #20a057;
+  --tf-verde-osc: #1a8a4a;
+  --tf-tinta: #041d1b;
+  --tf-menta: #ebfcf0;
+  --tf-blanco: #ffffff;
+  --tf-linea: #dfe7e2;
+
+  --tf-font: "Saira", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --tf-display: "Saira Semi Condensed", "Saira", Arial, sans-serif;
+
+  --tf-maxw: 1140px;
+  --tf-hdr-h: 80px;
+  --tf-radio: 13px;
+
+  --tf-escudo-fondo: #ffffff;
+  --tf-escudo-linea: #041d1b;
+
+  background: var(--tf-blanco);
+  color: var(--tf-bosque);
+  font-family: var(--tf-font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tpl-tienda-futbol *,
+.tpl-tienda-futbol *::before,
+.tpl-tienda-futbol *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-tienda-futbol h1,
+.tpl-tienda-futbol h2,
+.tpl-tienda-futbol h3,
+.tpl-tienda-futbol h4 {
+  font-family: var(--tf-display);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tpl-tienda-futbol img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-tienda-futbol a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-tienda-futbol ul,
+.tpl-tienda-futbol ol {
+  list-style: none;
+}
+
+.tpl-tienda-futbol button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.tpl-tienda-futbol [hidden] {
+  display: none !important;
+}
+
+/* ---------- utilidades ---------- */
+.tpl-tienda-futbol .tf-wrap {
+  width: 100%;
+  max-width: var(--tf-maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.tpl-tienda-futbol .tf-seccion {
+  padding: 88px 0;
+  scroll-margin-top: var(--tf-hdr-h);
+}
+
+.tpl-tienda-futbol .tf-titulo {
+  font-family: var(--tf-display);
+  font-size: clamp(1.9rem, 3.4vw, 2.65rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--tf-bosque);
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.tpl-tienda-futbol .tf-titulo em {
+  font-style: normal;
+  color: var(--tf-verde);
+}
+
+.tpl-tienda-futbol .tf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 34px;
+  border-radius: var(--tf-radio);
+  background: var(--tf-verde);
+  color: var(--tf-blanco);
+  font-family: var(--tf-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 2px solid var(--tf-verde);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.tpl-tienda-futbol .tf-btn:hover {
+  background: var(--tf-bosque);
+  border-color: var(--tf-bosque);
+}
+
+.tpl-tienda-futbol .tf-btn--blanco {
+  background: var(--tf-blanco);
+  border-color: var(--tf-blanco);
+  color: var(--tf-tinta);
+}
+
+.tpl-tienda-futbol .tf-btn--blanco:hover {
+  background: transparent;
+  color: var(--tf-blanco);
+}
+
+.tpl-tienda-futbol .tf-btn--chico {
+  padding: 10px 24px;
+  font-size: 0.8rem;
+}
+
+/* ---------- logo (componente reutilizado) ---------- */
+.tpl-tienda-futbol .tf-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--tf-tinta);
+}
+
+.tpl-tienda-futbol .tf-logo__escudo {
+  width: 40px;
+  height: 46px;
+  flex-shrink: 0;
+}
+
+.tpl-tienda-futbol .tf-logo__txt {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  font-family: var(--tf-display);
+}
+
+.tpl-tienda-futbol .tf-logo__txt b {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.tpl-tienda-futbol .tf-logo__txt small {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  color: var(--tf-verde);
+  margin-top: 3px;
+}
+
+.tpl-tienda-futbol .tf-logo--claro {
+  --tf-escudo-fondo: #ffffff;
+  --tf-escudo-linea: #041d1b;
+  color: var(--tf-blanco);
+}
+
+.tpl-tienda-futbol .tf-logo--grande .tf-logo__escudo {
+  width: 84px;
+  height: 97px;
+}
+
+.tpl-tienda-futbol .tf-logo--grande {
+  gap: 16px;
+}
+
+.tpl-tienda-futbol .tf-logo--grande .tf-logo__txt b {
+  font-size: 2.9rem;
+}
+
+.tpl-tienda-futbol .tf-logo--grande .tf-logo__txt small {
+  font-size: 1rem;
+  margin-top: 6px;
+}
+
+/* ---------- aparicion al hacer scroll ---------- */
+.tpl-tienda-futbol .tf-reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.tpl-tienda-futbol .tf-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-tienda-futbol .tf-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .tpl-tienda-futbol {
+    --tf-hdr-h: 68px;
+  }
+
+  .tpl-tienda-futbol .tf-seccion {
+    padding: 64px 0;
+  }
+}

@@ -1,0 +1,35 @@
+---
+import './estilos.css';
+import { filas } from './datos/tienda.js';
+
+import Cabecera from './secciones/Cabecera.astro';
+import Beneficios from './secciones/Beneficios.astro';
+import Lema from './secciones/Lema.astro';
+import PromoMirilla from './secciones/PromoMirilla.astro';
+import Protecciones from './secciones/Protecciones.astro';
+import Ahorro from './secciones/Ahorro.astro';
+import Categorias from './secciones/Categorias.astro';
+import Ofertas from './secciones/Ofertas.astro';
+import ResultadoBusqueda from './secciones/ResultadoBusqueda.astro';
+import FilaProductos, { type Fila } from './secciones/FilaProductos.astro';
+import PiePagina from './secciones/PiePagina.astro';
+import BarraMovil from './secciones/BarraMovil.astro';
+---
+
+<div class="tpl-cerrajero-seguridad">
+  <span id="top"></span>
+  <Cabecera />
+  <Beneficios />
+  <main>
+    <Lema />
+    <PromoMirilla />
+    <Protecciones />
+    <Ahorro />
+    <Categorias />
+    <Ofertas />
+    <ResultadoBusqueda />
+    {(filas as Fila[]).map((f: Fila) => <FilaProductos fila={f} />)}
+  </main>
+  <PiePagina />
+  <BarraMovil />
+</div>

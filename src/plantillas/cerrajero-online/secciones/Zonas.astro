@@ -1,0 +1,62 @@
+---
+import { zonas } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="co-seccion co-zonas" id="zonas">
+  <div class="co-wrap co-zonas__grid">
+    <div class="co-reveal">
+      <span class="co-kicker">Localidades</span>
+      <h2 class="co-titulo co-titulo--normal">Su cerrajero en Madrid y pueblos colindantes</h2>
+      <p class="co-sub">Servicio a domicilio sin coste de desplazamiento en Madrid capital y en toda la zona sur y oeste de la Comunidad.</p>
+    </div>
+    <ul class="co-zonas__lista co-reveal co-reveal--1">
+      {zonas.map((z: string) => (
+        <li><Icono nombre="pin" size={15} grosor={2} /> Cerrajeros {z}</li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .co-zonas__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .co-zonas__lista {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.1rem 1.5rem;
+  }
+
+  .co-zonas__lista li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--co-linea);
+    font-weight: 600;
+    font-size: 0.93rem;
+    color: var(--co-titulo);
+  }
+
+  .co-zonas__lista li :global(svg) {
+    color: var(--co-naranja);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 860px) {
+    .co-zonas__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .co-zonas__lista {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

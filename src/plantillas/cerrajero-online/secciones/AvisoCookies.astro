@@ -1,0 +1,114 @@
+---
+---
+
+<!-- Aviso de cookies demo (el sitio original muestra uno igual abajo al centro).
+     Aparece tras el primer scroll para no tapar el hero; cualquier boton lo cierra.
+     No guarda cookies reales: solo recuerda el cierre en sessionStorage. -->
+<div class="co-cookies" id="co-cookies" role="dialog" aria-label="Aviso de cookies" hidden>
+  <p>
+    Utilizamos cookies propias y de terceros para garantizar el funcionamiento de la web, medir su uso y mejorar nuestros
+    servicios. Puede aceptarlas, rechazar las no necesarias o configurarlas. <a href="#top">Política de cookies</a>
+  </p>
+  <div class="co-cookies__btns">
+    <button type="button" data-cookie="aceptar">Aceptar todo</button>
+    <button type="button" data-cookie="rechazar">Rechazar</button>
+    <button type="button" data-cookie="configurar">Configurar</button>
+  </div>
+</div>
+
+<script>
+  const caja = document.getElementById('co-cookies');
+  const CLAVE = 'co-cookies-cerrado';
+
+  let cerrado = false;
+  try {
+    cerrado = sessionStorage.getItem(CLAVE) === '1';
+  } catch {
+    cerrado = false;
+  }
+
+  function mostrar() {
+    if (cerrado || !caja) return;
+    caja.hidden = false;
+    window.removeEventListener('scroll', alScroll);
+  }
+  function alScroll() {
+    if (window.scrollY > 400) mostrar();
+  }
+  if (!cerrado) window.addEventListener('scroll', alScroll, { passive: true });
+
+  caja?.querySelectorAll('[data-cookie]').forEach((b) =>
+    b.addEventListener('click', () => {
+      cerrado = true;
+      caja.hidden = true;
+      try {
+        sessionStorage.setItem(CLAVE, '1');
+      } catch {
+        /* sin storage: se volvera a mostrar en la proxima visita */
+      }
+    }),
+  );
+</script>
+
+<style>
+  .co-cookies {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translateX(-50%);
+    z-index: 180;
+    width: min(980px, calc(100% - 2rem));
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--co-blanco);
+    border-radius: 12px;
+    border: 1px solid var(--co-linea);
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.35);
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--co-titulo);
+  }
+
+  .co-cookies[hidden] {
+    display: none;
+  }
+
+  .co-cookies a {
+    color: #1a57c9;
+    text-decoration: underline;
+  }
+
+  .co-cookies__btns {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .co-cookies__btns button {
+    padding: 0.6rem 1rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--co-blanco);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .co-cookies__btns button:hover {
+    border-color: var(--co-titulo);
+    background: var(--co-panel);
+  }
+
+  @media (max-width: 760px) {
+    .co-cookies {
+      flex-direction: column;
+      align-items: stretch;
+      bottom: 4.75rem;
+    }
+    .co-cookies__btns button {
+      flex: 1;
+    }
+  }
+</style>

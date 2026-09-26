@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Pastelería (Estilo Dolce Capriccio)",
+  "categoria": "pasteleria",
+  "descripcion": "Tienda online de pastelería y cafetería en Lima: cabecera blanca con logo coral, buscador pill con búsquedas populares, carrito y favoritos; botón coral \"Nuestras categorías\" con desplegable a 2 columnas y menú con iconos. Hero en banner pastel con extremo en semicírculo, aro coral y 3 slides con autoplay, carrusel \"¿Qué estás buscando hoy?\", catálogo \"Recomendados para ti\" con pestañas (tortas, rollos, cheesecakes, salados, helados), badge -30%, precios en soles por tamaño, vista rápida con selector de tamaño y cantidad, carrito lateral demo, 2 banners promo, blog y footer claro con comprobantes y libro de reclamaciones. Widget de WhatsApp y aviso de cookies demo. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/pasteleria-cafe.jpg",
+  "tags": ["pastelería", "tortas", "postres", "cafetería", "cheesecake", "tienda online", "carrito", "lima"],
+  "paleta": ["#ff5046", "#302d2a", "#e0dfc1", "#e5c7ad", "#f2c4b6"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "dolcecapriccio.pe",
+  "orden": 79
+}

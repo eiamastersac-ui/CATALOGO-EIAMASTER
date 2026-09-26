@@ -1,0 +1,53 @@
+---
+import { marca, waHref, telHref } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<a href={waHref} target="_blank" rel="noopener" class="sg-whats" aria-label="Escríbenos por WhatsApp">
+  <span class="sg-whats__tip" id="sg-whats-tip">¿Emergencia? Escríbenos</span>
+  <Icono nombre="whatsapp" size={28} />
+</a>
+
+<a href={telHref} class="sg-llamar" id="sg-llamar" aria-label={`Llamar al ${marca.tel}`}>
+  <Icono nombre="telefono" size={17} />
+  {marca.tel}
+</a>
+
+<script>
+  // El tip de WhatsApp aparece unos segundos al cargar.
+  const tip = document.getElementById('sg-whats-tip');
+  window.setTimeout(() => tip?.classList.add('is-visible'), 2500);
+  window.setTimeout(() => tip?.classList.remove('is-visible'), 8000);
+
+  // La pildora de llamada se esconde cuando la banda de contacto ya esta a la vista
+  // (evita duplicar el telefono encima del bloque de contacto).
+  const llamar = document.getElementById('sg-llamar');
+  const zonasOscuras = Array.from(
+    document.querySelectorAll<HTMLElement>('.tpl-servicios-generales #contacto, .tpl-servicios-generales .sg-pie'),
+  );
+  if (llamar && zonasOscuras.length && 'IntersectionObserver' in window) {
+    const visibles = new Set<Element>();
+    const io = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (e.isIntersecting) visibles.add(e.target);
+          else visibles.delete(e.target);
+        }
+        llamar.classList.toggle('is-oculto', visibles.size > 0);
+      },
+      { threshold: 0.15 },
+    );
+    zonasOscuras.forEach((z) => io.observe(z));
+  }
+
+  // En movil el hero ya trae sus botones de WhatsApp/Llamada: la pildora
+  // aparece recien cuando esos botones salen de pantalla (clase usada solo en CSS movil).
+  const acciones = document.querySelector('.tpl-servicios-generales .sg-hero__acciones');
+  if (llamar && acciones && 'IntersectionObserver' in window) {
+    new IntersectionObserver((entradas) => {
+      for (const e of entradas) {
+        llamar.classList.toggle('is-en-hero', e.isIntersecting || e.boundingClientRect.top > 0);
+      }
+    }).observe(acciones);
+  }
+</script>

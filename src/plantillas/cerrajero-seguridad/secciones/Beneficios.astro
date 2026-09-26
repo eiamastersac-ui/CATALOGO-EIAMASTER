@@ -1,0 +1,117 @@
+---
+import { beneficios } from '../datos/tienda.js';
+
+type B = { ico: string; t: string; s: string };
+const chips = [
+  { ico: '🛍️', t: 'Categorías', href: '#categorias' },
+  { ico: '🚚', t: 'Envío Gratis 24h', href: '#cs-pie' },
+  { ico: '🔄', t: 'Modelos 2026', href: '#novedades' },
+  { ico: '🪙', t: 'Ganas CerraCoins', href: '#ofertas' },
+];
+---
+
+<!-- escritorio: franja blanca de 4 beneficios bajo el menu -->
+<section class="cs-benef" aria-label="Ventajas de compra">
+  <ul class="cs-wrap cs-benef__lista">
+    {
+      beneficios.map((b: B) => (
+        <li class="cs-benef__item">
+          <span class="cs-benef__ico" aria-hidden="true">{b.ico}</span>
+          <span class="cs-benef__txt">
+            <b>{b.t}</b>
+            <small>{b.s}</small>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<!-- movil: botones-chip en 2 columnas sobre fondo navy -->
+<nav class="cs-chips" aria-label="Accesos rápidos">
+  {
+    chips.map((c) => (
+      <a href={c.href} class="cs-chip">
+        <span aria-hidden="true">{c.ico}</span>
+        {c.t.toUpperCase()}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .cs-benef {
+    background: #fff;
+    border-bottom: 1px solid var(--cs-linea);
+  }
+
+  .cs-benef__lista {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    height: 44px;
+  }
+
+  .cs-benef__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+
+  .cs-benef__ico {
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+
+  .cs-benef__txt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.15;
+    color: var(--cs-navy-2);
+  }
+
+  .cs-benef__txt b {
+    font-weight: 700;
+    font-size: 0.86rem;
+  }
+
+  .cs-benef__txt small {
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .cs-chips {
+    display: none;
+  }
+
+  @media (max-width: 899px) {
+    .cs-benef {
+      display: none;
+    }
+    .cs-chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 0 10px 14px;
+      background: var(--cs-navy);
+    }
+    .cs-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: #fff;
+      border-radius: 6px;
+      height: 42px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--cs-navy);
+      white-space: nowrap;
+    }
+    .cs-chip span {
+      font-size: 1.05rem;
+    }
+  }
+</style>

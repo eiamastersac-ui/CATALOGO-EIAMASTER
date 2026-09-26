@@ -1,0 +1,111 @@
+---
+import { bloquesSeo, marca } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Bloque { id: string; titulo: string; img: string; parrafos: string[] }
+const bloques = bloquesSeo as Bloque[];
+---
+
+<section class="co-seccion co-seo" id="urgentes">
+  <div class="co-wrap co-seo__lista">
+    {bloques.map((b: Bloque, i: number) => (
+      <article class={`co-seo__bloque${i % 2 ? ' co-seo__bloque--inv' : ''}`} id={`bloque-${b.id}`}>
+        <figure class="co-seo__foto co-reveal">
+          <img src={b.img} alt="" loading="lazy" />
+        </figure>
+        <div class="co-seo__texto co-reveal co-reveal--1">
+          <span class="co-kicker">{i === 0 ? 'Atención inmediata' : 'Precios justos'}</span>
+          <h2 class="co-titulo co-titulo--normal">{b.titulo}</h2>
+          {b.parrafos.map((p: string) => <p>{p}</p>)}
+          <ul class="co-seo__checks">
+            {(i === 0
+              ? ['Apertura sin romper la puerta', 'En menos de 30 minutos', 'Madrid centro y alrededores']
+              : ['Presupuesto claro por adelantado', 'Sin coste de desplazamiento', '6 meses de garantía']
+            ).map((c: string) => (
+              <li><Icono nombre="check" size={16} grosor={2.4} /> {c}</li>
+            ))}
+          </ul>
+          <a href={i === 0 ? `tel:${marca.telCrudo}` : '#contacto'} class="co-btn co-btn--borde">
+            {i === 0 ? `Llamar ahora · ${marca.tel}` : 'Pedir presupuesto'}
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .co-seo {
+    padding-top: 0;
+  }
+
+  .co-seo__lista {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .co-seo__bloque {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .co-seo__bloque--inv .co-seo__foto {
+    order: 2;
+  }
+
+  .co-seo__foto {
+    position: relative;
+    aspect-ratio: 5 / 5.6;
+    border-radius: var(--co-radio);
+    overflow: hidden;
+    background: var(--co-panel);
+  }
+
+  .co-seo__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .co-seo__texto p {
+    color: var(--co-gris);
+    margin-bottom: 1rem;
+  }
+
+  .co-seo__checks {
+    display: grid;
+    gap: 0.55rem;
+    margin: 1.4rem 0 1.8rem;
+  }
+
+  .co-seo__checks li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    color: var(--co-titulo);
+    font-size: 0.95rem;
+  }
+
+  .co-seo__checks li :global(svg) {
+    color: var(--co-naranja);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 860px) {
+    .co-seo__bloque {
+      grid-template-columns: 1fr;
+    }
+    .co-seo__bloque--inv .co-seo__foto {
+      order: 0;
+    }
+    .co-seo__foto {
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

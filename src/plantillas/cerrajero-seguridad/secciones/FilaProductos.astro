@@ -1,0 +1,151 @@
+---
+/* Una seccion de carril de productos (Novedades, Destacado, Packs, Bombines...).
+   Se instancia una vez por fila desde Plantilla.astro con los datos de `filas`. */
+import TarjetaProducto, { type Producto } from '../componentes/TarjetaProducto.astro';
+
+export interface Fila {
+  id: string;
+  titulo: string;
+  badge?: string;
+  badgeTipo?: string;
+  emoji?: string;
+  fondo: string;
+  verTodos?: string;
+  btnTipo?: string;
+  productos: Producto[];
+}
+
+interface Props {
+  fila: Fila;
+}
+const { fila } = Astro.props as Props;
+const cols = fila.productos.length <= 5 ? fila.productos.length : 6;
+---
+
+<section class={`cs-fila cs-fila--${fila.fondo}`} id={fila.id} aria-labelledby={`cs-fila-${fila.id}`} data-cs-fila>
+  <div class="cs-wrap">
+    <header class={`cs-fila__cab ${fila.fondo === 'crema' ? 'is-naranja' : ''}`}>
+      {fila.badge && <span class={`cs-fila__badge cs-fila__badge--${fila.badgeTipo}`}>{fila.badge.toUpperCase()}</span>}
+      <h2 id={`cs-fila-${fila.id}`} class="cs-fila__titulo">
+        {fila.emoji && <span aria-hidden="true">{fila.emoji} </span>}
+        {fila.titulo.toUpperCase()}
+      </h2>
+    </header>
+
+    <div class="cs-fila__grid" style={`--cols:${cols}`}>
+      {fila.productos.map((p: Producto) => <TarjetaProducto p={p} />)}
+    </div>
+
+    {
+      fila.verTodos && (
+        <p class="cs-fila__ver">
+          <a href={`#${fila.id}`} class={`cs-btn ${fila.btnTipo === 'naranja' ? 'cs-btn--naranja' : ''}`}>
+            {fila.verTodos} →
+          </a>
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .cs-fila {
+    padding: 2.2rem 0 2.6rem;
+    scroll-margin-top: 130px;
+    border-top: 1px solid transparent;
+  }
+
+  .cs-fila--blanco {
+    background: #fff;
+  }
+
+  .cs-fila--hielo {
+    background: var(--cs-hielo);
+    border-top-color: var(--cs-linea);
+  }
+
+  .cs-fila--crema {
+    background: var(--cs-crema);
+    border-top-color: var(--cs-crema-borde);
+  }
+
+  .cs-fila__cab {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid var(--cs-petroleo);
+    margin-bottom: 1.4rem;
+  }
+
+  .cs-fila__cab.is-naranja {
+    border-bottom-color: #e5b43c;
+  }
+
+  .cs-fila__titulo {
+    font-weight: 400;
+    font-size: clamp(1.15rem, 2vw, 1.3rem);
+    color: var(--cs-navy);
+  }
+
+  .cs-fila__badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 0.55rem;
+    border-radius: 3px;
+  }
+
+  .cs-fila__badge--crema {
+    background: #fdefc2;
+    color: #6b4a07;
+  }
+
+  .cs-fila__badge--navy {
+    background: var(--cs-navy);
+    color: #fff;
+  }
+
+  .cs-fila__badge--naranja {
+    background: var(--cs-naranja);
+    color: var(--cs-navy-2);
+  }
+
+  .cs-fila__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  /* los packs cerrojo (4) mantienen el ancho de columna de 6, como el original */
+  .cs-fila__grid[style*='--cols:4'] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .cs-fila__ver {
+    text-align: center;
+    margin-top: 1.1rem;
+  }
+
+  .cs-fila.cs-oculto-busqueda {
+    display: none;
+  }
+
+  @media (max-width: 1000px) {
+    .cs-fila__grid,
+    .cs-fila__grid[style*='--cols:4'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cs-fila__grid,
+    .cs-fila__grid[style*='--cols:4'] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 12px;
+    }
+    .cs-fila__ver .cs-btn {
+      width: 100%;
+    }
+  }
+</style>

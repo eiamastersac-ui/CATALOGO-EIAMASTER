@@ -1,0 +1,103 @@
+---
+import { porQue } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Item {
+  icono: string;
+  t: string;
+  d: string;
+}
+---
+
+<section class="sg-pq sg-seccion" id="por-que">
+  <div class="sg-wrap">
+    <header class="sg-pq__cab sg-reveal">
+      <h2 class="sg-titulo">{porQue.titulo}</h2>
+      <p class="sg-texto">{porQue.texto}</p>
+    </header>
+
+    <ul class="sg-pq__grid">
+      {porQue.items.map((it: Item, i: number) => (
+        <li class={`sg-pq__item sg-reveal sg-reveal--${i + 1}`}>
+          <span class="sg-pq__ico"><Icono nombre={it.icono} size={54} /></span>
+          <h3>{it.t}</h3>
+          <p class="sg-texto">{it.d}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sg-pq {
+    background: var(--sg-papel);
+    border-top: 1px solid var(--sg-linea);
+  }
+
+  .sg-pq__cab {
+    text-align: center;
+    max-width: 56rem;
+    margin: 0 auto clamp(2.75rem, 6vw, 4.25rem);
+  }
+
+  .sg-pq__cab .sg-titulo {
+    margin-bottom: 1rem;
+  }
+
+  .sg-pq__grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    max-width: 58rem;
+    margin-inline: auto;
+  }
+
+  .sg-pq__item {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: var(--sg-radio);
+    border: 1px solid transparent;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .sg-pq__item:hover {
+    background: var(--sg-blanco);
+    border-color: var(--sg-linea);
+    transform: translateY(-4px);
+  }
+
+  .sg-pq__ico {
+    display: inline-grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    color: var(--sg-azul);
+    margin-bottom: 1.2rem;
+  }
+
+  .sg-pq__ico :global(svg) {
+    stroke-width: 1.4;
+  }
+
+  .sg-pq__item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .sg-pq__item .sg-texto {
+    font-size: 0.88rem;
+    max-width: 30ch;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 820px) {
+    .sg-pq__grid {
+      grid-template-columns: 1fr;
+      max-width: 28rem;
+    }
+    .sg-pq__item {
+      padding: 1.25rem 1rem;
+    }
+  }
+</style>

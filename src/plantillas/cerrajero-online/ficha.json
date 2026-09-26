@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Cerrajería (Estilo Cerrajero Online)",
+  "categoria": "cerrajeria",
+  "descripcion": "Web de captación para una cerrajería en Madrid: barra superior oscura con teléfono y correo, cabecera fija transparente que se vuelve blanca al scrollear, menú con desplegables (servicios, opiniones, blog, localidades) y buscador demo que filtra servicios. Hero de foto a 100svh con tinte pizarra y divisor diagonal, grilla de servicios foto-primero, bloques de cerrajeros urgentes y baratos, carrusel de opiniones, slider del blog, vídeo demo, 6 ventajas con icono naranja, banda de llamada, contacto con presupuesto online (demo, sin envío), localidades, preguntas frecuentes en acordeón, newsletter y footer oscuro con galería de trabajos. Aviso de cookies demo y botón de llamada flotante en móvil. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/cerrajero-online.jpg",
+  "tags": ["cerrajería", "cerrajero", "servicios", "hogar", "madrid", "urgencias", "cerraduras", "landing"],
+  "paleta": ["#262626", "#e95d0e", "#353740", "#f4f4f4", "#283d4b"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "cerrajeronline.com",
+  "orden": 75
+}

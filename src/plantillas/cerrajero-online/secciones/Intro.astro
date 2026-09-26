@@ -1,0 +1,52 @@
+---
+import { intro, marca } from '../datos/cerrajeria.js';
+---
+
+<section class="co-seccion co-intro" id="nosotros">
+  <div class="co-wrap co-intro__inner co-reveal">
+    <h2 class="co-titulo">{intro.titulo}</h2>
+    <p>{intro.texto}</p>
+    <p class="co-intro__linea">
+      Llámenos al <a href={`tel:${marca.telCrudo}`}>{marca.tel}</a>{' '}<b>({marca.horario})</b>{' '}o escríbanos cuando quiera a{' '}<a href={`mailto:${marca.correo}`}>{marca.correo}</a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .co-intro {
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .co-intro__inner {
+    max-width: 62rem;
+    text-align: center;
+  }
+
+  .co-intro__inner .co-titulo {
+    font-size: clamp(1.5rem, 3.3vw, 2.15rem);
+    margin-bottom: 1.4rem;
+  }
+
+  .co-intro__inner p {
+    color: var(--co-gris);
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.95;
+  }
+
+  .co-intro__linea {
+    margin-top: 1rem;
+  }
+
+  .co-intro__linea a {
+    color: var(--co-naranja);
+    font-weight: 700;
+  }
+
+  .co-intro__linea a:hover {
+    text-decoration: underline;
+  }
+
+  .co-intro__linea b {
+    color: var(--co-titulo);
+  }
+</style>

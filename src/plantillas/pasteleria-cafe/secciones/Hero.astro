@@ -1,0 +1,258 @@
+---
+import { heroSlides } from '../datos/pasteleria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Slide { kicker: string; titulo: string; sub: string; cta: string; tab: string; fondo: string; img: string; alt: string }
+const slides = heroSlides as Slide[];
+---
+
+<!-- Hero del original: banner pastel con el extremo derecho en semicirculo,
+     aro coral a la derecha y destello blanco a la izquierda (NO es full-bleed a 100svh:
+     en dolcecapriccio.pe mide ~25% del ancho de alto y deja ver la seccion siguiente). -->
+<section class="pc-hero" id="pc-hero" aria-roledescription="carrusel" aria-label="Promociones">
+  <div class="pc-hero__aro" aria-hidden="true"></div>
+
+  <div class="pc-hero__track">
+    {slides.map((s: Slide, i: number) => (
+      <div class={`pc-hero__slide pc-f-${s.fondo}${i === 0 ? ' is-activo' : ''}`} data-slide={i} aria-hidden={i === 0 ? 'false' : 'true'}>
+        <span class="pc-hero__destello" aria-hidden="true"><Icono nombre="destello" size={54} /></span>
+        <div class="pc-hero__txt">
+          {s.kicker && <p class="pc-hero__kicker">{s.kicker}</p>}
+          <h2 class="pc-hero__titulo">{s.titulo}</h2>
+          {s.sub && <p class="pc-hero__sub">{s.sub}</p>}
+          <a href="#recomendados" class="pc-btn pc-hero__cta" data-tab={s.tab} tabindex={i === 0 ? 0 : -1}>{s.cta}</a>
+        </div>
+        <div class="pc-hero__foto">
+          <img src={s.img} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} width="1100" height="760" />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="pc-hero__dots" role="tablist" aria-label="Elegir promoción">
+    {slides.map((_s: Slide, i: number) => (
+      <button type="button" class={`pc-hero__dot${i === 0 ? ' is-activo' : ''}`} data-ir={i} aria-label={`Promoción ${i + 1}`}></button>
+    ))}
+  </div>
+</section>
+
+<script>
+  const hero = document.getElementById('pc-hero');
+  const slides = Array.from(hero?.querySelectorAll<HTMLElement>('.pc-hero__slide') ?? []);
+  const dots = Array.from(hero?.querySelectorAll<HTMLButtonElement>('.pc-hero__dot') ?? []);
+  let idx = 0;
+  let timer: number | undefined;
+
+  const ir = (n: number) => {
+    idx = (n + slides.length) % slides.length;
+    slides.forEach((s, i) => {
+      const on = i === idx;
+      s.classList.toggle('is-activo', on);
+      s.setAttribute('aria-hidden', String(!on));
+      s.querySelector('a')?.setAttribute('tabindex', on ? '0' : '-1');
+    });
+    dots.forEach((d, i) => d.classList.toggle('is-activo', i === idx));
+  };
+  const play = () => {
+    stop();
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  };
+  const stop = () => window.clearInterval(timer);
+
+  dots.forEach((d) => d.addEventListener('click', () => { ir(Number(d.dataset.ir)); play(); }));
+  hero?.addEventListener('mouseenter', stop);
+  hero?.addEventListener('mouseleave', play);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) play();
+
+  hero?.querySelectorAll<HTMLAnchorElement>('[data-tab]').forEach((a) =>
+    a.addEventListener('click', () =>
+      document.dispatchEvent(new CustomEvent('pc:tab', { detail: { tab: a.dataset.tab } })),
+    ),
+  );
+</script>
+
+<style>
+  .pc-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: 24px;
+    height: clamp(320px, 25vw, 520px);
+  }
+
+  /* aro coral de la derecha (forma real de la marca, no decorado inventado) */
+  .pc-hero__aro {
+    position: absolute;
+    top: 0;
+    right: calc(-1 * clamp(80px, 6vw, 120px));
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: clamp(60px, 6.4vw, 124px) solid var(--pc-coral);
+  }
+
+  .pc-hero__track {
+    position: absolute;
+    inset: 0;
+    right: clamp(150px, 13.3vw, 260px);
+  }
+
+  .pc-hero__slide {
+    position: absolute;
+    inset: 0;
+    border-radius: 0 999px 999px 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.7s ease, visibility 0.7s;
+    overflow: hidden;
+  }
+
+  .pc-hero__slide.is-activo {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .pc-hero__destello {
+    position: absolute;
+    left: clamp(20px, 3.4vw, 56px);
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+  }
+
+  .pc-hero__txt {
+    padding-left: max(16px, calc((100vw - var(--pc-maxw)) / 2 + 26px));
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .pc-hero__kicker {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--pc-tinta);
+    margin-bottom: 0.6rem;
+  }
+
+  .pc-hero__titulo {
+    font-family: var(--pc-display);
+    font-weight: 600;
+    font-size: clamp(1.7rem, 2.3vw, 2.65rem);
+    line-height: 1.12;
+    letter-spacing: -0.055em;
+    color: var(--pc-tinta);
+    max-width: 19ch;
+  }
+
+  .pc-hero__sub {
+    margin-top: 1.1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--pc-tinta);
+  }
+
+  .pc-hero__cta {
+    margin-top: 1.5rem;
+    background: var(--pc-panel);
+  }
+
+  /* la foto ocupa la mitad derecha del banner, recortada en capsula */
+  .pc-hero__foto {
+    align-self: stretch;
+    position: relative;
+    margin: 18px 0 18px 0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-right: 18px;
+  }
+
+  .pc-hero__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pc-hero__dots {
+    position: absolute;
+    bottom: 16px;
+    left: max(16px, calc((100vw - var(--pc-maxw)) / 2 + 26px));
+    display: flex;
+    gap: 0.45rem;
+    z-index: 2;
+  }
+
+  .pc-hero__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(48, 45, 42, 0.25);
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+
+  .pc-hero__dot.is-activo {
+    width: 24px;
+    background: var(--pc-tinta);
+  }
+
+  @media (max-width: 760px) {
+    .pc-hero {
+      height: auto;
+      margin-top: 12px;
+    }
+
+    .pc-hero__aro {
+      display: none;
+    }
+
+    .pc-hero__track {
+      position: relative;
+      right: auto;
+      display: grid;
+    }
+
+    .pc-hero__slide {
+      position: relative;
+      grid-area: 1 / 1;
+      grid-template-columns: 1fr;
+      border-radius: 0 0 48px 0;
+      padding-bottom: 2.8rem;
+    }
+
+    .pc-hero__foto {
+      order: -1;
+      margin: 12px 12px 0;
+      height: 220px;
+      border-radius: 0 0 120px 0;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .pc-hero__destello {
+      top: 28px;
+      left: auto;
+      right: 30px;
+      transform: none;
+      z-index: 1;
+    }
+
+    .pc-hero__destello :global(svg) {
+      width: 36px;
+      height: 36px;
+    }
+
+    .pc-hero__txt {
+      padding: 1.4rem 16px 0;
+    }
+
+    .pc-hero__titulo {
+      max-width: 14ch;
+    }
+
+    .pc-hero__dots {
+      left: 16px;
+    }
+  }
+</style>

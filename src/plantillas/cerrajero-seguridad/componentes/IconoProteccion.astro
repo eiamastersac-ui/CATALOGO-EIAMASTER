@@ -1,0 +1,35 @@
+---
+/* Iconos de linea (estilo "dibujo tecnico" del original) para los 8 metodos de robo. */
+interface Props {
+  id: string;
+}
+const { id } = Astro.props as Props;
+
+// bombin europeo reutilizable (silueta de cilindro)
+const bombin = (x: number, y: number) =>
+  `<path d="M${x} ${y}h20a6 6 0 0 1 0 12h-4v8h-8v-8h-8a6 6 0 0 1 0-12Z"/><circle cx="${x + 2}" cy="${y + 6}" r="2.2"/><circle cx="${x + 20}" cy="${y + 6}" r="2.2"/>`;
+
+const DIBUJOS: Record<string, string> = {
+  bumping: `${bombin(8, 26)}<path d="M40 14 58 40"/><path d="m34 18 10-8 6 6-10 8z"/><path d="M36 22l-6 6M31 23l-3 3" stroke-width="1.2"/>`,
+  impresion: `<path d="M14 8h36v6H14z"/><path d="M28 14v4h8v-4M29 18h6v28l-3 4-3-4Z"/><path d="M29 26h3M29 31h4M29 36h3M29 41h4" stroke-width="1.2"/>`,
+  ganzua: `<path d="M20 52V18c0-4 4-4 4-8"/><path d="M32 52V14c0-3 3-4 3-7"/><path d="M44 52V18l3-4-3-3"/><path d="M17 52h6M29 52h6M41 52h6"/>`,
+  rotura: `${bombin(4, 22)}<path d="M36 22h4v12h-4"/>${bombin(40, 22)}<path d="m30 30 3-4 2 5 3-3" stroke-width="1.2"/>`,
+  extraccion: `<path d="M16 22h22a8 8 0 0 1 0 16H16a8 8 0 0 1 0-16Z"/><circle cx="16" cy="30" r="4"/><path d="M38 22 52 8l4 4-14 14M46 12l6 6"/><path d="M8 44c6 4 14 4 20 0" stroke-width="1.2"/>`,
+  topolino: `<path d="M6 44 26 30"/><path d="m24 26 16-10 8 10-14 12Z"/><path d="M40 16l6-6 10 10-6 6"/><path d="M10 40l-4 6" stroke-width="1.2"/><circle cx="36" cy="26" r="2.5"/>`,
+  taladro: `<path d="M14 18h26v12H14z"/><path d="M40 21h6v6h-6M46 24h10"/><path d="M22 30l-2 16h12l2-16"/><path d="M18 46h16v6H18z"/><path d="M26 18v-4h8v4" stroke-width="1.2"/>`,
+  magic: `<path d="M14 44 44 14"/><path d="m36 12 16 16-8 8-16-16Z"/><path d="M40 18l6 6M36 22l6 6M44 14l6 6" stroke-width="1.1"/><path d="M8 50l8-8M18 38l-8-2M26 46l2 8" stroke-width="1.2"/><circle cx="16" cy="42" r="3"/>`,
+};
+---
+
+<svg
+  viewBox="0 0 64 60"
+  width="84"
+  height="78"
+  fill="none"
+  stroke="#19334f"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={DIBUJOS[id] ?? ''}
+/>

@@ -1,0 +1,205 @@
+---
+import { contacto, tiposTrabajo } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Dato { icono: string; t: string; d: string; d2: string }
+const datos = contacto as Dato[];
+---
+
+<section class="co-seccion co-cont" id="contacto">
+  <div class="co-wrap">
+    <ul class="co-cont__datos">
+      {datos.map((c: Dato, i: number) => (
+        <li class={`co-reveal co-reveal--${i}`}>
+          <span class="co-cont__icono"><Icono nombre={c.icono} size={30} grosor={1.8} /></span>
+          <h3>{c.t}</h3>
+          <p class="co-cont__d">{c.d}</p>
+          <p class="co-cont__d2">{c.d2}</p>
+        </li>
+      ))}
+    </ul>
+
+    <div class="co-cont__caja co-reveal">
+      <div class="co-cont__intro">
+        <span class="co-kicker">Presupuesto online</span>
+        <h2 class="co-titulo co-titulo--normal">Sin compromiso y rápido</h2>
+        <p>Cuéntenos qué necesita y le llamamos con un precio cerrado. Sin coste de visita ni de desplazamiento; todos los trabajos con 6 meses de garantía.</p>
+      </div>
+
+      <form class="co-form" id="co-form" novalidate>
+        <label>
+          <span>Nombre</span>
+          <input type="text" name="nombre" required placeholder="Su nombre" autocomplete="name" />
+        </label>
+        <label>
+          <span>Teléfono</span>
+          <input type="tel" name="telefono" required placeholder="600 000 000" autocomplete="tel" />
+        </label>
+        <label class="co-form__full">
+          <span>¿Qué necesita?</span>
+          <select name="tipo" required>
+            <option value="">Elija un servicio…</option>
+            {tiposTrabajo.map((t: string) => <option>{t}</option>)}
+          </select>
+        </label>
+        <label class="co-form__full">
+          <span>Detalles (opcional)</span>
+          <textarea name="detalle" rows="3" placeholder="Tipo de puerta, localidad, urgencia…"></textarea>
+        </label>
+        <div class="co-form__full co-form__pie">
+          <button type="submit" class="co-btn co-btn--naranja">Solicitar presupuesto</button>
+          <small>Formulario de demostración: no se envía ningún dato.</small>
+        </div>
+        <p class="co-aviso" id="co-form-aviso" hidden></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('co-form') as HTMLFormElement | null;
+  const aviso = document.getElementById('co-form-aviso');
+
+  form?.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+    if (!aviso) return;
+    const datos = new FormData(form);
+    const nombre = String(datos.get('nombre') ?? '').trim();
+    const tel = String(datos.get('telefono') ?? '').trim();
+    const tipo = String(datos.get('tipo') ?? '');
+    aviso.hidden = false;
+    if (!nombre || tel.replace(/\D/g, '').length < 9 || !tipo) {
+      aviso.className = 'co-aviso co-aviso--error';
+      aviso.textContent = 'Revise su nombre, un teléfono de 9 dígitos y el servicio que necesita.';
+      return;
+    }
+    aviso.className = 'co-aviso';
+    aviso.textContent = `¡Gracias, ${nombre}! (demo) Le llamaríamos en breve por su ${tipo.toLowerCase()}.`;
+    form.reset();
+  });
+</script>
+
+<style>
+  .co-cont__datos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .co-cont__icono {
+    display: inline-grid;
+    place-items: center;
+    color: #f47a55;
+    margin-bottom: 0.9rem;
+  }
+
+  .co-cont__datos h3 {
+    font-family: var(--co-display);
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .co-cont__d {
+    color: var(--co-naranja);
+    font-size: 1.02rem;
+    line-height: 1.5;
+  }
+
+  .co-cont__d2 {
+    color: var(--co-gris);
+    font-size: 0.88rem;
+  }
+
+  .co-cont__caja {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    background: var(--co-panel);
+    border-radius: var(--co-radio);
+    padding: clamp(1.75rem, 5vw, 3.25rem);
+  }
+
+  .co-cont__intro p {
+    color: var(--co-gris);
+  }
+
+  .co-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .co-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--co-titulo);
+  }
+
+  .co-form input,
+  .co-form select,
+  .co-form textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    background: var(--co-blanco);
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: border-color 0.2s ease;
+  }
+
+  .co-form input:focus,
+  .co-form select:focus,
+  .co-form textarea:focus {
+    outline: none;
+    border-color: var(--co-naranja);
+  }
+
+  .co-form textarea {
+    resize: vertical;
+  }
+
+  .co-form__full {
+    grid-column: 1 / -1;
+  }
+
+  .co-form__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1.2rem;
+  }
+
+  .co-form__pie small {
+    color: var(--co-gris);
+    font-size: 0.78rem;
+  }
+
+  .co-form :global(.co-aviso) {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+
+  @media (max-width: 860px) {
+    .co-cont__caja {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .co-cont__datos {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    .co-form {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

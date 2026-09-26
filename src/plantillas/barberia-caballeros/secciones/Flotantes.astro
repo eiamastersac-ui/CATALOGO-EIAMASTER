@@ -1,0 +1,282 @@
+---
+import { chat } from '../datos/barberia.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<div class="bc-flot">
+  <button type="button" class="bc-arriba" id="bc-arriba" aria-label="Volver arriba">
+    <Icono nombre="arriba" size={20} grosor={1.4} />
+  </button>
+
+  <div class="bc-wa" id="bc-wa">
+    <div class="bc-wa__panel" id="bc-wa-panel" role="dialog" aria-label="Chat de WhatsApp (demo)" data-respuestas={JSON.stringify(chat.respuestas)} hidden>
+      <div class="bc-wa__cab">
+        <span class="bc-wa__cab-ico"><Icono nombre="whatsapp" size={20} /></span>
+        <b>WhatsApp</b>
+        <button type="button" class="bc-wa__x" id="bc-wa-cerrar" aria-label="Cerrar chat">
+          <Icono nombre="cerrar" size={14} grosor={2.4} />
+        </button>
+      </div>
+      <div class="bc-wa__cuerpo" id="bc-wa-cuerpo" aria-live="polite">
+        <div class="bc-burbuja bc-burbuja--bot">
+          {chat.saludo.map((l: string) => <p>{l}</p>)}
+        </div>
+      </div>
+      <form class="bc-wa__form" id="bc-wa-form">
+        <input type="text" id="bc-wa-input" placeholder="Escribe un mensaje…" aria-label="Mensaje" autocomplete="off" />
+        <button type="submit" aria-label="Enviar"><Icono nombre="enviar" size={18} grosor={1.8} /></button>
+      </form>
+    </div>
+
+    <button type="button" class="bc-wa__btn" id="bc-wa-btn" aria-label="Abrir chat de WhatsApp" aria-expanded="false" aria-controls="bc-wa-panel">
+      <Icono nombre="whatsapp" size={30} />
+      <span class="bc-wa__badge" id="bc-wa-badge">1</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  const arriba = document.getElementById('bc-arriba');
+  const alScroll = () => arriba?.classList.toggle('is-visible', window.scrollY > 500);
+  window.addEventListener('scroll', alScroll, { passive: true });
+  alScroll();
+  arriba?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  const panel = document.getElementById('bc-wa-panel');
+  const btn = document.getElementById('bc-wa-btn');
+  const badge = document.getElementById('bc-wa-badge');
+  const cuerpo = document.getElementById('bc-wa-cuerpo');
+  const form = document.getElementById('bc-wa-form') as HTMLFormElement | null;
+  const input = document.getElementById('bc-wa-input') as HTMLInputElement | null;
+  const respuestas: string[] = JSON.parse(panel?.dataset.respuestas ?? '[]');
+  let turno = 0;
+
+  const toggle = (abrir: boolean, texto?: string) => {
+    if (!panel) return;
+    panel.hidden = !abrir;
+    btn?.setAttribute('aria-expanded', String(abrir));
+    btn?.classList.toggle('is-abierto', abrir);
+    if (abrir) {
+      if (badge) badge.hidden = true;
+      if (texto && input) input.value = texto;
+      input?.focus();
+    }
+  };
+
+  btn?.addEventListener('click', () => toggle(!!panel?.hidden));
+  document.getElementById('bc-wa-cerrar')?.addEventListener('click', () => toggle(false));
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') toggle(false);
+  });
+
+  // cualquier boton "Reserva" de la pagina abre el chat con un mensaje sugerido
+  document.addEventListener('click', (e: MouseEvent) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-abrir-chat]');
+    if (!el) return;
+    e.preventDefault();
+    toggle(true, el.dataset.abrirChat || 'Hola, quiero reservar una cita');
+  });
+
+  const burbuja = (texto: string, quien: 'bot' | 'yo') => {
+    const b = document.createElement('div');
+    b.className = `bc-burbuja bc-burbuja--${quien}`;
+    b.textContent = texto;
+    cuerpo?.appendChild(b);
+    if (cuerpo) cuerpo.scrollTop = cuerpo.scrollHeight;
+  };
+
+  form?.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+    const t = input?.value.trim();
+    if (!t) return;
+    burbuja(t, 'yo');
+    if (input) input.value = '';
+    window.setTimeout(() => {
+      burbuja(respuestas[turno % respuestas.length] ?? '¡Gracias! Te respondemos enseguida.', 'bot');
+      turno++;
+    }, 650);
+  });
+</script>
+
+<style>
+  .bc-flot {
+    position: fixed;
+    right: clamp(0.9rem, 2vw, 1.9rem);
+    bottom: clamp(0.9rem, 2vw, 1.5rem);
+    z-index: 250;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+    pointer-events: none;
+  }
+
+  .bc-flot > * {
+    pointer-events: auto;
+  }
+
+  .bc-arriba {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: #1e1e1e;
+    border: 1px solid #1e1e1e !important;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s, background 0.2s ease, color 0.2s ease;
+  }
+
+  .bc-arriba.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .bc-arriba:hover {
+    background: #1e1e1e;
+    color: #fff;
+  }
+
+  .bc-wa {
+    position: relative;
+  }
+
+  .bc-wa__btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--bc-wa) !important;
+    color: var(--bc-wa);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease;
+  }
+
+  .bc-wa__btn :global(svg) {
+    color: var(--bc-wa);
+  }
+
+  .bc-wa__btn :global(svg path:first-child) {
+    fill: #fff;
+  }
+
+  .bc-wa__btn :global(svg path:last-child) {
+    fill: var(--bc-wa);
+  }
+
+  .bc-wa__btn:hover {
+    transform: scale(1.06);
+  }
+
+  .bc-wa__badge {
+    position: absolute;
+    top: -4px;
+    right: -3px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    background: #e02424;
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    line-height: 1;
+  }
+
+  .bc-wa__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 14px);
+    width: min(330px, calc(100vw - 2rem));
+    border-radius: 14px;
+    overflow: hidden;
+    background: #efeae2;
+    box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bc-wa__panel[hidden] {
+    display: none;
+  }
+
+  .bc-wa__cab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    background: var(--bc-wa);
+    color: #fff;
+    font-size: 0.95rem;
+  }
+
+  .bc-wa__cab-ico :global(svg path:first-child) {
+    fill: #fff;
+  }
+
+  .bc-wa__cab-ico :global(svg path:last-child) {
+    fill: var(--bc-wa);
+  }
+
+  .bc-wa__cab-ico {
+    display: grid;
+  }
+
+  .bc-wa__x {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.18) !important;
+  }
+
+  .bc-wa__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .bc-wa__cuerpo p + p {
+    margin-top: 0.5rem;
+  }
+
+  .bc-wa__form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    background: #f0f0f0;
+  }
+
+  .bc-wa__form input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    border-radius: 20px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.85rem;
+    background: #fff;
+    outline: none;
+    color: #222;
+  }
+
+  .bc-wa__form button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--bc-wa) !important;
+    color: #fff;
+  }
+</style>

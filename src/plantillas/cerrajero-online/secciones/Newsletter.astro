@@ -1,0 +1,121 @@
+---
+---
+
+<section class="co-news" id="newsletter">
+  <div class="co-wrap co-news__grid">
+    <div class="co-reveal">
+      <h2>Suscríbase a nuestra newsletter</h2>
+      <p><b>¡Suscríbase!</b> Reciba todas nuestras novedades, noticias y ofertas en su e-mail.</p>
+    </div>
+    <form class="co-news__form co-reveal co-reveal--1" id="co-news" novalidate>
+      <label class="co-news__campo">
+        <span class="co-news__sr">Correo electrónico</span>
+        <input type="email" name="email" placeholder="Correo electrónico" required autocomplete="email" />
+      </label>
+      <button type="submit" class="co-btn co-btn--naranja">Suscribirme</button>
+      <p class="co-aviso" id="co-news-aviso" hidden></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('co-news') as HTMLFormElement | null;
+  const aviso = document.getElementById('co-news-aviso');
+  form?.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+    const input = form.querySelector('input');
+    if (!aviso || !input) return;
+    aviso.hidden = false;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+      aviso.className = 'co-aviso co-aviso--error';
+      aviso.textContent = 'Introduzca un correo electrónico válido.';
+      return;
+    }
+    aviso.className = 'co-aviso';
+    aviso.textContent = '¡Listo! (demo) Ya está suscrito a la newsletter.';
+    form.reset();
+  });
+</script>
+
+<style>
+  .co-news {
+    background: var(--co-tinta);
+    color: #fff;
+    padding-block: clamp(3rem, 7vw, 4.5rem);
+  }
+
+  .co-news__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 4rem;
+    align-items: center;
+  }
+
+  /* el sitio real usa una serif (Abhaya Libre) aqui; Josefin la sustituye para
+     no cargar una cuarta familia */
+  .co-news h2 {
+    font-family: var(--co-display);
+    color: #fff;
+    font-size: clamp(1.7rem, 3.6vw, 2.4rem);
+    line-height: 1.2;
+    margin-bottom: 0.7rem;
+  }
+
+  .co-news p {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.95rem;
+  }
+
+  .co-news p b {
+    color: #fff;
+  }
+
+  .co-news__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .co-news__campo {
+    flex: 1 1 240px;
+  }
+
+  .co-news__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .co-news__form input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: var(--co-radio);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #fff;
+    color: var(--co-titulo);
+    font-size: 0.95rem;
+  }
+
+  .co-news__form input:focus {
+    outline: 2px solid var(--co-naranja);
+    outline-offset: 1px;
+  }
+
+  .co-news__form :global(.co-aviso) {
+    flex-basis: 100%;
+    margin-top: 0;
+    color: #8fd19e;
+  }
+
+  .co-news__form :global(.co-aviso--error) {
+    color: #ffb4a8;
+  }
+
+  @media (max-width: 760px) {
+    .co-news__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,205 @@
+---
+import { hero, marca, waHref, telHref } from '../datos/servicios.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="sg-hero" id="inicio">
+  <div class="sg-hero__foto">
+    <img src={hero.img} alt="Electricista con casco revisando una instalación" loading="eager" fetchpriority="high" />
+    <div class="sg-hero__dato">
+      <b>{hero.dato.valor}</b>
+      <span>{hero.dato.t}<br /><small>{marca.experiencia} años de experiencia</small></span>
+    </div>
+  </div>
+
+  <div class="sg-hero__panel">
+    <div class="sg-hero__texto">
+      <h1>{hero.titulo}</h1>
+      <p class="sg-hero__sub">{hero.sub}</p>
+      <p class="sg-hero__p">{hero.texto}</p>
+
+      <div class="sg-hero__acciones">
+        <a href={waHref} target="_blank" rel="noopener" class="sg-btn sg-btn--whats">
+          <Icono nombre="whatsapp" size={18} />
+          WhatsApp
+          <Icono nombre="flecha" size={16} />
+        </a>
+        <a href={telHref} class="sg-btn sg-btn--blanco-linea">
+          <Icono nombre="telefono" size={17} />
+          Llamada
+          <Icono nombre="flecha" size={16} />
+        </a>
+      </div>
+
+      <ul class="sg-hero__pills" aria-label="Servicios">
+        {hero.pills.map((p: string) => (
+          <li><a href="#servicios">{p}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sg-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: calc(100svh - var(--sg-hdr-h));
+    min-height: 560px;
+    background: var(--sg-azul);
+    color: var(--sg-blanco);
+  }
+
+  .sg-hero__foto {
+    position: relative;
+    overflow: hidden;
+    background: var(--sg-tinta);
+  }
+
+  .sg-hero__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    animation: sg-zoom 14s ease-out both;
+  }
+
+  @keyframes sg-zoom {
+    from { transform: scale(1.07); }
+    to { transform: scale(1); }
+  }
+
+  .sg-hero__dato {
+    position: absolute;
+    left: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: var(--sg-blanco);
+    color: var(--sg-tinta);
+    padding: 0.85rem 1.15rem;
+    border-radius: var(--sg-radio);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+  }
+
+  .sg-hero__dato b {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--sg-azul);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    padding-right: 0.9rem;
+    border-right: 1px solid var(--sg-linea);
+  }
+
+  .sg-hero__dato span {
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .sg-hero__dato small {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--sg-humo);
+  }
+
+  .sg-hero__panel {
+    display: flex;
+    align-items: center;
+    padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 5vw, 4.5rem);
+  }
+
+  .sg-hero__texto {
+    max-width: 38rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .sg-hero__texto h1 {
+    font-size: clamp(2.4rem, 4.4vw, 4.1rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 1rem;
+  }
+
+  .sg-hero__sub {
+    font-size: clamp(1.25rem, 2.3vw, 1.8rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 1.1rem;
+  }
+
+  .sg-hero__p {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.88);
+    max-width: 44ch;
+    margin: 0 auto 2rem;
+  }
+
+  .sg-hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .sg-hero__pills {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .sg-hero__pills a {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .sg-hero__pills a:hover {
+    background: var(--sg-blanco);
+    color: var(--sg-azul);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sg-hero__foto img { animation: none; }
+  }
+
+  @media (max-width: 860px) {
+    .sg-hero {
+      grid-template-columns: 1fr;
+      grid-template-rows: 38svh auto;
+      height: auto;
+      min-height: calc(100svh - var(--sg-hdr-h));
+    }
+    .sg-hero__foto {
+      min-height: 240px;
+    }
+    .sg-hero__panel {
+      padding-block: 2.25rem 2.75rem;
+    }
+    .sg-hero__dato {
+      padding: 0.6rem 0.85rem;
+    }
+    .sg-hero__dato b {
+      font-size: 1.35rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .sg-hero__acciones .sg-btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

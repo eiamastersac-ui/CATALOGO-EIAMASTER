@@ -1,0 +1,214 @@
+---
+import { blog } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Post { t: string; cat: string; img: string }
+const posts = blog.posts as Post[];
+---
+
+<section class="co-seccion co-blog" id="blog">
+  <div class="co-wrap">
+    <div class="co-cab co-cab--centro co-reveal">
+      <h2 class="co-titulo">¡No deje de visitar nuestro blog!</h2>
+    </div>
+
+    <div class="co-blog__grid">
+      <div class="co-blog__slider co-reveal" id="co-blog" aria-roledescription="carrusel">
+        <div class="co-blog__track" id="co-blog-track">
+          {posts.map((p: Post, i: number) => (
+            <article class="co-blog__slide" aria-label={`${i + 1} de ${posts.length}`}>
+              <img src={p.img} alt="" loading="lazy" />
+              <span class="co-blog__scrim" aria-hidden="true"></span>
+              <div class="co-blog__txt">
+                <span class="co-blog__cat">{p.cat}</span>
+                <h3>{p.t}</h3>
+                <a href="#blog" class="co-btn co-btn--claro">Leer más…</a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <button type="button" class="co-blog__flecha co-blog__flecha--izq" id="co-blog-prev" aria-label="Artículo anterior">
+          <Icono nombre="chevron" size={20} grosor={2} />
+        </button>
+        <button type="button" class="co-blog__flecha" id="co-blog-next" aria-label="Artículo siguiente">
+          <Icono nombre="chevron" size={20} grosor={2} />
+        </button>
+        <div class="co-dots co-blog__dots" id="co-blog-dots">
+          {posts.map((_p: Post, i: number) => (
+            <button type="button" class={`co-dot${i === 0 ? ' is-activo' : ''}`} aria-label={`Ir al artículo ${i + 1}`}></button>
+          ))}
+        </div>
+      </div>
+
+      <div class="co-blog__lado co-reveal co-reveal--1">
+        <span class="co-kicker">Blog de seguridad</span>
+        <p>{blog.texto}</p>
+        <a href="#blog" class="co-btn co-btn--borde">Acceda a nuestro blog</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('co-blog-track');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#co-blog-dots .co-dot'));
+  const total = dots.length;
+  let idx = 0;
+
+  function ir(n: number) {
+    if (!track || !total) return;
+    idx = (n + total) % total;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('is-activo', i === idx));
+  }
+
+  document.getElementById('co-blog-prev')?.addEventListener('click', () => ir(idx - 1));
+  document.getElementById('co-blog-next')?.addEventListener('click', () => ir(idx + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => ir(i)));
+
+  let timer = window.setInterval(() => ir(idx + 1), 6000);
+  const box = document.getElementById('co-blog');
+  box?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  box?.addEventListener('mouseleave', () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  });
+</script>
+
+<style>
+  .co-blog {
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .co-blog__grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  .co-blog__slider {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--co-radio);
+    overflow: hidden;
+    background: var(--co-tinta);
+  }
+
+  .co-blog__track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .co-blog__slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+  }
+
+  .co-blog__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .co-blog__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+  }
+
+  .co-blog__txt {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem 4.5rem 2.5rem;
+    color: #fff;
+  }
+
+  .co-blog__cat {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.6rem;
+  }
+
+  .co-blog__txt h3 {
+    color: #fff;
+    font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+    font-weight: 600;
+    max-width: 26ch;
+    margin-bottom: 1.3rem;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  .co-blog__txt .co-btn {
+    padding: 0.6rem 1.3rem;
+    font-size: 0.88rem;
+  }
+
+  .co-blog__flecha {
+    position: absolute;
+    top: 50%;
+    right: 0.9rem;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.3);
+    transition: background 0.2s ease;
+  }
+
+  .co-blog__flecha:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .co-blog__flecha--izq {
+    right: auto;
+    left: 0.9rem;
+  }
+
+  .co-blog__flecha--izq :global(svg) {
+    transform: scaleX(-1);
+  }
+
+  .co-blog__dots {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+  }
+
+  .co-blog__lado p {
+    color: var(--co-gris);
+    text-align: justify;
+    margin-bottom: 1.6rem;
+  }
+
+  @media (max-width: 900px) {
+    .co-blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .co-blog__slider {
+      aspect-ratio: 4 / 3.6;
+    }
+    .co-blog__txt {
+      padding-inline: 3.25rem;
+    }
+  }
+</style>

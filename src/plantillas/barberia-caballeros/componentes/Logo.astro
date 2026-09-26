@@ -1,0 +1,69 @@
+---
+import { marca } from '../datos/barberia.js';
+---
+
+<a href="#top" class="bc-logo" aria-label={`${marca.nombre} ${marca.sub} — inicio`}>
+  <svg class="bc-logo__mark" viewBox="0 0 48 30" aria-hidden="true">
+    <!-- monograma: dos hojas de navaja cruzadas en V -->
+    <path d="M2 2h9l13 20L37 2h9L28.5 28h-9Z" fill="currentColor" />
+    <path d="M14 2h4l6 9.5L30 2h4l-10 15.5Z" fill="currentColor" opacity=".55" />
+  </svg>
+  <span class="bc-logo__txt">
+    <b>{marca.nombre}</b>
+    <span>{marca.sub}</span>
+  </span>
+</a>
+
+<style>
+  .bc-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .bc-logo__mark {
+    width: 44px;
+    height: 28px;
+  }
+
+  .bc-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .bc-logo__txt b {
+    font-family: var(--bc-ext);
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
+    font-weight: 900;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  .bc-logo__txt span {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.2rem;
+    font-family: var(--bc-ext);
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
+    font-weight: 800;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .bc-logo__txt span::before,
+  .bc-logo__txt span::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    min-width: 10px;
+  }
+</style>

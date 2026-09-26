@@ -1,0 +1,191 @@
+---
+import { marca } from '../datos/reservas.js';
+---
+
+<header class="rb-hdr" id="rb-hdr">
+  <div class="rb-wrap rb-hdr__row">
+    <a href="#inicio" class="rb-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+      <svg class="rb-logo__trazo" width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+        <path d="M1 7.5C3 2 6 2 8 5s5 3 7-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+      <span class="rb-logo__tx">{marca.nombre}</span>
+      <span class="rb-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="rb-hdr__nav" aria-label="Accesos">
+      <a href="#recomendado">Recomendado</a>
+      <a href="#ciudades">Ciudades</a>
+      <a href="#blog">Blog</a>
+    </nav>
+
+    <div class="rb-hdr__acc">
+      <div class="rb-idioma">
+        <button type="button" class="rb-idioma__btn" id="rb-idioma-btn" aria-haspopup="listbox" aria-expanded="false">
+          <span class="rb-idioma__flag" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span id="rb-idioma-actual">ES</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" stroke-width="1.4"></path></svg>
+        </button>
+        <ul class="rb-idioma__menu" id="rb-idioma-menu" role="listbox" hidden>
+          <li><button type="button" data-lang="ES">Español</button></li>
+          <li><button type="button" data-lang="CA">Català</button></li>
+          <li><button type="button" data-lang="EN">English</button></li>
+        </ul>
+      </div>
+      <a href="#apps" class="rb-hdr__cta"><span class="rb-hdr__cta-l">Añade tu negocio a la lista</span><span class="rb-hdr__cta-s">Tu negocio</span></a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('rb-hdr');
+  const onScroll = () => hdr?.classList.toggle('is-solido', window.scrollY > 60);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const btn = document.getElementById('rb-idioma-btn');
+  const menu = document.getElementById('rb-idioma-menu');
+  const actual = document.getElementById('rb-idioma-actual');
+  const abrir = (v: boolean) => {
+    if (!menu || !btn) return;
+    menu.hidden = !v;
+    btn.setAttribute('aria-expanded', String(v));
+  };
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    abrir(menu?.hidden ?? true);
+  });
+  menu?.querySelectorAll<HTMLButtonElement>('button').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (actual) actual.textContent = b.dataset.lang || 'ES';
+      abrir(false);
+    }),
+  );
+  document.addEventListener('click', (e) => {
+    if (menu && btn && !menu.contains(e.target as Node) && !btn.contains(e.target as Node)) abrir(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') abrir(false);
+  });
+</script>
+
+<style>
+  .rb-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--rb-hdr);
+    color: #fff;
+    background: transparent;
+    transition: background-color .25s, color .25s, box-shadow .25s;
+  }
+  .rb-hdr.is-solido {
+    background: #fff;
+    color: var(--rb-tinta);
+    box-shadow: 0 1px 0 var(--rb-linea);
+  }
+  .rb-hdr__row {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .rb-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: -0.03em;
+  }
+  .rb-logo__trazo { align-self: center; margin-right: 1px; }
+  .rb-logo__sub {
+    margin-left: 6px;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .8;
+  }
+  .rb-hdr__nav {
+    display: flex;
+    gap: 22px;
+    margin-left: auto;
+    font-size: .88rem;
+    font-weight: 600;
+  }
+  .rb-hdr__nav a { opacity: .9; }
+  .rb-hdr__nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  .rb-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .rb-idioma { position: relative; }
+  .rb-idioma__btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: .85rem;
+    font-weight: 700;
+    color: inherit;
+  }
+  .rb-idioma__flag {
+    display: flex;
+    flex-direction: column;
+    width: 20px;
+    height: 14px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .rb-idioma__flag i:nth-child(1),
+  .rb-idioma__flag i:nth-child(3) { flex: 1; background: #c60b1e; }
+  .rb-idioma__flag i:nth-child(2) { flex: 2; background: #ffc400; }
+  .rb-idioma__menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 140px;
+    padding: 6px;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--rb-tinta);
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  }
+  .rb-idioma__menu button {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    text-align: left;
+    font-size: .88rem;
+  }
+  .rb-idioma__menu button:hover { background: var(--rb-panel); }
+  .rb-hdr__cta {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--rb-tinta);
+    font-size: .82rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background-color .25s, color .25s;
+  }
+  .rb-hdr__cta-s { display: none; }
+  .rb-hdr.is-solido .rb-hdr__cta { background: var(--rb-tinta); color: #fff; }
+
+  @media (max-width: 900px) {
+    .rb-hdr__nav { display: none; }
+    .rb-hdr__acc { margin-left: auto; }
+  }
+  @media (max-width: 560px) {
+    .rb-logo__sub { display: none; }
+    .rb-hdr__cta { font-size: .78rem; padding: 0 12px; }
+    .rb-hdr__cta-l { display: none; }
+    .rb-hdr__cta-s { display: inline; }
+    .rb-hdr__acc { gap: 10px; }
+  }
+</style>

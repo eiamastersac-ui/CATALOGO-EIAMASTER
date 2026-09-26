@@ -1,0 +1,208 @@
+---
+import { marca, redes, footerLinks } from '../datos/escuela.js';
+import Logo from '../componentes/Logo.astro';
+import Icono from '../componentes/Icono.astro';
+
+interface Enlace { txt: string; href: string }
+interface Red { nombre: string; href: string; label: string }
+---
+
+<footer class="tf-pie" id="contacto">
+  <div class="tf-wrap tf-pie__grid">
+    <div class="tf-pie__col">
+      <Logo claro />
+      <dl>
+        <dt>Dirección:</dt>
+        <dd>{marca.direccion}</dd>
+        <dt>Informes e Inscripciones</dt>
+        <dd>{marca.informes}</dd>
+      </dl>
+    </div>
+
+    <div class="tf-pie__col">
+      <dl>
+        <dt>Tesorería:</dt>
+        <dd>{marca.tesoreria}<br />({marca.correoTesoreria})</dd>
+        <dt>Atención al cliente:</dt>
+        <dd>{marca.correoReclamos}</dd>
+      </dl>
+      <ul class="tf-pie__redes">
+        {
+          (redes as Red[]).map((r: Red) => (
+            <li>
+              <a href={r.href} aria-label={r.label}>
+                <Icono nombre={r.nombre} size={14} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <nav class="tf-pie__col" aria-label="tienda.com Fútbol">
+      <h4>TIENDA.COM</h4>
+      <ul class="tf-pie__links">
+        {(footerLinks.marca as Enlace[]).map((l: Enlace) => <li><a href={l.href}>{l.txt}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav class="tf-pie__col" aria-label="Cursos">
+      <h4>CURSOS</h4>
+      <ul class="tf-pie__links">
+        {(footerLinks.cursos as Enlace[]).map((l: Enlace) => <li><a href={l.href}>{l.txt}</a></li>)}
+      </ul>
+      <a href="#contacto" class="tf-pie__libro" aria-label="Libro de reclamaciones">
+        <Icono nombre="libro" size={44} />
+        <span>Libro de<br /><b>reclamaciones</b><small>DIGITAL</small></span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="tf-pie__legal">
+    <div class="tf-wrap tf-pie__legal-inner">
+      <span>Copyright © 2026 tienda.com Fútbol</span>
+      <span>Powered by tienda.com</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .tf-pie {
+    background: var(--tf-tinta);
+    color: var(--tf-blanco);
+    scroll-margin-top: var(--tf-hdr-h);
+  }
+
+  .tf-pie__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    padding-top: 74px;
+    padding-bottom: 80px;
+  }
+
+  .tf-pie dl {
+    margin-top: 26px;
+    font-size: 0.85rem;
+  }
+
+  .tf-pie__col:nth-child(2) dl {
+    margin-top: 6px;
+  }
+
+  .tf-pie dt {
+    font-weight: 700;
+    font-family: var(--tf-display);
+    margin-bottom: 4px;
+  }
+
+  .tf-pie dd {
+    margin-bottom: 22px;
+    line-height: 1.75;
+  }
+
+  .tf-pie__redes {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tf-pie__redes a {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--tf-verde);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .tf-pie__redes a:hover {
+    background: var(--tf-blanco);
+    color: var(--tf-tinta);
+    transform: translateY(-2px);
+  }
+
+  .tf-pie h4 {
+    color: var(--tf-verde);
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+    margin: 4px 0 20px;
+  }
+
+  .tf-pie__links li {
+    margin-bottom: 10px;
+  }
+
+  .tf-pie__links a {
+    font-size: 0.93rem;
+    transition: color 0.2s ease;
+  }
+
+  .tf-pie__links a:hover {
+    color: var(--tf-verde);
+  }
+
+  .tf-pie__libro {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    opacity: 0.95;
+  }
+
+  .tf-pie__libro span {
+    font-size: 0.66rem;
+    line-height: 1.15;
+  }
+
+  .tf-pie__libro b {
+    font-size: 0.78rem;
+  }
+
+  .tf-pie__libro small {
+    display: block;
+    width: max-content;
+    margin-top: 2px;
+    padding: 0 4px;
+    background: var(--tf-blanco);
+    color: var(--tf-tinta);
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .tf-pie__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .tf-pie__legal-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 0.93rem;
+  }
+
+  @media (max-width: 900px) {
+    .tf-pie__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .tf-pie__grid {
+      grid-template-columns: 1fr;
+      gap: 26px;
+      padding-top: 56px;
+      padding-bottom: 50px;
+    }
+    .tf-pie__legal-inner {
+      justify-content: center;
+      text-align: center;
+      padding-bottom: 84px;
+    }
+  }
+</style>

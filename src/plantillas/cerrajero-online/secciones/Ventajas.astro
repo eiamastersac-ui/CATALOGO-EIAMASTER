@@ -1,0 +1,74 @@
+---
+import { ventajas } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Ventaja { icono: string; t: string; d: string }
+const lista = ventajas as Ventaja[];
+---
+
+<section class="co-seccion co-vent" id="por-que">
+  <div class="co-wrap">
+    <ul class="co-vent__grid">
+      {lista.map((v: Ventaja, i: number) => (
+        <li class={`co-vent__item co-reveal co-reveal--${i % 3}`}>
+          <span class="co-vent__icono"><Icono nombre={v.icono} size={54} grosor={1.4} /></span>
+          <h3>{v.t}</h3>
+          <p>{v.d}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .co-vent {
+    padding-top: clamp(1rem, 3vw, 2rem);
+  }
+
+  .co-vent__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem 2rem;
+  }
+
+  .co-vent__item {
+    text-align: center;
+    padding: 1.9rem 1.5rem;
+    border-radius: var(--co-radio);
+    transition: background 0.25s ease;
+  }
+
+  .co-vent__item:hover {
+    background: var(--co-panel);
+  }
+
+  .co-vent__icono {
+    display: inline-grid;
+    place-items: center;
+    color: var(--co-naranja);
+    margin-bottom: 1.3rem;
+  }
+
+  .co-vent__item h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .co-vent__item p {
+    color: var(--co-gris);
+    font-size: 0.93rem;
+    line-height: 1.85;
+  }
+
+  @media (max-width: 900px) {
+    .co-vent__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .co-vent__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

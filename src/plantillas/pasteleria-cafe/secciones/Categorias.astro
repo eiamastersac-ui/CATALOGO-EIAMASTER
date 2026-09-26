@@ -1,0 +1,133 @@
+---
+import { categoriasHome } from '../datos/pasteleria.js';
+
+interface Cat { t: string; img: string; fondo: string; tab: string }
+const cats = categoriasHome as Cat[];
+---
+
+<section class="pc-seccion pc-cat" id="categorias" aria-labelledby="pc-cat-titulo">
+  <div class="pc-wrap">
+    <h2 class="pc-titulo pc-titulo--centro" id="pc-cat-titulo">¿Qué estás buscando hoy?</h2>
+
+    <div class="pc-cat__vp">
+      <ul class="pc-cat__fila" id="pc-cat-fila">
+        {cats.map((c: Cat) => (
+          <li class="pc-cat__item">
+            <a href="#recomendados" data-tab={c.tab}>
+              <span class={`pc-cat__foto pc-f-${c.fondo}`}>
+                <img src={c.img} alt="" loading="lazy" width="600" height="440" />
+              </span>
+              <span class="pc-cat__t">{c.t}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* carrusel con autoplay como el del original (4 visibles, avanza de a uno) */
+  const fila = document.getElementById('pc-cat-fila');
+  let timer: number | undefined;
+
+  const paso = () => {
+    if (!fila) return;
+    const item = fila.querySelector<HTMLElement>('.pc-cat__item');
+    const ancho = (item?.offsetWidth ?? 240) + 20;
+    const fin = fila.scrollLeft + fila.clientWidth >= fila.scrollWidth - 4;
+    fila.scrollTo({ left: fin ? 0 : fila.scrollLeft + ancho, behavior: 'smooth' });
+  };
+  const play = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(paso, 3500);
+  };
+  if (fila && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    play();
+    fila.addEventListener('mouseenter', () => window.clearInterval(timer));
+    fila.addEventListener('mouseleave', play);
+    fila.addEventListener('touchstart', () => window.clearInterval(timer), { passive: true });
+  }
+
+  fila?.querySelectorAll<HTMLAnchorElement>('[data-tab]').forEach((a) =>
+    a.addEventListener('click', () =>
+      document.dispatchEvent(new CustomEvent('pc:tab', { detail: { tab: a.dataset.tab } })),
+    ),
+  );
+</script>
+
+<style>
+  .pc-cat {
+    padding-bottom: 1.5rem;
+  }
+
+  .pc-cat .pc-titulo {
+    margin-bottom: 2rem;
+  }
+
+  .pc-cat__vp {
+    padding-inline: 1.3rem;
+  }
+
+  .pc-cat__fila {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 3 * 20px) / 4);
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pc-cat__fila::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pc-cat__item {
+    scroll-snap-align: start;
+  }
+
+  .pc-cat__item a {
+    display: block;
+    text-align: center;
+  }
+
+  .pc-cat__foto {
+    display: block;
+    aspect-ratio: 235 / 170;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .pc-cat__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .pc-cat__item a:hover img {
+    transform: scale(1.05);
+  }
+
+  .pc-cat__t {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pc-tinta);
+  }
+
+  @media (max-width: 760px) {
+    .pc-cat__vp {
+      padding-inline: 0;
+    }
+
+    .pc-cat__fila {
+      grid-auto-columns: calc((100% - 14px) / 2.2);
+      gap: 14px;
+    }
+  }
+</style>

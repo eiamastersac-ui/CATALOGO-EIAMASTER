@@ -1,0 +1,141 @@
+---
+import { categorias, img } from '../datos/tienda.js';
+
+type C = { t: string; s: string; img: string; badge?: string; href: string };
+---
+
+<section class="cs-cat" id="categorias" aria-labelledby="cs-cat-t">
+  <div class="cs-wrap">
+    <header class="cs-centro">
+      <h2 id="cs-cat-t" class="cs-h2">Categorias Principales</h2>
+      <p class="cs-sub">Productos testados y seleccionados por nosotros</p>
+    </header>
+
+    <ul class="cs-cat__grid">
+      {
+        categorias.map((c: C) => (
+          <li>
+            <a href={c.href} class={`cs-cat__card ${c.badge ? 'is-ahorro' : ''}`}>
+              {c.badge && <span class="cs-cat__badge">{c.badge.toUpperCase()}</span>}
+              <span class="cs-cat__foto">
+                <img src={img(c.img, 640, 240)} alt={c.t} loading="lazy" />
+              </span>
+              <b>{c.t.toUpperCase()}</b>
+              <small>{c.s}</small>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="cs-centro cs-cat__ver">
+      <a href="#novedades" class="cs-btn">Ver todas las Categorias →</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .cs-cat {
+    padding: 3.2rem 0 3.4rem;
+    background: #fff;
+  }
+
+  .cs-cat__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 1.6rem;
+  }
+
+  .cs-cat__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 18px 22px;
+    background: #fff;
+    border: 1px solid var(--cs-linea);
+    border-top: 3px solid var(--cs-petroleo);
+    border-radius: 4px;
+    text-align: center;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .cs-cat__card.is-ahorro {
+    border-top-color: var(--cs-naranja);
+  }
+
+  .cs-cat__card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px -20px rgba(25, 51, 79, 0.55);
+  }
+
+  .cs-cat__badge {
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    background: var(--cs-naranja);
+    color: var(--cs-navy-2);
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 3px;
+    z-index: 1;
+  }
+
+  .cs-cat__foto {
+    display: block;
+    width: 100%;
+    height: 120px;
+    background: var(--cs-hielo);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .cs-cat__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .cs-cat__card:hover .cs-cat__foto img {
+    transform: scale(1.05);
+  }
+
+  .cs-cat__card b {
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: var(--cs-navy);
+  }
+
+  .cs-cat__card small {
+    font-size: 0.8rem;
+    color: var(--cs-humo);
+    margin-top: 0.15rem;
+  }
+
+  .cs-cat__ver {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 760px) {
+    .cs-cat__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .cs-cat__card {
+      padding: 12px 10px 16px;
+    }
+    .cs-cat__foto {
+      height: 90px;
+    }
+    .cs-cat__card b {
+      font-size: 0.9rem;
+    }
+    .cs-cat__ver .cs-btn {
+      width: 100%;
+    }
+  }
+</style>

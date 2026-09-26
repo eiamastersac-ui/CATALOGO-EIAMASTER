@@ -1,0 +1,297 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap");
+
+/* ==========================================================================
+   pasteleria-cafe — pasteleria / cafeteria en Lima (inspirada en dolcecapriccio.pe)
+   Paleta real del sitio: tinta #302d2a, texto #333, panel gris #f3f3f3 y UN
+   acento coral #ff5046 (boton de categorias, iconos del menu, precios, badges).
+   Los fondos pastel salvia #e0dfc1, arena #e5c7ad y rosa #f2c4b6 salen de los
+   banners y tarjetas de categoria del original. El resto lo ponen las fotos.
+   Todo namespaced bajo .tpl-pasteleria-cafe. SIN overflow-x en la raiz
+   (rompe la cabecera sticky).
+   ========================================================================== */
+
+.tpl-pasteleria-cafe {
+  --pc-coral: #ff5046;
+  --pc-coral-osc: #e8403a;
+  --pc-coral-suave: #ffb3ae;
+  --pc-tinta: #302d2a;
+  --pc-texto: #333333;
+  --pc-gris: #8c8986;
+  --pc-gris-2: #b3b0ad;
+  --pc-linea: #ececec;
+  --pc-panel: #f3f3f3;
+  --pc-foto: #eeeff1;
+  --pc-blanco: #ffffff;
+  --pc-salvia: #e0dfc1;
+  --pc-arena: #e5c7ad;
+  --pc-rosa: #f2c4b6;
+  --pc-wa: #25d366;
+
+  --pc-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --pc-display: "Lexend Exa", "Montserrat", Helvetica, Arial, sans-serif;
+
+  --pc-maxw: 1310px;
+  --pc-radio: 14px;
+
+  background: var(--pc-blanco);
+  color: var(--pc-texto);
+  font-family: var(--pc-font);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-pasteleria-cafe {
+    scroll-behavior: auto;
+  }
+}
+
+.tpl-pasteleria-cafe *,
+.tpl-pasteleria-cafe *::before,
+.tpl-pasteleria-cafe *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-pasteleria-cafe h1,
+.tpl-pasteleria-cafe h2,
+.tpl-pasteleria-cafe h3,
+.tpl-pasteleria-cafe h4 {
+  color: var(--pc-texto);
+  line-height: 1.2;
+}
+
+.tpl-pasteleria-cafe img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-pasteleria-cafe a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-pasteleria-cafe ul {
+  list-style: none;
+}
+
+.tpl-pasteleria-cafe button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-pasteleria-cafe input,
+.tpl-pasteleria-cafe select {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-pasteleria-cafe [hidden] {
+  display: none !important;
+}
+
+.tpl-pasteleria-cafe :focus-visible {
+  outline: 2px solid var(--pc-coral);
+  outline-offset: 2px;
+}
+
+/* --- layout utils --- */
+.tpl-pasteleria-cafe .pc-wrap {
+  max-width: var(--pc-maxw);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+.tpl-pasteleria-cafe .pc-seccion {
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.tpl-pasteleria-cafe section[id] {
+  scroll-margin-top: 150px;
+}
+
+@media (max-width: 900px) {
+  .tpl-pasteleria-cafe section[id] {
+    scroll-margin-top: 120px;
+  }
+}
+
+.tpl-pasteleria-cafe .pc-titulo {
+  font-family: var(--pc-display);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+  letter-spacing: -0.045em;
+  color: var(--pc-texto);
+}
+
+.tpl-pasteleria-cafe .pc-titulo--centro {
+  text-align: center;
+}
+
+/* --- boton claro tipo "VER PRODUCTOS" del original --- */
+.tpl-pasteleria-cafe .pc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: var(--pc-panel);
+  color: var(--pc-tinta);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.tpl-pasteleria-cafe .pc-btn:hover {
+  background: var(--pc-tinta);
+  color: #fff;
+}
+
+.tpl-pasteleria-cafe .pc-btn--coral {
+  background: var(--pc-coral);
+  color: #fff;
+}
+
+.tpl-pasteleria-cafe .pc-btn--coral:hover {
+  background: var(--pc-coral-osc);
+  color: #fff;
+}
+
+.tpl-pasteleria-cafe .pc-btn--bloque {
+  width: 100%;
+}
+
+/* fondos pastel reutilizados por hero, categorias y banners */
+.tpl-pasteleria-cafe .pc-f-salvia { background-color: var(--pc-salvia); }
+.tpl-pasteleria-cafe .pc-f-arena { background-color: var(--pc-arena); }
+.tpl-pasteleria-cafe .pc-f-rosa { background-color: var(--pc-rosa); }
+
+/* --- tarjeta de producto: se reordena/filtra por JS --- */
+.tpl-pasteleria-cafe .pc-prod.is-oculto {
+  display: none;
+}
+
+/* --- aviso de resultados del buscador (lo pinta JS) --- */
+.tpl-pasteleria-cafe .pc-resultados {
+  margin: -0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: var(--pc-gris);
+}
+
+.tpl-pasteleria-cafe .pc-resultados b {
+  color: var(--pc-coral);
+}
+
+.tpl-pasteleria-cafe .pc-resultados button {
+  margin-left: 0.5rem;
+  text-decoration: underline;
+  font-weight: 600;
+  color: var(--pc-texto);
+}
+
+/* --- items del carrito (creados por JS, fuera del scope de Astro) --- */
+.tpl-pasteleria-cafe .pc-ci {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--pc-linea);
+}
+
+.tpl-pasteleria-cafe .pc-ci img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--pc-foto);
+}
+
+.tpl-pasteleria-cafe .pc-ci__n {
+  font-weight: 700;
+  font-size: 0.86rem;
+  line-height: 1.3;
+}
+
+.tpl-pasteleria-cafe .pc-ci__t {
+  font-size: 0.75rem;
+  color: var(--pc-gris);
+}
+
+.tpl-pasteleria-cafe .pc-ci__p {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--pc-coral);
+}
+
+.tpl-pasteleria-cafe .pc-ci__qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--pc-linea);
+  border-radius: 999px;
+  margin-top: 0.35rem;
+}
+
+.tpl-pasteleria-cafe .pc-ci__qty button {
+  width: 26px;
+  height: 26px;
+  font-weight: 700;
+}
+
+.tpl-pasteleria-cafe .pc-ci__qty span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tpl-pasteleria-cafe .pc-ci__x {
+  align-self: start;
+  color: var(--pc-gris);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.tpl-pasteleria-cafe .pc-ci__x:hover {
+  background: var(--pc-panel);
+  color: var(--pc-coral);
+}
+
+/* --- toast (creado por JS) --- */
+.tpl-pasteleria-cafe .pc-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 400;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  background: var(--pc-tinta);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.75rem 1.2rem;
+  border-radius: 999px;
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  max-width: calc(100vw - 32px);
+  text-align: center;
+}
+
+.tpl-pasteleria-cafe .pc-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

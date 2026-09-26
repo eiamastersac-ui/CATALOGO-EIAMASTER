@@ -1,0 +1,77 @@
+<div class="bc-cookies" id="bc-cookies" role="region" aria-label="Aviso de cookies (demo)">
+  <div class="bc-cookies__txt">
+    <p>Utilizamos cookies para ofrecerte la mejor experiencia en nuestra web.</p>
+    <p>Puedes aprender más sobre qué cookies utilizamos o desactivarlas en los ajustes.</p>
+  </div>
+  <div class="bc-cookies__acc">
+    <button type="button" class="bc-cookies__btn bc-cookies__btn--sec" data-cookies>Rechazar</button>
+    <button type="button" class="bc-cookies__btn" data-cookies>Aceptar</button>
+  </div>
+</div>
+
+<script>
+  const aviso = document.getElementById('bc-cookies');
+  aviso?.querySelectorAll('[data-cookies]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (aviso) aviso.hidden = true;
+    }),
+  );
+</script>
+
+<style>
+  .bc-cookies {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 240;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 1rem clamp(1rem, 4vw, 2rem);
+    padding-right: max(5.5rem, 4vw);
+    background: #202020;
+    color: #fff;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    box-shadow: 0 -8px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .bc-cookies[hidden] {
+    display: none;
+  }
+
+  .bc-cookies__txt p + p {
+    margin-top: 0.4rem;
+  }
+
+  .bc-cookies__acc {
+    display: flex;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .bc-cookies__btn {
+    padding: 0.6rem 1.3rem;
+    border-radius: 999px;
+    background: #fff !important;
+    color: #000 !important;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  .bc-cookies__btn--sec {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  }
+
+  @media (max-width: 700px) {
+    .bc-cookies {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+  }
+</style>

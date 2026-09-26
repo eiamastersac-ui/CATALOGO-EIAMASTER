@@ -1,0 +1,97 @@
+---
+import { footerLinks, marca } from '../datos/reservas.js';
+const anio = 2026;
+---
+
+<footer class="rb-pie">
+  <div class="rb-wrap">
+    <div class="rb-pie__fila">
+      <ul class="rb-pie__links">
+        {footerLinks.map((l: string) => <li><a href="#inicio">{l}</a></li>)}
+      </ul>
+      <div class="rb-pie__stores">
+        <a href="#apps" class="rb-store" aria-label="Descargar en App Store">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.6-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.1 2.5-1.8 3.1-.5 7.6 1.3 10.1.8 1.2 1.8 2.6 3.1 2.5 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4 1-1.4 1.4-2.7 1.4-2.8 0 0-2.5-1-2.5-3.9ZM14 5.3c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z"></path></svg>
+          <span><small>Descárgala en</small>App Store</span>
+        </a>
+        <a href="#apps" class="rb-store" aria-label="Disponible en Google Play">
+          <svg width="18" height="20" viewBox="0 0 24 26" aria-hidden="true"><path d="M1 1l13 12L1 25z" fill="#9ae6ea"></path><path d="M1 1l17 9.5-4 2.5z" fill="#fff"></path><path d="M1 25l17-9.5-4-2.5z" fill="#cfcfcf"></path><path d="M18 10.5 23 13l-5 2.5-4-2.5z" fill="#e9e9e9"></path></svg>
+          <span><small>Disponible en</small>Google Play</span>
+        </a>
+      </div>
+    </div>
+    <div class="rb-pie__base">
+      <p class="rb-pie__marca">
+        <strong>{marca.nombre}</strong>
+        <span>© {anio} {marca.nombre} {marca.sub}. Todos los derechos reservados. Maqueta demo sin backend.</span>
+      </p>
+      <div class="rb-pie__redes">
+        <a href="#inicio" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor"></circle></svg>
+        </a>
+        <a href="#inicio" aria-label="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V10H7v4h3v8h4v-8h3l1-4h-4V8.6c0-.4.3-.6 1-.6Z"></path></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rb-pie {
+    background: var(--rb-tinta2);
+    color: #a3a3a3;
+    font-size: .8rem;
+  }
+  .rb-pie__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .rb-pie__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+  .rb-pie__links a:hover { color: #fff; }
+  .rb-pie__stores { display: flex; gap: 10px; flex-shrink: 0; }
+  .rb-store {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #5a5a5a;
+    border-radius: 7px;
+    background: #000;
+    color: #fff;
+    line-height: 1.05;
+    font-weight: 600;
+  }
+  .rb-store small { display: block; font-size: .56rem; font-weight: 400; opacity: .8; }
+  .rb-pie__base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0 22px;
+  }
+  .rb-pie__marca { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .rb-pie__marca strong { color: #fff; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.03em; }
+  .rb-pie__redes { display: flex; gap: 10px; }
+  .rb-pie__redes a {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--rb-tinta);
+  }
+  @media (max-width: 900px) {
+    .rb-pie__fila, .rb-pie__base { flex-direction: column; align-items: flex-start; }
+  }
+</style>

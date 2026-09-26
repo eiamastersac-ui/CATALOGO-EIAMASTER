@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Seguridad (Estilo Tu Cerrajero de Seguridad)",
+  "categoria": "cerrajeria-seguridad",
+  "descripcion": "Tienda online de cerrajería de seguridad (bombines, escudos acorazados y magnéticos, cerrojos, domótica) con la paleta real navy + naranja y tipografía Nunito. Cabecera navy fija con buscador que filtra productos y carrito con contador, barra gris de categorías con desplegables, franja de beneficios, banda-lema, promo de mirilla digital en panel crema, 8 protecciones anti-robo en iconos de línea, franja 'Instálalo tú' que despliega la comparativa de ahorro, categorías principales, ofertas con cuenta atrás en vivo y carriles de producto con fichas tipo NIVEL/estrellas, precio tachado, stock y fecha de entrega calculada. Footer oscuro con botones de colores y formas de pago; en móvil, barra inferior fija y menú lateral con acordeones. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/cerrajero-seguridad.jpg",
+  "tags": ["cerrajería", "seguridad", "bombines", "escudos", "cerrojos", "e-commerce", "tienda online", "domótica"],
+  "paleta": ["#19334f", "#f59e0b", "#fefbed", "#f1f5f9", "#161616"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "tucerrajerodeseguridad.com",
+  "orden": 76
+}

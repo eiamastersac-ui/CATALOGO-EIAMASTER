@@ -1,0 +1,237 @@
+---
+import { footer, marca } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+
+interface Foto { img: string; alt: string }
+const anio = new Date().getFullYear();
+---
+
+<footer class="co-pie">
+  <div class="co-wrap co-pie__grid">
+    <div class="co-pie__col co-pie__col--marca">
+      <h4>Sobre nosotros</h4>
+      <a href="#top" class="co-pie__logo">
+        <span class="co-pie__mark" aria-hidden="true"><Icono nombre="llave" size={18} grosor={2} /></span>
+        <span><b>{marca.nombre}</b> <em>{marca.sub}</em></span>
+      </a>
+      <p>{footer.sobre}</p>
+      <h4 class="co-pie__h-sep">¿Eres cerrajero?</h4>
+      <p><a href="#contacto" class="co-pie__link-fuerte">Trabaja con nosotros</a> · <a href="#videos">Vídeos y descargas</a></p>
+    </div>
+
+    <div class="co-pie__col">
+      <h4>Servicios</h4>
+      <ul>
+        {footer.servicios.map((s: string) => <li><a href="#servicios">{s}</a></li>)}
+        <li><a href="#servicios" class="co-pie__link-fuerte">Consulte todos los servicios</a></li>
+      </ul>
+      <h4 class="co-pie__h-sep">Categorías blog</h4>
+      <ul>
+        {footer.categorias.map((c: string) => <li><a href="#blog">{c}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="co-pie__col">
+      <h4>Encuéntrenos en…</h4>
+      <address>
+        <b>{marca.nombre} {marca.sub}</b><br />
+        {marca.direccion}<br />
+        Horario: lunes a viernes 9:00 – 19:30<br />
+        Sábado y domingo: cerrado<br />
+        Teléfono: <a href={`tel:${marca.telCrudo}`}>+34 {marca.tel}</a><br />
+        Email: <a href={`mailto:${marca.correo}`}>{marca.correo}</a>
+      </address>
+      <h4 class="co-pie__h-sep">Textos legales</h4>
+      <ul>
+        {footer.legales.map((l: string) => <li><a href="#top">{l}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="co-pie__col">
+      <h4>Nuestros trabajos</h4>
+      <ul class="co-pie__galeria">
+        {footer.trabajos.map((f: Foto) => (
+          <li><img src={f.img} alt={f.alt} loading="lazy" /></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="co-pie__bajo">
+    <div class="co-wrap co-pie__bajo-row">
+      <p>© {anio} {marca.nombre} {marca.sub} — sus cerrajeros en Madrid. El mejor servicio a una llamada. Maqueta de demostración.</p>
+      <div class="co-pie__redes">
+        <a href="#top" aria-label="Facebook"><Icono nombre="facebook" size={16} /></a>
+        <a href="#top" aria-label="X"><Icono nombre="x" size={13} grosor={2} /></a>
+        <a href="#top" aria-label="RSS"><Icono nombre="rss" size={15} /></a>
+        <a href="#top" aria-label="YouTube"><Icono nombre="youtube" size={18} /></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .co-pie {
+    background: #222;
+    color: #8a8a8a;
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  .co-pie__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-block: clamp(3rem, 7vw, 4.5rem);
+  }
+
+  .co-pie h4 {
+    color: #d8d8d8;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .co-pie__h-sep {
+    margin-top: 2rem;
+  }
+
+  .co-pie a {
+    transition: color 0.2s ease;
+  }
+
+  .co-pie a:hover {
+    color: #fff;
+  }
+
+  .co-pie__link-fuerte {
+    color: var(--co-naranja);
+    font-weight: 600;
+  }
+
+  .co-pie__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .co-pie__logo b {
+    font-family: var(--co-display);
+    font-size: 1.2rem;
+  }
+
+  .co-pie__logo em {
+    font-style: normal;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--co-naranja);
+    font-weight: 700;
+  }
+
+  .co-pie__mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--co-naranja);
+    color: #fff;
+    transform: rotate(-20deg);
+  }
+
+  .co-pie ul li {
+    position: relative;
+    padding-left: 14px;
+  }
+
+  .co-pie ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 4px;
+    height: 4px;
+    border: 1px solid #787878;
+    border-radius: 50%;
+  }
+
+  .co-pie address {
+    font-style: normal;
+  }
+
+  .co-pie address b {
+    color: #d8d8d8;
+  }
+
+  .co-pie__galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .co-pie__galeria li {
+    padding-left: 0 !important;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #2c2c2c;
+  }
+
+  .co-pie__galeria li::before {
+    display: none;
+  }
+
+  .co-pie__galeria img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.35);
+    transition: filter 0.3s ease, transform 0.4s ease;
+  }
+
+  .co-pie__galeria li:hover img {
+    filter: none;
+    transform: scale(1.06);
+  }
+
+  .co-pie__bajo {
+    background: rgba(0, 0, 0, 0.32);
+  }
+
+  .co-pie__bajo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1rem;
+    font-size: 0.78rem;
+    color: #666;
+  }
+
+  .co-pie__redes {
+    display: flex;
+    gap: 1rem;
+    color: #8a8a8a;
+  }
+
+  @media (max-width: 980px) {
+    .co-pie__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .co-pie__grid {
+      grid-template-columns: 1fr;
+    }
+    .co-pie__bajo-row {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

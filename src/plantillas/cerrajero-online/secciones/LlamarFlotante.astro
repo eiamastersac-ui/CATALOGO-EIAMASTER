@@ -1,0 +1,9 @@
+---
+import { marca } from '../datos/cerrajeria.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<!-- Boton flotante de llamada, solo en movil (estilos en estilos.css) -->
+<a href={`tel:${marca.telCrudo}`} class="co-llamar-flotante" aria-label={`Llamar al ${marca.tel}`}>
+  <Icono nombre="telefono" size={18} grosor={2} /> Llamar
+</a>

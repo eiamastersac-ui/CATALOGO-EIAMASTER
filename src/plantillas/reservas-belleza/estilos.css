@@ -1,0 +1,275 @@
+/* reservas-belleza — clon de estilo de booksy.com. Todo bajo .tpl-reservas-belleza */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap");
+
+.tpl-reservas-belleza {
+  --rb-tinta: #1a1a1a;
+  --rb-tinta2: #262626;
+  --rb-gris: #6b6b6b;
+  --rb-gris-cl: #a3a3a3;
+  --rb-linea: #e6e6e6;
+  --rb-panel: #f5f5f5;
+  --rb-blanco: #ffffff;
+  --rb-cian: #00a3ad;
+  --rb-cian-osc: #1f7f9e;
+  --rb-cian-cl: #effbfc;
+
+  --rb-font: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --rb-maxw: 1280px;
+  --rb-hdr: 72px;
+
+  background: var(--rb-blanco);
+  color: var(--rb-tinta);
+  font-family: var(--rb-font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tpl-reservas-belleza *,
+.tpl-reservas-belleza *::before,
+.tpl-reservas-belleza *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-reservas-belleza img { display: block; max-width: 100%; }
+.tpl-reservas-belleza a { color: inherit; text-decoration: none; }
+.tpl-reservas-belleza ul { list-style: none; }
+.tpl-reservas-belleza button,
+.tpl-reservas-belleza input,
+.tpl-reservas-belleza select { font: inherit; color: inherit; }
+.tpl-reservas-belleza button { cursor: pointer; background: none; border: 0; }
+.tpl-reservas-belleza [hidden] { display: none !important; }
+
+/* ---------- utilidades ---------- */
+.tpl-reservas-belleza .rb-wrap {
+  width: 100%;
+  max-width: var(--rb-maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.tpl-reservas-belleza .rb-h2 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.tpl-reservas-belleza .rb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color .2s, color .2s, transform .15s;
+}
+.tpl-reservas-belleza .rb-btn--oscuro { background: var(--rb-tinta); color: #fff; }
+.tpl-reservas-belleza .rb-btn--oscuro:hover { background: #000; }
+.tpl-reservas-belleza .rb-btn--cian { background: var(--rb-cian-osc); color: #fff; }
+.tpl-reservas-belleza .rb-btn--cian:hover { background: #186b86; }
+.tpl-reservas-belleza .rb-btn:active { transform: scale(.98); }
+
+/* carril con scroll-snap para carruseles */
+.tpl-reservas-belleza .rb-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  justify-content: start;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 4px 2px 12px;
+}
+.tpl-reservas-belleza .rb-fila::-webkit-scrollbar { display: none; }
+.tpl-reservas-belleza .rb-fila > * { scroll-snap-align: start; }
+
+.tpl-reservas-belleza .rb-flecha {
+  position: absolute;
+  top: 34%;
+  z-index: 3;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .18);
+  display: grid;
+  place-items: center;
+  color: var(--rb-tinta);
+  transition: transform .15s;
+}
+.tpl-reservas-belleza .rb-flecha:hover { transform: scale(1.06); }
+.tpl-reservas-belleza .rb-flecha--prev { left: -18px; }
+.tpl-reservas-belleza .rb-flecha--next { right: -18px; }
+.tpl-reservas-belleza .rb-flecha[disabled] { opacity: 0; pointer-events: none; }
+
+/* ---------- modal de reserva (partes creadas por JS: van aqui, no scoped) ---------- */
+.tpl-reservas-belleza .rb-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10, 10, 10, .55);
+}
+.tpl-reservas-belleza .rb-modal__caja {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100svh - 32px);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+}
+.tpl-reservas-belleza .rb-modal__cab {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 16px 16px 0 0;
+}
+.tpl-reservas-belleza .rb-modal__cab img { width: 100%; height: 100%; object-fit: cover; }
+.tpl-reservas-belleza .rb-modal__cab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,0) 65%);
+}
+.tpl-reservas-belleza .rb-modal__tit {
+  position: absolute;
+  left: 20px;
+  right: 60px;
+  bottom: 14px;
+  z-index: 1;
+  color: #fff;
+}
+.tpl-reservas-belleza .rb-modal__tit h3 { font-size: 1.3rem; line-height: 1.2; }
+.tpl-reservas-belleza .rb-modal__tit p { font-size: .82rem; opacity: .85; }
+.tpl-reservas-belleza .rb-modal__cerrar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+}
+.tpl-reservas-belleza .rb-modal__cuerpo { padding: 20px; }
+.tpl-reservas-belleza .rb-paso { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--rb-gris); margin-bottom: 10px; }
+.tpl-reservas-belleza .rb-paso + .rb-paso,
+.tpl-reservas-belleza .rb-bloque + .rb-paso { margin-top: 22px; }
+
+.tpl-reservas-belleza .rb-serv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rb-linea);
+  text-align: left;
+}
+.tpl-reservas-belleza .rb-serv__tx { flex: 1; }
+.tpl-reservas-belleza .rb-serv__n { display: block; font-weight: 600; }
+.tpl-reservas-belleza .rb-serv__d { display: block; font-size: .82rem; color: var(--rb-gris); }
+.tpl-reservas-belleza .rb-serv__p { font-weight: 700; white-space: nowrap; }
+.tpl-reservas-belleza .rb-serv__b {
+  padding: 7px 14px;
+  border-radius: 6px;
+  background: var(--rb-cian-osc);
+  color: #fff;
+  font-size: .82rem;
+  font-weight: 600;
+}
+.tpl-reservas-belleza .rb-serv.is-on { background: var(--rb-cian-cl); margin: 0 -20px; padding: 12px 20px; width: calc(100% + 40px); }
+.tpl-reservas-belleza .rb-serv.is-on .rb-serv__b { background: var(--rb-tinta); }
+
+.tpl-reservas-belleza .rb-dias,
+.tpl-reservas-belleza .rb-horas {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.tpl-reservas-belleza .rb-horas { flex-wrap: wrap; }
+.tpl-reservas-belleza .rb-dia {
+  flex: 0 0 auto;
+  width: 58px;
+  padding: 8px 0;
+  border: 1px solid var(--rb-linea);
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.2;
+}
+.tpl-reservas-belleza .rb-dia small { display: block; font-size: .7rem; text-transform: uppercase; color: var(--rb-gris); }
+.tpl-reservas-belleza .rb-dia b { font-size: 1.15rem; }
+.tpl-reservas-belleza .rb-dia.is-on { background: var(--rb-tinta); border-color: var(--rb-tinta); color: #fff; }
+.tpl-reservas-belleza .rb-dia.is-on small { color: #cfcfcf; }
+.tpl-reservas-belleza .rb-hora {
+  padding: 8px 14px;
+  border: 1px solid var(--rb-linea);
+  border-radius: 8px;
+  font-size: .9rem;
+  font-weight: 600;
+}
+.tpl-reservas-belleza .rb-hora:hover { border-color: var(--rb-tinta); }
+.tpl-reservas-belleza .rb-hora.is-on { background: var(--rb-cian-osc); border-color: var(--rb-cian-osc); color: #fff; }
+.tpl-reservas-belleza .rb-hora[disabled] { color: #c4c4c4; text-decoration: line-through; pointer-events: none; }
+
+.tpl-reservas-belleza .rb-resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  bottom: 0;
+  margin: 22px -20px -20px;
+  padding: 14px 20px 18px;
+  border-top: 1px solid var(--rb-linea);
+  background: #fff;
+}
+.tpl-reservas-belleza .rb-resumen p { font-size: .88rem; color: var(--rb-gris); }
+.tpl-reservas-belleza .rb-resumen strong { display: block; color: var(--rb-tinta); font-size: 1rem; }
+.tpl-reservas-belleza .rb-resumen .rb-btn[disabled] { opacity: .4; pointer-events: none; }
+
+.tpl-reservas-belleza .rb-ok { text-align: center; padding: 16px 4px 6px; }
+.tpl-reservas-belleza .rb-ok__ico {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  border: 2px solid var(--rb-cian);
+  color: var(--rb-cian);
+  display: grid;
+  place-items: center;
+}
+.tpl-reservas-belleza .rb-ok h4 { font-size: 1.25rem; margin-bottom: 6px; }
+.tpl-reservas-belleza .rb-ok p { color: var(--rb-gris); font-size: .92rem; }
+.tpl-reservas-belleza .rb-ok .rb-btn { margin-top: 18px; }
+
+/* aviso flotante (toast) */
+.tpl-reservas-belleza .rb-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 250;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: var(--rb-tinta);
+  color: #fff;
+  font-size: .9rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  transition: opacity .25s, transform .25s;
+  pointer-events: none;
+}
+.tpl-reservas-belleza .rb-toast.is-on { opacity: 1; transform: translate(-50%, 0); }

@@ -1,0 +1,534 @@
+---
+import { tabs, productos, img, DESCUENTO } from '../datos/pasteleria.js';
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+import Icono from '../componentes/Icono.astro';
+
+interface Tab { id: string; t: string }
+interface Tam { t: string; p: number }
+interface Prod { id: string; cat: string; n: string; img: string; tam: Tam[]; d: string }
+const lista = tabs as Tab[];
+const prods = productos as Prod[];
+const inicial = lista[0].id;
+
+// datos minimos para la vista rapida / carrito en cliente
+const json = JSON.stringify(
+  prods.map((p: Prod) => ({ id: p.id, n: p.n, d: p.d, cat: p.cat, img: img(p.img, 700, 700), mini: img(p.img, 160, 160), tam: p.tam })),
+);
+---
+
+<section class="pc-seccion pc-rec" id="recomendados" aria-labelledby="pc-rec-titulo" data-productos={json} data-dcto={DESCUENTO}>
+  <div class="pc-wrap">
+    <div class="pc-rec__cab">
+      <h2 class="pc-titulo" id="pc-rec-titulo">Recomendados para ti</h2>
+      <div class="pc-rec__tabs" role="tablist" aria-label="Categorías de productos">
+        {lista.map((t: Tab) => (
+          <button type="button" role="tab" class="pc-rec__tab" data-tabbtn={t.id} aria-selected={t.id === inicial ? 'true' : 'false'}>
+            {t.t}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <p class="pc-resultados" id="pc-resultados" hidden></p>
+
+    <div class="pc-rec__grid" id="pc-rec-grid">
+      {prods.map((p: Prod) => <TarjetaProducto {...p} oculto={p.cat !== inicial} />)}
+    </div>
+  </div>
+
+  <!-- vista rapida / seleccionar opciones (demo, sin pago real) -->
+  <div class="pc-qv" id="pc-qv" hidden>
+    <div class="pc-qv__fondo" data-cerrar-qv></div>
+    <div class="pc-qv__caja" role="dialog" aria-modal="true" aria-labelledby="pc-qv-n">
+      <button type="button" class="pc-qv__x" data-cerrar-qv aria-label="Cerrar">
+        <Icono nombre="cerrar" size={20} grosor={2} />
+      </button>
+      <div class="pc-qv__foto">
+        <span class="pc-qv__badge">-{DESCUENTO}%</span>
+        <img id="pc-qv-img" src="" alt="" width="700" height="700" />
+      </div>
+      <div class="pc-qv__info">
+        <h3 class="pc-qv__n" id="pc-qv-n"></h3>
+        <p class="pc-qv__precio"><del id="pc-qv-antes"></del> <ins id="pc-qv-ahora"></ins></p>
+        <p class="pc-qv__d" id="pc-qv-d"></p>
+        <fieldset class="pc-qv__tams">
+          <legend>Tamaño</legend>
+          <div id="pc-qv-tams"></div>
+        </fieldset>
+        <div class="pc-qv__fila">
+          <div class="pc-qv__qty" aria-label="Cantidad">
+            <button type="button" data-qty="-1" aria-label="Quitar uno">−</button>
+            <span id="pc-qv-qty">1</span>
+            <button type="button" data-qty="1" aria-label="Agregar uno">+</button>
+          </div>
+          <button type="button" class="pc-btn pc-btn--coral pc-qv__add" id="pc-qv-add">Añadir al carrito</button>
+        </div>
+        <p class="pc-qv__nota">Precios con {DESCUENTO}% de descuento web. Pedido demo: no se realiza ningún cobro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  interface Tam { t: string; p: number }
+  interface Prod { id: string; n: string; d: string; cat: string; img: string; mini: string; tam: Tam[] }
+
+  const sec = document.getElementById('recomendados');
+  const prods: Prod[] = JSON.parse(sec?.dataset.productos ?? '[]');
+  const dcto = Number(sec?.dataset.dcto ?? 0);
+  const porId = new Map(prods.map((p: Prod) => [p.id, p]));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.tpl-pasteleria-cafe .pc-prod'));
+  const tabsBtn = Array.from(document.querySelectorAll<HTMLButtonElement>('.tpl-pasteleria-cafe [data-tabbtn]'));
+  const res = document.getElementById('pc-resultados');
+
+  const soles = (n: number) =>
+    'S/ ' + n.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const conDcto = (n: number) => Math.round(n * (100 - dcto)) / 100;
+  const normalizar = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  /* --- pestanas --- */
+  const verTab = (tab: string) => {
+    tabsBtn.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tabbtn === tab)));
+    cards.forEach((c) => c.classList.toggle('is-oculto', c.dataset.cat !== tab));
+    if (res) res.hidden = true;
+  };
+  tabsBtn.forEach((b) => b.addEventListener('click', () => verTab(b.dataset.tabbtn ?? '')));
+  document.addEventListener('pc:tab', ((e: CustomEvent<{ tab: string }>) => {
+    if (e.detail?.tab) verTab(e.detail.tab);
+  }) as EventListener);
+
+  /* --- resultados (buscador y favoritos) --- */
+  const mostrar = (ok: (c: HTMLElement) => boolean, html: string) => {
+    tabsBtn.forEach((b) => b.setAttribute('aria-selected', 'false'));
+    cards.forEach((c) => c.classList.toggle('is-oculto', !ok(c)));
+    if (res) {
+      res.hidden = false;
+      res.innerHTML = `${html} <button type="button" data-limpiar>Ver recomendados</button>`;
+    }
+    sec?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  document.addEventListener('pc:buscar', ((e: CustomEvent<{ q: string }>) => {
+    const crudo = e.detail?.q ?? '';
+    const q = normalizar(crudo);
+    if (!q) { verTab(tabsBtn[0]?.dataset.tabbtn ?? ''); return; }
+    const palabras = q.split(/\s+/);
+    const ok = (c: HTMLElement) => {
+      const p = porId.get(c.dataset.id ?? '');
+      const txt = normalizar(`${p?.n ?? ''} ${p?.d ?? ''} ${p?.cat ?? ''}`);
+      return palabras.every((w: string) => txt.includes(w.replace(/s$/, '')));
+    };
+    const n = cards.filter(ok).length;
+    mostrar(ok, `<b>${n}</b> resultado${n === 1 ? '' : 's'} para “${crudo.replace(/</g, '&lt;')}”`);
+  }) as EventListener);
+
+  /* --- favoritos --- */
+  const favs = new Set<string>();
+  document.addEventListener('click', (e: MouseEvent) => {
+    const t = e.target as HTMLElement;
+    const favBtn = t.closest<HTMLButtonElement>('.tpl-pasteleria-cafe [data-fav]');
+    if (favBtn) {
+      const id = favBtn.dataset.fav ?? '';
+      const on = !favs.has(id);
+      if (on) favs.add(id); else favs.delete(id);
+      favBtn.setAttribute('aria-pressed', String(on));
+      document.dispatchEvent(new CustomEvent('pc:badge', { detail: { tipo: 'favs', n: favs.size } }));
+      document.dispatchEvent(new CustomEvent('pc:toast', { detail: { txt: on ? 'Agregado a favoritos' : 'Quitado de favoritos' } }));
+      return;
+    }
+    if (t.closest('.tpl-pasteleria-cafe [data-limpiar]')) {
+      verTab(tabsBtn[0]?.dataset.tabbtn ?? '');
+    }
+  });
+  document.addEventListener('pc:ver-favs', () => {
+    const n = favs.size;
+    mostrar(
+      (c: HTMLElement) => favs.has(c.dataset.id ?? ''),
+      n ? `Tus favoritos: <b>${n}</b>` : 'Aún no tienes favoritos. Toca el ♡ de cualquier producto.',
+    );
+  });
+
+  /* --- vista rapida --- */
+  const qv = document.getElementById('pc-qv');
+  const qvImg = document.getElementById('pc-qv-img') as HTMLImageElement | null;
+  const qvTams = document.getElementById('pc-qv-tams');
+  const qvQty = document.getElementById('pc-qv-qty');
+  const qvAhora = document.getElementById('pc-qv-ahora');
+  const qvAntes = document.getElementById('pc-qv-antes');
+  let actual: Prod | undefined;
+  let qty = 1;
+  let ultimoFoco: HTMLElement | null = null;
+
+  const tamSel = () => {
+    const r = qvTams?.querySelector<HTMLInputElement>('input:checked');
+    return actual?.tam[Number(r?.value ?? 0)];
+  };
+  const pintarPrecio = () => {
+    const t = tamSel();
+    if (!t) return;
+    if (qvAntes) qvAntes.textContent = soles(t.p);
+    if (qvAhora) qvAhora.textContent = soles(conDcto(t.p));
+  };
+
+  const abrirQv = (id: string) => {
+    actual = porId.get(id);
+    if (!actual || !qv) return;
+    ultimoFoco = document.activeElement as HTMLElement | null;
+    qty = 1;
+    if (qvQty) qvQty.textContent = '1';
+    if (qvImg) { qvImg.src = actual.img; qvImg.alt = actual.n; }
+    const n = document.getElementById('pc-qv-n');
+    const d = document.getElementById('pc-qv-d');
+    if (n) n.textContent = actual.n;
+    if (d) d.textContent = actual.d;
+    if (qvTams) {
+      qvTams.innerHTML = actual.tam
+        .map((t: Tam, i: number) =>
+          `<label><input type="radio" name="pc-tam" value="${i}" ${i === 0 ? 'checked' : ''}/><span>${t.t}</span></label>`,
+        )
+        .join('');
+    }
+    pintarPrecio();
+    qv.hidden = false;
+    document.body.style.overflow = 'hidden';
+    qv.querySelector<HTMLButtonElement>('.pc-qv__x')?.focus();
+  };
+  const cerrarQv = () => {
+    if (!qv || qv.hidden) return;
+    qv.hidden = true;
+    document.body.style.overflow = '';
+    ultimoFoco?.focus();
+  };
+
+  document.addEventListener('click', (e: MouseEvent) => {
+    const t = e.target as HTMLElement;
+    const ver = t.closest<HTMLElement>('.tpl-pasteleria-cafe [data-ver]');
+    if (ver) abrirQv(ver.dataset.ver ?? '');
+    if (t.closest('[data-cerrar-qv]')) cerrarQv();
+  });
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') cerrarQv();
+  });
+  qvTams?.addEventListener('change', pintarPrecio);
+  qv?.querySelectorAll<HTMLButtonElement>('[data-qty]').forEach((b) =>
+    b.addEventListener('click', () => {
+      qty = Math.max(1, Math.min(20, qty + Number(b.dataset.qty)));
+      if (qvQty) qvQty.textContent = String(qty);
+    }),
+  );
+  document.getElementById('pc-qv-add')?.addEventListener('click', () => {
+    const t = tamSel();
+    if (!actual || !t) return;
+    document.dispatchEvent(
+      new CustomEvent('pc:agregar', {
+        detail: { id: actual.id, n: actual.n, img: actual.mini, tam: t.t, p: conDcto(t.p), qty },
+      }),
+    );
+    cerrarQv();
+  });
+</script>
+
+<style>
+  .pc-rec {
+    padding-top: 2.5rem;
+  }
+
+  .pc-rec__cab {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.6rem;
+  }
+
+  .pc-rec__tabs {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    max-width: 100%;
+  }
+
+  .pc-rec__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pc-rec__tab {
+    position: relative;
+    padding: 0.2rem 0 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--pc-gris-2);
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .pc-rec__tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--pc-coral);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  .pc-rec__tab:hover {
+    color: var(--pc-texto);
+  }
+
+  .pc-rec__tab[aria-selected="true"] {
+    color: var(--pc-texto);
+  }
+
+  .pc-rec__tab[aria-selected="true"]::after {
+    transform: scaleX(1);
+  }
+
+  .pc-rec__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.1rem 1rem;
+    min-height: 300px;
+  }
+
+  @media (max-width: 1000px) {
+    .pc-rec__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .pc-rec__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.6rem 0.8rem;
+    }
+
+    .pc-rec__tabs {
+      gap: 1.4rem;
+      margin-inline: -16px;
+      padding-inline: 16px;
+      max-width: none;
+      width: calc(100% + 32px);
+    }
+  }
+
+  /* --- vista rapida --- */
+  .pc-qv {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+  }
+
+  .pc-qv__fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(48, 45, 42, 0.55);
+  }
+
+  .pc-qv__caja {
+    position: relative;
+    width: min(860px, 100%);
+    max-height: calc(100svh - 32px);
+    overflow-y: auto;
+    background: var(--pc-blanco);
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    animation: pc-qv-in 0.3s ease;
+  }
+
+  @keyframes pc-qv-in {
+    from { opacity: 0; transform: translateY(14px); }
+  }
+
+  .pc-qv__x {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--pc-blanco);
+  }
+
+  .pc-qv__x:hover {
+    color: var(--pc-coral);
+  }
+
+  .pc-qv__foto {
+    position: relative;
+    background: var(--pc-foto);
+    min-height: 100%;
+  }
+
+  .pc-qv__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1;
+  }
+
+  .pc-qv__badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: var(--pc-coral);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .pc-qv__info {
+    padding: 2.2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .pc-qv__n {
+    font-family: var(--pc-display);
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: -0.05em;
+    padding-right: 2rem;
+  }
+
+  .pc-qv__precio del {
+    color: var(--pc-gris-2);
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+
+  .pc-qv__precio ins {
+    text-decoration: none;
+    color: var(--pc-coral);
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+
+  .pc-qv__d {
+    font-size: 0.88rem;
+    color: #5e5a57;
+  }
+
+  .pc-qv__tams {
+    border: none;
+  }
+
+  .pc-qv__tams legend {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+
+  .pc-qv__tams div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pc-qv__tams :global(label) {
+    cursor: pointer;
+  }
+
+  .pc-qv__tams :global(input) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pc-qv__tams :global(span) {
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--pc-linea);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .pc-qv__tams :global(input:checked + span) {
+    border-color: var(--pc-coral);
+    color: var(--pc-coral);
+    background: #fff4f3;
+  }
+
+  .pc-qv__tams :global(input:focus-visible + span) {
+    outline: 2px solid var(--pc-coral);
+    outline-offset: 2px;
+  }
+
+  .pc-qv__fila {
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+    margin-top: 0.4rem;
+  }
+
+  .pc-qv__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--pc-linea);
+    border-radius: 999px;
+    height: 44px;
+  }
+
+  .pc-qv__qty button {
+    width: 38px;
+    height: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .pc-qv__qty span {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .pc-qv__add {
+    flex: 1;
+    height: 44px;
+  }
+
+  .pc-qv__nota {
+    font-size: 0.72rem;
+    color: var(--pc-gris);
+  }
+
+  @media (max-width: 700px) {
+    .pc-qv {
+      place-items: end center;
+      padding: 0;
+    }
+
+    .pc-qv__caja {
+      grid-template-columns: 1fr;
+      border-radius: 18px 18px 0 0;
+      max-height: 92svh;
+    }
+
+    .pc-qv__foto img {
+      aspect-ratio: 16 / 10;
+    }
+
+    .pc-qv__info {
+      padding: 1.4rem 16px 1.6rem;
+    }
+  }
+</style>

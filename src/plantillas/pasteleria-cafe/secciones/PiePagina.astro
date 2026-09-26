@@ -1,0 +1,222 @@
+---
+import { marca, footer } from '../datos/pasteleria.js';
+import Icono from '../componentes/Icono.astro';
+
+const redesNombre: Record<string, string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  linkedin: 'LinkedIn',
+  tiktok: 'TikTok',
+};
+---
+
+<footer class="pc-pie" id="pie">
+  <div class="pc-wrap pc-pie__grid">
+    <div>
+      <h2 class="pc-pie__h">Comprobantes</h2>
+      <ul class="pc-pie__comp">
+        {footer.comprobantes.map((c: string) => (
+          <li><a href="#pie"><Icono nombre="carpeta" size={16} /> {c}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="pc-pie__h">Información</h2>
+      <ul class="pc-pie__lista">
+        {footer.informacion.map((c: string) => (
+          <li><a href="#pie"><Icono nombre="asterisco" size={13} /> {c}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="pc-pie__h">Políticas</h2>
+      <ul class="pc-pie__lista">
+        {footer.politicas.map((c: string) => (
+          <li><a href="#pie"><Icono nombre="asterisco" size={13} /> {c}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <a href="#pie" class="pc-pie__libro">
+        <span class="pc-pie__libro-ico"><Icono nombre="libro" size={58} /></span>
+        <span>
+          <b>Libro de reclamaciones</b>
+          <small>Ley Nº 29571, Código de protección y defensa al consumidor</small>
+        </span>
+      </a>
+      <p class="pc-pie__tel">Central telefónica: <a href={`tel:${marca.telCrudo}`}>{marca.tel}</a></p>
+      <ul class="pc-pie__redes">
+        {footer.redes.map((r: string) => (
+          <li><a href="#pie" aria-label={redesNombre[r] ?? r}><Icono nombre={r} size={13} grosor={2} /></a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="pc-pie__base">
+    <div class="pc-wrap pc-pie__baserow">
+      <p>{marca.razon} | RUC {marca.ruc} © Todos los derechos reservados.</p>
+      <p>Diseño web: {marca.nombre}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pc-pie {
+    border-top: 1px solid var(--pc-linea);
+    background: var(--pc-blanco);
+  }
+
+  .pc-pie__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem 1rem;
+    padding-block: 3.6rem 3rem;
+  }
+
+  .pc-pie__h {
+    font-family: var(--pc-display);
+    font-weight: 700;
+    font-size: 1.12rem;
+    letter-spacing: -0.05em;
+    margin-bottom: 1.4rem;
+  }
+
+  .pc-pie__comp {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .pc-pie__comp a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.55rem 1.4rem;
+    border-radius: 999px;
+    background: var(--pc-salvia);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--pc-tinta);
+    transition: background 0.2s ease;
+  }
+
+  .pc-pie__comp a:hover {
+    background: #d4d3ae;
+  }
+
+  .pc-pie__lista {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .pc-pie__lista a {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.1rem;
+    font-size: 0.8rem;
+    color: #4a4643;
+    transition: color 0.2s ease;
+  }
+
+  .pc-pie__lista a :global(svg) {
+    color: var(--pc-coral);
+    flex-shrink: 0;
+  }
+
+  .pc-pie__lista a:hover {
+    color: var(--pc-coral);
+  }
+
+  .pc-pie__libro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--pc-tinta);
+    border-radius: 10px;
+    color: var(--pc-tinta);
+  }
+
+  .pc-pie__libro-ico {
+    display: grid;
+    flex-shrink: 0;
+  }
+
+  .pc-pie__libro b {
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .pc-pie__libro small {
+    display: block;
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.3;
+    margin-top: 0.2rem;
+  }
+
+  .pc-pie__tel {
+    margin-top: 1.2rem;
+    font-size: 0.8rem;
+  }
+
+  .pc-pie__redes {
+    display: flex;
+    gap: 1.3rem;
+    margin-top: 1rem;
+  }
+
+  .pc-pie__redes a {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--pc-coral);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease;
+  }
+
+  .pc-pie__redes a:hover {
+    background: var(--pc-tinta);
+  }
+
+  .pc-pie__base {
+    border-top: 1px solid var(--pc-linea);
+  }
+
+  .pc-pie__baserow {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    flex-wrap: wrap;
+    padding-block: 1.6rem;
+    font-size: 0.78rem;
+    color: #4a4643;
+  }
+
+  @media (max-width: 900px) {
+    .pc-pie__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .pc-pie__grid {
+      grid-template-columns: 1fr;
+      padding-block: 2.6rem 2rem;
+    }
+
+    .pc-pie__baserow {
+      padding-bottom: 5.5rem;
+    }
+  }
+</style>
