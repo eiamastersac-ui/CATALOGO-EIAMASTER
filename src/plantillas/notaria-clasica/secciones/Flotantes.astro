@@ -1,0 +1,310 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { chat } from '../datos/notaria.js';
+---
+
+<a href="#ncl-inicio" class="ncl-arriba" id="ncl-arriba" aria-label="Volver arriba">
+  <span><Icono n="arriba" size={22} /></span>
+  <small>Volver<br />arriba</small>
+</a>
+
+<div class="ncl-chat" id="ncl-chat">
+  <div class="ncl-chat__panel" id="ncl-chat-panel" role="dialog" aria-label="Asistente virtual" hidden>
+    <div class="ncl-chat__cab">
+      <span class="ncl-chat__av" aria-hidden="true">T</span>
+      <div>
+        <b>Asistente tienda.com</b>
+        <small>Notaría · responde al instante</small>
+      </div>
+      <button type="button" class="ncl-chat__x" id="ncl-chat-x" aria-label="Cerrar chat"><Icono n="cerrar" size={18} /></button>
+    </div>
+    <div class="ncl-chat__msgs" id="ncl-chat-msgs">
+      <p class="ncl-msg ncl-msg--bot">{chat.saludo}</p>
+    </div>
+    <div class="ncl-chat__rapidas" id="ncl-chat-rapidas">
+      {chat.rapidas.map((r: string) => <button type="button" data-r={r}>{r}</button>)}
+    </div>
+    <form class="ncl-chat__form" id="ncl-chat-form">
+      <input type="text" id="ncl-chat-in" placeholder="Escriba su consulta…" autocomplete="off" aria-label="Mensaje" />
+      <button type="submit" aria-label="Enviar"><Icono n="flecha" size={18} /></button>
+    </form>
+  </div>
+
+  <span class="ncl-chat__burbuja" id="ncl-chat-burbuja">¿Cómo podemos ayudarle?</span>
+  <button type="button" class="ncl-chat__btn" id="ncl-chat-btn" aria-label="Abrir asistente virtual" aria-expanded="false" aria-controls="ncl-chat-panel">
+    <Icono n="chat" size={28} />
+  </button>
+</div>
+
+<script is:inline define:vars={{ respuestas: chat.respuestas, defecto: chat.defecto }}>
+  const arriba = document.getElementById('ncl-arriba');
+  const pintar = () => arriba && arriba.classList.toggle('is-on', window.scrollY > 500);
+  pintar();
+  window.addEventListener('scroll', pintar, { passive: true });
+
+  const panel = document.getElementById('ncl-chat-panel');
+  const btn = document.getElementById('ncl-chat-btn');
+  const burbuja = document.getElementById('ncl-chat-burbuja');
+  const msgs = document.getElementById('ncl-chat-msgs');
+  const form = document.getElementById('ncl-chat-form');
+  const input = document.getElementById('ncl-chat-in');
+
+  function abrir(v) {
+    if (!panel || !btn) return;
+    panel.hidden = !v;
+    btn.setAttribute('aria-expanded', String(v));
+    if (burbuja) burbuja.hidden = true;
+    if (v && input) input.focus();
+  }
+  btn && btn.addEventListener('click', () => abrir(panel ? panel.hidden : false));
+  document.getElementById('ncl-chat-x')?.addEventListener('click', () => abrir(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') abrir(false); });
+
+  function burbujaMsg(txt, quien) {
+    const p = document.createElement('p');
+    p.className = 'ncl-msg ncl-msg--' + quien;
+    p.textContent = txt;
+    msgs && msgs.appendChild(p);
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+    return p;
+  }
+
+  function enviar(txt) {
+    const t = (txt || '').trim();
+    if (!t) return;
+    burbujaMsg(t, 'yo');
+    const esc = burbujaMsg('Escribiendo…', 'bot');
+    esc.classList.add('ncl-msg--escribiendo');
+    setTimeout(() => {
+      esc.classList.remove('ncl-msg--escribiendo');
+      esc.textContent = respuestas[t] || defecto;
+      if (msgs) msgs.scrollTop = msgs.scrollHeight;
+    }, 650);
+  }
+
+  document.querySelectorAll('#ncl-chat-rapidas button').forEach((b) => {
+    b.addEventListener('click', () => enviar(b.getAttribute('data-r')));
+  });
+  form && form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    enviar(input.value);
+    input.value = '';
+  });
+</script>
+
+<style>
+  .ncl-arriba {
+    position: fixed;
+    left: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 80;
+    display: grid;
+    justify-items: center;
+    gap: 0.2rem;
+    width: 56px;
+    padding: 0.4rem 0 0.35rem;
+    background: #fff;
+    border: 1px solid var(--ncl-acento);
+    border-radius: 6px;
+    box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  .ncl-arriba.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .ncl-arriba span {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--ncl-acento);
+    color: #fff;
+  }
+
+  .ncl-arriba small {
+    font-size: 0.58rem;
+    line-height: 1.1;
+    text-align: center;
+    color: var(--ncl-tinta);
+  }
+
+  .ncl-chat {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 95;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .ncl-chat__btn {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 6px;
+    background: var(--ncl-tinta);
+    color: #fff;
+    border-bottom: 3px solid var(--ncl-acento);
+    box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  .ncl-chat__btn:hover {
+    background: var(--ncl-acento);
+  }
+
+  .ncl-chat__burbuja {
+    background: #fff;
+    color: var(--ncl-tinta);
+    font-size: 0.78rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 4px;
+    box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--ncl-linea);
+  }
+
+  .ncl-chat__burbuja[hidden] {
+    display: none;
+  }
+
+  .ncl-chat__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 0.8rem);
+    width: min(340px, calc(100vw - 2.4rem));
+    background: var(--ncl-papel);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--ncl-linea);
+  }
+
+  .ncl-chat__panel[hidden] {
+    display: none;
+  }
+
+  .ncl-chat__cab {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--ncl-tinta);
+    color: #fff;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .ncl-chat__cab div {
+    flex: 1;
+    display: grid;
+    line-height: 1.25;
+  }
+
+  .ncl-chat__cab b {
+    font-size: 0.88rem;
+  }
+
+  .ncl-chat__cab small {
+    font-size: 0.7rem;
+    opacity: 0.75;
+  }
+
+  .ncl-chat__av {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    background: var(--ncl-acento);
+    font-family: var(--ncl-serif);
+    font-size: 1.2rem;
+    border-radius: 3px;
+  }
+
+  .ncl-chat__x {
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  .ncl-chat__msgs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.9rem;
+    height: 250px;
+    overflow-y: auto;
+  }
+
+  .ncl-chat__rapidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0 0.9rem 0.7rem;
+  }
+
+  .ncl-chat__rapidas button {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--ncl-acento);
+    color: var(--ncl-acento);
+    border-radius: 999px;
+    background: #fff;
+  }
+
+  .ncl-chat__rapidas button:hover {
+    background: var(--ncl-acento);
+    color: #fff;
+  }
+
+  .ncl-chat__form {
+    display: flex;
+    border-top: 1px solid var(--ncl-linea);
+    background: #fff;
+  }
+
+  .ncl-chat__form input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    padding: 0.8rem 0.9rem;
+    font-size: 0.84rem;
+  }
+
+  .ncl-chat__form input:focus {
+    outline: none;
+  }
+
+  .ncl-chat__form button {
+    width: 46px;
+    color: var(--ncl-acento);
+  }
+
+  @media (max-width: 600px) {
+    .ncl-chat__burbuja {
+      display: none;
+    }
+
+    .ncl-chat__btn {
+      width: 50px;
+      height: 50px;
+    }
+
+    .ncl-arriba {
+      left: 0.8rem;
+      bottom: 0.8rem;
+    }
+
+    .ncl-chat {
+      right: 0.8rem;
+      bottom: 0.8rem;
+    }
+  }
+</style>

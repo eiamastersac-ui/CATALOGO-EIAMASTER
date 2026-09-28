@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Notaría (Estilo Notaría Tarazona)",
+  "categoria": "notaria",
+  "descripcion": "Notaría en Lima en una sola página con anclas: barra de contacto y cabecera fija transparente que se vuelve sólida al hacer scroll con submenús, hero de foto a pantalla completa con carrusel 01/04, trámites en línea en tarjetas foto-primero, servicios protocolares y extraprotocolares en pestañas, requisitos por trámite con menú lateral, consulta de Kardex con teclado numérico y resultados demo, bandas de cita y horario, compromiso y valores, cuentas bancarias con botón copiar, formulario de contacto, directorio por áreas en acordeón, testimonios y pie con entidades. Modal para reservar cita. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/notaria-moderna.jpg",
+  "tags": ["notaría", "legal", "trámites", "kardex", "requisitos", "citas", "acordeón", "carrusel"],
+  "paleta": ["#2c4350", "#1f2a30", "#f4f4f2", "#8db43a"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "notariatarazona.pe",
+  "orden": 86
+}

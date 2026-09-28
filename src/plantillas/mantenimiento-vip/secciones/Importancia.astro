@@ -1,0 +1,111 @@
+---
+import { importancia } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="mv-imp mv-seccion" id="importancia">
+  <div class="mv-wrap">
+    <h2 class="mv-titulo mv-reveal">
+      {importancia.titulo[0]}<br />{importancia.titulo[1]}
+    </h2>
+
+    <div class="mv-imp__grid">
+      <article class="mv-imp__card mv-imp__card--malo mv-reveal">
+        <header>
+          <span class="mv-imp__ico"><Icono nombre="x" size={22} trazo={3} /></span>
+          <h3>{importancia.malo.t}</h3>
+        </header>
+        <ul>
+          {importancia.malo.l.map((t: string) => <li>{t}</li>)}
+        </ul>
+      </article>
+
+      <article class="mv-imp__card mv-imp__card--bueno mv-reveal">
+        <header>
+          <span class="mv-imp__ico"><Icono nombre="check" size={22} trazo={3} /></span>
+          <h3>{importancia.bueno.t}</h3>
+        </header>
+        <ul>
+          {importancia.bueno.l.map((t: string) => <li>{t}</li>)}
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mv-imp {
+    padding-top: 0;
+  }
+
+  .mv-imp__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 330px));
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2.6rem;
+  }
+
+  .mv-imp__card {
+    padding: 1.6rem 1.8rem 1.8rem;
+    border: 1.5px solid var(--mv-rojo);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .mv-imp__card--bueno {
+    border-color: var(--mv-ok);
+  }
+
+  .mv-imp__card header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .mv-imp__ico {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: var(--mv-rojo);
+    color: #fff;
+    transform: rotate(-8deg);
+  }
+
+  .mv-imp__card--bueno .mv-imp__ico {
+    background: var(--mv-ok);
+  }
+
+  .mv-imp__card h3 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+  }
+
+  .mv-imp__card li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.92rem;
+    line-height: 1.9;
+  }
+
+  .mv-imp__card li::before {
+    content: "";
+    position: absolute;
+    left: 0.2rem;
+    top: 0.8em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  @media (max-width: 700px) {
+    .mv-imp__grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

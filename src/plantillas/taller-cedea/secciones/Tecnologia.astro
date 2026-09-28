@@ -1,0 +1,122 @@
+---
+import { tecnologia } from '../datos/taller.js';
+---
+
+<section class="tc-seccion tc-tec" id="tecnologia">
+  <img class="tc-tec__fondo" src={tecnologia.fondo} alt="" loading="lazy" aria-hidden="true" />
+  <div class="tc-tec__velo" aria-hidden="true"></div>
+
+  <div class="tc-wrap tc-tec__grid">
+    <div class="tc-tec__tx">
+      <h2><b>{tecnologia.titulo[0]}</b>{tecnologia.titulo[1]}</h2>
+      <p>{tecnologia.intro}</p>
+      <ul class="tc-check">
+        {tecnologia.lista.map((l: string) => <li>{l}</li>)}
+      </ul>
+      <p>{tecnologia.cierre}</p>
+      <a href="#contacto" class="tc-btn tc-btn--acento">Contáctanos Hoy</a>
+    </div>
+
+    <ul class="tc-tec__cifras">
+      {tecnologia.cifras.map((c: { n: string; t: string }) => (
+        <li><b>{c.n}</b><span>{c.t}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tc-tec {
+    position: relative;
+    isolation: isolate;
+    color: #fff;
+    background: var(--tc-tinta-2);
+  }
+
+  .tc-tec__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .tc-tec__velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(10, 26, 45, 0.94) 0%, rgba(10, 26, 45, 0.82) 55%, rgba(10, 26, 45, 0.45) 100%);
+    z-index: -1;
+  }
+
+  .tc-tec__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: end;
+  }
+
+  .tc-tec__tx {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .tc-tec__tx h2 {
+    color: #fff;
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  }
+
+  .tc-tec__tx .tc-check {
+    color: #fff;
+  }
+
+  .tc-tec__cifras {
+    display: grid;
+    gap: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .tc-tec__cifras li {
+    display: grid;
+    padding: 1.1rem 0 1.1rem 1.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .tc-tec__cifras li:last-child {
+    border-bottom: 0;
+  }
+
+  .tc-tec__cifras b {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .tc-tec__cifras span {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+    margin-top: 0.35rem;
+  }
+
+  @media (max-width: 860px) {
+    .tc-tec__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tc-tec__cifras {
+      grid-template-columns: repeat(3, 1fr);
+      border-left: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .tc-tec__cifras li {
+      padding: 1rem 0.5rem 0 0;
+      border-bottom: 0;
+    }
+  }
+</style>

@@ -1,0 +1,317 @@
+---
+import { heroSlides } from '../datos/llantas.js';
+
+interface Slide { kicker: string; rojo: string; blanco: string; sub: string; cta: string; href: string; img: string; pos: string }
+const total = String(heroSlides.length).padStart(2, '0');
+---
+
+<section class="ll-hero" id="top" aria-roledescription="carrusel" aria-label="Promociones principales">
+  <div class="ll-hero__track" id="ll-hero-track">
+    {heroSlides.map((s: Slide, i: number) => (
+      <article class="ll-hero__slide" aria-hidden={i === 0 ? 'false' : 'true'}>
+        <img
+          src={s.img}
+          alt=""
+          style={`object-position:${s.pos}`}
+          loading="eager"
+          fetchpriority={i === 0 ? 'high' : 'auto'}
+          decoding="async"
+        />
+        <div class="ll-hero__scrim"></div>
+        <div class="ll-wrap ll-hero__contenido">
+          <p class="ll-hero__kicker">{s.kicker}</p>
+          {i === 0 ? (
+            <h1 class="ll-hero__titulo"><em>{s.rojo}</em> {s.blanco}</h1>
+          ) : (
+            <h2 class="ll-hero__titulo"><em>{s.rojo}</em> {s.blanco}</h2>
+          )}
+          <span class="ll-hero__linea" aria-hidden="true"></span>
+          <p class="ll-hero__sub">{s.sub}</p>
+          <a href={s.href} class="ll-btn ll-btn--rojo ll-hero__cta">{s.cta}</a>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="ll-wrap ll-hero__ctrl">
+    <span class="ll-hero__cont"><b id="ll-hero-n">01</b> / {total}</span>
+    <button type="button" class="ll-hero__fl" id="ll-hero-prev" aria-label="Anterior">&#8249;</button>
+    <button type="button" class="ll-hero__fl" id="ll-hero-next" aria-label="Siguiente">&#8250;</button>
+  </div>
+
+  <div class="ll-hero__dots" id="ll-hero-dots">
+    {heroSlides.map((_s: Slide, i: number) => (
+      <button type="button" class={i === 0 ? 'is-on' : ''} data-i={i} aria-label={`Ir al slide ${i + 1}`}></button>
+    ))}
+  </div>
+
+  <a href="#buscador" class="ll-hero__bajar" aria-label="Bajar al buscador">
+    <span></span>
+  </a>
+</section>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('.ll-hero');
+  const track = document.getElementById('ll-hero-track');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#ll-hero-dots button'));
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('.ll-hero__slide'));
+  const num = document.getElementById('ll-hero-n');
+  let idx = 0;
+  let timer: number | undefined;
+
+  function ir(n: number) {
+    if (!track || slides.length === 0) return;
+    idx = (n + slides.length) % slides.length;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+    slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== idx)));
+    if (num) num.textContent = String(idx + 1).padStart(2, '0');
+  }
+
+  function play() {
+    stop();
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  }
+  function stop() {
+    if (timer) window.clearInterval(timer);
+  }
+
+  document.getElementById('ll-hero-prev')?.addEventListener('click', () => { ir(idx - 1); play(); });
+  document.getElementById('ll-hero-next')?.addEventListener('click', () => { ir(idx + 1); play(); });
+  dots.forEach((d) => d.addEventListener('click', () => { ir(Number(d.dataset.i)); play(); }));
+  hero?.addEventListener('mouseenter', stop);
+  hero?.addEventListener('mouseleave', play);
+
+  /* Fija el transform inicial y repinta cuando carga la primera foto
+     (evita que el primer slide quede sin pintar en algunos navegadores). */
+  ir(0);
+  const repintar = () => {
+    if (!track) return;
+    track.style.transform = 'translateX(0.01px)';
+    void track.offsetWidth;
+    ir(idx);
+  };
+  const primera = slides[0]?.querySelector('img');
+  primera?.decode().then(repintar, repintar);
+  window.addEventListener('load', repintar, { once: true });
+  [900, 2200].forEach((ms) =>
+    window.setTimeout(() => {
+      if (primera) primera.style.outline = `0px solid rgba(0,0,0,${ms / 10000})`;
+    }, ms)
+  );
+  play();
+</script>
+
+<style>
+  .ll-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    background: var(--ll-negro);
+    color: #fff;
+  }
+
+  .ll-hero__track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .ll-hero__slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .ll-hero__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ll-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.7) 36%, rgba(0, 0, 0, 0.1) 70%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 22%, transparent 70%, rgba(0, 0, 0, 0.6) 100%);
+  }
+
+  .ll-hero__contenido {
+    position: relative;
+    width: 100%;
+    padding-top: var(--ll-hdr);
+  }
+
+  .ll-hero__kicker {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+  }
+
+  .ll-hero__titulo {
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    font-weight: 800;
+    color: #fff;
+    max-width: 15ch;
+    line-height: 1.02;
+  }
+
+  .ll-hero__titulo em {
+    display: block;
+    font-style: normal;
+    color: var(--ll-rojo);
+  }
+
+  .ll-hero__linea {
+    display: block;
+    width: 44px;
+    height: 3px;
+    background: var(--ll-rojo);
+    margin-block: 1.4rem 1.1rem;
+  }
+
+  .ll-hero__sub {
+    font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+    font-weight: 500;
+    max-width: 42ch;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ll-hero__cta {
+    margin-top: 1.9rem;
+    padding: 0.85rem 1.6rem;
+  }
+
+  .ll-hero__ctrl {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    pointer-events: none;
+  }
+
+  .ll-hero__ctrl > * {
+    pointer-events: auto;
+  }
+
+  .ll-hero__cont {
+    font-family: var(--ll-titulos);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-right: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  .ll-hero__cont b {
+    color: #fff;
+  }
+
+  .ll-hero__fl {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #fff;
+    font-size: 1.4rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    padding-bottom: 3px;
+  }
+
+  .ll-hero__fl:hover {
+    background: var(--ll-rojo);
+    border-color: var(--ll-rojo);
+  }
+
+  .ll-hero__dots {
+    position: absolute;
+    left: 50%;
+    bottom: 2.6rem;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 0.35rem 0.5rem;
+    border-radius: 20px;
+  }
+
+  .ll-hero__dots button {
+    width: 8px;
+    height: 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.6);
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+
+  .ll-hero__dots button.is-on {
+    width: 26px;
+    background: var(--ll-rojo);
+  }
+
+  .ll-hero__bajar {
+    position: absolute;
+    left: clamp(1rem, 3vw, 2rem);
+    bottom: 2.1rem;
+    width: 24px;
+    height: 38px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ll-hero__bajar span {
+    width: 3px;
+    height: 8px;
+    background: #fff;
+    border-radius: 2px;
+    margin-top: 6px;
+    animation: ll-bajar 1.6s ease-in-out infinite;
+  }
+
+  @keyframes ll-bajar {
+    0% { transform: translateY(0); opacity: 1; }
+    70% { transform: translateY(12px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 0; }
+  }
+
+  @media (min-width: 1300px) {
+    .ll-hero__bajar {
+      left: calc((100vw - var(--ll-maxw)) / 2 + 2rem);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ll-hero__scrim {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.85) 100%);
+    }
+
+    .ll-hero__ctrl {
+      display: none;
+    }
+
+    .ll-hero__bajar {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ll-hero__track {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Notaría (Estilo Notaría Hidalgo)",
+  "categoria": "notaria",
+  "descripcion": "Notaría de Lima en una sola página: barra superior vino con teléfono y correo, cabecera fija transparente que se vuelve sólida al hacer scroll, carrusel hero de foto a pantalla completa con contador y flechas, bloque Nosotros con trayectoria desplegable, servicios en tarjetas sobre foto tintada con modal de requisitos por categoría (protocolares, no contenciosos, extraprotocolares, libros, vehicular), trámites en línea con pestañas, consulta de kardex demo con estado del trámite, trabaja con nosotros, contacto con formulario y pie con enlaces a entidades públicas. Incluye widget flotante de Citas Online y botón de WhatsApp. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/notaria-central.jpg",
+  "tags": ["notaría", "legal", "trámites", "escrituras", "kardex", "citas", "requisitos", "carrusel"],
+  "paleta": ["#6e2a30", "#262626", "#f4f2f0", "#7f7f7f"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "notariahidalgo.com",
+  "orden": 87
+}

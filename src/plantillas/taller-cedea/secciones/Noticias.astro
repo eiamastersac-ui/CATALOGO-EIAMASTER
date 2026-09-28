@@ -1,0 +1,246 @@
+---
+import { noticias } from '../datos/taller.js';
+
+interface Nota { t: string; f: string; d: string; img: string }
+const notas = noticias as Nota[];
+---
+
+<section class="tc-seccion tc-not" id="noticias">
+  <div class="tc-wrap">
+    <header class="tc-not__head">
+      <h2 class="tc-titulo">Noticias y novedades de nuestro <b>taller mecánico</b></h2>
+      <div class="tc-not__ctrl">
+        <span class="tc-not__cont" id="tc-not-cont">01 / 0{notas.length}</span>
+        <button type="button" class="tc-not__flecha" id="tc-not-prev" aria-label="Anterior">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6" /></svg>
+        </button>
+        <button type="button" class="tc-not__flecha" id="tc-not-next" aria-label="Siguiente">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="tc-not__vista" id="tc-not-vista">
+      <ul class="tc-not__track" id="tc-not-track">
+        {notas.map((n) => (
+          <li class="tc-not__slide">
+            <article class="tc-not__card">
+              <figure><img src={n.img} alt="" loading="lazy" /></figure>
+              <div class="tc-not__tx">
+                <time>{n.f}</time>
+                <h3>{n.t}</h3>
+                <p>{n.d}</p>
+                <a href="#noticias">Leer artículo <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="tc-not__dots" id="tc-not-dots" role="tablist" aria-label="Artículos">
+      {notas.map((_, i) => (
+        <button type="button" class={i === 0 ? 'is-on' : ''} aria-label={`Ir al artículo ${i + 1}`} data-i={i}></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const vista = document.getElementById('tc-not-vista');
+  const track = document.getElementById('tc-not-track');
+  const prev = document.getElementById('tc-not-prev');
+  const next = document.getElementById('tc-not-next');
+  const cont = document.getElementById('tc-not-cont');
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#tc-not-dots button'));
+  const slides = track ? Array.from(track.children) as HTMLElement[] : [];
+  let idx = 0;
+  let timer = 0;
+
+  function porVista(): number {
+    return window.matchMedia('(max-width: 760px)').matches ? 1 : 2;
+  }
+
+  function maxIdx(): number {
+    return Math.max(0, slides.length - porVista());
+  }
+
+  function ir(i: number) {
+    if (!track || slides.length === 0) return;
+    const tope = maxIdx();
+    idx = i > tope ? 0 : i < 0 ? tope : i;
+    const paso = slides[0].getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || '0');
+    track.style.transform = `translateX(${-idx * paso}px)`;
+    dots.forEach((d, j) => {
+      d.classList.toggle('is-on', j === idx);
+      d.hidden = j > tope;
+    });
+    if (cont) cont.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(tope + 1).padStart(2, '0')}`;
+  }
+
+  function auto() {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  }
+
+  prev?.addEventListener('click', () => { ir(idx - 1); auto(); });
+  next?.addEventListener('click', () => { ir(idx + 1); auto(); });
+  dots.forEach((d) => d.addEventListener('click', () => { ir(Number(d.dataset.i)); auto(); }));
+  vista?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  vista?.addEventListener('mouseleave', auto);
+  window.addEventListener('resize', () => ir(Math.min(idx, maxIdx())));
+
+  ir(0);
+  auto();
+</script>
+
+<style>
+  .tc-not {
+    background: var(--tc-papel);
+  }
+
+  .tc-not__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .tc-not__head .tc-titulo {
+    margin-bottom: 0;
+    max-width: 22ch;
+  }
+
+  .tc-not__ctrl {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .tc-not__cont {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--tc-suave);
+    margin-right: 0.5rem;
+  }
+
+  .tc-not__flecha {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1.5px solid var(--tc-tinta);
+    color: var(--tc-tinta);
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .tc-not__flecha:hover {
+    background: var(--tc-tinta);
+    color: #fff;
+  }
+
+  .tc-not__vista {
+    overflow: hidden;
+  }
+
+  .tc-not__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 1.5rem) / 2);
+    column-gap: 1.5rem;
+    transition: transform 0.5s ease;
+  }
+
+  .tc-not__card {
+    background: #fff;
+    border-radius: var(--tc-radio);
+    overflow: hidden;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .tc-not__card figure {
+    aspect-ratio: 16 / 8;
+    overflow: hidden;
+  }
+
+  .tc-not__card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .tc-not__card:hover img {
+    transform: scale(1.04);
+  }
+
+  .tc-not__tx {
+    padding: 1.2rem 1.3rem 1.4rem;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .tc-not__tx time {
+    font-size: 0.78rem;
+    color: var(--tc-suave);
+    text-transform: capitalize;
+  }
+
+  .tc-not__tx h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .tc-not__tx p {
+    font-size: 0.9rem;
+    color: var(--tc-suave);
+  }
+
+  .tc-not__tx a {
+    justify-self: start;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--tc-tinta);
+    border-bottom: 2px solid var(--tc-acento);
+    margin-top: 0.3rem;
+  }
+
+  .tc-not__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .tc-not__dots button {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #c9cbc7;
+    transition: width 0.2s ease, background 0.2s ease;
+  }
+
+  .tc-not__dots button.is-on {
+    width: 26px;
+    border-radius: 5px;
+    background: var(--tc-tinta);
+  }
+
+  @media (max-width: 760px) {
+    .tc-not__track {
+      grid-auto-columns: 100%;
+    }
+
+    .tc-not__head {
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+</style>

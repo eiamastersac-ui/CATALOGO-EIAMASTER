@@ -6,7 +6,7 @@
   "tags": ["cerrajería", "seguridad", "bombines", "escudos", "cerrojos", "e-commerce", "tienda online", "domótica"],
   "paleta": ["#19334f", "#f59e0b", "#fefbed", "#f1f5f9", "#161616"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "tucerrajerodeseguridad.com",
   "orden": 76
 }

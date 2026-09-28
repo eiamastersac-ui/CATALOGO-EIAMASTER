@@ -1,0 +1,181 @@
+---
+import { hero } from '../datos/taller.js';
+---
+
+<section class="tc-hero" id="tc-inicio" aria-label="Taller mecánico">
+  <img class="tc-hero__img" src={hero.img} alt="Mecánico ajustando piezas en el motor de un vehículo" fetchpriority="high" />
+  <div class="tc-hero__scrim" aria-hidden="true"></div>
+
+  <div class="tc-wrap tc-hero__cont">
+    <span class="tc-hero__kicker">{hero.kicker}</span>
+    <h1>{hero.titulo}</h1>
+    <ul class="tc-check tc-hero__lista">
+      {hero.lista.map((l: string) => <li>{l}</li>)}
+    </ul>
+    <div class="tc-hero__ctas">
+      <button type="button" class="tc-btn tc-btn--acento" data-cita>{hero.cta}</button>
+      <a href="#servicios" class="tc-btn tc-btn--borde">Ver servicios</a>
+    </div>
+  </div>
+
+  <aside class="tc-hero__card" aria-label="Datos del taller">
+    <div class="tc-hero__stars" aria-label="4.8 de 5">★★★★★</div>
+    <b>4.8 / 5 en 320 reseñas</b>
+    <span>Taller multimarca · más de 20 años atendiendo personas y flotas</span>
+  </aside>
+
+  <a href="#taller" class="tc-hero__down" aria-label="Bajar a la siguiente sección">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+  </a>
+</section>
+
+<style>
+  .tc-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+    background: var(--tc-tinta-2);
+  }
+
+  .tc-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  /* scrim de legibilidad sobre la foto (no decorativo) */
+  .tc-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(10, 26, 45, 0.6) 0%, rgba(10, 26, 45, 0.15) 30%, rgba(10, 26, 45, 0.25) 60%, rgba(10, 26, 45, 0.8) 100%),
+      linear-gradient(90deg, rgba(10, 26, 45, 0.78) 0%, rgba(10, 26, 45, 0.35) 55%, rgba(10, 26, 45, 0.05) 100%);
+  }
+
+  .tc-hero__cont {
+    position: relative;
+    width: 100%;
+    padding-top: 76px;
+  }
+
+  .tc-hero__kicker {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    border-left: 3px solid var(--tc-acento);
+    padding-left: 0.7rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .tc-hero h1 {
+    color: #fff;
+    font-size: clamp(2.3rem, 6vw, 4.2rem);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    max-width: 14ch;
+    margin-bottom: 1.6rem;
+  }
+
+  .tc-hero__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+    row-gap: 0.45rem;
+    max-width: 720px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 2.1rem;
+  }
+
+  .tc-hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .tc-hero__card {
+    position: absolute;
+    right: clamp(1rem, 4vw, 3rem);
+    bottom: 6.5rem; /* deja libre el boton flotante de chat */
+    width: 280px;
+    background: #fff;
+    color: var(--tc-texto);
+    border-radius: var(--tc-radio);
+    padding: 1rem 1.15rem;
+    display: grid;
+    gap: 0.2rem;
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+  }
+
+  .tc-hero__stars {
+    color: var(--tc-acento);
+    letter-spacing: 0.12em;
+    font-size: 0.95rem;
+  }
+
+  .tc-hero__card b {
+    color: var(--tc-tinta);
+    font-size: 0.95rem;
+  }
+
+  .tc-hero__card span {
+    font-size: 0.8rem;
+    color: var(--tc-suave);
+    line-height: 1.4;
+  }
+
+  .tc-hero__down {
+    position: absolute;
+    left: 50%;
+    bottom: 1.4rem;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    display: grid;
+    place-items: center;
+    animation: tc-bote 2s ease-in-out infinite;
+  }
+
+  .tc-hero__down:hover {
+    background: #fff;
+    color: var(--tc-tinta);
+  }
+
+  @keyframes tc-bote {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 6px); }
+  }
+
+  @media (max-width: 900px) {
+    .tc-hero__card {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .tc-hero {
+      min-height: 680px;
+    }
+
+    .tc-hero__lista {
+      grid-template-columns: 1fr;
+      font-size: 0.88rem;
+    }
+
+    .tc-hero__lista li:nth-child(n + 7) {
+      display: none;
+    }
+  }
+</style>

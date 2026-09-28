@@ -1,0 +1,113 @@
+---
+import { nosotros, marca } from '../datos/notaria.js';
+---
+
+<section class="ncl-nos" id="ncl-nosotros" aria-labelledby="ncl-nos-t">
+  <img class="ncl-nos__img" src={nosotros.img} alt="Equipo de la notaría reunido en la sala de juntas" loading="lazy" />
+  <div class="ncl-wrap ncl-nos__cont">
+    <div class="ncl-nos__card">
+      <h2 id="ncl-nos-t">{nosotros.titulo}</h2>
+      <p>{nosotros.texto}</p>
+      <div class="ncl-nos__pie">
+        <a href="#ncl-valores" class="ncl-btn ncl-btn--acento">Conoce más</a>
+        <div class="ncl-nos__firma">
+          <small>Notario titular</small>
+          <b>{marca.notario}</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ncl-nos {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    background: var(--ncl-papel-2);
+    overflow: hidden;
+  }
+
+  .ncl-nos__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% center;
+  }
+
+  .ncl-nos__cont {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    padding-block: 4rem;
+  }
+
+  .ncl-nos__card {
+    width: min(100%, 445px);
+    background: rgba(245, 244, 242, 0.93);
+    border: 1px solid var(--ncl-acento);
+    border-radius: 2px;
+    padding: clamp(1.6rem, 3vw, 2.2rem);
+    box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  }
+
+  .ncl-nos__card h2 {
+    font-size: clamp(1.45rem, 2.4vw, 1.75rem);
+    margin-bottom: 1rem;
+  }
+
+  .ncl-nos__card p {
+    font-size: 0.86rem;
+    line-height: 1.55;
+    text-align: justify;
+    margin-bottom: 1.4rem;
+  }
+
+  .ncl-nos__pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .ncl-nos__firma {
+    display: grid;
+    text-align: right;
+    font-family: var(--ncl-serif);
+  }
+
+  .ncl-nos__firma small {
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ncl-suave);
+  }
+
+  .ncl-nos__firma b {
+    font-weight: 500;
+    font-style: italic;
+    color: var(--ncl-tinta);
+  }
+
+  @media (max-width: 700px) {
+    .ncl-nos {
+      min-height: 0;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .ncl-nos__img {
+      position: relative;
+      height: 260px;
+    }
+
+    .ncl-nos__cont {
+      margin-top: -3rem;
+      padding-block: 0 2.5rem;
+    }
+  }
+</style>

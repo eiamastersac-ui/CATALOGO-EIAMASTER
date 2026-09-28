@@ -1,0 +1,148 @@
+---
+import { vehiculos, usd } from '../datos/taller.js';
+
+interface Vehiculo { tipo: string; t: string; desde: number; img: string }
+const items = vehiculos.items as Vehiculo[];
+---
+
+<section class="tc-seccion tc-veh" id="vehiculos">
+  <div class="tc-wrap">
+    <header class="tc-veh__head">
+      <h2 class="tc-titulo">{vehiculos.titulo}</h2>
+      <p>{vehiculos.texto}</p>
+    </header>
+
+    <ul class="tc-veh__grid">
+      {items.map((v) => (
+        <li>
+          <article class="tc-veh__card">
+            <figure>
+              <img src={v.img} alt={v.t} loading="lazy" />
+              <span class="tc-veh__precio">Desde <b>{usd(v.desde)}</b></span>
+            </figure>
+            <div class="tc-veh__tx">
+              <small>{v.tipo}</small>
+              <h3>{v.t}</h3>
+              <button type="button" class="tc-veh__btn" data-wa={`Hola, quiero información del ${v.t}.`}>
+                Solicitar cotización <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tc-veh__head {
+    text-align: center;
+    margin-bottom: 2.4rem;
+  }
+
+  .tc-veh__head .tc-titulo {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .tc-veh__head p {
+    color: var(--tc-suave);
+  }
+
+  .tc-veh__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tc-veh__card {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1px solid var(--tc-linea);
+    border-radius: var(--tc-radio);
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tc-veh__card:hover {
+    border-color: var(--tc-tinta);
+    box-shadow: 0 18px 30px -24px rgba(10, 26, 45, 0.6);
+  }
+
+  .tc-veh__card figure {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--tc-papel);
+    overflow: hidden;
+  }
+
+  .tc-veh__card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .tc-veh__card:hover img {
+    transform: scale(1.05);
+  }
+
+  .tc-veh__precio {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    background: #fff;
+    color: var(--tc-suave);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  .tc-veh__precio b {
+    color: var(--tc-tinta);
+    font-size: 0.85rem;
+  }
+
+  .tc-veh__tx {
+    padding: 1rem 1.1rem 1.2rem;
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+  }
+
+  .tc-veh__tx small {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tc-suave);
+  }
+
+  .tc-veh__tx h3 {
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+
+  .tc-veh__btn {
+    justify-self: start;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--tc-tinta);
+    border-bottom: 2px solid var(--tc-acento);
+    padding: 0.1rem 0;
+  }
+
+  @media (max-width: 980px) {
+    .tc-veh__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .tc-veh__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

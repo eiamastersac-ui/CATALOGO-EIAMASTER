@@ -1,0 +1,89 @@
+---
+/* Iconos de linea para la grilla de servicios (stroke = currentColor). */
+const { nombre } = Astro.props as { nombre: string };
+---
+
+<svg class="ll-ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {nombre === 'alineamiento' && (
+    <Fragment>
+      <rect x="4" y="14" width="7" height="20" rx="1.5" /><rect x="37" y="14" width="7" height="20" rx="1.5" />
+      <path d="M11 24h26" /><circle cx="24" cy="24" r="4" /><path d="M7.5 18v2M7.5 23v2M7.5 28v2M40.5 18v2M40.5 23v2M40.5 28v2" />
+    </Fragment>
+  )}
+  {nombre === 'balanceo' && (
+    <Fragment>
+      <path d="M8 42V14M40 42V14M4 42h8M36 42h8" /><path d="M8 26h32" />
+      <path d="M15 26l3-7h12l3 7" /><rect x="13" y="26" width="22" height="6" rx="2" /><circle cx="18" cy="33" r="2" /><circle cx="30" cy="33" r="2" />
+    </Fragment>
+  )}
+  {nombre === 'frenos' && (
+    <Fragment>
+      <circle cx="22" cy="26" r="15" /><circle cx="22" cy="26" r="4" />
+      <circle cx="22" cy="17" r="1.4" /><circle cx="30" cy="27" r="1.4" /><circle cx="15" cy="32" r="1.4" />
+      <path d="M31 9a17 17 0 0 1 10 12l-7 1a10 10 0 0 0-5-6z" />
+    </Fragment>
+  )}
+  {nombre === 'suspension' && (
+    <Fragment>
+      <path d="M16 4v6M16 38v6M12 10h8M12 38h8" />
+      <path d="M11 13l10 3-10 3 10 3-10 3 10 3-10 3 10 3" />
+      <rect x="30" y="8" width="12" height="34" rx="2" /><path d="M30 15h12M30 22h12M30 29h12M30 36h12" />
+    </Fragment>
+  )}
+  {nombre === 'enllante' && (
+    <Fragment>
+      <circle cx="24" cy="24" r="19" /><circle cx="24" cy="24" r="14" /><circle cx="24" cy="24" r="3.5" />
+      <path d="M24 20.5V10M27.3 25.2l10 3.3M20.7 25.2l-10 3.3M26 27l6 8.5M22 27l-6 8.5" />
+    </Fragment>
+  )}
+  {nombre === 'aros' && (
+    <Fragment>
+      <circle cx="24" cy="24" r="19" /><circle cx="24" cy="24" r="5" />
+      <path d="M24 19V8M28.8 22.5l10.3-3.4M27 28l6.4 8.8M21 28l-6.4 8.8M19.2 22.5 8.9 19.1" />
+    </Fragment>
+  )}
+  {nombre === 'discos' && (
+    <Fragment>
+      <circle cx="22" cy="26" r="16" /><circle cx="22" cy="26" r="6" />
+      <path d="M26 6a20 20 0 0 1 16 16" /><path d="M29 11a13 13 0 0 1 8 8" />
+    </Fragment>
+  )}
+  {nombre === 'diagnostico' && (
+    <Fragment>
+      <rect x="6" y="9" width="36" height="24" rx="2" /><path d="M2 38h44" />
+      <path d="M10 25l6-6 5 4 6-8 5 5 6-4" /><path d="M34 13v4M37 12v5" />
+    </Fragment>
+  )}
+  {nombre === 'afinamiento' && (
+    <Fragment>
+      <path d="M4 34l4-10 8-4h14l8 6 6 2v6H4z" /><circle cx="14" cy="36" r="5" /><circle cx="36" cy="36" r="5" />
+      <path d="M28 20l10-12M34 8h4v4" />
+    </Fragment>
+  )}
+  {nombre === 'aire' && (
+    <Fragment>
+      <path d="M8 38v-8l4-8h24l4 8v8z" /><path d="M8 38v4M40 38v4" /><circle cx="15" cy="32" r="2" /><circle cx="33" cy="32" r="2" />
+      <path d="M24 3v14M18 6l12 8M30 6l-12 8" />
+    </Fragment>
+  )}
+  {nombre === 'undercoating' && (
+    <Fragment>
+      <path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z" />
+      <path d="M15 28l2-6h14l2 6zM15 28v4M33 28v4" /><circle cx="19" cy="30" r="0.8" /><circle cx="29" cy="30" r="0.8" />
+    </Fragment>
+  )}
+  {nombre === 'inhouse' && (
+    <Fragment>
+      <path d="M24 6l3 1 2 4 4 1 3-2 3 3-2 3 1 4 4 2 1 3-1 3-4 2-1 4 2 3-3 3-3-2-4 1-2 4-3 1-3-1-2-4-4-1-3 2-3-3 2-3-1-4-4-2-1-3 1-3 4-2 1-4-2-3 3-3 3 2 4-1 2-4z" />
+      <path d="M18 30l10-10M27 17a4 4 0 0 0 5 5" />
+    </Fragment>
+  )}
+</svg>
+
+<style>
+  .ll-ico {
+    width: 56px;
+    height: 56px;
+    color: var(--ll-rojo);
+  }
+</style>

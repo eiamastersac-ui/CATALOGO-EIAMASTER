@@ -1,0 +1,104 @@
+---
+import { marcas } from '../datos/llantas.js';
+
+/* Se duplica la lista para que la cinta sea continua */
+const cinta = [...marcas, ...marcas];
+---
+
+<section class="ll-seccion ll-marcas" aria-labelledby="ll-marcas-titulo">
+  <div class="ll-wrap">
+    <header class="ll-cabeza">
+      <span class="ll-kicker">- Marcas -</span>
+      <h2 class="ll-titulo ll-marcas__titulo" id="ll-marcas-titulo">Trabajamos con las <em>mejores marcas</em></h2>
+    </header>
+
+    <div class="ll-marcas__ventana">
+      <ul class="ll-marcas__cinta">
+        {cinta.map((m: string, i: number) => (
+          <li aria-hidden={i >= marcas.length ? 'true' : undefined}>
+            <button type="button" class="ll-marca" data-marca={m} tabindex={i >= marcas.length ? -1 : undefined}>
+              <span class={`ll-marca__nom ll-marca__nom--${i % 4}`}>{m}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.ll-marca').forEach((b) => {
+    b.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('ll-filtro', { detail: { marca: b.dataset.marca || '' } }));
+      document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .ll-marcas {
+    background: var(--ll-negro);
+  }
+
+  .ll-marcas__titulo {
+    color: #fff;
+  }
+
+  .ll-marcas__ventana {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .ll-marcas__cinta {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: ll-cinta 32s linear infinite;
+  }
+
+  .ll-marcas__ventana:hover .ll-marcas__cinta {
+    animation-play-state: paused;
+  }
+
+  @keyframes ll-cinta {
+    to { transform: translateX(calc(-50% - 0.5rem)); }
+  }
+
+  .ll-marca {
+    width: 210px;
+    height: 110px;
+    background: #fff;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    transition: transform 0.2s ease;
+  }
+
+  .ll-marca:hover {
+    transform: translateY(-3px);
+  }
+
+  .ll-marca__nom {
+    font-family: var(--ll-titulos);
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--ll-negro);
+    letter-spacing: 0.01em;
+  }
+
+  /* Pequenas variaciones de "logotipo" solo con tipografia */
+  .ll-marca__nom--0 { font-style: italic; }
+  .ll-marca__nom--1 { letter-spacing: 0.14em; font-weight: 600; font-size: 1.35rem; }
+  .ll-marca__nom--2 { font-style: italic; border-bottom: 3px solid var(--ll-rojo); line-height: 1.1; }
+  .ll-marca__nom--3 { font-weight: 700; text-transform: lowercase; font-size: 1.85rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ll-marcas__cinta {
+      animation: none;
+    }
+
+    .ll-marcas__ventana {
+      overflow-x: auto;
+    }
+  }
+</style>

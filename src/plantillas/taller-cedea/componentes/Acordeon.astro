@@ -1,0 +1,129 @@
+---
+interface Item { t: string; d: string }
+const { items, id } = Astro.props as { items: Item[]; id: string };
+---
+
+<div class="tc-acc" data-acc>
+  {items.map((it, i) => (
+    <div class={`tc-acc__item${i === 0 ? ' is-open' : ''}`}>
+      <h3>
+        <button
+          type="button"
+          class="tc-acc__btn"
+          id={`${id}-b${i}`}
+          aria-expanded={i === 0 ? 'true' : 'false'}
+          aria-controls={`${id}-p${i}`}
+        >
+          <span class="tc-acc__ico" aria-hidden="true"></span>
+          {it.t}
+        </button>
+      </h3>
+      <div class="tc-acc__panel" id={`${id}-p${i}`} role="region" aria-labelledby={`${id}-b${i}`}>
+        <div class="tc-acc__in">
+          <p>{it.d}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.tpl-taller-cedea [data-acc]').forEach((acc) => {
+    acc.querySelectorAll<HTMLButtonElement>('.tc-acc__btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.tc-acc__item');
+        if (!item) return;
+        const abrir = !item.classList.contains('is-open');
+        acc.querySelectorAll('.tc-acc__item').forEach((otro) => {
+          otro.classList.remove('is-open');
+          otro.querySelector('.tc-acc__btn')?.setAttribute('aria-expanded', 'false');
+        });
+        if (abrir) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .tc-acc {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .tc-acc__item {
+    background: #fff;
+    border: 1px solid var(--tc-linea);
+    border-radius: var(--tc-radio);
+    transition: border-color 0.2s ease;
+  }
+
+  .tc-acc__item.is-open {
+    border-color: var(--tc-tinta);
+  }
+
+  .tc-acc__item h3 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .tc-acc__btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-align: left;
+    padding: 0.95rem 1.1rem;
+    color: var(--tc-tinta);
+    font-weight: 500;
+  }
+
+  .tc-acc__ico {
+    position: relative;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+  }
+
+  .tc-acc__ico::before,
+  .tc-acc__ico::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 12px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  .tc-acc__ico::after {
+    transform: rotate(90deg);
+  }
+
+  .tc-acc__item.is-open .tc-acc__ico::after {
+    transform: rotate(0deg);
+  }
+
+  .tc-acc__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+
+  .tc-acc__item.is-open .tc-acc__panel {
+    grid-template-rows: 1fr;
+  }
+
+  .tc-acc__in {
+    overflow: hidden;
+  }
+
+  .tc-acc__in p {
+    padding: 0 1.1rem 1.1rem 2.9rem;
+    color: var(--tc-texto);
+    font-size: 0.95rem;
+  }
+</style>

@@ -1,0 +1,301 @@
+---
+import { tramites } from '../datos/notaria.js';
+
+interface Tramite { t: string; d: string; l: string[] }
+const items = tramites.items as Tramite[];
+---
+
+<section class="nc-seccion nc-tra" id="tramites">
+  <div class="nc-wrap">
+    <div class="nc-tra__cab">
+      <div>
+        <h2 class="nc-titulo-xl">Trámites en línea</h2>
+        <p class="nc-sub">{tramites.titulo}</p>
+      </div>
+      <p class="nc-tra__intro">
+        Revisa los requisitos, reúne tus documentos y agenda tu visita: llegarás a la notaría con todo listo para firmar.
+      </p>
+    </div>
+
+    <div class="nc-tra__grid">
+      <div class="nc-tra__tabs" role="tablist" aria-label="Trámites en línea" aria-orientation="vertical">
+        {items.map((it, i) => (
+          <button
+            type="button"
+            role="tab"
+            class={`nc-tra__tab${i === 0 ? ' is-on' : ''}`}
+            id={`nc-tra-tab-${i}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls={`nc-tra-pan-${i}`}
+            data-tab={i}
+          >
+            <span class="nc-tra__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="nc-tra__t">{it.t}</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="nc-tra__paneles">
+        {items.map((it, i) => (
+          <div class="nc-tra__panel" role="tabpanel" id={`nc-tra-pan-${i}`} aria-labelledby={`nc-tra-tab-${i}`} hidden={i !== 0}>
+            <h3>{it.t}</h3>
+            <p class="nc-tra__d">{it.d}</p>
+            <ul>
+              {it.l.map((x) => <li>{x}</li>)}
+            </ul>
+            <div class="nc-tra__acc">
+              <button type="button" class="nc-btn nc-btn--lleno" data-abrir-citas>Iniciar trámite</button>
+              <a href="#contacto" class="nc-btn nc-btn--vino">Consultar</a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <figure class="nc-tra__foto">
+        <img src={tramites.img} alt="Documentos y calculadora sobre un escritorio" loading="lazy" />
+      </figure>
+    </div>
+
+    <div class="nc-tra__otros">
+      <span>Otros trámites notariales:</span>
+      <ul>
+        {tramites.otros.map((o: string) => <li><a href="#contacto">{o}</a></li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.nc-tra__tab'));
+  const panes = Array.from(document.querySelectorAll<HTMLElement>('.nc-tra__panel'));
+
+  function activar(n: number) {
+    tabs.forEach((t, i) => {
+      const on = i === n;
+      t.classList.toggle('is-on', on);
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    panes.forEach((p, i) => (p.hidden = i !== n));
+  }
+
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => activar(i));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const n = (i + 1) % tabs.length;
+        activar(n);
+        tabs[n].focus();
+      }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const n = (i - 1 + tabs.length) % tabs.length;
+        activar(n);
+        tabs[n].focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .nc-tra {
+    background: var(--nc-papel);
+  }
+
+  .nc-tra__cab {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .nc-tra__intro {
+    font-size: 0.95rem;
+    border-left: 2px solid var(--nc-vino);
+    padding-left: 1rem;
+  }
+
+  .nc-tra__grid {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr) 260px;
+    background: #fff;
+    box-shadow: 0 18px 50px -26px rgba(0, 0, 0, 0.3);
+  }
+
+  .nc-tra__tabs {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--nc-linea);
+  }
+
+  .nc-tra__tab {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    text-align: left;
+    padding: 1.05rem 1.3rem;
+    border-bottom: 1px solid var(--nc-linea);
+    border-left: 3px solid transparent;
+    font-family: var(--nc-f-sub);
+    font-weight: 600;
+    font-size: 0.97rem;
+    color: var(--nc-texto);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nc-tra__tab:last-child {
+    border-bottom: 0;
+  }
+
+  .nc-tra__tab:hover {
+    background: var(--nc-papel);
+  }
+
+  .nc-tra__tab.is-on {
+    color: var(--nc-vino);
+    border-left-color: var(--nc-vino);
+    background: var(--nc-papel);
+  }
+
+  .nc-tra__n {
+    font-family: var(--nc-f-titulo);
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--nc-gris);
+  }
+
+  .nc-tra__panel {
+    padding: clamp(1.4rem, 3.5vw, 2.2rem);
+    animation: nc-tra-in 0.3s ease both;
+  }
+
+  @keyframes nc-tra-in {
+    from { opacity: 0; transform: translateX(8px); }
+  }
+
+  .nc-tra__panel h3 {
+    font-size: 1.6rem;
+    text-transform: uppercase;
+  }
+
+  .nc-tra__d {
+    color: var(--nc-gris);
+    margin: 0.3rem 0 1.2rem;
+  }
+
+  .nc-tra__panel ul {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .nc-tra__panel li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.93rem;
+  }
+
+  .nc-tra__panel li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    width: 12px;
+    height: 7px;
+    border-left: 2px solid var(--nc-vino);
+    border-bottom: 2px solid var(--nc-vino);
+    transform: rotate(-45deg);
+  }
+
+  .nc-tra__acc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.6rem;
+  }
+
+  .nc-tra__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .nc-tra__otros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1rem;
+    margin-top: 2rem;
+    font-family: var(--nc-f-sub);
+    font-weight: 600;
+    color: var(--nc-tinta);
+  }
+
+  .nc-tra__otros ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nc-tra__otros a {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid #cfc8c4;
+    border-radius: 999px;
+    font-weight: 400;
+    font-size: 0.88rem;
+    background: #fff;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nc-tra__otros a:hover {
+    border-color: var(--nc-vino);
+    color: var(--nc-vino);
+  }
+
+  @media (max-width: 1000px) {
+    .nc-tra__grid {
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+
+    .nc-tra__foto {
+      display: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .nc-tra__cab {
+      grid-template-columns: 1fr;
+    }
+
+    .nc-tra__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nc-tra__tabs {
+      flex-direction: row;
+      overflow-x: auto;
+      border-right: 0;
+      border-bottom: 1px solid var(--nc-linea);
+      scroll-snap-type: x mandatory;
+    }
+
+    .nc-tra__tab {
+      flex: 0 0 auto;
+      max-width: 220px;
+      border-bottom: 0;
+      border-left: 0;
+      border-bottom: 3px solid transparent;
+      scroll-snap-align: start;
+    }
+
+    .nc-tra__tab:last-child {
+      border-bottom: 3px solid transparent;
+    }
+
+    .nc-tra__tab.is-on {
+      border-bottom-color: var(--nc-vino);
+    }
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+import { porQue } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="mv-porque mv-seccion" id="incluye">
+  <div class="mv-wrap">
+    <h2 class="mv-titulo mv-reveal">{porQue.titulo}</h2>
+    <p class="mv-sub mv-reveal">{porQue.sub}</p>
+
+    <ul class="mv-porque__grid">
+      {porQue.items.map((it: { icono: string; t: string }, i: number) => (
+        <li class="mv-porque__item mv-reveal" style={`transition-delay:${i * 60}ms`}>
+          <span class="mv-porque__ico"><Icono nombre={it.icono} size={46} trazo={1.3} /></span>
+          <span class="mv-porque__t">{it.t}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .mv-porque__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem;
+    margin-top: 2.6rem;
+  }
+
+  .mv-porque__item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-height: 124px;
+    padding: 1.3rem 1.6rem;
+    background: var(--mv-card);
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .mv-porque__item:hover {
+    border-color: rgba(228, 0, 43, 0.6);
+    background: var(--mv-card-2);
+  }
+
+  .mv-porque__ico {
+    flex-shrink: 0;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+  }
+
+  .mv-porque__item:hover .mv-porque__ico {
+    color: var(--mv-rojo);
+  }
+
+  .mv-porque__t {
+    font-weight: 600;
+    font-size: 1.02rem;
+    line-height: 1.3;
+    max-width: 18ch;
+  }
+
+  @media (max-width: 900px) {
+    .mv-porque__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mv-porque__grid {
+      grid-template-columns: 1fr;
+    }
+    .mv-porque__item {
+      min-height: 92px;
+    }
+  }
+</style>

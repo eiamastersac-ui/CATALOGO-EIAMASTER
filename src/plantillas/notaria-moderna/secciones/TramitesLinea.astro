@@ -1,0 +1,226 @@
+---
+import { tramitesLinea, img } from '../datos/notaria.js';
+
+interface Tramite { t: string; d: string; img: string; req: string }
+const lista = tramitesLinea as Tramite[];
+---
+
+<section class="nm-seccion nm-tl" id="tramites" aria-labelledby="nm-tl-titulo">
+  <div class="nm-wrap">
+    <div class="nm-tl__cab">
+      <div>
+        <span class="nm-kicker">Notaría en línea</span>
+        <h2 class="nm-titulo" id="nm-tl-titulo">Ponemos a su servicio nuestros <em>trámites en línea</em></h2>
+      </div>
+      <div class="nm-tl__flechas">
+        <button type="button" class="nm-tl__flecha" data-mover="-1" aria-label="Trámites anteriores">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+        </button>
+        <button type="button" class="nm-tl__flecha" data-mover="1" aria-label="Más trámites">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <ul class="nm-tl__fila" id="nm-tl-fila">
+      {lista.map((t) => (
+        <li class="nm-tl__card">
+          <img src={img(t.img, 700)} alt="" loading="lazy" />
+          <div class="nm-tl__info">
+            <h3>{t.t}</h3>
+            <p>{t.d}</p>
+          </div>
+          <a href="#requisitos" class="nm-tl__ir" data-req={t.req} aria-label={`Ver requisitos de ${t.t}`}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="nm-tl__todos"><a href="#requisitos">Ver todos los "Trámites en línea"</a></p>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('nm-tl-fila');
+  document.querySelectorAll<HTMLButtonElement>('.nm-tl [data-mover]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const paso = (fila?.querySelector('li')?.clientWidth ?? 320) + 20;
+      fila?.scrollBy({ left: Number(b.dataset.mover) * paso, behavior: 'smooth' });
+    }),
+  );
+</script>
+
+<style>
+  .nm-tl {
+    background: var(--nm-blanco);
+  }
+
+  .nm-tl__cab {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .nm-tl h2 em {
+    font-style: normal;
+    border-bottom: 2px solid var(--nm-acento);
+  }
+
+  .nm-tl__flechas {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+
+  .nm-tl__flecha {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--nm-linea);
+    color: var(--nm-tinta);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .nm-tl__flecha:hover {
+    background: var(--nm-tinta);
+    color: #fff;
+  }
+
+  .nm-tl__flecha svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .nm-tl__fila {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 40px) / 3);
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .nm-tl__fila::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nm-tl__card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    scroll-snap-align: start;
+    background: var(--nm-tinta-2);
+  }
+
+  .nm-tl__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .nm-tl__card:hover img {
+    transform: scale(1.05);
+  }
+
+  .nm-tl__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 28, 33, 0) 35%, rgba(20, 28, 33, 0.88) 100%);
+  }
+
+  .nm-tl__info {
+    position: absolute;
+    left: 0;
+    right: 56px;
+    bottom: 0;
+    z-index: 1;
+    padding: 1.3rem;
+    color: #fff;
+  }
+
+  .nm-tl__info h3 {
+    color: #fff;
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .nm-tl__info p {
+    font-size: 0.86rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+  }
+
+  .nm-tl__ir {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: var(--nm-acento);
+    color: #fff;
+    transition: background 0.2s ease;
+  }
+
+  .nm-tl__ir::before {
+    /* toda la tarjeta clickeable */
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 1000px;
+  }
+
+  .nm-tl__card:hover .nm-tl__ir {
+    background: var(--nm-acento-osc);
+  }
+
+  .nm-tl__ir svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .nm-tl__todos {
+    text-align: center;
+    margin-top: 2.2rem;
+  }
+
+  .nm-tl__todos a {
+    font-family: var(--nm-serif);
+    font-size: 1.3rem;
+    color: var(--nm-tinta);
+    text-decoration: underline;
+    text-decoration-color: var(--nm-acento);
+    text-underline-offset: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .nm-tl__fila {
+      grid-auto-columns: calc((100% - 20px) / 2);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .nm-tl__fila {
+      grid-auto-columns: 82%;
+    }
+
+    .nm-tl__flechas {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Mantenimiento VIP (Estilo VIP2Cars)",
+  "categoria": "mantenimiento-automotriz",
+  "descripcion": "Landing de campaña oscura para un taller de mantenimiento automotriz (mantenimiento mayor + afinamiento electrónico con más de 70 servicios): cabecera fija transparente que se vuelve sólida al scrollear, hero de 100svh a sangre con titular 'Mant. Mayor' y foto del taller, '¿Por qué elegirnos?' en 6 tarjetas, comparativa 'si lo postergas / si no lo postergas', marquee de marcas atendidas, bloque de 70 servicios con pestañas por sistema, paquetes con precios que cambian según el tipo de vehículo, banda de beneficios (lavado premium + grúa gratis), testimonios con paginación, carrusel de promos, FAQ en acordeón, formulario 'Quiero mi dscto especial' que arma el mensaje de WhatsApp, sedes con foto y footer. WhatsApp flotante y barra de cita en móvil. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/mantenimiento-vip.jpg",
+  "tags": ["taller", "mantenimiento mayor", "afinamiento", "automotriz", "landing", "cotización", "whatsapp", "lima"],
+  "paleta": ["#0b0b0b", "#161616", "#262626", "#f4f4f4", "#e4002b"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "vip2carsmantenimientos.com",
+  "orden": 83
+}

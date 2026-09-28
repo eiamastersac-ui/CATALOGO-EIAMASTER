@@ -6,7 +6,7 @@
   "tags": ["fútbol", "escuela", "cursos", "entrenadores", "deporte", "educación", "lima", "institucional"],
   "paleta": ["#0a3f1d", "#20a057", "#041d1b", "#ebfcf0", "#ffffff"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "eseful.com.pe",
   "orden": 81
 }

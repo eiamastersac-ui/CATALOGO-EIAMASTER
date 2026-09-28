@@ -1,0 +1,198 @@
+---
+import { marca, contacto } from '../datos/notaria.js';
+---
+
+<section class="nc-seccion nc-con" id="contacto">
+  <div class="nc-wrap nc-con__grid">
+    <div class="nc-con__datos">
+      <h2 class="nc-titulo-xl">Contacto</h2>
+
+      <h3 class="nc-con__h">Contáctanos:</h3>
+      <ul class="nc-con__lista">
+        <li><span>Teléfono:</span> <a href={`tel:${marca.telHref}`}>{marca.tel}</a></li>
+        <li><span>Dirección:</span> {marca.direccion}</li>
+        <li><span>Email:</span> <a href={`mailto:${marca.correo}`}>{marca.correo}</a></li>
+      </ul>
+
+      <h3 class="nc-con__h">Horarios:</h3>
+      <p>{marca.horario}</p>
+
+      <figure class="nc-con__mapa">
+        <img src={contacto.img} alt="Recepción de la notaría" loading="lazy" />
+        <figcaption>
+          <b>{marca.nombre} {marca.sub}</b>
+          <span>{marca.direccion}</span>
+          <a class="nc-con__maps" href="https://www.google.com/maps/search/?api=1&query=San+Isidro+Lima" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" /></svg>
+            Abrir en Maps
+          </a>
+        </figcaption>
+      </figure>
+    </div>
+
+    <form class="nc-con__form" id="nc-con-form" novalidate>
+      <p class="nc-con__intro">Completa el siguiente formulario y un especialista se pondrá en contacto contigo.</p>
+      <div class="nc-con__campos">
+        <input class="nc-campo" name="nombre" placeholder="Nombre" required />
+        <input class="nc-campo" name="correo" type="email" placeholder="Dirección de correo electrónico" required />
+        <input class="nc-campo" name="telefono" type="tel" inputmode="tel" placeholder="Teléfono" />
+        <select class="nc-campo" name="tipo" aria-label="Tipo de empresa">
+          <option value="">Tipo de Empresa</option>
+          {contacto.tiposEmpresa.map((t: string) => <option>{t}</option>)}
+        </select>
+        <textarea class="nc-campo nc-con__msg" name="mensaje" rows="6" placeholder="Mensaje" required></textarea>
+      </div>
+      <p class="nc-con__err" id="nc-con-err" hidden>Completa nombre, un correo válido y tu mensaje.</p>
+      <button type="submit" class="nc-btn nc-btn--vino nc-con__enviar">Enviar</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { toast } from '../componentes/toast';
+  const f = document.getElementById('nc-con-form') as HTMLFormElement | null;
+  const err = document.getElementById('nc-con-err');
+  f?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const ok = f.checkValidity();
+    if (err) err.hidden = ok;
+    f.querySelectorAll<HTMLInputElement>('[required]').forEach((c) => c.classList.toggle('is-mal', !c.checkValidity()));
+    if (!ok) return;
+    f.reset();
+    toast('Mensaje enviado (demo). Un especialista te contactará pronto.');
+  });
+</script>
+
+<style>
+  .nc-con__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 4rem);
+    align-items: start;
+  }
+
+  .nc-con__h {
+    font-family: var(--nc-f-sub);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--nc-tinta);
+    margin: 1.8rem 0 0.5rem;
+  }
+
+  .nc-con__lista li span {
+    color: var(--nc-tinta);
+  }
+
+  .nc-con__lista a:hover {
+    color: var(--nc-vino);
+  }
+
+  .nc-con__mapa {
+    position: relative;
+    margin-top: 1.6rem;
+    height: 260px;
+    overflow: hidden;
+    background: var(--nc-papel);
+  }
+
+  .nc-con__mapa img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .nc-con__mapa figcaption {
+    position: absolute;
+    left: 0.9rem;
+    top: 0.9rem;
+    max-width: 260px;
+    background: #fff;
+    padding: 0.8rem 0.95rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.5);
+  }
+
+  .nc-con__mapa b {
+    color: var(--nc-tinta);
+    font-size: 0.9rem;
+  }
+
+  .nc-con__maps {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    align-self: flex-start;
+    margin-top: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    background: var(--nc-vino);
+    color: #fff;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .nc-con__form {
+    background: #fff;
+    padding: clamp(1.4rem, 3.5vw, 2rem);
+    box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.22);
+    border-radius: 6px;
+    margin-top: clamp(0rem, 6vw, 4.5rem);
+  }
+
+  .nc-con__intro {
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .nc-con__campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .nc-con__msg {
+    grid-column: 1 / -1;
+    resize: vertical;
+  }
+
+  .nc-con__form :global(.is-mal) {
+    border-color: var(--nc-vino);
+  }
+
+  .nc-con__err {
+    color: var(--nc-vino);
+    font-size: 0.85rem;
+    margin-top: 0.7rem;
+  }
+
+  .nc-con__enviar {
+    display: flex;
+    margin: 1rem 0 0 auto;
+    font-family: var(--nc-f-titulo);
+    font-weight: 400;
+    font-size: 1.05rem;
+    text-transform: none;
+    padding: 0.5rem 1.1rem;
+  }
+
+  @media (max-width: 860px) {
+    .nc-con__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nc-con__form {
+      margin-top: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nc-con__campos {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

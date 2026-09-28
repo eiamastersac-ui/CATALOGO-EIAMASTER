@@ -1,0 +1,318 @@
+---
+import { paquetes, tiposVehiculo, soles } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+
+type Paquete = {
+  id: string;
+  t: string;
+  d: string;
+  precios: Record<string, number>;
+  antes: Record<string, number>;
+  items: string[];
+  destacado: boolean;
+};
+const tipoInicial = tiposVehiculo[0].id;
+---
+
+<section class="mv-paq mv-seccion" id="paquetes">
+  <div class="mv-wrap">
+    <h2 class="mv-titulo mv-reveal">Paquetes y precios</h2>
+    <p class="mv-sub mv-reveal">Elige tu tipo de vehículo y mira el precio final con el descuento de campaña.</p>
+
+    <div class="mv-paq__tipos mv-reveal" role="radiogroup" aria-label="Tipo de vehículo">
+      {tiposVehiculo.map((t: { id: string; t: string }, i: number) => (
+        <button
+          type="button"
+          role="radio"
+          aria-checked={i === 0 ? 'true' : 'false'}
+          data-tipo={t.id}
+          class:list={['mv-paq__tipo', { 'is-activo': i === 0 }]}
+        >{t.t}</button>
+      ))}
+    </div>
+
+    <div class="mv-paq__grid">
+      {paquetes.map((p: Paquete) => {
+        const ahorro = Math.round((1 - p.precios[tipoInicial] / p.antes[tipoInicial]) * 100);
+        return (
+          <article
+            class:list={['mv-paq__card mv-reveal', { 'is-destacado': p.destacado }]}
+            data-precios={JSON.stringify(p.precios)}
+            data-antes={JSON.stringify(p.antes)}
+          >
+            {p.destacado && <span class="mv-paq__cinta">Más elegido</span>}
+            <h3>{p.t}</h3>
+            <p class="mv-paq__d">{p.d}</p>
+
+            <div class="mv-paq__precio">
+              <small>Desde</small>
+              <b data-precio>{soles(p.precios[tipoInicial])}</b>
+              <span class="mv-paq__antes">
+                <s data-antes-txt>{soles(p.antes[tipoInicial])}</s>
+                <em data-ahorro>-{ahorro}%</em>
+              </span>
+            </div>
+
+            <ul>
+              {p.items.map((it: string) => (
+                <li><Icono nombre="check" size={16} trazo={2.4} />{it}</li>
+              ))}
+            </ul>
+
+            <a href="#contactar" class={p.destacado ? 'mv-cta mv-paq__btn' : 'mv-paq__btn mv-paq__btn--linea'} data-elegir={p.id}>
+              <span>Reservar este paquete</span>
+            </a>
+          </article>
+        );
+      })}
+    </div>
+
+    <p class="mv-paq__legal">Precios referenciales en soles, incluyen IGV y mano de obra. Aceite y filtros según ficha del fabricante; repuestos adicionales se cotizan aparte.</p>
+  </div>
+</section>
+
+<script>
+  const fmt = (n: number) => 'S/ ' + Number(n).toLocaleString('es-PE', { maximumFractionDigits: 0 });
+  const raiz = document.querySelector<HTMLElement>('.tpl-mantenimiento-vip #paquetes');
+  const botones = Array.from(raiz?.querySelectorAll<HTMLButtonElement>('[data-tipo]') ?? []);
+  const cards = Array.from(raiz?.querySelectorAll<HTMLElement>('[data-precios]') ?? []);
+
+  function aplicar(tipo: string) {
+    botones.forEach((b) => {
+      const on = b.dataset.tipo === tipo;
+      b.classList.toggle('is-activo', on);
+      b.setAttribute('aria-checked', String(on));
+    });
+    cards.forEach((c) => {
+      const precios = JSON.parse(c.dataset.precios ?? '{}') as Record<string, number>;
+      const antes = JSON.parse(c.dataset.antes ?? '{}') as Record<string, number>;
+      const p = c.querySelector<HTMLElement>('[data-precio]');
+      const a = c.querySelector<HTMLElement>('[data-antes-txt]');
+      const ah = c.querySelector<HTMLElement>('[data-ahorro]');
+      if (p) {
+        p.textContent = fmt(precios[tipo]);
+        p.classList.remove('is-flash');
+        void p.offsetWidth;
+        p.classList.add('is-flash');
+      }
+      if (a) a.textContent = fmt(antes[tipo]);
+      if (ah) ah.textContent = '-' + Math.round((1 - precios[tipo] / antes[tipo]) * 100) + '%';
+    });
+    raiz?.setAttribute('data-tipo-activo', tipo);
+  }
+
+  botones.forEach((b) => b.addEventListener('click', () => aplicar(b.dataset.tipo ?? 'sedan')));
+
+  // "Reservar este paquete" -> preselecciona paquete y tipo en el formulario
+  raiz?.querySelectorAll<HTMLAnchorElement>('[data-elegir]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const paq = document.getElementById('mv-f-paquete') as HTMLSelectElement | null;
+      const tipo = document.getElementById('mv-f-tipo') as HTMLSelectElement | null;
+      if (paq) paq.value = a.dataset.elegir ?? '';
+      if (tipo) tipo.value = raiz?.getAttribute('data-tipo-activo') ?? 'sedan';
+      paq?.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  });
+</script>
+
+<style>
+  .mv-paq {
+    background: var(--mv-panel);
+  }
+
+  .mv-paq__tipos {
+    display: flex;
+    justify-content: center;
+    gap: 0.3rem;
+    width: fit-content;
+    max-width: 100%;
+    margin: 2rem auto 0;
+    padding: 0.3rem;
+    border-radius: 999px;
+    background: var(--mv-negro);
+    border: 1px solid var(--mv-linea);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .mv-paq__tipo {
+    flex-shrink: 0;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.86rem;
+    color: var(--mv-humo);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .mv-paq__tipo.is-activo {
+    background: var(--mv-rojo);
+    color: #fff;
+  }
+
+  .mv-paq__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 2.6rem;
+    align-items: stretch;
+  }
+
+  .mv-paq__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.7rem 1.8rem;
+    background: var(--mv-card);
+    border-radius: 14px;
+    border: 1px solid transparent;
+  }
+
+  .mv-paq__card.is-destacado {
+    background: var(--mv-negro);
+    border-color: var(--mv-rojo);
+  }
+
+  .mv-paq__cinta {
+    position: absolute;
+    top: -12px;
+    left: 1.7rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--mv-rojo);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .mv-paq__card h3 {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+  }
+
+  .mv-paq__d {
+    margin-top: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--mv-humo);
+    min-height: 2.8em;
+  }
+
+  .mv-paq__precio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.6rem;
+    margin-top: 1.3rem;
+    padding-bottom: 1.3rem;
+    border-bottom: 1px solid var(--mv-linea);
+  }
+
+  .mv-paq__precio small {
+    width: 100%;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mv-humo);
+  }
+
+  .mv-paq__precio b {
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .mv-paq__precio b.is-flash {
+    animation: mv-flash 0.5s ease;
+  }
+
+  @keyframes mv-flash {
+    from { color: var(--mv-rojo); transform: translateY(-4px); }
+  }
+
+  .mv-paq__antes {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .mv-paq__antes s {
+    color: var(--mv-humo-2);
+  }
+
+  .mv-paq__antes em {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--mv-rojo);
+  }
+
+  .mv-paq__card ul {
+    display: grid;
+    gap: 0.55rem;
+    margin-block: 1.3rem 1.8rem;
+    flex: 1;
+    align-content: start;
+  }
+
+  .mv-paq__card li {
+    display: flex;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .mv-paq__card li :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--mv-rojo);
+  }
+
+  .mv-paq__btn {
+    align-self: flex-start;
+    font-size: 0.82rem;
+  }
+
+  .mv-paq__btn--linea {
+    display: inline-flex;
+    padding: 0.85rem 1.5rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .mv-paq__btn--linea:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .mv-paq__legal {
+    margin-top: 1.8rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--mv-humo-2);
+  }
+
+  @media (max-width: 900px) {
+    .mv-paq__grid {
+      grid-template-columns: 1fr;
+      max-width: 480px;
+      margin-inline: auto;
+    }
+    .mv-paq__card.is-destacado {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .mv-paq__tipos {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .mv-paq__tipo {
+      padding-inline: 0.9rem;
+    }
+  }
+</style>

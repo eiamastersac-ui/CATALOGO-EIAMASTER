@@ -1,0 +1,324 @@
+---
+import { kardex } from '../datos/notaria.js';
+
+interface Estado { e: string; d: string }
+const estados = kardex.estados as Estado[];
+---
+
+<section class="nc-kdx" id="consultas" aria-labelledby="nc-kdx-h">
+  <img class="nc-kdx__fondo" src={kardex.img} alt="" loading="lazy" aria-hidden="true" />
+  <div class="nc-kdx__velo" aria-hidden="true"></div>
+
+  <div class="nc-wrap nc-kdx__cont">
+    <div class="nc-kdx__fila">
+      <h2 id="nc-kdx-h">{kardex.titulo}</h2>
+      <button type="button" class="nc-btn nc-btn--claro" id="nc-kdx-toggle" aria-expanded="false" aria-controls="nc-kdx-panel">
+        Consultas en línea
+      </button>
+    </div>
+
+    <div class="nc-kdx__panel" id="nc-kdx-panel" hidden>
+      <p class="nc-kdx__txt">{kardex.texto}</p>
+      <form class="nc-kdx__form" id="nc-kdx-form" novalidate>
+        <label>
+          <span>Tipo</span>
+          <select class="nc-campo" id="nc-kdx-tipo">
+            <option>Escritura pública</option>
+            <option>Asunto no contencioso</option>
+            <option>Transferencia vehicular</option>
+          </select>
+        </label>
+        <label>
+          <span>N.º de kardex</span>
+          <input class="nc-campo" id="nc-kdx-num" inputmode="numeric" placeholder="Ej. 45821" maxlength="8" />
+        </label>
+        <label>
+          <span>Año</span>
+          <select class="nc-campo" id="nc-kdx-anio">
+            <option>2026</option>
+            <option>2025</option>
+            <option>2024</option>
+          </select>
+        </label>
+        <button type="submit" class="nc-btn nc-btn--lleno">Consultar</button>
+      </form>
+      <p class="nc-kdx__error" id="nc-kdx-error" hidden>Ingresa un número de kardex válido (4 a 8 dígitos).</p>
+
+      <div class="nc-kdx__res" id="nc-kdx-res" hidden>
+        <p class="nc-kdx__res-cab">Kardex <b id="nc-kdx-res-n"></b> · <span id="nc-kdx-res-tipo"></span></p>
+        <ol class="nc-kdx__pasos">
+          {estados.map((s, i) => (
+            <li data-paso={i}>
+              <b>{s.e}</b>
+              <span>{s.d}</span>
+            </li>
+          ))}
+        </ol>
+        <p class="nc-kdx__demo">Resultado de demostración: no se consulta ningún sistema real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tg = document.getElementById('nc-kdx-toggle');
+  const panel = document.getElementById('nc-kdx-panel');
+  const form = document.getElementById('nc-kdx-form') as HTMLFormElement | null;
+  const num = document.getElementById('nc-kdx-num') as HTMLInputElement | null;
+  const tipo = document.getElementById('nc-kdx-tipo') as HTMLSelectElement | null;
+  const anio = document.getElementById('nc-kdx-anio') as HTMLSelectElement | null;
+  const err = document.getElementById('nc-kdx-error');
+  const res = document.getElementById('nc-kdx-res');
+
+  tg?.addEventListener('click', () => {
+    if (!panel) return;
+    const abrir = panel.hidden;
+    panel.hidden = !abrir;
+    tg.setAttribute('aria-expanded', String(abrir));
+    tg.textContent = abrir ? 'Cerrar consulta' : 'Consultas en línea';
+    if (abrir) num?.focus();
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = (num?.value || '').trim();
+    const ok = /^\d{4,8}$/.test(v);
+    if (err) err.hidden = ok;
+    if (!ok) {
+      if (res) res.hidden = true;
+      num?.focus();
+      return;
+    }
+    const paso = Number(v) % 4;
+    const n = document.getElementById('nc-kdx-res-n');
+    const t = document.getElementById('nc-kdx-res-tipo');
+    if (n) n.textContent = `${v}-${anio?.value || ''}`;
+    if (t) t.textContent = tipo?.value || '';
+    res?.querySelectorAll<HTMLElement>('[data-paso]').forEach((li) => {
+      const i = Number(li.dataset.paso);
+      li.classList.toggle('is-hecho', i < paso);
+      li.classList.toggle('is-actual', i === paso);
+    });
+    if (res) {
+      res.hidden = false;
+      res.classList.remove('is-anim');
+      void res.offsetWidth;
+      res.classList.add('is-anim');
+    }
+  });
+</script>
+
+<style>
+  .nc-kdx {
+    position: relative;
+    color: #fff;
+    background: var(--nc-carbon);
+    overflow: hidden;
+    scroll-margin-top: calc(var(--nc-hdr) + var(--nc-top) - 1px);
+  }
+
+  .nc-kdx__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .nc-kdx__velo {
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 16, 16, 0.66);
+  }
+
+  .nc-kdx__cont {
+    position: relative;
+    padding-top: clamp(3.2rem, 7vw, 4.5rem);
+    padding-bottom: clamp(3.2rem, 7vw, 4.5rem);
+  }
+
+  .nc-kdx__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.2rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .nc-kdx h2 {
+    font-family: var(--nc-f-sub);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 3.6vw, 2.2rem);
+    color: #fff;
+  }
+
+  .nc-kdx__panel {
+    max-width: 900px;
+    margin: 2rem auto 0;
+    background: #fff;
+    color: var(--nc-texto);
+    padding: clamp(1.3rem, 3.5vw, 2rem);
+    animation: nc-kdx-in 0.3s ease both;
+  }
+
+  .nc-kdx__panel[hidden] {
+    display: none;
+  }
+
+  @keyframes nc-kdx-in {
+    from { opacity: 0; transform: translateY(-8px); }
+  }
+
+  .nc-kdx__txt {
+    font-size: 0.93rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .nc-kdx__form {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 0.7fr auto;
+    gap: 0.8rem;
+    align-items: end;
+  }
+
+  .nc-kdx__form label span {
+    display: block;
+    font-family: var(--nc-f-sub);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--nc-tinta);
+    margin-bottom: 0.3rem;
+  }
+
+  .nc-kdx__form .nc-btn {
+    padding-block: 0.78rem;
+  }
+
+  .nc-kdx__error {
+    color: var(--nc-vino);
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
+  }
+
+  .nc-kdx__res {
+    margin-top: 1.5rem;
+    padding-top: 1.3rem;
+    border-top: 1px solid var(--nc-linea);
+  }
+
+  .nc-kdx__res.is-anim {
+    animation: nc-kdx-in 0.35s ease both;
+  }
+
+  .nc-kdx__res-cab {
+    font-family: var(--nc-f-sub);
+    color: var(--nc-tinta);
+    margin-bottom: 1rem;
+  }
+
+  .nc-kdx__pasos {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+    counter-reset: paso;
+  }
+
+  .nc-kdx__pasos li {
+    counter-increment: paso;
+    position: relative;
+    padding-top: 2.4rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--nc-gris);
+  }
+
+  .nc-kdx__pasos li::before {
+    content: counter(paso);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #cfc8c4;
+    border-radius: 50%;
+    font-family: var(--nc-f-titulo);
+    font-size: 0.85rem;
+    background: #fff;
+    z-index: 1;
+  }
+
+  .nc-kdx__pasos li::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 28px;
+    right: -0.8rem;
+    height: 1px;
+    background: #cfc8c4;
+  }
+
+  .nc-kdx__pasos li:last-child::after {
+    display: none;
+  }
+
+  .nc-kdx__pasos b {
+    display: block;
+    font-family: var(--nc-f-sub);
+    font-size: 0.95rem;
+    color: var(--nc-tinta);
+  }
+
+  .nc-kdx__pasos li.is-hecho::before {
+    content: "✓";
+    background: var(--nc-tinta);
+    border-color: var(--nc-tinta);
+    color: #fff;
+  }
+
+  .nc-kdx__pasos li.is-actual::before {
+    background: var(--nc-vino);
+    border-color: var(--nc-vino);
+    color: #fff;
+  }
+
+  .nc-kdx__pasos li.is-actual b {
+    color: var(--nc-vino);
+  }
+
+  .nc-kdx__demo {
+    font-size: 0.78rem;
+    color: var(--nc-gris);
+    margin-top: 1.1rem;
+  }
+
+  @media (max-width: 760px) {
+    .nc-kdx__form {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .nc-kdx__form label:first-child,
+    .nc-kdx__form .nc-btn {
+      grid-column: 1 / -1;
+    }
+
+    .nc-kdx__pasos {
+      grid-template-columns: 1fr;
+    }
+
+    .nc-kdx__pasos li {
+      padding: 0 0 0 2.6rem;
+      min-height: 28px;
+    }
+
+    .nc-kdx__pasos li::after {
+      display: none;
+    }
+  }
+</style>

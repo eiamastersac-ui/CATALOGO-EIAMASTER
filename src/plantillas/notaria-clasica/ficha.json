@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Notaría (Estilo Notaría Paino)",
+  "categoria": "notaria",
+  "descripcion": "Portal de notaría clásica en una sola página: cabecera fija con fila de navegación en celdas y menús desplegables, hero de foto a pantalla completa con tarjeta de horarios y 3 accesos (consultas, trámites, pagos), tarjetas foto-primero de servicios con descripción al pasar el mouse, servicios recurrentes, consulta de contratos por Kardex/DNI/RUC con resultado y línea de tiempo, servicios notariales con requisitos por trámite, bloque institucional a sangre completa, misión y valores, contratos con financiamiento, pagos de kardex, formulario de contacto y asistente virtual flotante. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/notaria-clasica.jpg",
+  "tags": ["notaría", "legal", "trámites", "kardex", "escrituras", "requisitos", "consulta en línea", "chatbot"],
+  "paleta": ["#231f1d", "#f5f4f2", "#a73924", "#222222"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "notariapaino.com.pe",
+  "orden": 85
+}

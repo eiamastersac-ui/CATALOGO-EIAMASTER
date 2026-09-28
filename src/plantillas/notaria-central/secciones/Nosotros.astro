@@ -1,0 +1,183 @@
+---
+import { nosotros, marca } from '../datos/notaria.js';
+---
+
+<section class="nc-seccion nc-nos" id="nosotros">
+  <div class="nc-wrap nc-nos__grid">
+    <div class="nc-nos__izq">
+      <h2 class="nc-titulo-xl">Nosotros</h2>
+      <figure class="nc-nos__foto">
+        <img src={nosotros.img} alt="Notaria atendiendo a una clienta en su despacho" loading="lazy" />
+        <figcaption>
+          <b>{marca.notaria}</b>
+          <span>{marca.cargo}</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <article class="nc-nos__card">
+      <p class="nc-kicker">{nosotros.kicker}</p>
+      <h3 class="nc-nos__h">{nosotros.titulo}</h3>
+      <span class="nc-raya" aria-hidden="true"></span>
+      <p>{nosotros.texto}</p>
+
+      <div class="nc-nos__mas" id="nc-nos-mas" hidden>
+        {nosotros.trayectoria.map((p: string) => <p>{p}</p>)}
+      </div>
+
+      <button type="button" class="nc-btn nc-btn--vino nc-nos__btn" id="nc-nos-btn" aria-expanded="false" aria-controls="nc-nos-mas">
+        Ver más
+      </button>
+
+      <ul class="nc-nos__cifras">
+        {nosotros.cifras.map((c: { n: string; t: string }) => (
+          <li><b>{c.n}</b><span>{c.t}</span></li>
+        ))}
+      </ul>
+    </article>
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById('nc-nos-btn');
+  const mas = document.getElementById('nc-nos-mas');
+  btn?.addEventListener('click', () => {
+    if (!mas) return;
+    const abrir = mas.hidden;
+    mas.hidden = !abrir;
+    btn.setAttribute('aria-expanded', String(abrir));
+    btn.textContent = abrir ? 'Ver menos' : 'Ver más';
+  });
+</script>
+
+<style>
+  .nc-nos__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .nc-nos__foto {
+    position: relative;
+    margin: 2.8rem 0 0 3.5rem;
+  }
+
+  /* bloque gris desplazado detras de la foto (como el original) */
+  .nc-nos__foto::before {
+    content: "";
+    position: absolute;
+    left: -3.5rem;
+    top: 2.5rem;
+    width: 78%;
+    height: 100%;
+    background: var(--nc-papel);
+  }
+
+  .nc-nos__foto img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .nc-nos__foto figcaption {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0 0 0;
+    margin-left: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .nc-nos__foto figcaption b {
+    font-family: var(--nc-f-titulo);
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: var(--nc-tinta);
+  }
+
+  .nc-nos__card {
+    background: #fff;
+    padding: clamp(1.6rem, 4vw, 2.6rem) clamp(1.4rem, 3.5vw, 2.2rem);
+    box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.22);
+    margin-top: 0.5rem;
+  }
+
+  .nc-nos__h {
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    line-height: 1.12;
+  }
+
+  .nc-nos__card p:not(.nc-kicker) {
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+
+  .nc-nos__mas {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--nc-linea);
+    animation: nc-abre 0.35s ease both;
+  }
+
+  .nc-nos__mas[hidden] {
+    display: none;
+  }
+
+  @keyframes nc-abre {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .nc-nos__btn {
+    margin-top: 1.6rem;
+  }
+
+  .nc-nos__cifras {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 2rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--nc-linea);
+    text-align: left;
+  }
+
+  .nc-nos__cifras li {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  .nc-nos__cifras b {
+    font-family: var(--nc-f-titulo);
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: var(--nc-vino);
+  }
+
+  .nc-nos__cifras span {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 860px) {
+    .nc-nos__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nc-nos__foto {
+      margin-left: 2rem;
+    }
+
+    .nc-nos__foto::before {
+      left: -2rem;
+    }
+  }
+</style>

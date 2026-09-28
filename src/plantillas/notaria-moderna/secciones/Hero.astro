@@ -1,0 +1,356 @@
+---
+import { heroSlides, img, marca } from '../datos/notaria.js';
+
+interface Slide {
+  kicker: string;
+  titulo: string;
+  texto: string;
+  cta: { t: string; href?: string; cita?: boolean };
+  img: string;
+}
+const slides = heroSlides as Slide[];
+const total = String(slides.length).padStart(2, '0');
+---
+
+<section class="nm-hero" id="nm-inicio" aria-roledescription="carrusel" aria-label="Presentación de la notaría">
+  <div class="nm-hero__fotos" aria-hidden="true">
+    {slides.map((s, i) => (
+      <img
+        class={`nm-hero__img${i === 0 ? ' is-on' : ''}`}
+        src={img(s.img, 1920)}
+        alt=""
+        loading={i === 0 ? 'eager' : 'lazy'}
+        fetchpriority={i === 0 ? 'high' : 'auto'}
+      />
+    ))}
+  </div>
+  <div class="nm-hero__scrim" aria-hidden="true"></div>
+
+  <div class="nm-wrap nm-hero__cont">
+    {slides.map((s, i) => (
+      <div class={`nm-hero__slide${i === 0 ? ' is-on' : ''}`} data-slide={i} aria-hidden={i === 0 ? 'false' : 'true'}>
+        <p class="nm-hero__cont-num"><b>{String(i + 1).padStart(2, '0')}</b> / {total}</p>
+        <span class="nm-hero__kicker">{s.kicker}</span>
+        <h1>{s.titulo}</h1>
+        <p class="nm-hero__txt">{s.texto}</p>
+        {s.cta.cita ? (
+          <button type="button" class="nm-btn nm-btn--acento" data-cita tabindex={i === 0 ? 0 : -1}>
+            {s.cta.t}
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+          </button>
+        ) : (
+          <a href={s.cta.href} class="nm-btn nm-btn--acento" tabindex={i === 0 ? 0 : -1}>
+            {s.cta.t}
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+          </a>
+        )}
+      </div>
+    ))}
+  </div>
+
+  <div class="nm-hero__ctrl">
+    <button type="button" class="nm-hero__flecha" data-dir="-1" aria-label="Diapositiva anterior">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+    </button>
+    <button type="button" class="nm-hero__flecha nm-hero__flecha--sig" data-dir="1" aria-label="Diapositiva siguiente">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+    </button>
+  </div>
+
+  <div class="nm-hero__base">
+    <div class="nm-wrap nm-hero__base-row">
+      <div class="nm-hero__dots" role="tablist" aria-label="Elegir diapositiva">
+        {slides.map((_, i) => (
+          <button type="button" class={`nm-hero__dot${i === 0 ? ' is-on' : ''}`} data-ir={i} aria-label={`Ir a la diapositiva ${i + 1}`}></button>
+        ))}
+      </div>
+      <ul class="nm-hero__pills" aria-label="Accesos rápidos">
+        <li><button type="button" data-cita>Reserva tu cita</button></li>
+        <li><a href="#kardex">Consulta tu Kardex</a></li>
+        <li><a href="#requisitos">Requisitos</a></li>
+      </ul>
+      <p class="nm-hero__notario">Notario titular · <b>{marca.notario}</b></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('.nm-hero');
+  if (hero) {
+    const imgs = hero.querySelectorAll<HTMLElement>('.nm-hero__img');
+    const slides = hero.querySelectorAll<HTMLElement>('.nm-hero__slide');
+    const dots = hero.querySelectorAll<HTMLElement>('.nm-hero__dot');
+    let idx = 0;
+    let timer: number | undefined;
+
+    const ir = (n: number) => {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => {
+        const on = i === idx;
+        s.classList.toggle('is-on', on);
+        s.setAttribute('aria-hidden', String(!on));
+        s.querySelectorAll<HTMLElement>('a, button').forEach((b) => (b.tabIndex = on ? 0 : -1));
+      });
+      imgs.forEach((im, i) => im.classList.toggle('is-on', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+    };
+
+    const auto = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => ir(idx + 1), 6500);
+    };
+
+    hero.querySelectorAll<HTMLElement>('[data-dir]').forEach((b) =>
+      b.addEventListener('click', () => {
+        ir(idx + Number(b.dataset.dir));
+        auto();
+      }),
+    );
+    dots.forEach((d) =>
+      d.addEventListener('click', () => {
+        ir(Number(d.dataset.ir));
+        auto();
+      }),
+    );
+    hero.addEventListener('mouseenter', () => window.clearInterval(timer));
+    hero.addEventListener('mouseleave', auto);
+    auto();
+  }
+</script>
+
+<style>
+  .nm-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+    background: var(--nm-tinta-2);
+  }
+
+  .nm-hero__fotos,
+  .nm-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .nm-hero__img {
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 1s ease, transform 7s ease;
+  }
+
+  .nm-hero__img.is-on {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* scrim de legibilidad sobre la foto (no decorativo) */
+  .nm-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(20, 28, 33, 0.62) 0%, rgba(20, 28, 33, 0.1) 30%, rgba(20, 28, 33, 0.2) 62%, rgba(20, 28, 33, 0.78) 100%),
+      linear-gradient(90deg, rgba(20, 28, 33, 0.72) 0%, rgba(20, 28, 33, 0.3) 55%, rgba(20, 28, 33, 0) 100%);
+  }
+
+  .nm-hero__cont {
+    position: relative;
+    display: grid;
+    padding-top: var(--nm-hdr);
+  }
+
+  .nm-hero__slide {
+    grid-area: 1 / 1;
+    max-width: 640px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+  }
+
+  .nm-hero__slide.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nm-hero__cont-num {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 0.4rem;
+  }
+
+  .nm-hero__cont-num b {
+    font-size: 1.7rem;
+    font-weight: 300;
+    color: var(--nm-acento);
+  }
+
+  .nm-hero__kicker {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .nm-hero h1 {
+    color: #fff;
+    font-size: clamp(2.2rem, 5.2vw, 3.7rem);
+    line-height: 1.08;
+    margin-bottom: 1.1rem;
+  }
+
+  .nm-hero__txt {
+    max-width: 52ch;
+    color: rgba(255, 255, 255, 0.88);
+    margin-bottom: 1.8rem;
+  }
+
+  .nm-hero__ctrl {
+    position: absolute;
+    right: clamp(1rem, 3vw, 2.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .nm-hero__flecha {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: background 0.2s ease;
+  }
+
+  .nm-hero__flecha:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .nm-hero__flecha--sig {
+    background: var(--nm-acento);
+    border-color: var(--nm-acento);
+  }
+
+  .nm-hero__flecha--sig:hover {
+    background: var(--nm-acento-osc);
+  }
+
+  .nm-hero__flecha svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .nm-hero__base {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .nm-hero__base-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 72px;
+  }
+
+  .nm-hero__dots {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .nm-hero__dot {
+    width: 28px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.35);
+    transition: background 0.2s ease, width 0.2s ease;
+  }
+
+  .nm-hero__dot.is-on {
+    width: 44px;
+    background: #fff;
+  }
+
+  .nm-hero__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nm-hero__pills a,
+  .nm-hero__pills button {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: #fff;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nm-hero__pills a:hover,
+  .nm-hero__pills button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+  }
+
+  .nm-hero__notario {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .nm-hero__notario b {
+    font-family: var(--nm-serif);
+    font-weight: 400;
+    font-size: 0.98rem;
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .nm-hero__notario {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nm-hero {
+      align-items: flex-start;
+    }
+
+    .nm-hero__cont {
+      padding-top: calc(var(--nm-hdr) + 2.5rem);
+    }
+
+    .nm-hero__ctrl {
+      top: auto;
+      bottom: 92px;
+      transform: none;
+      grid-auto-flow: column;
+    }
+
+    .nm-hero__base-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .nm-hero__pills {
+      display: none;
+    }
+  }
+</style>

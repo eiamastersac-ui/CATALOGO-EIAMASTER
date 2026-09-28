@@ -1,0 +1,180 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { pagos } from '../datos/notaria.js';
+
+interface Pago { t: string; d: string; ico: string }
+const lista = pagos.lista as Pago[];
+---
+
+<section class="ncl-seccion ncl-pag" id="ncl-pagos" aria-labelledby="ncl-pag-t">
+  <div class="ncl-wrap">
+    <div class="ncl-pag__cab">
+      <div>
+        <span class="ncl-kicker">Pagos en línea</span>
+        <h2 class="ncl-titulo" id="ncl-pag-t">{pagos.titulo}</h2>
+        <p class="ncl-lead">{pagos.texto}</p>
+      </div>
+      <form class="ncl-pag__form" id="ncl-pag-form" novalidate>
+        <label for="ncl-pag-k">Pago de Kardex</label>
+        <div>
+          <input id="ncl-pag-k" type="text" placeholder="N.° de kardex" autocomplete="off" />
+          <button type="submit" class="ncl-btn ncl-btn--acento">Pagar en línea</button>
+        </div>
+        <p id="ncl-pag-msg" class="ncl-pag__msg" hidden></p>
+      </form>
+    </div>
+
+    <ul class="ncl-pag__grid">
+      {lista.map((p) => (
+        <li class="ncl-pag__item">
+          <span class="ncl-pag__ico"><Icono n={p.ico} size={30} /></span>
+          <h3>{p.t}</h3>
+          <p>{p.d}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const f = document.getElementById('ncl-pag-form') as HTMLFormElement | null;
+  const k = document.getElementById('ncl-pag-k') as HTMLInputElement | null;
+  const msg = document.getElementById('ncl-pag-msg');
+  f?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = (k?.value || '').trim();
+    if (!msg) return;
+    msg.hidden = false;
+    msg.classList.toggle('is-err', v.length < 4);
+    msg.textContent = v.length < 4
+      ? 'Ingrese un número de kardex válido.'
+      : `Kardex ${v.toUpperCase()}: pasarela de pago demostrativa (no se realiza ningún cobro).`;
+  });
+</script>
+
+<style>
+  .ncl-pag {
+    background: var(--ncl-papel);
+  }
+
+  .ncl-pag__cab {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2.5rem;
+    align-items: end;
+    margin-bottom: 2.4rem;
+  }
+
+  .ncl-pag__form {
+    background: #fff;
+    border: 1px solid var(--ncl-linea);
+    border-top: 3px solid var(--ncl-acento);
+    padding: 1.2rem;
+    border-radius: 3px;
+  }
+
+  .ncl-pag__form label {
+    display: block;
+    font-family: var(--ncl-serif);
+    font-size: 1.05rem;
+    color: var(--ncl-tinta);
+    margin-bottom: 0.6rem;
+  }
+
+  .ncl-pag__form div {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .ncl-pag__form input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 0.8rem;
+    border: 1px solid var(--ncl-linea);
+    border-radius: var(--ncl-radio);
+    background: var(--ncl-papel);
+  }
+
+  .ncl-pag__form input:focus {
+    outline: none;
+    border-color: var(--ncl-acento);
+  }
+
+  .ncl-pag__form .ncl-btn {
+    height: 44px;
+    padding-inline: 1rem;
+    font-size: 0.84rem;
+  }
+
+  .ncl-pag__msg {
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--ncl-tinta);
+  }
+
+  .ncl-pag__msg.is-err {
+    color: var(--ncl-acento);
+  }
+
+  .ncl-pag__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .ncl-pag__item {
+    background: #fff;
+    border: 1px solid var(--ncl-linea);
+    border-radius: 3px;
+    padding: 1.4rem 1.2rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .ncl-pag__item:hover {
+    border-color: var(--ncl-acento);
+    transform: translateY(-2px);
+  }
+
+  .ncl-pag__ico {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 50px;
+    color: var(--ncl-acento);
+    border: 2px solid currentColor;
+    border-radius: 10px / 15px;
+    margin-bottom: 1rem;
+  }
+
+  .ncl-pag__item h3 {
+    font-size: 1.02rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .ncl-pag__item p {
+    font-size: 0.82rem;
+    color: var(--ncl-suave);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .ncl-pag__cab {
+      grid-template-columns: 1fr;
+    }
+
+    .ncl-pag__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ncl-pag__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ncl-pag__form div {
+      flex-direction: column;
+    }
+  }
+</style>

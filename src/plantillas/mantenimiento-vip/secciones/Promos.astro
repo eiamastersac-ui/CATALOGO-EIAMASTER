@@ -1,0 +1,309 @@
+---
+import { promos } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+
+type Promo = { img: string; kicker: string; grande: string; t: string; acento: string; regalo: string };
+---
+
+<section class="mv-pro" id="promos" aria-roledescription="carrusel" aria-label="Promociones vigentes">
+  <h2 class="mv-titulo mv-reveal">Promos del mes</h2>
+
+  <div class="mv-pro__viewport" id="mv-pro-vp">
+    <ul class="mv-pro__track" id="mv-pro-track">
+      {promos.map((p: Promo, i: number) => (
+        <li class:list={['mv-pro__slide', { 'is-activo': i === 0 }]} data-i={i} aria-label={`${i + 1} de ${promos.length}`}>
+          <img src={p.img} alt="" loading={i === 0 ? 'eager' : 'lazy'} />
+          <div class="mv-pro__txt">
+            <p class="mv-pro__kicker">{p.kicker}</p>
+            <p class="mv-pro__grande">{p.grande}<span>{p.t}</span></p>
+            <p class="mv-pro__acento">{p.acento}</p>
+            <a href="#contactar" class="mv-cta mv-pro__cta" tabindex={i === 0 ? 0 : -1}><span>Agenda tu cita aquí</span></a>
+          </div>
+          <span class="mv-pro__sello">{p.regalo}</span>
+          <div class="mv-pro__pie">
+            <small>Aplican términos y condiciones</small>
+            <b>tienda<span>.</span>com</b>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <button type="button" class="mv-pro__flecha mv-pro__flecha--izq" id="mv-pro-prev" aria-label="Promo anterior">
+      <Icono nombre="izq" size={22} trazo={2.2} />
+    </button>
+    <button type="button" class="mv-pro__flecha mv-pro__flecha--der" id="mv-pro-next" aria-label="Promo siguiente">
+      <Icono nombre="der" size={22} trazo={2.2} />
+    </button>
+  </div>
+
+  <div class="mv-pro__dots" id="mv-pro-dots">
+    {promos.map((_: Promo, i: number) => (
+      <button type="button" class:list={[{ 'is-activo': i === 0 }]} data-ir={i} aria-label={`Ir a la promo ${i + 1}`}></button>
+    ))}
+  </div>
+</section>
+
+<script>
+  const vp = document.getElementById('mv-pro-vp');
+  const track = document.getElementById('mv-pro-track');
+  const slides = Array.from(track?.querySelectorAll<HTMLElement>('.mv-pro__slide') ?? []);
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#mv-pro-dots [data-ir]'));
+  let idx = 0;
+  let timer: number | undefined;
+
+  function ir(n: number) {
+    if (!vp || !track || !slides.length) return;
+    idx = (n + slides.length) % slides.length;
+    const s = slides[idx];
+    const x = vp.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
+    track.style.transform = `translateX(${x}px)`;
+    slides.forEach((el, i) => {
+      el.classList.toggle('is-activo', i === idx);
+      el.querySelector('a')?.setAttribute('tabindex', i === idx ? '0' : '-1');
+    });
+    dots.forEach((d, i) => d.classList.toggle('is-activo', i === idx));
+  }
+
+  function auto() {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => ir(idx + 1), 6000);
+  }
+
+  document.getElementById('mv-pro-next')?.addEventListener('click', () => { ir(idx + 1); auto(); });
+  document.getElementById('mv-pro-prev')?.addEventListener('click', () => { ir(idx - 1); auto(); });
+  dots.forEach((d) => d.addEventListener('click', () => { ir(Number(d.dataset.ir)); auto(); }));
+  // click en una promo lateral la trae al centro
+  slides.forEach((s, i) => s.addEventListener('click', (e: MouseEvent) => {
+    if (i !== idx) { e.preventDefault(); ir(i); auto(); }
+  }));
+  vp?.addEventListener('mouseenter', () => window.clearInterval(timer));
+  vp?.addEventListener('mouseleave', auto);
+
+  // swipe tactil
+  let x0 = 0;
+  vp?.addEventListener('touchstart', (e: TouchEvent) => { x0 = e.touches[0].clientX; }, { passive: true });
+  vp?.addEventListener('touchend', (e: TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) { ir(idx + (dx < 0 ? 1 : -1)); auto(); }
+  });
+
+  window.addEventListener('resize', () => ir(idx));
+  window.addEventListener('load', () => ir(idx));
+  ir(0);
+  auto();
+</script>
+
+<style>
+  .mv-pro {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .mv-pro__viewport {
+    position: relative;
+    margin-top: 2.4rem;
+    overflow: hidden;
+  }
+
+  .mv-pro__track {
+    display: flex;
+    gap: 1.5rem;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .mv-pro__slide {
+    position: relative;
+    flex: 0 0 min(70vw, 1050px);
+    aspect-ratio: 21 / 10;
+    overflow: hidden;
+    background: var(--mv-card);
+    cursor: pointer;
+    opacity: 0.45;
+    transition: opacity 0.5s ease;
+  }
+
+  .mv-pro__slide.is-activo {
+    opacity: 1;
+    cursor: default;
+  }
+
+  .mv-pro__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mv-pro__slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(11, 11, 11, 0.85) 0%, rgba(11, 11, 11, 0.45) 50%, transparent 80%);
+  }
+
+  .mv-pro__txt {
+    position: absolute;
+    z-index: 1;
+    left: 6%;
+    top: 12%;
+    max-width: 58%;
+    transform: rotate(-4deg);
+    transform-origin: left;
+  }
+
+  .mv-pro__kicker {
+    font-size: clamp(0.9rem, 2.2vw, 1.9rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    line-height: 1;
+    color: #e6e6e6;
+  }
+
+  .mv-pro__grande {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6rem;
+    font-size: clamp(2.6rem, 8vw, 7rem);
+    font-weight: 900;
+    font-style: italic;
+    line-height: 0.9;
+    color: #f0f0f0;
+    text-shadow: 0 3px 0 #7a7a7a;
+  }
+
+  .mv-pro__grande span {
+    max-width: 7ch;
+    font-size: 0.26em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-shadow: none;
+    padding-bottom: 0.4em;
+  }
+
+  .mv-pro__acento {
+    font-size: clamp(0.9rem, 2.2vw, 1.8rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    color: var(--mv-rojo);
+    line-height: 1.1;
+  }
+
+  .mv-pro__cta {
+    margin-top: clamp(0.8rem, 2.5vw, 1.8rem);
+    font-size: clamp(0.72rem, 1.3vw, 1rem);
+    padding: clamp(0.55rem, 1.2vw, 0.9rem) clamp(1rem, 2.4vw, 2rem);
+  }
+
+  .mv-pro__sello {
+    position: absolute;
+    z-index: 1;
+    right: 4%;
+    top: 7%;
+    width: clamp(70px, 11vw, 130px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 0.8rem;
+    background: var(--mv-negro);
+    border: 2px solid #fff;
+    font-size: clamp(0.58rem, 1vw, 0.8rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+    transform: rotate(8deg);
+  }
+
+  .mv-pro__pie {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 13%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 4%;
+    background: #fff;
+    color: var(--mv-negro);
+  }
+
+  .mv-pro__pie small {
+    font-size: clamp(0.55rem, 0.9vw, 0.72rem);
+    color: #777;
+  }
+
+  .mv-pro__pie b {
+    font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .mv-pro__pie b span {
+    color: var(--mv-rojo);
+  }
+
+  .mv-pro__flecha {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 2;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(11, 11, 11, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background 0.2s ease;
+  }
+
+  .mv-pro__flecha:hover {
+    background: var(--mv-rojo);
+  }
+
+  .mv-pro__flecha--izq {
+    left: calc(50% - min(35vw, 525px) - 24px);
+  }
+
+  .mv-pro__flecha--der {
+    right: calc(50% - min(35vw, 525px) - 24px);
+  }
+
+  .mv-pro__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+  }
+
+  .mv-pro__dots button {
+    width: 28px;
+    height: 4px;
+    border-radius: 2px;
+    background: #444;
+    transition: background 0.2s ease, width 0.3s ease;
+  }
+
+  .mv-pro__dots button.is-activo {
+    width: 44px;
+    background: var(--mv-rojo);
+  }
+
+  @media (max-width: 700px) {
+    .mv-pro__slide {
+      flex-basis: 86vw;
+      aspect-ratio: 4 / 3.2;
+    }
+    .mv-pro__txt {
+      max-width: 80%;
+    }
+    .mv-pro__flecha {
+      display: none;
+    }
+  }
+</style>

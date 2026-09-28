@@ -1,0 +1,342 @@
+---
+import { productos, tiposVehiculo, marcas } from '../datos/llantas.js';
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+
+interface Tipo { id: string; t: string }
+const marcasOrden = [...marcas].sort();
+---
+
+<section class="ll-seccion ll-cat" id="catalogo" aria-labelledby="ll-cat-titulo">
+  <div class="ll-wrap">
+    <header class="ll-cabeza">
+      <span class="ll-kicker">- Tienda online -</span>
+      <h2 class="ll-titulo" id="ll-cat-titulo">Compra <em>online</em></h2>
+      <p>Delivery e instalacion a todo Lima. Precio por unidad, incluye montaje y balanceo en tienda.</p>
+    </header>
+
+    <div class="ll-cat__layout">
+      <aside class="ll-cat__filtros" aria-label="Filtros">
+        <div class="ll-cat__caja">
+          <h3>Por tipo de vehiculo</h3>
+          {tiposVehiculo.map((t: Tipo) => (
+            <label class="ll-check">
+              <input type="checkbox" name="tipo" value={t.id} />
+              <span>{t.t}</span>
+            </label>
+          ))}
+        </div>
+        <div class="ll-cat__caja">
+          <h3>Por marca</h3>
+          {marcasOrden.map((m: string) => (
+            <label class="ll-check">
+              <input type="checkbox" name="marca" value={m} />
+              <span>{m.charAt(0) + m.slice(1).toLowerCase()}</span>
+            </label>
+          ))}
+        </div>
+        <button type="button" class="ll-cat__limpiar" id="ll-cat-limpiar">Limpiar filtros</button>
+      </aside>
+
+      <div class="ll-cat__main">
+        <div class="ll-cat__barra">
+          <p id="ll-cat-n" aria-live="polite">{productos.length} productos</p>
+          <span class="ll-cat__chip" id="ll-cat-chip" hidden>
+            Medida: <b id="ll-cat-chip-tx"></b>
+            <button type="button" id="ll-cat-chip-x" aria-label="Quitar medida">&times;</button>
+          </span>
+          <label class="ll-cat__orden">
+            <span>Ordenar</span>
+            <select id="ll-cat-orden">
+              <option value="">Relevancia</option>
+              <option value="asc">Precio: menor a mayor</option>
+              <option value="desc">Precio: mayor a menor</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="ll-cat__grid" id="ll-cat-grid">
+          {productos.map((p: any) => <TarjetaProducto producto={p} />)}
+        </div>
+        <p class="ll-cat__vacio" id="ll-cat-vacio" hidden>
+          No encontramos llantas con esos filtros. Escribenos por el chat y te conseguimos la medida.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const grid = document.getElementById('ll-cat-grid');
+  const cards = Array.from(grid?.querySelectorAll<HTMLElement>('.ll-prod') ?? []);
+  const original = [...cards];
+  const n = document.getElementById('ll-cat-n');
+  const vacio = document.getElementById('ll-cat-vacio');
+  const chip = document.getElementById('ll-cat-chip');
+  const chipTx = document.getElementById('ll-cat-chip-tx');
+  const orden = document.getElementById('ll-cat-orden') as HTMLSelectElement | null;
+  const checks = Array.from(document.querySelectorAll<HTMLInputElement>('.ll-cat__filtros input[type="checkbox"]'));
+
+  const medida = { ancho: '', perfil: '', aro: '' };
+
+  function marcados(name: string): string[] {
+    return checks.filter((c) => c.name === name && c.checked).map((c) => c.value);
+  }
+
+  function aplicar() {
+    const tipos = marcados('tipo');
+    const marcas = marcados('marca');
+    let visibles = 0;
+    cards.forEach((c) => {
+      const d = c.dataset;
+      const ok =
+        (tipos.length === 0 || tipos.includes(d.tipo || '')) &&
+        (marcas.length === 0 || marcas.includes(d.marca || '')) &&
+        (!medida.ancho || d.ancho === medida.ancho) &&
+        (!medida.perfil || d.perfil === medida.perfil) &&
+        (!medida.aro || d.aro === medida.aro);
+      c.hidden = !ok;
+      if (ok) visibles++;
+    });
+    if (n) n.textContent = `${visibles} producto${visibles === 1 ? '' : 's'}`;
+    if (vacio) vacio.hidden = visibles > 0;
+
+    const hayMedida = Boolean(medida.ancho);
+    if (chip) chip.hidden = !hayMedida;
+    if (chipTx) {
+      chipTx.textContent =
+        medida.ancho + (medida.perfil ? `/${medida.perfil}` : '') + (medida.aro ? ` R${medida.aro}` : '');
+    }
+  }
+
+  function ordenar() {
+    if (!grid) return;
+    const v = orden?.value;
+    const lista = v
+      ? [...cards].sort((a, b) => {
+          const pa = Number(a.dataset.precio);
+          const pb = Number(b.dataset.precio);
+          return v === 'asc' ? pa - pb : pb - pa;
+        })
+      : original;
+    lista.forEach((c) => grid.appendChild(c));
+  }
+
+  checks.forEach((c) => c.addEventListener('change', aplicar));
+  orden?.addEventListener('change', ordenar);
+
+  document.getElementById('ll-cat-chip-x')?.addEventListener('click', () => {
+    medida.ancho = medida.perfil = medida.aro = '';
+    aplicar();
+  });
+
+  document.getElementById('ll-cat-limpiar')?.addEventListener('click', () => {
+    checks.forEach((c) => (c.checked = false));
+    medida.ancho = medida.perfil = medida.aro = '';
+    aplicar();
+  });
+
+  window.addEventListener('ll-filtro', (ev: Event) => {
+    const d = (ev as CustomEvent).detail as Record<string, string>;
+    if ('tipo' in d) {
+      checks.forEach((c) => {
+        if (c.name === 'tipo') c.checked = c.value === d.tipo;
+      });
+    }
+    if ('marca' in d) {
+      checks.forEach((c) => {
+        if (c.name === 'marca') c.checked = c.value === d.marca;
+      });
+    }
+    if ('ancho' in d) {
+      medida.ancho = d.ancho || '';
+      medida.perfil = d.perfil || '';
+      medida.aro = d.aro || '';
+    }
+    aplicar();
+  });
+</script>
+
+<style>
+  .ll-cat__layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    align-items: start;
+  }
+
+  .ll-cat__filtros {
+    position: sticky;
+    top: calc(var(--ll-hdr) + 1rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ll-cat__caja {
+    background: var(--ll-gris-claro);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .ll-cat__caja h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .ll-check {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.84rem;
+    cursor: pointer;
+  }
+
+  .ll-check input {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--ll-rojo);
+    border-radius: 3px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .ll-check input:checked {
+    background: var(--ll-rojo);
+  }
+
+  .ll-check input:checked::after {
+    content: "";
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .ll-check input:focus-visible {
+    outline: 2px solid var(--ll-negro);
+    outline-offset: 2px;
+  }
+
+  .ll-cat__limpiar {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ll-rojo);
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ll-cat__barra {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.1rem;
+    font-size: 0.85rem;
+  }
+
+  .ll-cat__barra > p {
+    font-weight: 600;
+  }
+
+  .ll-cat__chip[hidden] {
+    display: none;
+  }
+
+  .ll-cat__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--ll-negro);
+    color: #fff;
+    border-radius: 20px;
+    padding: 0.25rem 0.4rem 0.25rem 0.8rem;
+    font-size: 0.78rem;
+  }
+
+  .ll-cat__chip button {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ll-rojo);
+    color: #fff;
+    line-height: 1;
+  }
+
+  .ll-cat__orden {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ll-gris);
+  }
+
+  .ll-cat__orden select {
+    border: 1px solid var(--ll-linea);
+    border-radius: 6px;
+    padding: 0.45rem 0.6rem;
+    background: #fff;
+    font-size: 0.82rem;
+  }
+
+  .ll-cat__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .ll-cat__vacio[hidden] {
+    display: none;
+  }
+
+  .ll-cat__vacio {
+    padding: 2rem;
+    text-align: center;
+    background: var(--ll-gris-claro);
+    border-radius: 10px;
+    color: var(--ll-gris);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .ll-cat__layout {
+      grid-template-columns: 1fr;
+    }
+
+    .ll-cat__filtros {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .ll-cat__caja {
+      flex: 1 1 220px;
+    }
+
+    .ll-cat__limpiar {
+      flex-basis: 100%;
+    }
+
+    .ll-cat__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ll-cat__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ll-cat__orden {
+      margin-left: 0;
+    }
+  }
+</style>

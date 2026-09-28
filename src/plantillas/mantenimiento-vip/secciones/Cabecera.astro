@@ -1,0 +1,308 @@
+---
+import { marca, nav, telHref } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<header class="mv-hdr" id="mv-cabecera">
+  <div class="mv-wrap mv-hdr__row">
+    <a href="#inicio" class="mv-logo" aria-label={`${marca.nombre} — inicio`}>
+      <svg class="mv-logo__mark" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M6 17a14 14 0 0 1 28 0" fill="none" stroke="var(--mv-rojo)" stroke-width="4" stroke-linecap="round" />
+        <path d="M6 23a14 14 0 0 0 28 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+        <path d="M2 20h8l4 7 5-12 3 8h16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="mv-logo__txt">
+        <b>tienda<span>.</span>com</b>
+        <small>{marca.sub}</small>
+      </span>
+    </a>
+
+    <nav class="mv-nav" id="mv-nav" aria-label="Navegación principal">
+      {nav.map((n: { t: string; href: string }, i: number) => (
+        <a href={n.href} class={i === 0 ? 'is-activo' : ''} data-spy={n.href}>{n.t}</a>
+      ))}
+      <a href="#contactar" class="mv-nav__cita">Quiero una cita</a>
+    </nav>
+
+    <div class="mv-hdr__acc">
+      <a href={telHref} class="mv-hdr__tel" aria-label={`Llamar al ${marca.tel}`}>
+        <Icono nombre="telefono" size={20} />
+        <span>{marca.tel}</span>
+      </a>
+      <button type="button" class="mv-hdr__burger" id="mv-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mv-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('mv-cabecera');
+  const burger = document.getElementById('mv-burger');
+  const nav = document.getElementById('mv-nav');
+  const links = Array.from(nav?.querySelectorAll<HTMLAnchorElement>('a[data-spy]') ?? []);
+
+  function cerrar() {
+    nav?.classList.remove('is-abierto');
+    burger?.classList.remove('is-abierto');
+    burger?.setAttribute('aria-expanded', 'false');
+    hdr?.classList.remove('is-menu');
+  }
+
+  burger?.addEventListener('click', () => {
+    const abierto = !!nav?.classList.toggle('is-abierto');
+    burger.classList.toggle('is-abierto', abierto);
+    burger.setAttribute('aria-expanded', String(abierto));
+    hdr?.classList.toggle('is-menu', abierto);
+  });
+
+  nav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', cerrar));
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  // Transparente sobre el hero -> solida al scrollear + scrollspy
+  function alScroll() {
+    hdr?.classList.toggle('is-solida', window.scrollY > 60);
+    // solo marca la seccion que esta cruzando la linea bajo la cabecera
+    // (FAQ, formulario y sedes no estan en el menu -> ninguno activo)
+    let activo: HTMLAnchorElement | undefined = window.scrollY < 60 ? links[0] : undefined;
+    let mejor = -Infinity;
+    for (const a of links) {
+      const id = a.dataset.spy ?? '';
+      const sec = document.querySelector<HTMLElement>(id);
+      if (!sec) continue;
+      const { top, bottom } = sec.getBoundingClientRect();
+      if (top <= 140 && bottom > 140 && top > mejor) {
+        mejor = top;
+        activo = a;
+      }
+    }
+    links.forEach((a) => a.classList.toggle('is-activo', a === activo));
+  }
+  window.addEventListener('scroll', alScroll, { passive: true });
+  alScroll();
+</script>
+
+<style>
+  .mv-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    height: var(--mv-hdr-h);
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s ease, border-color 0.3s ease, height 0.3s ease;
+  }
+
+  .mv-hdr.is-solida,
+  .mv-hdr.is-menu {
+    background: var(--mv-negro);
+    border-color: var(--mv-linea);
+  }
+
+  .mv-hdr__row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .mv-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .mv-logo__mark {
+    width: 40px;
+    height: 40px;
+    color: #fff;
+  }
+
+  .mv-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .mv-logo__txt b {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .mv-logo__txt b span {
+    color: var(--mv-rojo);
+  }
+
+  .mv-logo__txt small {
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-align: right;
+    margin-top: 0.2rem;
+    color: #d6d6d6;
+  }
+
+  .mv-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-left: auto;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .mv-nav a {
+    position: relative;
+    padding-block: 0.3rem;
+    transition: color 0.2s ease;
+  }
+
+  .mv-nav a[data-spy]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 2px;
+    background: var(--mv-rojo);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .mv-nav a:hover {
+    color: #fff;
+  }
+
+  .mv-nav a.is-activo::after {
+    transform: scaleX(1);
+  }
+
+  .mv-nav__cita {
+    display: none;
+  }
+
+  .mv-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .mv-hdr__tel {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+  }
+
+  .mv-hdr__tel svg {
+    color: var(--mv-rojo);
+  }
+
+  .mv-hdr__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    padding-inline: 9px;
+  }
+
+  .mv-hdr__burger span {
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+
+  .mv-hdr__burger.is-abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .mv-hdr__burger.is-abierto span:nth-child(2) { opacity: 0; }
+  .mv-hdr__burger.is-abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 1100px) {
+    .mv-nav {
+      gap: 1.1rem;
+      font-size: 0.84rem;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .mv-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: var(--mv-negro);
+      border-bottom: 1px solid var(--mv-linea);
+      padding: 0.25rem clamp(1rem, 4vw, 2rem) 1.25rem;
+      max-height: calc(100svh - var(--mv-hdr-h));
+      overflow-y: auto;
+    }
+    .mv-nav.is-abierto {
+      display: flex;
+    }
+    .mv-nav a {
+      padding-block: 0.9rem;
+      border-bottom: 1px solid var(--mv-linea);
+      font-size: 1rem;
+    }
+    .mv-nav a::after {
+      display: none;
+    }
+    .mv-nav a.is-activo {
+      color: var(--mv-rojo);
+    }
+    .mv-nav__cita {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      background: var(--mv-rojo);
+      border-radius: 6px;
+      border-bottom: none !important;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .mv-hdr__acc {
+      margin-left: auto;
+    }
+    .mv-hdr__burger {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mv-hdr__tel span {
+      display: none;
+    }
+    .mv-hdr__tel {
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+    }
+    .mv-logo__txt b {
+      font-size: 1.2rem;
+    }
+    .mv-logo__mark {
+      width: 34px;
+      height: 34px;
+    }
+  }
+</style>

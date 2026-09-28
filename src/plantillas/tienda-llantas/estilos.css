@@ -1,0 +1,264 @@
+/* tienda.com Llantas — tokens y utilidades. Todo bajo .tpl-tienda-llantas */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Condensed:wght@500;600;700;800&display=swap");
+
+.tpl-tienda-llantas {
+  --ll-negro: #111111;
+  --ll-negro2: #1b1b1b;
+  --ll-linea-osc: #2b2b2b;
+  --ll-gris-claro: #f5f5f5;
+  --ll-linea: #e6e6e6;
+  --ll-texto: #1a1a1a;
+  --ll-gris: #6b6b6b;
+  --ll-rojo: #c41212;
+  --ll-rojo-osc: #9e0e0e;
+  --ll-blanco: #fff;
+
+  --ll-font: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --ll-titulos: "Roboto Condensed", "Arial Narrow", var(--ll-font);
+  --ll-maxw: 1200px;
+  --ll-hdr: 68px;
+
+  background: var(--ll-blanco);
+  color: var(--ll-texto);
+  font-family: var(--ll-font);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  /* clip (no hidden) para no romper position:sticky/fixed de hijos */
+  overflow-x: clip;
+}
+
+.tpl-tienda-llantas *,
+.tpl-tienda-llantas *::before,
+.tpl-tienda-llantas *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-tienda-llantas h1,
+.tpl-tienda-llantas h2,
+.tpl-tienda-llantas h3,
+.tpl-tienda-llantas h4 {
+  font-family: var(--ll-titulos);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+}
+
+.tpl-tienda-llantas img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-tienda-llantas a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-tienda-llantas button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-tienda-llantas input,
+.tpl-tienda-llantas select {
+  font: inherit;
+}
+
+.tpl-tienda-llantas ul {
+  list-style: none;
+}
+
+.tpl-tienda-llantas .ll-wrap {
+  max-width: var(--ll-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+.tpl-tienda-llantas .ll-seccion {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* Kicker "- MARCAS -" + titulo con palabra en rojo, como el original */
+.tpl-tienda-llantas .ll-kicker {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ll-rojo);
+  margin-bottom: 0.6rem;
+}
+
+.tpl-tienda-llantas .ll-titulo {
+  font-size: clamp(1.9rem, 4.2vw, 2.75rem);
+  color: var(--ll-texto);
+}
+
+.tpl-tienda-llantas .ll-titulo em {
+  font-style: normal;
+  color: var(--ll-rojo);
+}
+
+.tpl-tienda-llantas .ll-cabeza {
+  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.tpl-tienda-llantas .ll-cabeza p {
+  margin-top: 0.9rem;
+  color: var(--ll-gris);
+  font-size: 0.98rem;
+}
+
+.tpl-tienda-llantas .ll-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  font-family: var(--ll-font);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tpl-tienda-llantas .ll-btn--rojo {
+  background: var(--ll-rojo);
+  color: #fff;
+}
+
+.tpl-tienda-llantas .ll-btn--rojo:hover {
+  background: var(--ll-rojo-osc);
+}
+
+.tpl-tienda-llantas .ll-btn--blanco {
+  background: #fff;
+  color: var(--ll-negro);
+}
+
+.tpl-tienda-llantas .ll-btn--blanco:hover {
+  background: var(--ll-rojo);
+  color: #fff;
+}
+
+/* Carril horizontal con scroll-snap (carruseles de producto) */
+.tpl-tienda-llantas .ll-fila {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * 1.25rem) / 4);
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-block: 0.25rem 0.75rem;
+}
+
+.tpl-tienda-llantas .ll-fila::-webkit-scrollbar {
+  display: none;
+}
+
+.tpl-tienda-llantas .ll-fila > * {
+  scroll-snap-align: start;
+}
+
+@media (max-width: 960px) {
+  .tpl-tienda-llantas .ll-fila {
+    grid-auto-columns: calc((100% - 1.25rem) / 2);
+  }
+}
+
+@media (max-width: 540px) {
+  .tpl-tienda-llantas .ll-fila {
+    grid-auto-columns: 78%;
+  }
+}
+
+.tpl-tienda-llantas .ll-flecha {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ll-rojo);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.35);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.tpl-tienda-llantas .ll-flecha:hover {
+  background: var(--ll-rojo);
+  color: #fff;
+}
+
+/* ---- Clases creadas por JS (no reciben data-astro-cid) ---- */
+
+/* Burbujas del chat */
+.tpl-tienda-llantas .ll-chat__msg {
+  max-width: 84%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.tpl-tienda-llantas .ll-chat__msg--bot {
+  background: #fff;
+  color: var(--ll-texto);
+  align-self: flex-start;
+  border-top-left-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.tpl-tienda-llantas .ll-chat__msg--yo {
+  background: var(--ll-negro);
+  color: #fff;
+  align-self: flex-end;
+  border-top-right-radius: 2px;
+}
+
+/* Filas del mini carrito */
+.tpl-tienda-llantas .ll-mini__item {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 0.7rem;
+  align-items: center;
+  padding-block: 0.65rem;
+  border-bottom: 1px solid var(--ll-linea);
+}
+
+.tpl-tienda-llantas .ll-mini__item img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.tpl-tienda-llantas .ll-mini__item b {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.tpl-tienda-llantas .ll-mini__item span {
+  font-size: 0.72rem;
+  color: var(--ll-gris);
+}
+
+.tpl-tienda-llantas .ll-mini__quitar {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--ll-gris);
+  padding: 0.25rem;
+}
+
+.tpl-tienda-llantas .ll-mini__quitar:hover {
+  color: var(--ll-rojo);
+}

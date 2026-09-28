@@ -1,0 +1,220 @@
+---
+import { img } from '../datos/notaria.js';
+---
+
+<section class="nm-ct" id="contacto" aria-labelledby="nm-ct-titulo">
+  <img class="nm-ct__fondo" src={img('laptop', 1800)} alt="" loading="lazy" />
+  <div class="nm-wrap nm-ct__cont">
+    <span class="nm-kicker nm-ct__kicker">Contáctanos</span>
+    <h2 id="nm-ct-titulo">Estamos para ayudarte a resolver tus dudas o consultas</h2>
+    <p class="nm-ct__lead">Llene el siguiente formulario con sus consultas, dudas o sugerencias y lo contactaremos.</p>
+
+    <form class="nm-ct__form" id="nm-ct-form" novalidate>
+      <label>
+        <span>Nombre*</span>
+        <input name="nombre" type="text" required autocomplete="given-name" />
+      </label>
+      <label>
+        <span>Apellidos*</span>
+        <input name="apellidos" type="text" required autocomplete="family-name" />
+      </label>
+      <label>
+        <span>Teléfono*</span>
+        <div class="nm-ct__tel">
+          <select name="pais" aria-label="Código de país">
+            <option>+51</option>
+            <option>+54</option>
+            <option>+56</option>
+            <option>+57</option>
+            <option>+1</option>
+            <option>+34</option>
+          </select>
+          <input name="telefono" type="tel" required inputmode="tel" autocomplete="tel-national" />
+        </div>
+      </label>
+      <label>
+        <span>Correo electrónico*</span>
+        <input name="correo" type="email" required autocomplete="email" />
+      </label>
+      <label>
+        <span>Documento de identidad*</span>
+        <input name="documento" type="text" required inputmode="numeric" />
+      </label>
+      <label>
+        <span>Trámite</span>
+        <select name="tramite">
+          <option>Consulta general</option>
+          <option>Servicios protocolares</option>
+          <option>Servicios extraprotocolares</option>
+          <option>Constitución de empresas</option>
+          <option>Registros públicos</option>
+        </select>
+      </label>
+      <label class="nm-ct__full">
+        <span>Comentarios e indicaciones adicionales</span>
+        <textarea name="comentario" rows="4" placeholder="Indique el detalle de su trámite o algún dato a tener en cuenta: número de Kardex, placa, precio o valor del vehículo, entre otros."></textarea>
+      </label>
+      <div class="nm-ct__full nm-ct__pie">
+        <button type="submit" class="nm-btn nm-btn--acento">
+          Enviar
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+        </button>
+        <p class="nm-ct__msg" id="nm-ct-msg" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('nm-ct-form') as HTMLFormElement | null;
+  const msg = document.getElementById('nm-ct-msg');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form || !msg) return;
+    const faltan = [...form.querySelectorAll<HTMLInputElement>('input[required]')].filter((i) => !i.value.trim() || !i.checkValidity());
+    form.querySelectorAll('.is-error').forEach((el) => el.classList.remove('is-error'));
+    if (faltan.length) {
+      faltan.forEach((i) => i.classList.add('is-error'));
+      faltan[0].focus();
+      msg.textContent = 'Complete los campos obligatorios marcados.';
+      msg.classList.remove('is-ok');
+      return;
+    }
+    const nombre = (form.elements.namedItem('nombre') as HTMLInputElement).value.trim();
+    msg.textContent = `Gracias, ${nombre}. Recibimos su consulta (demo): un asesor le escribirá en breve.`;
+    msg.classList.add('is-ok');
+    form.reset();
+  });
+</script>
+
+<style>
+  .nm-ct {
+    position: relative;
+    background: var(--nm-pizarra);
+    color: rgba(255, 255, 255, 0.86);
+    padding: clamp(3.5rem, 8vw, 5.5rem) 0;
+    overflow: hidden;
+    scroll-margin-top: 70px;
+  }
+
+  .nm-ct__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.18;
+    filter: grayscale(0.6);
+  }
+
+  .nm-ct__cont {
+    position: relative;
+  }
+
+  .nm-ct__kicker {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .nm-ct h2 {
+    color: #fff;
+    font-size: clamp(1.8rem, 3.6vw, 2.5rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .nm-ct__lead {
+    font-size: 0.93rem;
+    margin-bottom: 2rem;
+  }
+
+  .nm-ct__form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem 1.4rem;
+  }
+
+  .nm-ct__form label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .nm-ct__full {
+    grid-column: 1 / -1;
+  }
+
+  .nm-ct__form input,
+  .nm-ct__form select,
+  .nm-ct__form textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 0.75rem 0.85rem;
+    font-size: 0.92rem;
+    font-weight: 400;
+    border-radius: 0;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .nm-ct__form select option {
+    color: var(--nm-tinta-2);
+  }
+
+  .nm-ct__form textarea {
+    resize: vertical;
+  }
+
+  .nm-ct__form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .nm-ct__form input:focus,
+  .nm-ct__form select:focus,
+  .nm-ct__form textarea:focus {
+    outline: none;
+    border-color: var(--nm-acento);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nm-ct__form .is-error {
+    border-color: #e39a8a;
+  }
+
+  .nm-ct__tel {
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .nm-ct__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.4rem;
+  }
+
+  .nm-ct__msg {
+    font-size: 0.88rem;
+    color: #f0c9bf;
+  }
+
+  .nm-ct__msg.is-ok {
+    color: #fff;
+    border-left: 3px solid var(--nm-acento);
+    padding-left: 0.7rem;
+  }
+
+  @media (max-width: 860px) {
+    .nm-ct__form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .nm-ct__form {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

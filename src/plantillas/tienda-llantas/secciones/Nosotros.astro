@@ -1,0 +1,93 @@
+---
+import { nosotros } from '../datos/llantas.js';
+
+interface Dato { n: string; t: string }
+---
+
+<section class="ll-nos" id="nosotros" aria-labelledby="ll-nos-titulo">
+  <div class="ll-nos__foto">
+    <img src={nosotros.img} alt="Taller de tienda.com con llantas exhibidas en la pared" loading="lazy" decoding="async" />
+  </div>
+  <div class="ll-nos__tx">
+    <span class="ll-kicker">- Nosotros -</span>
+    <h2 class="ll-titulo" id="ll-nos-titulo">{nosotros.titulo}</h2>
+    <p>{nosotros.texto}</p>
+    <ul class="ll-nos__datos">
+      {nosotros.datos.map((d: Dato) => (
+        <li><b>{d.n}</b><span>{d.t}</span></li>
+      ))}
+    </ul>
+    <a href="#encuentranos" class="ll-btn ll-btn--rojo">Visita nuestras tiendas</a>
+  </div>
+</section>
+
+<style>
+  .ll-nos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--ll-gris-claro);
+    min-height: 560px;
+  }
+
+  .ll-nos__foto {
+    position: relative;
+    min-height: 320px;
+  }
+
+  .ll-nos__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ll-nos__tx {
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4.5rem);
+    align-self: center;
+    max-width: 620px;
+  }
+
+  .ll-nos__tx > p {
+    margin-top: 1.1rem;
+    color: #3b3b3b;
+    font-size: 0.95rem;
+  }
+
+  .ll-nos__datos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-block: 1.8rem 2rem;
+    border-top: 1px solid #dcdcdc;
+    padding-top: 1.4rem;
+  }
+
+  .ll-nos__datos b {
+    display: block;
+    font-family: var(--ll-titulos);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .ll-nos__datos li:first-child b {
+    color: var(--ll-rojo);
+  }
+
+  .ll-nos__datos span {
+    font-size: 0.78rem;
+    color: var(--ll-gris);
+  }
+
+  @media (max-width: 860px) {
+    .ll-nos {
+      grid-template-columns: 1fr;
+    }
+
+    .ll-nos__foto {
+      min-height: 0;
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

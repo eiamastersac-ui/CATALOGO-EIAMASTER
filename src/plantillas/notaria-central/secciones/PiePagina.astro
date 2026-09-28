@@ -1,0 +1,109 @@
+---
+import { footer, marca } from '../datos/notaria.js';
+
+interface Enlace { t: string; href: string }
+const menu = footer.menu as Enlace[];
+const enlaces = footer.enlaces as Enlace[];
+---
+
+<footer class="nc-pie">
+  <div class="nc-wrap nc-pie__grid">
+    <div>
+      <h2 class="nc-pie__h">Menú Superior</h2>
+      <ul class="nc-pie__menu">
+        {menu.map((m) => <li><a href={m.href}>{m.t}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="nc-pie__h">Nuestros Servicios</h2>
+      <ul class="nc-pie__vinetas">
+        {footer.servicios.map((s: string) => <li><a href="#servicios">{s}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="nc-pie__h">Enlaces Directos</h2>
+      <ul class="nc-pie__vinetas">
+        {enlaces.map((e) => <li><a href={e.href} target="_blank" rel="noopener">{e.t}</a></li>)}
+      </ul>
+    </div>
+  </div>
+  <div class="nc-pie__base">
+    <div class="nc-wrap nc-pie__base-row">
+      <span>{marca.nombre} {marca.sub} | Derechos Reservados</span>
+      <span>{marca.direccion} · {marca.tel}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .nc-pie {
+    background: var(--nc-carbon);
+    color: #fff;
+    font-family: var(--nc-f-sub);
+  }
+
+  .nc-pie__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .nc-pie__h {
+    font-family: var(--nc-f-sub);
+    font-weight: 400;
+    font-size: 1.55rem;
+    color: #fff;
+    margin-bottom: 0.7rem;
+  }
+
+  .nc-pie ul {
+    display: grid;
+    gap: 0.3rem;
+    font-size: 0.93rem;
+    line-height: 1.45;
+  }
+
+  .nc-pie a:hover {
+    color: #d9b7ba;
+  }
+
+  .nc-pie__vinetas li {
+    position: relative;
+    padding-left: 0.9rem;
+  }
+
+  .nc-pie__vinetas li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #9c6a6f;
+  }
+
+  .nc-pie__base {
+    background: #1a1a1a;
+    color: #8a8a8a;
+    font-size: 0.82rem;
+  }
+
+  .nc-pie__base-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.4rem 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  @media (max-width: 820px) {
+    .nc-pie__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

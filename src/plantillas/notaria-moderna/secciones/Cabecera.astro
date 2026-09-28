@@ -1,0 +1,469 @@
+---
+import { marca, nav } from '../datos/notaria.js';
+
+interface SubNav { t: string; href: string }
+interface ItemNav { t: string; href: string; sub?: SubNav[] }
+const items = nav as ItemNav[];
+---
+
+<header class="nm-hdr" id="nm-hdr">
+  <div class="nm-top">
+    <div class="nm-wrap nm-top__row">
+      <span class="nm-top__item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12Z" /></svg>
+        {marca.whatsapp}
+      </span>
+      <a class="nm-top__item" href={marca.telHref}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" /></svg>
+        {marca.tel}
+      </a>
+      <span class="nm-top__item nm-top__item--dir">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+        {marca.direccion}
+      </span>
+      <a class="nm-top__item nm-top__item--mail" href={`mailto:${marca.correo}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1" /><path d="m3 6 9 7 9-7" /></svg>
+        {marca.correo}
+      </a>
+    </div>
+  </div>
+
+  <div class="nm-main">
+    <div class="nm-wrap nm-main__row">
+      <a href="#nm-inicio" class="nm-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+        <svg class="nm-logo__sello" viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <circle cx="20" cy="20" r="13" fill="none" stroke="currentColor" stroke-width="0.8" stroke-dasharray="1.6 1.6" />
+          <path d="M14 15h12M20 15v11M16 26h8" fill="none" stroke="currentColor" stroke-width="1.8" />
+        </svg>
+        <span class="nm-logo__txt">
+          <b>tienda.com</b>
+          <span>Notaría</span>
+        </span>
+      </a>
+
+      <nav class="nm-nav" id="nm-nav" aria-label="Navegación principal">
+        <ul class="nm-nav__lista">
+          {items.map((it) => (
+            <li class={`nm-nav__item${it.sub ? ' nm-nav__item--sub' : ''}`}>
+              {it.sub ? (
+                <>
+                  <button type="button" class="nm-nav__link nm-nav__toggle" aria-expanded="false">
+                    {it.t}
+                    <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                  </button>
+                  <ul class="nm-nav__drop">
+                    {it.sub.map((s) => (
+                      <li><a href={s.href}>{s.t}</a></li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <a href={it.href} class="nm-nav__link">{it.t}</a>
+              )}
+            </li>
+          ))}
+        </ul>
+        <div class="nm-nav__ctas">
+          <a href="#kardex" class="nm-btn nm-btn--borde nm-nav__cta">Consulta tu Kardex</a>
+          <button type="button" class="nm-btn nm-btn--acento nm-nav__cta" data-cita>Reserva tu cita</button>
+        </div>
+      </nav>
+
+      <button type="button" class="nm-hamb" id="nm-hamb" aria-label="Abrir menú" aria-expanded="false" aria-controls="nm-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('nm-hdr');
+  const hamb = document.getElementById('nm-hamb');
+  const navEl = document.getElementById('nm-nav');
+
+  function pintarScroll() {
+    hdr?.classList.toggle('is-solid', window.scrollY > 60);
+  }
+  pintarScroll();
+  window.addEventListener('scroll', pintarScroll, { passive: true });
+
+  function cerrarDrops(excepto?: Element | null) {
+    hdr?.querySelectorAll('.nm-nav__item--sub.is-open').forEach((li) => {
+      if (li !== excepto) {
+        li.classList.remove('is-open');
+        li.querySelector('.nm-nav__toggle')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  hdr?.querySelectorAll<HTMLButtonElement>('.nm-nav__toggle').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const li = btn.closest('.nm-nav__item--sub');
+      if (!li) return;
+      const abierto = li.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(abierto));
+      cerrarDrops(li);
+    });
+  });
+
+  function abrirMenu(v: boolean) {
+    navEl?.classList.toggle('is-open', v);
+    hdr?.classList.toggle('is-menu', v);
+    hamb?.setAttribute('aria-expanded', String(v));
+    hamb?.setAttribute('aria-label', v ? 'Cerrar menú' : 'Abrir menú');
+  }
+
+  hamb?.addEventListener('click', () => abrirMenu(!navEl?.classList.contains('is-open')));
+
+  navEl?.querySelectorAll('a, [data-cita]').forEach((a) => {
+    a.addEventListener('click', () => {
+      abrirMenu(false);
+      cerrarDrops();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (hdr && !hdr.contains(e.target as Node)) cerrarDrops();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      cerrarDrops();
+      abrirMenu(false);
+    }
+  });
+</script>
+
+<style>
+  .nm-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    color: #fff;
+    transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .nm-hdr.is-solid,
+  .nm-hdr.is-menu {
+    background: #fff;
+    color: var(--nm-tinta);
+    box-shadow: 0 8px 24px -18px rgba(31, 42, 48, 0.55);
+  }
+
+  /* barra superior de contacto */
+  .nm-top {
+    font-size: 0.78rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    max-height: 40px;
+    overflow: hidden;
+    transition: max-height 0.25s ease, border-color 0.25s ease;
+  }
+
+  .nm-hdr.is-solid .nm-top {
+    max-height: 0;
+    border-bottom-color: transparent;
+  }
+
+  .nm-top__row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.6rem;
+    height: 38px;
+  }
+
+  .nm-top__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.9;
+    white-space: nowrap;
+  }
+
+  a.nm-top__item:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .nm-top__item svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  .nm-main {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .nm-hdr.is-solid .nm-main,
+  .nm-hdr.is-menu .nm-main {
+    border-bottom-color: var(--nm-linea);
+  }
+
+  .nm-main__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 74px;
+  }
+
+  .nm-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  .nm-logo__sello {
+    width: 40px;
+    height: 40px;
+    color: var(--nm-acento);
+  }
+
+  .nm-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    font-family: var(--nm-serif);
+  }
+
+  .nm-logo__txt b {
+    font-size: 1.45rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .nm-logo__txt span {
+    font-family: var(--nm-sans);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+    opacity: 0.85;
+  }
+
+  .nm-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .nm-nav__lista {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .nm-nav__item {
+    position: relative;
+  }
+
+  .nm-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.6rem 0.7rem;
+    font-size: 0.87rem;
+    font-weight: 500;
+    color: inherit;
+    border-bottom: 2px solid transparent;
+  }
+
+  .nm-nav__link:hover {
+    border-bottom-color: var(--nm-acento);
+  }
+
+  .nm-nav__toggle svg {
+    transition: transform 0.2s ease;
+  }
+
+  .nm-nav__drop {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    min-width: 250px;
+    background: #fff;
+    color: var(--nm-texto);
+    border-top: 3px solid var(--nm-acento);
+    box-shadow: 0 22px 40px -20px rgba(31, 42, 48, 0.5);
+    padding: 0.4rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  }
+
+  .nm-nav__drop::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.9rem;
+    height: 0.9rem;
+  }
+
+  .nm-nav__drop a {
+    display: block;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.87rem;
+  }
+
+  .nm-nav__drop a:hover {
+    background: var(--nm-papel);
+    color: var(--nm-tinta);
+  }
+
+  .nm-nav__item--sub:hover .nm-nav__drop,
+  .nm-nav__item--sub.is-open .nm-nav__drop {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nm-nav__item--sub.is-open .nm-nav__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .nm-nav__ctas {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .nm-nav__cta {
+    padding: 0.65rem 1rem;
+    font-size: 0.84rem;
+  }
+
+  .nm-hdr.is-solid .nm-btn--borde,
+  .nm-hdr.is-menu .nm-btn--borde {
+    color: var(--nm-tinta);
+    border-color: var(--nm-tinta);
+  }
+
+  .nm-hdr.is-solid .nm-btn--borde:hover {
+    background: var(--nm-papel);
+  }
+
+  .nm-hamb {
+    display: none;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: inherit;
+  }
+
+  .nm-hamb span {
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .nm-hdr.is-menu .nm-hamb span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nm-hdr.is-menu .nm-hamb span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nm-hdr.is-menu .nm-hamb span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 1100px) {
+    .nm-top__item--dir {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1040px) {
+    .nm-hamb {
+      display: flex;
+    }
+
+    .nm-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      background: #fff;
+      color: var(--nm-tinta);
+      padding: 0.5rem clamp(1rem, 4vw, 2rem) 1.5rem;
+      border-top: 1px solid var(--nm-linea);
+      box-shadow: 0 20px 30px -20px rgba(31, 42, 48, 0.4);
+      max-height: calc(100svh - 112px);
+      overflow-y: auto;
+      display: none;
+    }
+
+    .nm-nav.is-open {
+      display: flex;
+    }
+
+    .nm-nav__lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .nm-nav__item {
+      border-bottom: 1px solid var(--nm-linea);
+    }
+
+    .nm-nav__link {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      border-bottom: 0;
+    }
+
+    .nm-nav__drop {
+      position: static;
+      min-width: 0;
+      box-shadow: none;
+      border-top: 0;
+      padding: 0 0 0.6rem 0.75rem;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      display: none;
+    }
+
+    .nm-nav__item--sub:hover .nm-nav__drop {
+      display: none;
+    }
+
+    .nm-nav__item--sub.is-open .nm-nav__drop {
+      display: block;
+    }
+
+    .nm-nav__ctas {
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nm-top__item--mail {
+      display: none;
+    }
+
+    .nm-top__row {
+      justify-content: center;
+      gap: 1.2rem;
+    }
+  }
+</style>

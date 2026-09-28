@@ -1,0 +1,97 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { recurrentes } from '../datos/notaria.js';
+
+interface Rec { t: string; ico: string; tramite: string }
+const lista = recurrentes as Rec[];
+---
+
+<section class="ncl-rec" aria-labelledby="ncl-rec-t">
+  <div class="ncl-wrap">
+    <div class="ncl-rec__panel">
+      <h2 id="ncl-rec-t">Servicios Recurrentes</h2>
+      <ul class="ncl-rec__lista">
+        {lista.map((r) => (
+          <li>
+            <a
+              href={r.tramite ? '#ncl-tramites' : '#ncl-pagos'}
+              class="ncl-rec__item"
+              data-tramite={r.tramite || undefined}
+            >
+              <span class="ncl-rec__ico"><Icono n={r.ico} size={34} /></span>
+              <span class="ncl-rec__t">{r.t}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ncl-rec {
+    padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .ncl-rec__panel {
+    background: var(--ncl-papel);
+    border: 1px solid var(--ncl-linea);
+    border-radius: 3px;
+    box-shadow: 0 4px 8px -6px rgba(0, 0, 0, 0.35);
+    padding: clamp(1.8rem, 4vw, 2.6rem) 1.5rem clamp(2rem, 4vw, 2.8rem);
+    text-align: center;
+  }
+
+  .ncl-rec h2 {
+    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+    margin-bottom: 1.8rem;
+  }
+
+  .ncl-rec__lista {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem clamp(1.5rem, 6vw, 4.5rem);
+  }
+
+  .ncl-rec__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 120px;
+    color: var(--ncl-acento);
+  }
+
+  /* marco de "pergamino" como el original: bordes con curva suave */
+  .ncl-rec__ico {
+    display: grid;
+    place-items: center;
+    width: 80px;
+    height: 74px;
+    border: 2px solid currentColor;
+    border-radius: 14px 14px 14px 14px / 22px 22px 22px 22px;
+    background: #fff;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .ncl-rec__item:hover .ncl-rec__ico {
+    background: var(--ncl-acento);
+    color: #fff;
+    border-color: var(--ncl-acento);
+  }
+
+  .ncl-rec__t {
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 560px) {
+    .ncl-rec__lista {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      justify-items: center;
+    }
+  }
+</style>

@@ -1,0 +1,204 @@
+/* Plantilla taller-cedea (estilo cedeamotors.com) — todo bajo .tpl-taller-cedea */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap");
+
+.tpl-taller-cedea {
+  --tc-tinta: #0f2640;
+  --tc-tinta-2: #0a1a2d;
+  --tc-papel: #f3f3f1;
+  --tc-blanco: #ffffff;
+  --tc-texto: #3a3d42;
+  --tc-suave: #6b7078;
+  --tc-linea: #e1e1dd;
+  --tc-acento: #1fa83a;
+  --tc-acento-osc: #178a2f;
+  --tc-carbon: #2f3337;
+
+  --tc-font: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --tc-maxw: 1180px;
+  --tc-radio: 6px;
+
+  background: var(--tc-blanco);
+  color: var(--tc-texto);
+  font-family: var(--tc-font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* clip (no hidden): no rompe position:sticky/fixed */
+  overflow-x: clip;
+}
+
+.tpl-taller-cedea *,
+.tpl-taller-cedea *::before,
+.tpl-taller-cedea *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-taller-cedea h1,
+.tpl-taller-cedea h2,
+.tpl-taller-cedea h3,
+.tpl-taller-cedea h4 {
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: var(--tc-tinta);
+}
+
+.tpl-taller-cedea h1 b,
+.tpl-taller-cedea h2 b {
+  font-weight: 900;
+}
+
+.tpl-taller-cedea img {
+  display: block;
+  max-width: 100%;
+}
+
+.tpl-taller-cedea a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-taller-cedea ul {
+  list-style: none;
+}
+
+.tpl-taller-cedea button,
+.tpl-taller-cedea input,
+.tpl-taller-cedea select,
+.tpl-taller-cedea textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-taller-cedea button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-taller-cedea [hidden] {
+  display: none !important;
+}
+
+/* ---------- utilidades ---------- */
+.tpl-taller-cedea .tc-wrap {
+  max-width: var(--tc-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-taller-cedea .tc-seccion {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.tpl-taller-cedea .tc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tc-tinta);
+}
+
+.tpl-taller-cedea .tc-kicker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tc-acento);
+}
+
+.tpl-taller-cedea .tc-titulo {
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  margin-bottom: 1rem;
+}
+
+.tpl-taller-cedea .tc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--tc-radio);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+}
+
+.tpl-taller-cedea .tc-btn--acento {
+  background: var(--tc-acento);
+  color: #fff;
+}
+
+.tpl-taller-cedea .tc-btn--acento:hover {
+  background: var(--tc-acento-osc);
+}
+
+.tpl-taller-cedea .tc-btn--tinta {
+  background: var(--tc-tinta);
+  color: #fff;
+}
+
+.tpl-taller-cedea .tc-btn--tinta:hover {
+  background: var(--tc-tinta-2);
+}
+
+.tpl-taller-cedea .tc-btn--borde {
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.tpl-taller-cedea .tc-btn--borde:hover {
+  background: #fff;
+  color: var(--tc-tinta);
+}
+
+.tpl-taller-cedea .tc-check {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.tpl-taller-cedea .tc-check li {
+  position: relative;
+  padding-left: 1.6rem;
+}
+
+.tpl-taller-cedea .tc-check li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.7rem;
+  height: 0.38rem;
+  border-left: 2px solid var(--tc-acento);
+  border-bottom: 2px solid var(--tc-acento);
+  transform: rotate(-45deg);
+}
+
+/* ---------- chat (burbujas creadas por JS: van aqui, no en <style> scoped) ---------- */
+.tpl-taller-cedea .tc-chat__msg {
+  max-width: 84%;
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.tpl-taller-cedea .tc-chat__msg--bot {
+  align-self: flex-start;
+  background: #fff;
+  color: var(--tc-texto);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.tpl-taller-cedea .tc-chat__msg--yo {
+  align-self: flex-end;
+  background: #dcf5d9;
+  color: var(--tc-tinta);
+}

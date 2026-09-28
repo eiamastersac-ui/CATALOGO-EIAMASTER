@@ -1,0 +1,121 @@
+---
+import { img, marca } from '../datos/notaria.js';
+
+interface Hor { dia: string; h: string }
+const horario = marca.horario as Hor[];
+---
+
+<section class="nm-cb" aria-label="Citas y horario de atención">
+  <div class="nm-cb__bloque">
+    <img src={img('asesora', 1800)} alt="Asesora de la notaría atendiendo una llamada" loading="lazy" />
+    <div class="nm-wrap nm-cb__txt">
+      <div class="nm-cb__caja">
+        <h2>Recuerde agendar su cita para cualquier consulta o inicio de su trámite</h2>
+        <p>Recomendamos agendar su cita previamente; podrá realizarla en sencillos pasos y ser atendido sin esperas.</p>
+        <button type="button" class="nm-btn nm-btn--acento" data-cita>
+          Reserva tu cita
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nm-cb__bloque nm-cb__bloque--hor">
+    <img src={img('firma', 1800)} alt="Persona firmando un documento sobre un escritorio" loading="lazy" />
+    <div class="nm-wrap nm-cb__txt">
+      <div class="nm-cb__caja">
+        <h2>Visítenos dentro de nuestro horario de atención</h2>
+        <p>Nuestro oficio notarial le recibe en {marca.direccion}. Para una mejor atención contamos con el siguiente horario:</p>
+        <ul class="nm-check nm-cb__hor">
+          {horario.map((h) => <li><b>{h.dia}</b> de {h.h}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .nm-cb__bloque {
+    position: relative;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--nm-papel);
+  }
+
+  .nm-cb__bloque img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% 22%;
+  }
+
+  /* fundido a papel en el lado del texto, para legibilidad */
+  .nm-cb__bloque::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(244, 244, 242, 0) 35%, rgba(244, 244, 242, 0.92) 58%, rgba(244, 244, 242, 0.97) 100%);
+    z-index: 1;
+  }
+
+  .nm-cb__txt {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .nm-cb__caja {
+    width: min(420px, 100%);
+    padding: 3rem 0;
+  }
+
+  .nm-cb h2 {
+    font-size: clamp(1.7rem, 3.2vw, 2.25rem);
+    margin-bottom: 1rem;
+  }
+
+  .nm-cb p {
+    color: var(--nm-texto);
+    font-size: 0.93rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .nm-cb__bloque--hor {
+    border-top: 1px solid var(--nm-linea);
+  }
+
+  .nm-cb__hor {
+    font-size: 0.93rem;
+  }
+
+  .nm-cb__hor b {
+    font-weight: 500;
+    color: var(--nm-tinta);
+  }
+
+  @media (max-width: 760px) {
+    .nm-cb__bloque {
+      flex-direction: column;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .nm-cb__bloque img {
+      position: relative;
+      height: 260px;
+    }
+
+    .nm-cb__bloque::before {
+      display: none;
+    }
+
+    .nm-cb__caja {
+      padding: 2rem 0 2.6rem;
+    }
+  }
+</style>

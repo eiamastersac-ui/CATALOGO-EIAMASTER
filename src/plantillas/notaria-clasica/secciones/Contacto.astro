@@ -1,0 +1,294 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { contacto, marca } from '../datos/notaria.js';
+
+interface Horario { d: string; h: string[] }
+const horarios = marca.horario as Horario[];
+---
+
+<section class="ncl-con" id="ncl-contacto" aria-labelledby="ncl-con-t">
+  <img class="ncl-con__img" src={contacto.img} alt="Vista del malecón de Lima frente al mar" loading="lazy" />
+  <div class="ncl-con__scrim" aria-hidden="true"></div>
+
+  <div class="ncl-wrap ncl-con__grid">
+    <div class="ncl-con__info">
+      <Icono n="tel" size={54} class="ncl-con__ico" />
+      <h2 id="ncl-con-t">{contacto.titulo}</h2>
+      <p>{contacto.texto}</p>
+      <ul>
+        <li><Icono n="tel" size={18} /><a href={marca.telHref}>{marca.tel}</a></li>
+        <li><Icono n="mail" size={18} /><a href={`mailto:${marca.correo}`}>{marca.correo}</a></li>
+        <li><Icono n="edificio" size={18} /><span>{marca.dir1} {marca.dir2}<br />{marca.dir3}</span></li>
+        {horarios.map((h) => (
+          <li><Icono n="calendario" size={18} /><span><b>{h.d}</b><br />{h.h.join(' · ')}</span></li>
+        ))}
+      </ul>
+    </div>
+
+    <form class="ncl-con__form" id="ncl-con-form" novalidate>
+      <div class="ncl-con__form-cab">
+        <Icono n="mail" size={40} />
+        <div>
+          <h3>Contáctenos</h3>
+          <p>Si tiene alguna duda contáctenos y le responderemos a la brevedad.</p>
+        </div>
+      </div>
+
+      <div class="ncl-con__campos" id="ncl-con-campos">
+        <input name="nombre" type="text" placeholder="Nombres y Apellidos*" required autocomplete="name" />
+        <input name="email" type="email" placeholder="Email*" required autocomplete="email" />
+        <input name="tel" type="tel" placeholder="Teléfono*" required autocomplete="tel" />
+        <input name="horario" type="text" placeholder="Mejor horario para llamarlo*" required />
+        <input name="empresa" type="text" placeholder="Nombre de empresa" autocomplete="organization" />
+        <select name="asunto" id="ncl-con-asunto" aria-label="Asunto">
+          {contacto.asuntos.map((a: string) => <option>{a}</option>)}
+        </select>
+        <textarea name="mensaje" rows="4" placeholder="Mensaje*" required></textarea>
+        <label class="ncl-con__check">
+          <input type="checkbox" required />
+          <span>Acepto la política de privacidad y el tratamiento de mis datos personales.</span>
+        </label>
+        <p class="ncl-con__err" id="ncl-con-err" hidden>Complete los campos obligatorios (*).</p>
+        <button type="submit" class="ncl-btn ncl-btn--acento">Enviar mensaje</button>
+      </div>
+
+      <div class="ncl-con__ok" id="ncl-con-ok" hidden>
+        <Icono n="check" size={34} />
+        <h3>¡Mensaje recibido!</h3>
+        <p>Formulario demostrativo: un asesor le contactaría dentro del horario de atención.</p>
+        <button type="button" class="ncl-btn ncl-btn--borde" id="ncl-con-otro">Enviar otro mensaje</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('ncl-con-form') as HTMLFormElement | null;
+  const campos = document.getElementById('ncl-con-campos');
+  const ok = document.getElementById('ncl-con-ok');
+  const err = document.getElementById('ncl-con-err');
+  const asunto = document.getElementById('ncl-con-asunto') as HTMLSelectElement | null;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      if (err) err.hidden = false;
+      form.classList.add('is-validado');
+      return;
+    }
+    if (err) err.hidden = true;
+    if (campos) campos.hidden = true;
+    if (ok) ok.hidden = false;
+  });
+
+  document.getElementById('ncl-con-otro')?.addEventListener('click', () => {
+    form?.reset();
+    form?.classList.remove('is-validado');
+    if (campos) campos.hidden = false;
+    if (ok) ok.hidden = true;
+  });
+
+  // botones "Solicitar este tramite" preseleccionan el asunto
+  document.querySelectorAll<HTMLElement>('[data-asunto]').forEach((el) => {
+    el.addEventListener('click', () => {
+      if (!asunto) return;
+      const v = el.dataset.asunto || '';
+      const op = Array.from(asunto.options).find((o) => o.text === v);
+      asunto.value = op ? op.text : 'Otros';
+    });
+  });
+</script>
+
+<style>
+  .ncl-con {
+    position: relative;
+    background: var(--ncl-tinta-2);
+    border-top: 3px solid var(--ncl-acento);
+    overflow: hidden;
+  }
+
+  .ncl-con__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ncl-con__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(22, 18, 17, 0.72);
+  }
+
+  .ncl-con__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 460px;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .ncl-con__info {
+    color: #fff;
+  }
+
+  .ncl-con__info :global(.ncl-con__ico) {
+    stroke-width: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .ncl-con__info h2 {
+    color: #fff;
+    font-size: clamp(1.8rem, 3vw, 2.3rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .ncl-con__info > p {
+    font-size: 0.9rem;
+    max-width: 44ch;
+    color: rgba(255, 255, 255, 0.88);
+    margin-bottom: 1.8rem;
+  }
+
+  .ncl-con__info ul {
+    display: grid;
+    gap: 0.9rem;
+    font-family: var(--ncl-serif);
+    font-size: 0.95rem;
+  }
+
+  .ncl-con__info li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    line-height: 1.4;
+  }
+
+  .ncl-con__info li b {
+    font-weight: 500;
+  }
+
+  .ncl-con__info a:hover {
+    text-decoration: underline;
+  }
+
+  .ncl-con__form {
+    background: #fff;
+    border-radius: 3px;
+    padding: clamp(1.4rem, 4vw, 2.2rem);
+    box-shadow: 0 30px 50px -30px rgba(0, 0, 0, 0.8);
+  }
+
+  .ncl-con__form-cab {
+    display: flex;
+    gap: 0.9rem;
+    align-items: center;
+    color: var(--ncl-acento);
+    margin-bottom: 1.4rem;
+  }
+
+  .ncl-con__form-cab h3 {
+    font-size: 1.55rem;
+  }
+
+  .ncl-con__form-cab p {
+    font-size: 0.8rem;
+    color: var(--ncl-texto);
+    line-height: 1.4;
+  }
+
+  .ncl-con__campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .ncl-con__campos input[type="text"],
+  .ncl-con__campos input[type="email"],
+  .ncl-con__campos input[type="tel"],
+  .ncl-con__campos select,
+  .ncl-con__campos textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #c9a79f;
+    border-radius: 3px;
+    font-size: 0.84rem;
+    background: #fff;
+  }
+
+  .ncl-con__campos input:nth-of-type(1),
+  .ncl-con__campos textarea,
+  .ncl-con__check,
+  .ncl-con__err,
+  .ncl-con__campos .ncl-btn {
+    grid-column: 1 / -1;
+  }
+
+  .ncl-con__campos textarea {
+    resize: vertical;
+  }
+
+  .ncl-con__campos :focus {
+    outline: none;
+    border-color: var(--ncl-acento);
+  }
+
+  .ncl-con__form.is-validado :invalid {
+    border-color: var(--ncl-acento);
+    background: #fbf3f1;
+  }
+
+  .ncl-con__check {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    font-size: 0.74rem;
+    color: var(--ncl-suave);
+  }
+
+  .ncl-con__check input {
+    margin-top: 0.2rem;
+    accent-color: var(--ncl-acento);
+  }
+
+  .ncl-con__err {
+    font-size: 0.78rem;
+    color: var(--ncl-acento);
+  }
+
+  .ncl-con__campos[hidden],
+  .ncl-con__ok[hidden] {
+    display: none;
+  }
+
+  .ncl-con__ok {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    padding: 1.5rem 0;
+    color: var(--ncl-acento);
+  }
+
+  .ncl-con__ok p {
+    font-size: 0.86rem;
+    color: var(--ncl-texto);
+    margin-bottom: 0.6rem;
+  }
+
+  @media (max-width: 900px) {
+    .ncl-con__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ncl-con__campos {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

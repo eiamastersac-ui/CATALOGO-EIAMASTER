@@ -1,0 +1,151 @@
+---
+import { servicios } from '../datos/notaria.js';
+
+interface Tarjeta { t: string; d: string; img: string; href: string }
+const tarjetas = servicios.tarjetas as Tarjeta[];
+---
+
+<section class="ncl-seccion ncl-serv" id="ncl-servicios" aria-labelledby="ncl-serv-t">
+  <div class="ncl-wrap">
+    <div class="ncl-serv__cab">
+      <div>
+        <h2 class="ncl-titulo" id="ncl-serv-t">{servicios.titulo}</h2>
+        <p class="ncl-lead">{servicios.texto}</p>
+      </div>
+      <a href="#ncl-tramites" class="ncl-btn ncl-btn--acento">Ver todos los servicios</a>
+    </div>
+
+    <ul class="ncl-serv__grid">
+      {tarjetas.map((c) => (
+        <li>
+          <a href={c.href} class="ncl-foto">
+            <img src={c.img} alt="" loading="lazy" />
+            <div class="ncl-foto__pie">
+              <h3>{c.t}</h3>
+              <p>{c.d}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ncl-serv__cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .ncl-serv__cab .ncl-lead {
+    max-width: 420px;
+    font-size: 0.86rem;
+  }
+
+  .ncl-serv__cab .ncl-btn {
+    flex-shrink: 0;
+    margin-top: 0.3rem;
+  }
+
+  .ncl-serv__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .ncl-foto {
+    position: relative;
+    display: block;
+    aspect-ratio: 205 / 330;
+    overflow: hidden;
+    border: 2px solid var(--ncl-acento);
+    border-radius: 3px;
+    box-shadow: 0 6px 10px -6px rgba(0, 0, 0, 0.45);
+    background: var(--ncl-papel-2);
+  }
+
+  .ncl-foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .ncl-foto:hover img {
+    transform: scale(1.05);
+  }
+
+  /* pie de color: 20% de alto en reposo, sube y muestra la descripcion en hover */
+  .ncl-foto__pie {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.8rem 0.9rem;
+    background: rgba(167, 57, 36, 0.86);
+    color: #fff;
+    text-align: center;
+    transition: min-height 0.35s ease, background 0.35s ease;
+  }
+
+  .ncl-foto__pie h3 {
+    color: #fff;
+    font-family: var(--ncl-sans);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .ncl-foto__pie p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.35s ease, margin 0.35s ease;
+  }
+
+  .ncl-foto:hover .ncl-foto__pie,
+  .ncl-foto:focus-visible .ncl-foto__pie {
+    min-height: 55%;
+    background: rgba(138, 46, 28, 0.93);
+  }
+
+  .ncl-foto:hover .ncl-foto__pie p,
+  .ncl-foto:focus-visible .ncl-foto__pie p {
+    max-height: 8em;
+    opacity: 1;
+    margin-top: 0.6rem;
+  }
+
+  @media (max-width: 900px) {
+    .ncl-serv__cab {
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .ncl-serv__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .ncl-foto {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ncl-foto__pie p {
+      display: none;
+    }
+  }
+</style>

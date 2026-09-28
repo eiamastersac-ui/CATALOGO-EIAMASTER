@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Motors (Estilo Cedea Motors)",
+  "categoria": "taller-automotriz",
+  "descripcion": "Taller mecánico multimarca con concesionaria y venta de repuestos: cabecera fija transparente que se vuelve sólida al hacer scroll con menús desplegables, hero de foto a pantalla completa con checklist de servicios, bloque del taller, grilla foto-primero de 8 servicios sobre fondo de taller, acordeones de confianza y de 'cuándo llevar tu vehículo', banda de alta tecnología con cifras, marcas atendidas, venta de repuestos, carrusel de artículos, vehículos más solicitados y pie con 3 sedes y horarios. Incluye modal para agendar cita y chat flotante tipo WhatsApp. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/taller-cedea.jpg",
+  "tags": ["taller", "mecánico", "automotriz", "mantenimiento", "repuestos", "concesionaria", "citas", "acordeón"],
+  "paleta": ["#0f2640", "#f3f3f1", "#1fa83a", "#2f3337"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "cedeamotors.com",
+  "orden": 82
+}

@@ -1,0 +1,344 @@
+---
+import { marca, nav } from '../datos/taller.js';
+
+interface ItemNav { t: string; href: string; sub?: string[] }
+const items = nav as ItemNav[];
+---
+
+<header class="tc-hdr" id="tc-hdr">
+  <div class="tc-wrap tc-hdr__row">
+    <a href="#tc-inicio" class="tc-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+      <span class="tc-logo__marca">tienda<span>.com</span></span>
+      <span class="tc-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="tc-nav" id="tc-nav" aria-label="Navegación principal">
+      <ul class="tc-nav__lista">
+        {items.map((it) => (
+          <li class={`tc-nav__item${it.sub ? ' tc-nav__item--sub' : ''}`}>
+            {it.sub ? (
+              <>
+                <button type="button" class="tc-nav__link tc-nav__toggle" aria-expanded="false">
+                  {it.t}
+                  <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                </button>
+                <ul class="tc-nav__drop">
+                  {it.sub.map((s) => (
+                    <li><a href={it.href}>{s}</a></li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <a href={it.href} class="tc-nav__link">{it.t}</a>
+            )}
+          </li>
+        ))}
+      </ul>
+      <button type="button" class="tc-btn tc-btn--acento tc-nav__cta" data-cita>Agenda tu cita</button>
+    </nav>
+
+    <button type="button" class="tc-hamb" id="tc-hamb" aria-label="Abrir menú" aria-expanded="false" aria-controls="tc-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('tc-hdr');
+  const hamb = document.getElementById('tc-hamb');
+  const navEl = document.getElementById('tc-nav');
+
+  function pintarScroll() {
+    hdr?.classList.toggle('is-solid', window.scrollY > 60);
+  }
+  pintarScroll();
+  window.addEventListener('scroll', pintarScroll, { passive: true });
+
+  function cerrarDrops(excepto?: Element | null) {
+    hdr?.querySelectorAll('.tc-nav__item--sub.is-open').forEach((li) => {
+      if (li !== excepto) {
+        li.classList.remove('is-open');
+        li.querySelector('.tc-nav__toggle')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  hdr?.querySelectorAll<HTMLButtonElement>('.tc-nav__toggle').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const li = btn.closest('.tc-nav__item--sub');
+      if (!li) return;
+      const abierto = li.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(abierto));
+      cerrarDrops(li);
+    });
+  });
+
+  function abrirMenu(v: boolean) {
+    navEl?.classList.toggle('is-open', v);
+    hdr?.classList.toggle('is-menu', v);
+    hamb?.setAttribute('aria-expanded', String(v));
+  }
+
+  hamb?.addEventListener('click', () => abrirMenu(!navEl?.classList.contains('is-open')));
+
+  navEl?.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => {
+      abrirMenu(false);
+      cerrarDrops();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (hdr && !hdr.contains(e.target as Node)) cerrarDrops();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      cerrarDrops();
+      abrirMenu(false);
+    }
+  });
+</script>
+
+<style>
+  .tc-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .tc-hdr.is-solid,
+  .tc-hdr.is-menu {
+    background: #fff;
+    color: var(--tc-tinta);
+    border-bottom-color: var(--tc-linea);
+    box-shadow: 0 6px 20px -14px rgba(10, 26, 45, 0.45);
+  }
+
+  .tc-hdr__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 76px;
+  }
+
+  .tc-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .tc-logo__marca {
+    font-size: 1.55rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .tc-logo__marca span {
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  .tc-logo__sub {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+    padding-left: 0.1rem;
+  }
+
+  .tc-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .tc-nav__lista {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .tc-nav__item {
+    position: relative;
+  }
+
+  .tc-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: inherit;
+    border-radius: 4px;
+  }
+
+  .tc-nav__link:hover {
+    opacity: 0.75;
+  }
+
+  .tc-nav__toggle svg {
+    transition: transform 0.2s ease;
+  }
+
+  .tc-nav__drop {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    min-width: 260px;
+    background: #fff;
+    color: var(--tc-texto);
+    border-top: 3px solid var(--tc-tinta);
+    border-radius: 0 0 var(--tc-radio) var(--tc-radio);
+    box-shadow: 0 22px 40px -20px rgba(10, 26, 45, 0.5);
+    padding: 0.45rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  }
+
+  .tc-nav__drop::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.8rem;
+    height: 0.8rem;
+  }
+
+  .tc-nav__drop a {
+    display: block;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.87rem;
+  }
+
+  .tc-nav__drop a:hover {
+    background: var(--tc-papel);
+    color: var(--tc-tinta);
+  }
+
+  .tc-nav__item--sub:hover .tc-nav__drop,
+  .tc-nav__item--sub.is-open .tc-nav__drop {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .tc-nav__item--sub.is-open .tc-nav__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .tc-nav__cta {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .tc-hamb {
+    display: none;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: inherit;
+  }
+
+  .tc-hamb span {
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .tc-hdr.is-menu .tc-hamb span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .tc-hdr.is-menu .tc-hamb span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .tc-hdr.is-menu .tc-hamb span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 1080px) {
+    .tc-hamb {
+      display: flex;
+    }
+
+    .tc-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      background: #fff;
+      color: var(--tc-tinta);
+      padding: 0.75rem clamp(1rem, 4vw, 2rem) 1.5rem;
+      border-top: 1px solid var(--tc-linea);
+      box-shadow: 0 20px 30px -20px rgba(10, 26, 45, 0.4);
+      max-height: calc(100svh - 76px);
+      overflow-y: auto;
+      display: none;
+    }
+
+    .tc-nav.is-open {
+      display: flex;
+    }
+
+    .tc-nav__lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .tc-nav__item {
+      border-bottom: 1px solid var(--tc-linea);
+    }
+
+    .tc-nav__link {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+    }
+
+    .tc-nav__drop {
+      position: static;
+      min-width: 0;
+      box-shadow: none;
+      border-top: 0;
+      padding: 0 0 0.6rem 0.75rem;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      display: none;
+    }
+
+    .tc-nav__item--sub:hover .tc-nav__drop {
+      display: none;
+    }
+
+    .tc-nav__item--sub.is-open .tc-nav__drop {
+      display: block;
+    }
+
+    .tc-nav__cta {
+      align-self: flex-start;
+    }
+  }
+</style>

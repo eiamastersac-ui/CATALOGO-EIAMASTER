@@ -1,0 +1,225 @@
+---
+import { cuentas, img } from '../datos/notaria.js';
+
+interface Cuenta { banco: string; sigla: string; concepto: string; titular: string; cuenta: string; cci: string }
+const lista = cuentas as Cuenta[];
+---
+
+<section class="nm-pg" id="pagos" aria-labelledby="nm-pg-titulo">
+  <img class="nm-pg__fondo" src={img('calculadora', 1800)} alt="" loading="lazy" />
+  <div class="nm-wrap nm-pg__cont">
+    <span class="nm-kicker nm-pg__kicker">Modalidades de pago</span>
+    <h2 id="nm-pg-titulo">Ponemos a su disposición nuestras modalidades de pago</h2>
+    <p class="nm-pg__lead">Contamos con cuentas bancarias para el pago de los derechos notariales y registrales. Recuerde que, antes de realizar un depósito, debe consultar con nuestros asesores.</p>
+
+    <ul class="nm-pg__grid">
+      {lista.map((c) => (
+        <li class="nm-pg__card">
+          <div class="nm-pg__banco">
+            <span class="nm-pg__sigla" aria-hidden="true">{c.sigla}</span>
+            <h3>{c.banco}</h3>
+          </div>
+          <p class="nm-pg__conc"><b>{c.concepto}</b>, a nombre de {c.titular}</p>
+          <dl>
+            <div>
+              <dt>Número de cuenta</dt>
+              <dd>{c.cuenta}</dd>
+              <button type="button" class="nm-pg__copiar" data-copiar={c.cuenta} aria-label={`Copiar número de cuenta ${c.cuenta}`}>Copiar</button>
+            </div>
+            <div>
+              <dt>CCI</dt>
+              <dd>{c.cci}</dd>
+              <button type="button" class="nm-pg__copiar" data-copiar={c.cci} aria-label={`Copiar CCI ${c.cci}`}>Copiar</button>
+            </div>
+          </dl>
+        </li>
+      ))}
+    </ul>
+    <p class="nm-pg__nota">Cuentas ficticias de demostración.</p>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.nm-pg__copiar').forEach((b) =>
+    b.addEventListener('click', async () => {
+      const txt = b.dataset.copiar ?? '';
+      try {
+        await navigator.clipboard.writeText(txt);
+      } catch {
+        /* sin permiso de portapapeles: solo feedback visual */
+      }
+      const prev = b.textContent;
+      b.textContent = 'Copiado';
+      b.classList.add('is-ok');
+      window.setTimeout(() => {
+        b.textContent = prev;
+        b.classList.remove('is-ok');
+      }, 1600);
+    }),
+  );
+</script>
+
+<style>
+  .nm-pg {
+    position: relative;
+    background: var(--nm-tinta-2);
+    color: rgba(255, 255, 255, 0.82);
+    padding: clamp(3.5rem, 8vw, 5.5rem) 0;
+    overflow: hidden;
+    scroll-margin-top: 70px;
+  }
+
+  .nm-pg__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.12;
+    filter: grayscale(1);
+  }
+
+  .nm-pg__cont {
+    position: relative;
+  }
+
+  .nm-pg__kicker {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .nm-pg h2 {
+    color: #fff;
+    font-size: clamp(1.8rem, 3.6vw, 2.5rem);
+    margin-bottom: 0.9rem;
+  }
+
+  .nm-pg__lead {
+    max-width: 75ch;
+    font-size: 0.93rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .nm-pg__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .nm-pg__card {
+    border: 1px solid rgba(141, 180, 58, 0.55);
+    padding: 1.4rem;
+    background: rgba(31, 42, 48, 0.6);
+  }
+
+  .nm-pg__banco {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .nm-pg__sigla {
+    width: 52px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: var(--nm-tinta);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .nm-pg h3 {
+    color: #fff;
+    font-size: 1.25rem;
+  }
+
+  .nm-pg__conc {
+    font-size: 0.84rem;
+    margin-bottom: 1rem;
+    text-transform: none;
+  }
+
+  .nm-pg__conc b {
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .nm-pg dl {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .nm-pg dl div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 0.6rem;
+    padding-left: 0.9rem;
+    position: relative;
+  }
+
+  .nm-pg dl div::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--nm-acento);
+  }
+
+  .nm-pg dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    grid-column: 1;
+  }
+
+  .nm-pg dd {
+    grid-column: 1;
+    font-size: 0.9rem;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
+  }
+
+  .nm-pg__copiar {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    font-size: 0.72rem;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.3rem 0.55rem;
+    border-radius: 2px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nm-pg__copiar:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nm-pg__copiar.is-ok {
+    background: var(--nm-acento);
+    border-color: var(--nm-acento);
+  }
+
+  .nm-pg__nota {
+    margin-top: 1.2rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  @media (max-width: 900px) {
+    .nm-pg__grid {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 520px;
+    }
+  }
+</style>

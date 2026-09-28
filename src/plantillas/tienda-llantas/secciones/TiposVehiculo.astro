@@ -1,0 +1,126 @@
+---
+import { tiposVehiculo } from '../datos/llantas.js';
+
+interface Tipo { id: string; t: string; sub: string; img: string }
+---
+
+<section class="ll-seccion ll-tipos" aria-labelledby="ll-tipos-titulo">
+  <div class="ll-wrap">
+    <header class="ll-cabeza">
+      <span class="ll-kicker">- Buscar por tipo de vehiculo -</span>
+      <h2 class="ll-titulo" id="ll-tipos-titulo">¿Que tipo de <em>vehiculo</em> tienes?</h2>
+    </header>
+
+    <div class="ll-tipos__grid">
+      {tiposVehiculo.map((t: Tipo) => (
+        <a href="#catalogo" class="ll-tipo" data-tipo={t.id}>
+          <img src={t.img} alt="" loading="lazy" decoding="async" />
+          <span class="ll-tipo__scrim"></span>
+          <span class="ll-tipo__tx">
+            <b>{t.t}</b>
+            <small>{t.sub}</small>
+          </span>
+          <span class="ll-tipo__ir" aria-hidden="true">&rarr;</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.ll-tipo').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('ll-filtro', { detail: { tipo: a.dataset.tipo || '' } }));
+      document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .ll-tipos__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .ll-tipo {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 14px;
+    overflow: hidden;
+    color: #fff;
+    display: flex;
+    align-items: flex-end;
+    isolation: isolate;
+  }
+
+  .ll-tipo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transition: transform 0.5s ease;
+  }
+
+  .ll-tipo:hover img {
+    transform: scale(1.06);
+  }
+
+  .ll-tipo__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.82) 100%);
+  }
+
+  .ll-tipo__tx {
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem 1.2rem 1.3rem;
+  }
+
+  .ll-tipo__tx b {
+    font-family: var(--ll-titulos);
+    font-size: 1.55rem;
+    line-height: 1.05;
+  }
+
+  .ll-tipo__tx small {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.25rem;
+  }
+
+  .ll-tipo__ir {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ll-rojo);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .ll-tipo:hover .ll-tipo__ir {
+    background: var(--ll-rojo);
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .ll-tipos__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ll-tipo {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

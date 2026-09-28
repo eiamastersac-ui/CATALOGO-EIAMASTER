@@ -1,0 +1,199 @@
+@import url("https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap");
+
+/* ==========================================================================
+   mantenimiento-vip — landing de campaña de taller automotriz
+   (inspirada en vip2carsmantenimientos.com)
+   Paleta del original: negro casi puro + grises de panel + UN rojo de marca.
+   El verde solo existe en lo que es WhatsApp y en el check de la comparativa.
+   Sin gradientes decorativos (solo el scrim de legibilidad sobre fotos).
+   Todo namespaced bajo .tpl-mantenimiento-vip.
+   OJO: sin overflow-x:hidden en la raiz (rompe sticky) -> overflow-x:clip.
+   ========================================================================== */
+
+.tpl-mantenimiento-vip {
+  --mv-negro: #0b0b0b;
+  --mv-panel: #161616;
+  --mv-card: #262626;
+  --mv-card-2: #2f2f2f;
+  --mv-linea: #333333;
+  --mv-humo: #a6a6a6;
+  --mv-humo-2: #6e6e6e;
+  --mv-blanco: #f4f4f4;
+  --mv-rojo: #e4002b;
+  --mv-rojo-osc: #b80023;
+  --mv-ok: #2fbf71;
+  --mv-whats: #25d366;
+
+  --mv-font: "Saira", "Segoe UI", Roboto, Arial, sans-serif;
+
+  --mv-maxw: 1200px;
+  --mv-hdr-h: 84px;
+  --mv-radio: 10px;
+
+  background: var(--mv-negro);
+  color: var(--mv-blanco);
+  font-family: var(--mv-font);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+.tpl-mantenimiento-vip *,
+.tpl-mantenimiento-vip *::before,
+.tpl-mantenimiento-vip *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-mantenimiento-vip h1,
+.tpl-mantenimiento-vip h2,
+.tpl-mantenimiento-vip h3,
+.tpl-mantenimiento-vip h4 {
+  font-family: var(--mv-font);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+.tpl-mantenimiento-vip img {
+  max-width: 100%;
+  display: block;
+}
+
+.tpl-mantenimiento-vip a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-mantenimiento-vip ul {
+  list-style: none;
+}
+
+.tpl-mantenimiento-vip button,
+.tpl-mantenimiento-vip input,
+.tpl-mantenimiento-vip select {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-mantenimiento-vip button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-mantenimiento-vip [hidden] {
+  display: none !important;
+}
+
+.tpl-mantenimiento-vip [id] {
+  scroll-margin-top: calc(var(--mv-hdr-h) - 1px);
+}
+
+/* --- layout utils --- */
+.tpl-mantenimiento-vip .mv-wrap {
+  max-width: var(--mv-maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-mantenimiento-vip .mv-seccion {
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+}
+
+.tpl-mantenimiento-vip .mv-titulo {
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.tpl-mantenimiento-vip .mv-sub {
+  text-align: center;
+  color: var(--mv-humo);
+  margin-top: 0.5rem;
+}
+
+.tpl-mantenimiento-vip .mv-acento {
+  color: var(--mv-rojo);
+}
+
+/* --- boton de campaña: paralelogramo rojo solido como el original --- */
+.tpl-mantenimiento-vip .mv-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.95rem 2.2rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--mv-rojo);
+  transform: skewX(-12deg);
+  border-radius: 4px;
+  box-shadow: 4px 5px 0 var(--mv-rojo-osc);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.tpl-mantenimiento-vip .mv-cta > * {
+  transform: skewX(12deg);
+}
+
+.tpl-mantenimiento-vip .mv-cta:hover {
+  transform: skewX(-12deg) translate(-2px, -2px);
+  box-shadow: 6px 7px 0 var(--mv-rojo-osc);
+}
+
+.tpl-mantenimiento-vip .mv-cta:active {
+  transform: skewX(-12deg) translate(2px, 2px);
+  box-shadow: 1px 2px 0 var(--mv-rojo-osc);
+}
+
+.tpl-mantenimiento-vip .mv-btn-linea {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.4rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tpl-mantenimiento-vip .mv-btn-linea:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tpl-mantenimiento-vip .mv-btn-linea svg {
+  color: var(--mv-whats);
+}
+
+/* --- reveal on scroll --- */
+.tpl-mantenimiento-vip .mv-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-mantenimiento-vip .mv-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-mantenimiento-vip .mv-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

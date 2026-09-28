@@ -1,0 +1,92 @@
+---
+import { marcasAtendidas } from '../datos/taller.js';
+---
+
+<section class="tc-seccion tc-marcas" id="marcas">
+  <div class="tc-wrap">
+    <header class="tc-marcas__head">
+      <h2 class="tc-titulo">{marcasAtendidas.titulo}</h2>
+      <p>{marcasAtendidas.texto}</p>
+    </header>
+    <ul class="tc-marcas__lista">
+      {marcasAtendidas.lista.map((m: string, i: number) => (
+        <li class={`tc-marcas__logo tc-marcas__logo--${i + 1}`}>
+          <span>{m}</span>
+          <small>Repuestos y servicio</small>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tc-marcas {
+    background: var(--tc-papel);
+  }
+
+  .tc-marcas__head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 2.4rem;
+  }
+
+  .tc-marcas__head .tc-titulo {
+    font-weight: 700;
+  }
+
+  .tc-marcas__lista {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .tc-marcas__logo {
+    aspect-ratio: 4 / 3;
+    background: #fff;
+    border: 1px solid var(--tc-linea);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.45rem;
+    text-align: center;
+    color: var(--tc-tinta);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .tc-marcas__logo:hover {
+    border-color: var(--tc-tinta);
+    transform: translateY(-3px);
+  }
+
+  .tc-marcas__logo span {
+    font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+    line-height: 1;
+  }
+
+  .tc-marcas__logo small {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tc-suave);
+  }
+
+  /* cada "logo" con su propia personalidad tipografica, todos en tinta */
+  .tc-marcas__logo--1 span { font-weight: 900; letter-spacing: 0.02em; }
+  .tc-marcas__logo--2 span { font-weight: 500; font-style: italic; letter-spacing: 0.12em; }
+  .tc-marcas__logo--3 span { font-weight: 700; letter-spacing: 0.3em; font-size: clamp(0.9rem, 1.8vw, 1.15rem); }
+  .tc-marcas__logo--4 span { font-weight: 900; font-style: italic; letter-spacing: -0.02em; }
+  .tc-marcas__logo--5 span { font-weight: 400; letter-spacing: 0.22em; border-top: 2px solid currentColor; border-bottom: 2px solid currentColor; padding: 0.3rem 0; font-size: clamp(0.9rem, 1.8vw, 1.15rem); }
+
+  @media (max-width: 760px) {
+    .tc-marcas__lista {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tc-marcas__lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

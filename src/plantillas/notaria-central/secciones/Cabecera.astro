@@ -1,0 +1,379 @@
+---
+import { marca, nav } from '../datos/notaria.js';
+
+interface ItemNav { t: string; href: string }
+const items = nav as ItemNav[];
+---
+
+<header class="nc-hdr" id="nc-hdr">
+  <div class="nc-top">
+    <div class="nc-wrap nc-top__row">
+      <div class="nc-top__datos">
+        <a href={`tel:${marca.telHref}`}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z" /></svg>
+          {marca.tel}
+        </a>
+        <a href={`mailto:${marca.correo}`} class="nc-top__mail">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z" /></svg>
+          {marca.correo}
+        </a>
+      </div>
+      <div class="nc-top__extra">
+        <a href="#contacto">Fact. Electrónica</a>
+        <span class="nc-top__redes">Síguenos en:
+          <a href="#contacto" aria-label="Facebook">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8V6c0-.9.2-1.4 1.6-1.4H18V1h-3.4C10.9 1 10 3.3 10 6.1V8H7v3.6h3V23h4V11.6h3.2L18 8z" /></svg>
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nc-bar">
+    <div class="nc-wrap nc-bar__row">
+      <a href="#nc-inicio" class="nc-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+        <span class="nc-logo__sello" aria-hidden="true">t</span>
+        <span class="nc-logo__txt">
+          <span class="nc-logo__marca">tienda.com</span>
+          <span class="nc-logo__sub">{marca.sub}</span>
+        </span>
+      </a>
+
+      <nav class="nc-nav" id="nc-nav" aria-label="Navegación principal">
+        <ul class="nc-nav__lista">
+          {items.map((it) => (
+            <li><a href={it.href} class="nc-nav__link">{it.t}</a></li>
+          ))}
+        </ul>
+        <a href="#contacto" class="nc-nav__cta">Contacto</a>
+      </nav>
+
+      <button type="button" class="nc-hamb" id="nc-hamb" aria-label="Abrir menú" aria-expanded="false" aria-controls="nc-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('nc-hdr');
+  const hamb = document.getElementById('nc-hamb');
+  const navEl = document.getElementById('nc-nav');
+
+  function pintarScroll() {
+    hdr?.classList.toggle('is-solid', window.scrollY > 60);
+  }
+  pintarScroll();
+  window.addEventListener('scroll', pintarScroll, { passive: true });
+
+  function abrirMenu(v: boolean) {
+    navEl?.classList.toggle('is-open', v);
+    hdr?.classList.toggle('is-menu', v);
+    hamb?.setAttribute('aria-expanded', String(v));
+    hamb?.setAttribute('aria-label', v ? 'Cerrar menú' : 'Abrir menú');
+  }
+
+  hamb?.addEventListener('click', () => abrirMenu(!navEl?.classList.contains('is-open')));
+  navEl?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => abrirMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') abrirMenu(false);
+  });
+
+  // link activo segun la seccion visible
+  const links = Array.from(navEl?.querySelectorAll<HTMLAnchorElement>('.nc-nav__link') ?? []);
+  const secciones = links
+    .map((a) => document.querySelector(a.getAttribute('href') || ''))
+    .filter((s): s is Element => !!s);
+  if ('IntersectionObserver' in window && secciones.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const id = '#' + en.target.id;
+          links.forEach((a) => a.classList.toggle('is-activo', a.getAttribute('href') === id));
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    );
+    secciones.forEach((s) => io.observe(s));
+  }
+</script>
+
+<style>
+  .nc-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+  }
+
+  /* barra superior vino (igual que el original) */
+  .nc-top {
+    background: var(--nc-vino);
+    color: #fff;
+    font-size: 0.8rem;
+    height: var(--nc-top);
+  }
+
+  .nc-top__row {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nc-top__datos,
+  .nc-top__extra,
+  .nc-top__redes {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+  }
+
+  .nc-top__redes {
+    gap: 0.5rem;
+  }
+
+  .nc-top a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+
+  .nc-top a:hover {
+    opacity: 0.8;
+  }
+
+  .nc-bar {
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .nc-hdr.is-solid .nc-bar,
+  .nc-hdr.is-menu .nc-bar {
+    background: #fff;
+    color: var(--nc-tinta);
+    border-bottom-color: var(--nc-linea);
+    box-shadow: 0 8px 22px -18px rgba(0, 0, 0, 0.5);
+  }
+
+  .nc-bar__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: var(--nc-hdr);
+  }
+
+  .nc-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  .nc-logo__sello {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: var(--nc-vino);
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    line-height: 1;
+    padding-bottom: 4px;
+  }
+
+  .nc-logo__txt {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .nc-logo__marca {
+    font-family: var(--nc-f-titulo);
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .nc-logo__sub {
+    font-family: var(--nc-f-titulo);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .nc-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .nc-nav__lista {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+
+  .nc-nav__link {
+    display: block;
+    padding: 0.5rem 0.6rem;
+    font-family: var(--nc-f-sub);
+    font-size: 0.93rem;
+    font-weight: 600;
+    position: relative;
+  }
+
+  .nc-nav__link::after {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.2rem;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  .nc-nav__link:hover::after,
+  .nc-nav__link.is-activo::after {
+    transform: scaleX(1);
+  }
+
+  .nc-hdr.is-solid .nc-nav__link.is-activo {
+    color: var(--nc-vino);
+  }
+
+  .nc-nav__cta {
+    font-family: var(--nc-f-sub);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .nc-nav__cta:hover {
+    background: #fff;
+    color: var(--nc-vino);
+  }
+
+  .nc-hdr.is-solid .nc-nav__cta,
+  .nc-hdr.is-menu .nc-nav__cta {
+    background: var(--nc-vino);
+    border-color: var(--nc-vino);
+    color: #fff;
+  }
+
+  .nc-hdr.is-solid .nc-nav__cta:hover {
+    background: var(--nc-vino-osc);
+  }
+
+  .nc-hamb {
+    display: none;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: inherit;
+  }
+
+  .nc-hamb span {
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .nc-hdr.is-menu .nc-hamb span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nc-hdr.is-menu .nc-hamb span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nc-hdr.is-menu .nc-hamb span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 1060px) {
+    .nc-hamb {
+      display: flex;
+    }
+
+    .nc-bar {
+      position: relative;
+    }
+
+    .nc-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      background: #fff;
+      color: var(--nc-tinta);
+      padding: 0.5rem clamp(1rem, 4vw, 2rem) 1.5rem;
+      border-top: 1px solid var(--nc-linea);
+      box-shadow: 0 20px 30px -20px rgba(0, 0, 0, 0.45);
+      max-height: calc(100svh - var(--nc-hdr) - var(--nc-top));
+      overflow-y: auto;
+      display: none;
+    }
+
+    .nc-nav.is-open {
+      display: flex;
+    }
+
+    .nc-nav__lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .nc-nav__lista li {
+      border-bottom: 1px solid var(--nc-linea);
+    }
+
+    .nc-nav__link {
+      padding: 0.85rem 0;
+    }
+
+    .nc-nav__link::after {
+      display: none;
+    }
+
+    .nc-nav__cta {
+      align-self: flex-start;
+      padding: 0.6rem 1.3rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nc-top__extra,
+    .nc-top__mail {
+      display: none;
+    }
+
+    .nc-top__row {
+      justify-content: center;
+    }
+  }
+</style>

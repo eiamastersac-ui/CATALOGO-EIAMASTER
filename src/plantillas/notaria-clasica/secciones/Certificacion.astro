@@ -1,0 +1,76 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { certificacion } from '../datos/notaria.js';
+---
+
+<section class="ncl-cert" aria-labelledby="ncl-cert-t">
+  <div class="ncl-wrap ncl-cert__fila">
+    <div class="ncl-cert__sello" aria-hidden="true">
+      <Icono n="escudo" size={34} />
+      <span>{certificacion.sello}</span>
+    </div>
+    <div>
+      <h2 id="ncl-cert-t">{certificacion.titulo}</h2>
+      <p>{certificacion.texto}</p>
+    </div>
+    <a href="#ncl-valores" class="ncl-cert__link">Código de ética &gt;</a>
+  </div>
+</section>
+
+<style>
+  .ncl-cert {
+    background: var(--ncl-papel-2);
+    padding-block: 2.6rem;
+  }
+
+  .ncl-cert__fila {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.8rem;
+    align-items: center;
+  }
+
+  .ncl-cert__sello {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 2px solid var(--ncl-tinta);
+    color: var(--ncl-tinta);
+    font-family: var(--ncl-serif);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .ncl-cert h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .ncl-cert p {
+    font-size: 0.85rem;
+    color: var(--ncl-suave);
+  }
+
+  .ncl-cert__link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ncl-acento);
+  }
+
+  .ncl-cert__link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 700px) {
+    .ncl-cert__fila {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .ncl-cert__sello {
+      justify-self: start;
+    }
+  }
+</style>

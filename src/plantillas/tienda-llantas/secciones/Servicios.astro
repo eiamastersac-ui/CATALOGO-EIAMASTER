@@ -1,0 +1,71 @@
+---
+import { servicios } from '../datos/llantas.js';
+import IconoServicio from '../componentes/IconoServicio.astro';
+
+interface Servicio { t: string; ico: string }
+---
+
+<section class="ll-seccion ll-serv" id="servicios" aria-labelledby="ll-serv-titulo">
+  <div class="ll-wrap">
+    <header class="ll-cabeza">
+      <span class="ll-kicker">- Conoce -</span>
+      <h2 class="ll-titulo" id="ll-serv-titulo">Nuestros principales <em>Servicios</em></h2>
+      <p>Atencion especializada en tienda. Tecnologia de punta para tu vehiculo.</p>
+    </header>
+
+    <ul class="ll-serv__grid">
+      {servicios.map((s: Servicio) => (
+        <li class="ll-serv__card">
+          <IconoServicio nombre={s.ico} />
+          <h3>{s.t}</h3>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ll-serv__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .ll-serv__card {
+    border: 1px solid var(--ll-linea);
+    border-radius: 12px;
+    padding: 2rem 1rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ll-serv__card:hover {
+    border-color: var(--ll-rojo);
+    box-shadow: 0 14px 30px -20px rgba(0, 0, 0, 0.35);
+  }
+
+  .ll-serv__card h3 {
+    font-family: var(--ll-font);
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.3;
+    max-width: 14ch;
+  }
+
+  @media (max-width: 900px) {
+    .ll-serv__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .ll-serv__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+  }
+</style>

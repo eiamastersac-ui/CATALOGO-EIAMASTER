@@ -1,0 +1,192 @@
+---
+import { testimonios, img } from '../datos/notaria.js';
+
+interface Test { q: string; n: string; cargo: string; emp: string; img: string }
+const lista = testimonios as Test[];
+---
+
+<section class="nm-seccion nm-ts" aria-labelledby="nm-ts-titulo">
+  <div class="nm-wrap nm-ts__wrap">
+    <span class="nm-kicker">Testimoniales</span>
+    <h2 class="nm-titulo" id="nm-ts-titulo">La confianza de nuestros clientes es nuestra motivación</h2>
+
+    <div class="nm-ts__carrusel">
+      <button type="button" class="nm-ts__flecha" data-ts="-1" aria-label="Testimonio anterior">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+      </button>
+
+      <div class="nm-ts__marco">
+        {lista.map((t, i) => (
+          <figure class={`nm-ts__item${i === 0 ? ' is-on' : ''}`} aria-hidden={i === 0 ? 'false' : 'true'}>
+            <span class="nm-ts__comilla" aria-hidden="true">“</span>
+            <blockquote>{t.q}</blockquote>
+            <figcaption>
+              <img src={img(t.img, 160)} alt="" loading="lazy" />
+              <span>
+                <b>{t.n}</b>
+                {t.cargo} · {t.emp}
+              </span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <button type="button" class="nm-ts__flecha" data-ts="1" aria-label="Testimonio siguiente">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+      </button>
+    </div>
+
+    <div class="nm-ts__dots">
+      {lista.map((_, i) => (
+        <button type="button" class={`nm-ts__dot${i === 0 ? ' is-on' : ''}`} data-ts-ir={i} aria-label={`Testimonio ${i + 1}`}></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('.nm-ts__item');
+  const dots = document.querySelectorAll<HTMLElement>('.nm-ts__dot');
+  let i = 0;
+  const ir = (n: number) => {
+    i = (n + items.length) % items.length;
+    items.forEach((el, k) => {
+      el.classList.toggle('is-on', k === i);
+      el.setAttribute('aria-hidden', String(k !== i));
+    });
+    dots.forEach((d, k) => d.classList.toggle('is-on', k === i));
+  };
+  document.querySelectorAll<HTMLElement>('[data-ts]').forEach((b) => b.addEventListener('click', () => ir(i + Number(b.dataset.ts))));
+  dots.forEach((d) => d.addEventListener('click', () => ir(Number(d.dataset.tsIr))));
+</script>
+
+<style>
+  .nm-ts {
+    background: #fff;
+  }
+
+  .nm-ts__wrap {
+    text-align: center;
+  }
+
+  .nm-ts__carrusel {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) 46px;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .nm-ts__marco {
+    display: grid;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .nm-ts__item {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s;
+  }
+
+  .nm-ts__item.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nm-ts__comilla {
+    display: block;
+    font-family: var(--nm-serif);
+    font-size: 4.5rem;
+    line-height: 0.8;
+    color: var(--nm-acento);
+    height: 2.4rem;
+  }
+
+  .nm-ts blockquote {
+    font-family: var(--nm-serif);
+    font-size: clamp(1.2rem, 2.4vw, 1.55rem);
+    line-height: 1.45;
+    color: var(--nm-tinta);
+    margin-bottom: 1.6rem;
+  }
+
+  .nm-ts figcaption {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-align: left;
+    font-size: 0.84rem;
+    color: var(--nm-suave);
+  }
+
+  .nm-ts figcaption img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .nm-ts figcaption span {
+    display: grid;
+  }
+
+  .nm-ts figcaption b {
+    color: var(--nm-tinta);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .nm-ts__flecha {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--nm-linea);
+    color: var(--nm-tinta);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .nm-ts__flecha:hover {
+    background: var(--nm-tinta);
+    color: #fff;
+  }
+
+  .nm-ts__flecha svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .nm-ts__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 2rem;
+  }
+
+  .nm-ts__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--nm-linea);
+  }
+
+  .nm-ts__dot.is-on {
+    background: var(--nm-acento);
+  }
+
+  @media (max-width: 560px) {
+    .nm-ts__carrusel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .nm-ts__flecha {
+      display: none;
+    }
+  }
+</style>

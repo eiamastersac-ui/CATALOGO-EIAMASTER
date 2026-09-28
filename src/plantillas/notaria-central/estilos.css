@@ -1,0 +1,284 @@
+/* Plantilla notaria-central (estilo notariahidalgo.com) — todo bajo .tpl-notaria-central */
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Titillium+Web:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap");
+
+.tpl-notaria-central {
+  --nc-tinta: #262626;
+  --nc-carbon: #222222;
+  --nc-gris: #7f7f7f;
+  --nc-texto: #555555;
+  --nc-papel: #f4f2f0;
+  --nc-linea: #e4e0dd;
+  --nc-blanco: #ffffff;
+  --nc-vino: #6e2a30;
+  --nc-vino-osc: #4a1b20;
+
+  --nc-f-titulo: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --nc-f-sub: "Titillium Web", Helvetica, Arial, sans-serif;
+  --nc-f-texto: "Open Sans", Arial, sans-serif;
+  --nc-maxw: 1140px;
+  --nc-hdr: 78px;
+  --nc-top: 36px;
+
+  background: var(--nc-blanco);
+  color: var(--nc-texto);
+  font-family: var(--nc-f-texto);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  /* clip (no hidden): no rompe position:sticky/fixed */
+  overflow-x: clip;
+}
+
+.tpl-notaria-central *,
+.tpl-notaria-central *::before,
+.tpl-notaria-central *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-notaria-central h1,
+.tpl-notaria-central h2,
+.tpl-notaria-central h3,
+.tpl-notaria-central h4 {
+  font-family: var(--nc-f-titulo);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--nc-tinta);
+}
+
+.tpl-notaria-central img {
+  display: block;
+  max-width: 100%;
+}
+
+.tpl-notaria-central a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-notaria-central ul {
+  list-style: none;
+}
+
+.tpl-notaria-central button,
+.tpl-notaria-central input,
+.tpl-notaria-central select,
+.tpl-notaria-central textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-notaria-central button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-notaria-central [hidden] {
+  display: none !important;
+}
+
+/* ---------- utilidades ---------- */
+.tpl-notaria-central .nc-wrap {
+  width: 100%;
+  max-width: var(--nc-maxw);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-notaria-central .nc-seccion {
+  padding: clamp(4rem, 9vw, 6.5rem) 0;
+  scroll-margin-top: calc(var(--nc-hdr) + var(--nc-top) - 1px);
+}
+
+/* titulo gris gigante tipo "NOSOTROS" del original */
+.tpl-notaria-central .nc-titulo-xl {
+  font-family: var(--nc-f-titulo);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nc-gris);
+  line-height: 1;
+}
+
+.tpl-notaria-central .nc-sub {
+  font-family: var(--nc-f-sub);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nc-tinta);
+  margin-top: 0.55rem;
+}
+
+.tpl-notaria-central .nc-kicker {
+  font-family: var(--nc-f-titulo);
+  font-weight: 300;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nc-vino);
+}
+
+.tpl-notaria-central .nc-raya {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--nc-vino);
+  margin: 1.4rem 0;
+}
+
+.tpl-notaria-central .nc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.62rem 1.2rem;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  font-family: var(--nc-f-sub);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.tpl-notaria-central .nc-btn--vino {
+  color: var(--nc-vino);
+}
+
+.tpl-notaria-central .nc-btn--vino:hover {
+  background: var(--nc-vino);
+  border-color: var(--nc-vino);
+  color: #fff;
+}
+
+.tpl-notaria-central .nc-btn--claro {
+  color: #fff;
+}
+
+.tpl-notaria-central .nc-btn--claro:hover {
+  background: #fff;
+  color: var(--nc-vino-osc);
+}
+
+.tpl-notaria-central .nc-btn--lleno {
+  background: var(--nc-vino);
+  border-color: var(--nc-vino);
+  color: #fff;
+}
+
+.tpl-notaria-central .nc-btn--lleno:hover {
+  background: var(--nc-vino-osc);
+  border-color: var(--nc-vino-osc);
+}
+
+.tpl-notaria-central .nc-campo {
+  width: 100%;
+  background: var(--nc-papel);
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 0.8rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--nc-tinta);
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tpl-notaria-central .nc-campo:focus {
+  border-color: var(--nc-vino);
+  background: #fff;
+}
+
+.tpl-notaria-central .nc-campo::placeholder {
+  color: #9a9592;
+}
+
+/* ---------- modal de requisitos (contenido creado por JS) ---------- */
+.tpl-notaria-central .nc-req__grupo {
+  border-bottom: 1px solid var(--nc-linea);
+}
+
+.tpl-notaria-central .nc-req__grupo summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  font-family: var(--nc-f-sub);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--nc-tinta);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.tpl-notaria-central .nc-req__grupo summary::-webkit-details-marker {
+  display: none;
+}
+
+.tpl-notaria-central .nc-req__grupo summary::after {
+  content: "+";
+  font-family: var(--nc-f-titulo);
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--nc-vino);
+  flex-shrink: 0;
+}
+
+.tpl-notaria-central .nc-req__grupo[open] summary::after {
+  content: "–";
+}
+
+.tpl-notaria-central .nc-req__grupo ul {
+  padding: 0 0 1.1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.tpl-notaria-central .nc-req__grupo li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.92rem;
+}
+
+.tpl-notaria-central .nc-req__grupo li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.68em;
+  width: 6px;
+  height: 6px;
+  background: var(--nc-vino);
+}
+
+/* ---------- toast (creado por JS) ---------- */
+.tpl-notaria-central .nc-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 200;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  max-width: min(92vw, 420px);
+  background: var(--nc-tinta);
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.2rem;
+  border-left: 4px solid var(--nc-vino);
+  box-shadow: 0 16px 34px -18px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.tpl-notaria-central .nc-toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

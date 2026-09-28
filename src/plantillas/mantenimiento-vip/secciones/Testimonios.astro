@@ -1,0 +1,256 @@
+---
+import { resenas, marca } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+
+type Resena = { n: string; t: string; hace: string };
+const porPagina = 4;
+const paginas = Math.ceil(resenas.lista.length / porPagina);
+---
+
+<section class="mv-tes mv-seccion" id="testimonios">
+  <div class="mv-wrap">
+    <h2 class="mv-titulo mv-reveal">Testimonios</h2>
+
+    <div class="mv-tes__resumen mv-reveal">
+      <span class="mv-tes__logo" aria-hidden="true">t</span>
+      <div>
+        <b>{marca.nombre} · Taller Los Olivos</b>
+        <p>
+          <strong>{resenas.nota}</strong>
+          <span class="mv-tes__estrellas" aria-label="5 de 5 estrellas">
+            {Array.from({ length: 5 }).map(() => <Icono nombre="estrella" size={16} />)}
+          </span>
+        </p>
+        <small>Basado en {resenas.total} opiniones de Google</small>
+      </div>
+      <span class="mv-tes__g"><Icono nombre="google" size={22} trazo={1.6} /></span>
+    </div>
+
+    <ul class="mv-tes__grid" id="mv-tes-grid" aria-live="polite">
+      {resenas.lista.map((r: Resena, i: number) => (
+        <li class="mv-tes__card" data-pag={Math.floor(i / porPagina)} hidden={i >= porPagina}>
+          <header>
+            <span class="mv-tes__av" aria-hidden="true">{r.n.charAt(0)}</span>
+            <span>
+              <b>{r.n}</b>
+              <span class="mv-tes__estrellas mv-tes__estrellas--chica">
+                {Array.from({ length: 5 }).map(() => <Icono nombre="estrella" size={13} />)}
+              </span>
+            </span>
+            <span class="mv-tes__g"><Icono nombre="google" size={16} trazo={1.6} /></span>
+          </header>
+          <p>{r.t}</p>
+          <small>{r.hace}</small>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mv-tes__nav">
+      <button type="button" id="mv-tes-prev" aria-label="Opiniones anteriores" disabled>
+        <Icono nombre="izq" size={18} />
+      </button>
+      <span id="mv-tes-pag">1 / {paginas}</span>
+      <button type="button" id="mv-tes-next" aria-label="Siguientes opiniones">
+        Siguientes <Icono nombre="der" size={18} />
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.tpl-mantenimiento-vip #mv-tes-grid [data-pag]'));
+  const prev = document.getElementById('mv-tes-prev') as HTMLButtonElement | null;
+  const next = document.getElementById('mv-tes-next') as HTMLButtonElement | null;
+  const lbl = document.getElementById('mv-tes-pag');
+  const total = Math.max(...cards.map((c) => Number(c.dataset.pag))) + 1;
+  let pag = 0;
+
+  function mostrar(p: number) {
+    pag = (p + total) % total;
+    cards.forEach((c) => {
+      const on = Number(c.dataset.pag) === pag;
+      c.hidden = !on;
+      if (on) {
+        c.classList.remove('is-entra');
+        void c.offsetWidth;
+        c.classList.add('is-entra');
+      }
+    });
+    if (lbl) lbl.textContent = `${pag + 1} / ${total}`;
+    if (prev) prev.disabled = pag === 0;
+  }
+
+  next?.addEventListener('click', () => mostrar(pag + 1));
+  prev?.addEventListener('click', () => mostrar(pag - 1));
+</script>
+
+<style>
+  .mv-tes__resumen {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2.4rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--mv-card);
+    border: 1px solid #4a4a4a;
+    border-radius: 6px;
+  }
+
+  .mv-tes__logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--mv-negro);
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--mv-rojo);
+    border: 1px solid var(--mv-linea);
+  }
+
+  .mv-tes__resumen b {
+    font-size: 0.95rem;
+  }
+
+  .mv-tes__resumen p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .mv-tes__resumen strong {
+    font-size: 1.3rem;
+    color: var(--mv-rojo);
+  }
+
+  .mv-tes__resumen small {
+    font-size: 0.78rem;
+    color: var(--mv-humo);
+  }
+
+  .mv-tes__estrellas {
+    display: inline-flex;
+    gap: 2px;
+    color: var(--mv-rojo);
+  }
+
+  .mv-tes__g {
+    margin-left: auto;
+    align-self: flex-start;
+    color: var(--mv-humo);
+  }
+
+  .mv-tes__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  .mv-tes__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    min-height: 180px;
+    padding: 1.1rem;
+    background: var(--mv-card);
+    border: 1px solid #4a4a4a;
+    border-radius: 6px;
+  }
+
+  .mv-tes__card[hidden] {
+    display: none;
+  }
+
+  .mv-tes__card.is-entra {
+    animation: mv-entra 0.4s ease both;
+  }
+
+  @keyframes mv-entra {
+    from { opacity: 0; transform: translateY(8px); }
+  }
+
+  .mv-tes__card header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .mv-tes__card header > span:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font-size: 0.9rem;
+  }
+
+  .mv-tes__av {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #444;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .mv-tes__card p {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .mv-tes__card small {
+    font-size: 0.72rem;
+    color: var(--mv-humo-2);
+  }
+
+  .mv-tes__nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.6rem;
+    font-size: 0.85rem;
+    color: var(--mv-humo);
+  }
+
+  .mv-tes__nav button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--mv-linea);
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .mv-tes__nav button:hover:not(:disabled) {
+    border-color: #fff;
+  }
+
+  .mv-tes__nav button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  @media (max-width: 1000px) {
+    .mv-tes__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mv-tes__grid {
+      grid-template-columns: 1fr;
+    }
+    .mv-tes__card {
+      min-height: 0;
+    }
+  }
+</style>

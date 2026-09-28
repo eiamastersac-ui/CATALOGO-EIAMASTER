@@ -1,0 +1,171 @@
+---
+import { marca, sedes, horario } from '../datos/taller.js';
+
+interface Sede { t: string; dir: string; tel: string; correo: string }
+const lista = sedes as Sede[];
+---
+
+<footer class="tc-pie" id="contacto">
+  <div class="tc-wrap tc-pie__grid">
+    <div class="tc-pie__marca">
+      <a href="#tc-inicio" class="tc-pie__logo">
+        <span>tienda<em>.com</em></span>
+        <small>{marca.sub}</small>
+      </a>
+      <p>Taller mecánico, mantenimiento vehicular multimarca, mantenimiento de flotas, venta de repuestos y concesionaria vehicular.</p>
+      <button type="button" class="tc-btn tc-btn--acento" data-cita>Agenda tu cita</button>
+    </div>
+
+    {lista.map((s) => (
+      <div class="tc-pie__col">
+        <h3>{s.t}</h3>
+        <ul>
+          <li>{s.dir}</li>
+          <li><a href="#contacto">{s.tel}</a></li>
+          <li><a href="#contacto">{s.correo}</a></li>
+        </ul>
+        <h4>Horario de atención</h4>
+        <ul>
+          {horario.map((h: string) => <li>{h}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="tc-pie__legal">
+    <div class="tc-wrap tc-pie__legal-row">
+      <span>© 2026 {marca.nombre} {marca.sub}. Maqueta demostrativa.</span>
+      <nav aria-label="Legales">
+        <a href="#contacto">Libro de reclamaciones</a>
+        <a href="#contacto">Políticas de privacidad</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .tc-pie {
+    background: var(--tc-carbon);
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.9rem;
+  }
+
+  .tc-pie__grid {
+    display: grid;
+    grid-template-columns: 1.2fr repeat(3, 1fr);
+    gap: 2.5rem;
+    padding-block: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .tc-pie__marca {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    align-content: start;
+  }
+
+  .tc-pie__logo {
+    display: grid;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .tc-pie__logo span {
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .tc-pie__logo em {
+    font-style: normal;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  .tc-pie__logo small {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  .tc-pie__marca p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .tc-pie__col h3,
+  .tc-pie__col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.7rem;
+  }
+
+  .tc-pie__col h4 {
+    margin-top: 1.4rem;
+    font-size: 0.82rem;
+  }
+
+  .tc-pie__col ul {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .tc-pie__col li {
+    position: relative;
+    padding-left: 0.9rem;
+  }
+
+  .tc-pie__col li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 4px;
+    height: 4px;
+    background: var(--tc-acento);
+  }
+
+  .tc-pie__col a:hover {
+    color: #fff;
+  }
+
+  .tc-pie__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+  }
+
+  .tc-pie__legal-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 1.1rem;
+  }
+
+  .tc-pie__legal nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .tc-pie__legal a:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 960px) {
+    .tc-pie__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .tc-pie__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

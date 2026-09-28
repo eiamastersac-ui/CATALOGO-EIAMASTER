@@ -6,7 +6,7 @@
   "tags": ["cerrajería", "cerrajero", "servicios", "hogar", "madrid", "urgencias", "cerraduras", "landing"],
   "paleta": ["#262626", "#e95d0e", "#353740", "#f4f4f4", "#283d4b"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "cerrajeronline.com",
   "orden": 75
 }

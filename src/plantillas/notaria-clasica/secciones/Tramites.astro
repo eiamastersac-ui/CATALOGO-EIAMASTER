@@ -1,0 +1,302 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { tramites } from '../datos/notaria.js';
+
+interface Tramite { id: string; grupo: string; t: string; img: string; req: string[]; nota: string }
+const lista = tramites.lista as Tramite[];
+---
+
+<section class="ncl-seccion ncl-tra" id="ncl-tramites" aria-labelledby="ncl-tra-t">
+  <div class="ncl-wrap">
+    <div class="ncl-tra__cab">
+      <span class="ncl-kicker">Trámites y requisitos</span>
+      <h2 class="ncl-titulo" id="ncl-tra-t">{tramites.titulo}</h2>
+      <p class="ncl-lead">{tramites.texto}</p>
+    </div>
+
+    <div class="ncl-tra__cuerpo">
+      <ul class="ncl-tra__menu" role="tablist" aria-label="Servicios notariales" aria-orientation="vertical">
+        {lista.map((t, i) => (
+          <li>
+            <button
+              type="button"
+              role="tab"
+              id={`ncl-tab-${t.id}`}
+              class={`ncl-tra__op${i === 0 ? ' is-on' : ''}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-controls={`ncl-pan-${t.id}`}
+              data-id={t.id}
+            >
+              <small>{t.grupo}</small>
+              <span>{t.t}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <div class="ncl-tra__paneles">
+        {lista.map((t, i) => (
+          <article
+            class="ncl-tra__pan"
+            id={`ncl-pan-${t.id}`}
+            role="tabpanel"
+            aria-labelledby={`ncl-tab-${t.id}`}
+            hidden={i !== 0}
+          >
+            <div class="ncl-tra__foto">
+              <img src={t.img} alt="" loading="lazy" />
+              <span>{t.grupo}</span>
+            </div>
+            <div class="ncl-tra__txt">
+              <h3>{t.t}</h3>
+              <h4>Requisitos</h4>
+              <ol class="ncl-tra__req">
+                {t.req.map((r) => <li>{r}</li>)}
+              </ol>
+              <p class="ncl-tra__nota">{t.nota}</p>
+              <div class="ncl-tra__ctas">
+                <a href="#ncl-contacto" class="ncl-btn ncl-btn--acento" data-asunto={t.grupo}>
+                  Solicitar este trámite <Icono n="flecha" size={16} />
+                </a>
+                <a href="#ncl-consulta" class="ncl-btn ncl-btn--borde">Consultar estado</a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const sec = document.getElementById('ncl-tramites');
+
+  function activar(id: string) {
+    if (!sec) return;
+    sec.querySelectorAll<HTMLButtonElement>('.ncl-tra__op').forEach((b) => {
+      const on = b.dataset.id === id;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+    sec.querySelectorAll<HTMLElement>('.ncl-tra__pan').forEach((p) => {
+      p.hidden = p.id !== `ncl-pan-${id}`;
+    });
+  }
+
+  sec?.querySelectorAll<HTMLButtonElement>('.ncl-tra__op').forEach((b) => {
+    b.addEventListener('click', () => {
+      activar(b.dataset.id || '');
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        document.getElementById(`ncl-pan-${b.dataset.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // accesos directos desde "Servicios Recurrentes"
+  document.querySelectorAll<HTMLElement>('[data-tramite]').forEach((el) => {
+    el.addEventListener('click', () => activar(el.dataset.tramite || ''));
+  });
+</script>
+
+<style>
+  .ncl-tra__cab {
+    margin-bottom: 2.4rem;
+  }
+
+  .ncl-tra__cuerpo {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .ncl-tra__menu {
+    position: sticky;
+    top: 120px;
+    border: 1px solid var(--ncl-linea);
+    border-radius: 3px;
+    background: var(--ncl-papel);
+  }
+
+  .ncl-tra__menu li + li {
+    border-top: 1px solid var(--ncl-linea);
+  }
+
+  .ncl-tra__op {
+    width: 100%;
+    display: grid;
+    gap: 0.15rem;
+    text-align: left;
+    padding: 0.85rem 1rem 0.85rem 1.1rem;
+    border-left: 3px solid transparent;
+    transition: background 0.15s ease;
+  }
+
+  .ncl-tra__op small {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ncl-suave);
+  }
+
+  .ncl-tra__op span {
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--ncl-tinta);
+  }
+
+  .ncl-tra__op:hover {
+    background: #fff;
+  }
+
+  .ncl-tra__op.is-on {
+    background: #fff;
+    border-left-color: var(--ncl-acento);
+  }
+
+  .ncl-tra__op.is-on span {
+    color: var(--ncl-acento);
+  }
+
+  .ncl-tra__pan {
+    border: 1px solid var(--ncl-linea);
+    border-radius: 3px;
+    overflow: hidden;
+    animation: ncl-pan 0.3s ease;
+  }
+
+  @keyframes ncl-pan {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .ncl-tra__foto {
+    position: relative;
+    height: 220px;
+    background: var(--ncl-papel-2);
+  }
+
+  .ncl-tra__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ncl-tra__foto span {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: var(--ncl-acento);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .ncl-tra__txt {
+    padding: clamp(1.3rem, 3vw, 2rem);
+  }
+
+  .ncl-tra__txt h3 {
+    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+    margin-bottom: 1.2rem;
+  }
+
+  .ncl-tra__txt h4 {
+    font-family: var(--ncl-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ncl-acento);
+    margin-bottom: 0.7rem;
+  }
+
+  .ncl-tra__req {
+    counter-reset: req;
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .ncl-tra__req li {
+    counter-increment: req;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .ncl-tra__req li::before {
+    content: counter(req) ".";
+    font-family: var(--ncl-serif);
+    font-weight: 600;
+    color: var(--ncl-acento);
+  }
+
+  .ncl-tra__nota {
+    font-size: 0.84rem;
+    background: var(--ncl-papel);
+    border-left: 3px solid var(--ncl-tinta);
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .ncl-tra__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  @media (max-width: 900px) {
+    .ncl-tra__cuerpo {
+      grid-template-columns: 1fr;
+    }
+
+    .ncl-tra__menu {
+      position: static;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ncl-tra__menu li + li {
+      border-top: 0;
+    }
+
+    .ncl-tra__menu li {
+      border-bottom: 1px solid var(--ncl-linea);
+    }
+
+    .ncl-tra__menu li:nth-child(odd) {
+      border-right: 1px solid var(--ncl-linea);
+    }
+
+    .ncl-tra__pan {
+      scroll-margin-top: 80px;
+    }
+
+    .ncl-tra__foto {
+      height: 170px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ncl-tra__op span {
+      font-size: 0.8rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ncl-tra__ctas .ncl-btn {
+      width: 100%;
+    }
+  }
+</style>

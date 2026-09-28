@@ -1,0 +1,146 @@
+---
+import { delivery } from '../datos/llantas.js';
+---
+
+<section class="ll-seccion ll-deli" id="delivery" aria-labelledby="ll-deli-titulo">
+  <div class="ll-wrap">
+    <div class="ll-deli__card">
+      <div class="ll-deli__tx">
+        <span class="ll-deli__kicker">- {delivery.kicker} -</span>
+        <h2 id="ll-deli-titulo">{delivery.titulo}</h2>
+        <p>{delivery.texto}</p>
+        <a href="#top" class="ll-btn ll-btn--blanco ll-deli__cta" id="ll-deli-cta">{delivery.cta}</a>
+        <div class="ll-deli__pagos">
+          <small>Aceptamos todos los medios de pago:</small>
+          <ul>
+            {delivery.pagos.map((p: string) => <li>{p}</li>)}
+          </ul>
+        </div>
+      </div>
+      <div class="ll-deli__foto">
+        <img src={delivery.img} alt="Van de servicio de instalacion de llantas a domicilio" loading="lazy" decoding="async" />
+        <span class="ll-deli__sello">Taller movil · tienda.com</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* El CTA abre el chat (el widget escucha este evento) */
+  document.getElementById('ll-deli-cta')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('ll-chat-abrir', { detail: 'Hola! Quiero solicitar el servicio de delivery e instalacion a domicilio.' }));
+  });
+</script>
+
+<style>
+  .ll-deli {
+    background: var(--ll-negro);
+    color: #fff;
+  }
+
+  .ll-deli__card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr);
+    border: 1px solid #4a4a4a;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--ll-negro2);
+  }
+
+  .ll-deli__tx {
+    padding: clamp(1.75rem, 3.5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ll-deli__kicker {
+    font-family: var(--ll-titulos);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+
+  .ll-deli h2 {
+    color: var(--ll-rojo);
+    font-size: clamp(2rem, 3.6vw, 2.7rem);
+    margin-block: 0.6rem 1rem;
+    max-width: 10ch;
+  }
+
+  .ll-deli p {
+    font-size: 0.86rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ll-deli__cta {
+    margin-top: 1.5rem;
+  }
+
+  .ll-deli__pagos {
+    margin-top: auto;
+    padding-top: 1.75rem;
+  }
+
+  .ll-deli__pagos small {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .ll-deli__pagos ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.55rem;
+  }
+
+  .ll-deli__pagos li {
+    background: #fff;
+    color: var(--ll-negro);
+    font-family: var(--ll-titulos);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+  }
+
+  .ll-deli__foto {
+    position: relative;
+    min-height: 420px;
+  }
+
+  .ll-deli__foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ll-deli__sello {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    background: rgba(17, 17, 17, 0.85);
+    border-left: 3px solid var(--ll-rojo);
+    padding: 0.45rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 860px) {
+    .ll-deli__card {
+      grid-template-columns: 1fr;
+    }
+
+    .ll-deli__foto {
+      min-height: 0;
+      aspect-ratio: 16 / 10;
+      order: -1;
+    }
+  }
+</style>

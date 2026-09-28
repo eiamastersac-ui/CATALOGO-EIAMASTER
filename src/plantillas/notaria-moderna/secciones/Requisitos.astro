@@ -1,0 +1,289 @@
+---
+import { requisitos } from '../datos/notaria.js';
+
+interface Req { id: string; grupo: string; t: string; intro: string; lista: string[] }
+const lista = requisitos as Req[];
+const grupos = [...new Set(lista.map((r) => r.grupo))];
+---
+
+<section class="nm-seccion nm-rq" id="requisitos" aria-labelledby="nm-rq-titulo">
+  <div class="nm-wrap">
+    <nav class="nm-rq__miga" aria-label="Ruta">
+      <span>Inicio</span> / <span>Servicios notariales</span> / <b id="nm-rq-miga">{lista[0].t}</b>
+    </nav>
+
+    <div class="nm-rq__layout">
+      <aside class="nm-rq__lado">
+        <h2 class="nm-rq__lado-tit" id="nm-rq-titulo">Requisitos por trámite</h2>
+        {grupos.map((g) => (
+          <div class="nm-rq__grupo">
+            <p class="nm-rq__grupo-tit">Servicios {g.toLowerCase()}</p>
+            <ul role="tablist" aria-orientation="vertical" aria-label={`Servicios ${g}`}>
+              {lista.filter((r) => r.grupo === g).map((r) => (
+                <li>
+                  <button
+                    type="button"
+                    role="tab"
+                    class={`nm-rq__op${r.id === lista[0].id ? ' is-on' : ''}`}
+                    data-rq={r.id}
+                    aria-selected={r.id === lista[0].id ? 'true' : 'false'}
+                    aria-controls={`nm-rq-${r.id}`}
+                  >
+                    {r.t}
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <div class="nm-rq__consulta">
+          <span>¿Tiene dudas?</span>
+          <p>Consulte por nuestros servicios con un asesor legal.</p>
+          <a href="#contacto" class="nm-btn nm-btn--acento">Escríbanos</a>
+        </div>
+      </aside>
+
+      <div class="nm-rq__contenido">
+        {lista.map((r, i) => (
+          <article class="nm-rq__panel" id={`nm-rq-${r.id}`} role="tabpanel" hidden={i !== 0}>
+            <span class="nm-kicker">Servicios {r.grupo.toLowerCase()}</span>
+            <h3>{r.t}</h3>
+            <p class="nm-rq__intro">{r.intro}</p>
+            <h4>Requisitos generales:</h4>
+            <ul class="nm-check nm-rq__lista">
+              {r.lista.map((l) => <li>{l}</li>)}
+            </ul>
+            <div class="nm-rq__acciones">
+              <button type="button" class="nm-btn nm-btn--tinta" data-cita data-tipo={r.t}>
+                Agendar cita para este trámite
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+              </button>
+              <a href="#kardex" class="nm-rq__link">Ya inicié mi trámite: consultar Kardex</a>
+            </div>
+            <p class="nm-rq__nota">Los requisitos pueden variar según el caso. Antes de acudir, confirme con nuestros asesores.</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const seccion = document.getElementById('requisitos');
+  const miga = document.getElementById('nm-rq-miga');
+
+  const mostrar = (id: string) => {
+    if (!seccion) return;
+    const panel = document.getElementById(`nm-rq-${id}`);
+    if (!panel) return;
+    seccion.querySelectorAll<HTMLElement>('.nm-rq__panel').forEach((p) => (p.hidden = p !== panel));
+    seccion.querySelectorAll<HTMLButtonElement>('.nm-rq__op').forEach((b) => {
+      const on = b.dataset.rq === id;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+    if (miga) miga.textContent = panel.querySelector('h3')?.textContent ?? '';
+  };
+
+  seccion?.querySelectorAll<HTMLButtonElement>('.nm-rq__op').forEach((b) =>
+    b.addEventListener('click', () => mostrar(b.dataset.rq ?? '')),
+  );
+
+  // cualquier enlace con data-req (tarjetas de tramites y servicios) abre ese requisito
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLElement>('.tpl-notaria-moderna [data-req]');
+    if (a?.dataset.req) mostrar(a.dataset.req);
+  });
+</script>
+
+<style>
+  .nm-rq {
+    background: var(--nm-blanco);
+  }
+
+  .nm-rq__miga {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nm-suave);
+    padding-bottom: 1rem;
+    margin-bottom: 2.2rem;
+    border-bottom: 1px solid var(--nm-linea);
+  }
+
+  .nm-rq__miga b {
+    color: var(--nm-tinta);
+    font-weight: 500;
+  }
+
+  .nm-rq__layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .nm-rq__lado-tit {
+    font-size: 1.7rem;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+    margin-bottom: 1.4rem;
+  }
+
+  .nm-rq__grupo {
+    margin-bottom: 1.3rem;
+  }
+
+  .nm-rq__grupo-tit {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--nm-suave);
+    margin-bottom: 0.5rem;
+  }
+
+  .nm-rq__grupo ul {
+    display: grid;
+    gap: 6px;
+  }
+
+  .nm-rq__op {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--nm-tinta);
+    background: var(--nm-papel);
+    border-left: 3px solid transparent;
+    box-shadow: 0 2px 6px -4px rgba(31, 42, 48, 0.4);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nm-rq__op svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .nm-rq__op:hover {
+    background: #eaeae7;
+  }
+
+  .nm-rq__op.is-on {
+    background: var(--nm-tinta);
+    color: #fff;
+    border-left-color: var(--nm-acento);
+  }
+
+  .nm-rq__op.is-on svg {
+    opacity: 1;
+  }
+
+  .nm-rq__consulta {
+    margin-top: 1.6rem;
+    background: var(--nm-papel);
+    padding: 1.3rem;
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+  }
+
+  .nm-rq__consulta span {
+    font-family: var(--nm-serif);
+    font-size: 1.3rem;
+    color: var(--nm-tinta);
+  }
+
+  .nm-rq__consulta p {
+    font-size: 0.86rem;
+    color: var(--nm-suave);
+    margin-bottom: 0.4rem;
+  }
+
+  .nm-rq__panel h3 {
+    font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+    margin-bottom: 1rem;
+  }
+
+  .nm-rq__intro {
+    color: var(--nm-suave);
+    max-width: 70ch;
+    margin-bottom: 1.8rem;
+  }
+
+  .nm-rq__panel h4 {
+    font-size: 1.55rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .nm-rq__lista {
+    font-size: 0.93rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid var(--nm-linea);
+    margin-bottom: 1.6rem;
+  }
+
+  .nm-rq__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .nm-rq__link {
+    font-size: 0.9rem;
+    color: var(--nm-tinta);
+    text-decoration: underline;
+    text-decoration-color: var(--nm-acento);
+    text-underline-offset: 4px;
+  }
+
+  .nm-rq__nota {
+    font-size: 0.8rem;
+    color: var(--nm-suave);
+  }
+
+  @media (max-width: 860px) {
+    .nm-rq__layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .nm-rq__grupo ul {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .nm-rq__op {
+      white-space: nowrap;
+    }
+
+    .nm-rq__op svg {
+      display: none;
+    }
+
+    .nm-rq__consulta {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nm-rq__acciones .nm-btn {
+      white-space: normal;
+      text-align: left;
+    }
+  }
+</style>

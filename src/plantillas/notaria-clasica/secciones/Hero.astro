@@ -1,0 +1,259 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { hero, marca } from '../datos/notaria.js';
+
+interface Acceso { t: string; d: string; href: string; ico: string }
+interface Horario { d: string; h: string[] }
+const accesos = hero.accesos as Acceso[];
+const horarios = marca.horario as Horario[];
+---
+
+<section class="ncl-hero" id="ncl-inicio" aria-label="Bienvenida">
+  <img class="ncl-hero__img" src={hero.img} alt="Persona firmando un documento notarial sobre el escritorio" fetchpriority="high" />
+  <div class="ncl-hero__scrim" aria-hidden="true"></div>
+
+  <div class="ncl-wrap ncl-hero__cont">
+    <div class="ncl-hero__fila">
+      <div class="ncl-hero__txt">
+        <h1>{hero.titulo}</h1>
+        <p>{hero.texto}</p>
+      </div>
+
+      <aside class="ncl-hero__info" aria-label="Datos de atención">
+        <ul>
+          <li>
+            <Icono n="tel" size={20} />
+            <a href={marca.telHref}><b>{marca.tel}</b></a>
+          </li>
+          <li>
+            <Icono n="edificio" size={20} />
+            <b>{marca.dir1}<br />{marca.dir2}<br />{marca.dir3}</b>
+          </li>
+          <li>
+            <Icono n="calendario" size={20} />
+            <span>
+              <b>{horarios[0].d}</b>
+              {horarios[0].h.map((h: string) => <small>{h}</small>)}
+            </span>
+          </li>
+        </ul>
+      </aside>
+    </div>
+
+    <ul class="ncl-hero__accesos">
+      {accesos.map((a) => (
+        <li>
+          <a href={a.href} class="ncl-acc">
+            <Icono n={a.ico} size={56} class="ncl-acc__ico" />
+            <h2>{a.t}</h2>
+            <p>{a.d}</p>
+            <span class="ncl-acc__mas">Ver más &gt;</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ncl-hero {
+    position: relative;
+    height: 100svh;
+    min-height: 640px;
+    color: #fff;
+    overflow: hidden;
+    background: var(--ncl-tinta-2);
+    border-bottom: 3px solid var(--ncl-acento);
+  }
+
+  .ncl-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  /* scrim de legibilidad sobre la foto (no decorativo) */
+  .ncl-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.3) 35%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0.65) 100%),
+      rgba(20, 16, 14, 0.25);
+  }
+
+  .ncl-hero__cont {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-top: calc(var(--ncl-hdr) + clamp(2rem, 7vh, 4.5rem));
+    padding-bottom: clamp(2rem, 8vh, 4rem);
+  }
+
+  .ncl-hero__fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2.5rem;
+  }
+
+  .ncl-hero__txt {
+    max-width: 450px;
+  }
+
+  .ncl-hero h1 {
+    color: #fff;
+    font-size: clamp(1.9rem, 3.3vw, 2.55rem);
+    font-weight: 400;
+    line-height: 1.22;
+    margin-bottom: 0.9rem;
+  }
+
+  .ncl-hero__txt p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: justify;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ncl-hero__info {
+    flex-shrink: 0;
+    width: 300px;
+    background: rgba(40, 36, 34, 0.86);
+    border-radius: 3px;
+    padding: 1.3rem 1.3rem 1.4rem;
+    font-family: var(--ncl-serif);
+  }
+
+  .ncl-hero__info ul {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ncl-hero__info li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 0.9rem;
+    align-items: start;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  .ncl-hero__info b {
+    font-weight: 500;
+  }
+
+  .ncl-hero__info span {
+    display: grid;
+  }
+
+  .ncl-hero__info small {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ncl-hero__accesos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+  }
+
+  .ncl-acc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(66, 62, 60, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 3px;
+    padding: 1.3rem 1.25rem 1rem;
+    box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.7);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .ncl-acc:hover {
+    background: rgba(167, 57, 36, 0.92);
+    transform: translateY(-3px);
+  }
+
+  .ncl-acc :global(.ncl-acc__ico) {
+    margin-bottom: 0.9rem;
+    stroke-width: 1.3;
+  }
+
+  .ncl-acc h2 {
+    color: #fff;
+    font-size: 1.28rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+
+  .ncl-acc p {
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.92);
+    flex: 1;
+  }
+
+  .ncl-acc__mas {
+    align-self: flex-end;
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .ncl-hero {
+      height: auto;
+      min-height: 100svh;
+    }
+
+    .ncl-hero__cont {
+      padding-top: calc(64px + 2.5rem);
+    }
+
+    .ncl-hero__fila {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .ncl-hero__info {
+      width: 100%;
+      max-width: 420px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .ncl-hero__accesos {
+      grid-template-columns: 1fr;
+      gap: 0.7rem;
+    }
+
+    .ncl-acc {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      column-gap: 0.9rem;
+      padding: 0.95rem 1rem;
+    }
+
+    .ncl-acc :global(.ncl-acc__ico) {
+      width: 40px;
+      height: 40px;
+      grid-row: span 3;
+      margin: 0;
+    }
+
+    .ncl-acc h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .ncl-acc__mas {
+      margin-top: 0.3rem;
+    }
+  }
+</style>

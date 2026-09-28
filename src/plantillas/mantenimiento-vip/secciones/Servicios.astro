@@ -1,0 +1,299 @@
+---
+import { servicios } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+
+type Grupo = { id: string; t: string; img: string; l: string[] };
+const total = servicios.grupos.reduce((n: number, g: Grupo) => n + g.l.length, 0);
+---
+
+<section class="mv-serv" id="servicios">
+  <img class="mv-serv__fondo" src={servicios.fondo} alt="" loading="lazy" />
+  <div class="mv-serv__scrim" aria-hidden="true"></div>
+
+  <div class="mv-wrap mv-serv__grid">
+    <div class="mv-serv__texto mv-reveal">
+      <p class="mv-serv__kicker">
+        {servicios.kicker} <br /><span>{servicios.kicker2}</span>
+      </p>
+      <h2 class="mv-serv__h2">
+        <span>{servicios.titulo[0]}</span>
+        <span>{servicios.titulo[1]}</span>
+      </h2>
+      <a href="#contactar" class="mv-cta mv-serv__cta"><span>{servicios.cta}</span></a>
+    </div>
+
+    <div class="mv-serv__panel mv-reveal" data-tabs>
+      <div class="mv-serv__tabs" role="tablist" aria-label="Sistemas incluidos">
+        {servicios.grupos.map((g: Grupo, i: number) => (
+          <button
+            type="button"
+            role="tab"
+            id={`mv-tab-${g.id}`}
+            aria-controls={`mv-pan-${g.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            class:list={['mv-serv__tab', { 'is-activo': i === 0 }]}
+          >{g.t}</button>
+        ))}
+      </div>
+
+      {servicios.grupos.map((g: Grupo, i: number) => (
+        <div
+          class="mv-serv__pan"
+          role="tabpanel"
+          id={`mv-pan-${g.id}`}
+          aria-labelledby={`mv-tab-${g.id}`}
+          hidden={i !== 0}
+        >
+          <div class="mv-serv__pan-foto">
+            <img src={g.img} alt={g.t} loading="lazy" />
+            <span>{g.l.length} servicios</span>
+          </div>
+          <ul>
+            {g.l.map((s: string) => (
+              <li><Icono nombre="check" size={16} trazo={2.4} />{s}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <p class="mv-serv__nota">
+        <b>{total}+</b> puntos de revisión en este resumen · la lista completa llega a tu WhatsApp con la cotización.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.tpl-mantenimiento-vip [data-tabs]').forEach((caja) => {
+    const tabs = Array.from(caja.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const activar = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle('is-activo', on);
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const pan = document.getElementById(t.getAttribute('aria-controls') ?? '');
+        if (pan) pan.hidden = !on;
+      });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => activar(t));
+      t.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const sig = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        activar(sig);
+        sig.focus();
+      });
+    });
+  });
+</script>
+
+<style>
+  .mv-serv {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(4.5rem, 9vw, 7rem);
+    overflow: hidden;
+  }
+
+  .mv-serv__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.05);
+    z-index: -2;
+  }
+
+  .mv-serv__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(11, 11, 11, 0.62);
+  }
+
+  .mv-serv__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .mv-serv__kicker {
+    font-size: clamp(1.2rem, 2.4vw, 1.9rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.05;
+    transform: rotate(-4deg);
+    transform-origin: left;
+  }
+
+  .mv-serv__kicker span {
+    color: #fff;
+  }
+
+  .mv-serv__kicker::first-line {
+    color: var(--mv-rojo);
+  }
+
+  .mv-serv__h2 {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.6rem;
+    font-size: clamp(2.6rem, 6.4vw, 5rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: #eaeaea;
+    text-shadow: 0 3px 0 #7a7a7a;
+    transform: rotate(-4deg);
+    transform-origin: left;
+  }
+
+  .mv-serv__h2 span:last-child {
+    font-size: 1.25em;
+  }
+
+  .mv-serv__cta {
+    margin-top: 2.4rem;
+    max-width: 330px;
+    font-size: 0.88rem;
+  }
+
+  .mv-serv__panel {
+    min-width: 0;
+    background: rgba(11, 11, 11, 0.92);
+    border: 1px solid var(--mv-linea);
+    border-radius: 16px;
+    padding: 1.2rem;
+  }
+
+  .mv-serv__tabs {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.2rem;
+  }
+
+  .mv-serv__tab {
+    flex-shrink: 0;
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--mv-humo);
+    border: 1px solid var(--mv-linea);
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .mv-serv__tab:hover {
+    color: #fff;
+  }
+
+  .mv-serv__tab.is-activo {
+    background: #fff;
+    border-color: #fff;
+    color: var(--mv-negro);
+  }
+
+  .mv-serv__pan {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1.2rem;
+    margin-top: 1.1rem;
+    animation: mv-fade 0.35s ease;
+  }
+
+  .mv-serv__pan[hidden] {
+    display: none;
+  }
+
+  @keyframes mv-fade {
+    from { opacity: 0; transform: translateY(6px); }
+  }
+
+  .mv-serv__pan-foto {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 200px;
+  }
+
+  .mv-serv__pan-foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mv-serv__pan-foto span {
+    position: absolute;
+    left: 0.6rem;
+    bottom: 0.6rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background: var(--mv-rojo);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .mv-serv__pan ul {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+  }
+
+  .mv-serv__pan li {
+    display: flex;
+    gap: 0.55rem;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .mv-serv__pan li :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--mv-rojo);
+  }
+
+  .mv-serv__nota {
+    margin-top: 1.1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--mv-linea);
+    font-size: 0.8rem;
+    color: var(--mv-humo);
+  }
+
+  .mv-serv__nota b {
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .mv-serv {
+      min-height: 0;
+    }
+    .mv-serv__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mv-serv__pan {
+      grid-template-columns: 1fr;
+    }
+    .mv-serv__pan-foto {
+      min-height: 150px;
+    }
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { nosotros } from '../datos/notaria.js';
+---
+
+<section class="ncl-seccion ncl-val" id="ncl-valores" aria-labelledby="ncl-val-t">
+  <div class="ncl-wrap ncl-val__grid">
+    <div class="ncl-val__mv">
+      <span class="ncl-kicker">La Notaría</span>
+      <h2 class="ncl-titulo" id="ncl-val-t">Misión, visión y valores</h2>
+      <div class="ncl-val__bloque">
+        <h3>Misión</h3>
+        <p>{nosotros.mision}</p>
+      </div>
+      <div class="ncl-val__bloque">
+        <h3>Visión</h3>
+        <p>{nosotros.vision}</p>
+      </div>
+    </div>
+
+    <div class="ncl-val__lista">
+      <h3>Nuestros Valores</h3>
+      <ul>
+        {nosotros.valores.map((v: string, i: number) => (
+          <li>
+            <span class="ncl-val__n">{String(i + 1).padStart(2, '0')}</span>
+            <span>{v}</span>
+            <Icono n="check" size={18} class="ncl-val__ck" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ncl-val__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .ncl-val__bloque {
+    border-left: 2px solid var(--ncl-acento);
+    padding-left: 1.1rem;
+    margin-top: 1.4rem;
+  }
+
+  .ncl-val__bloque h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .ncl-val__bloque p {
+    font-size: 0.9rem;
+    text-align: justify;
+  }
+
+  .ncl-val__lista {
+    background: var(--ncl-tinta);
+    color: #fff;
+    border-radius: 3px;
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+  }
+
+  .ncl-val__lista h3 {
+    color: #fff;
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .ncl-val__lista li {
+    display: grid;
+    grid-template-columns: 38px 1fr auto;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.95rem;
+  }
+
+  .ncl-val__n {
+    font-family: var(--ncl-serif);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+  }
+
+  .ncl-val__lista :global(.ncl-val__ck) {
+    color: var(--ncl-acento);
+    stroke-width: 2.2;
+  }
+
+  @media (max-width: 800px) {
+    .ncl-val__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

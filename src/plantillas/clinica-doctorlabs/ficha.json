@@ -6,7 +6,7 @@
   "tags": ["clinica", "salud", "multiespecialidad", "cardiologia", "laboratorio", "ecografia", "rayos x", "servicios"],
   "paleta": ["#8b3a9e", "#2dd4c8", "#1e2a3a", "#d6528c"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "doctorlabs.com.pe",
   "orden": 74
 }

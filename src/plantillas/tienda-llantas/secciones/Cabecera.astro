@@ -1,0 +1,449 @@
+---
+import { marca, navPrincipal } from '../datos/llantas.js';
+---
+
+<header class="ll-hdr" id="ll-hdr">
+  <div class="ll-wrap ll-hdr__row">
+    <a href="#top" class="ll-logo" aria-label={`${marca.nombre} ${marca.sub}`}>
+      <span class="ll-logo__marca">
+        <svg class="ll-logo__rueda" viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="5 2.5"></circle>
+          <circle cx="20" cy="20" r="6" fill="currentColor"></circle>
+        </svg>
+        <span>tienda.com</span>
+      </span>
+      <span class="ll-logo__sub">{marca.sub}</span>
+    </a>
+
+    <nav class="ll-nav" id="ll-nav" aria-label="Navegacion principal">
+      {navPrincipal.map((n: { t: string; href: string }) => (
+        <a href={n.href}>{n.t}</a>
+      ))}
+    </nav>
+
+    <div class="ll-hdr__acc">
+      <div class="ll-mini-wrap" id="ll-mini-wrap">
+        <button type="button" class="ll-hdr__cart" id="ll-cart-toggle" aria-label="Ver carrito" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 7H6.2"></path>
+            <circle cx="9" cy="19.5" r="1.4"></circle><circle cx="17" cy="19.5" r="1.4"></circle>
+          </svg>
+          <span class="ll-hdr__badge" id="ll-cart-count" hidden>0</span>
+        </button>
+
+        <div class="ll-mini" id="ll-mini" hidden>
+          <p class="ll-mini__vacio" id="ll-mini-vacio">No hay productos en el carrito.</p>
+          <div class="ll-mini__lista" id="ll-mini-lista"></div>
+          <div class="ll-mini__pie" id="ll-mini-pie" hidden>
+            <div class="ll-mini__total"><span>Subtotal</span><b id="ll-mini-total">S/ 0.00</b></div>
+            <p class="ll-mini__nota">Incluye instalacion y balanceo en tienda.</p>
+            <button type="button" class="ll-btn ll-btn--rojo ll-mini__fin" id="ll-mini-fin">Finalizar compra</button>
+            <p class="ll-mini__ok" id="ll-mini-ok" hidden>Demo: pedido registrado. Un asesor te llamara para coordinar la instalacion.</p>
+          </div>
+        </div>
+      </div>
+
+      <a href="#catalogo" class="ll-btn ll-btn--rojo ll-hdr__cta">Compra online</a>
+
+      <button type="button" class="ll-burger" id="ll-burger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hdr = document.getElementById('ll-hdr');
+  const onScroll = () => hdr?.classList.toggle('is-solid', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* Menu movil */
+  const burger = document.getElementById('ll-burger');
+  const nav = document.getElementById('ll-nav');
+  burger?.addEventListener('click', () => {
+    const abierto = !nav?.classList.contains('is-open');
+    nav?.classList.toggle('is-open', abierto);
+    hdr?.classList.toggle('is-menu', abierto);
+    burger.setAttribute('aria-expanded', String(abierto));
+  });
+  nav?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-open');
+      hdr?.classList.remove('is-menu');
+      burger?.setAttribute('aria-expanded', 'false');
+    })
+  );
+
+  /* Carrito */
+  interface Item { id: string; nombre: string; medida: string; precio: number; img: string; cantidad: number }
+  const carrito: Item[] = [];
+
+  const toggle = document.getElementById('ll-cart-toggle');
+  const mini = document.getElementById('ll-mini');
+  const wrap = document.getElementById('ll-mini-wrap');
+  const lista = document.getElementById('ll-mini-lista');
+  const vacio = document.getElementById('ll-mini-vacio');
+  const pie = document.getElementById('ll-mini-pie');
+  const total = document.getElementById('ll-mini-total');
+  const badge = document.getElementById('ll-cart-count');
+  const fin = document.getElementById('ll-mini-fin');
+  const ok = document.getElementById('ll-mini-ok');
+
+  const soles = (n: number) =>
+    'S/ ' + n.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function pintar() {
+    if (!lista || !vacio || !pie || !total || !badge) return;
+    const nItems = carrito.reduce((a, i) => a + i.cantidad, 0);
+    const suma = carrito.reduce((a, i) => a + i.cantidad * i.precio, 0);
+    badge.textContent = String(nItems);
+    badge.hidden = nItems === 0;
+    vacio.hidden = carrito.length > 0;
+    pie.hidden = carrito.length === 0;
+    total.textContent = soles(suma);
+    lista.innerHTML = '';
+    carrito.forEach((it) => {
+      const row = document.createElement('div');
+      row.className = 'll-mini__item';
+      row.innerHTML = `
+        <img src="${it.img}" alt="" />
+        <div><b>${it.nombre}</b><span>${it.medida} · ${it.cantidad} x ${soles(it.precio)}</span></div>
+        <button type="button" class="ll-mini__quitar" data-quitar="${it.id}" aria-label="Quitar">&times;</button>`;
+      lista.appendChild(row);
+    });
+  }
+
+  function abrir(v: boolean) {
+    if (!mini || !toggle) return;
+    mini.hidden = !v;
+    toggle.setAttribute('aria-expanded', String(v));
+  }
+
+  toggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    abrir(mini?.hidden ?? true);
+  });
+
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+
+    const quitar = el.closest<HTMLElement>('[data-quitar]');
+    if (quitar) {
+      e.stopPropagation();
+      const idx = carrito.findIndex((i) => i.id === quitar.dataset.quitar);
+      if (idx > -1) carrito.splice(idx, 1);
+      if (ok) ok.hidden = true;
+      pintar();
+      return;
+    }
+
+    const btn = el.closest<HTMLButtonElement>('.ll-prod__comprar');
+    if (btn) {
+      const card = btn.closest<HTMLElement>('.ll-prod');
+      if (!card) return;
+      const d = card.dataset;
+      const id = d.id || '';
+      const ex = carrito.find((i) => i.id === id);
+      if (ex) ex.cantidad += 1;
+      else
+        carrito.push({
+          id,
+          nombre: d.nombre || 'Llanta',
+          medida: d.medida || '',
+          precio: Number(d.precio || 0),
+          img: d.img || '',
+          cantidad: 1,
+        });
+      if (ok) ok.hidden = true;
+      pintar();
+      badge?.classList.remove('is-pop');
+      void badge?.offsetWidth;
+      badge?.classList.add('is-pop');
+      const prev = btn.dataset.label || btn.textContent || 'Comprar';
+      btn.dataset.label = prev;
+      btn.textContent = 'Agregado al carrito';
+      btn.classList.add('is-ok');
+      window.clearTimeout(Number(btn.dataset.t || 0));
+      btn.dataset.t = String(window.setTimeout(() => {
+        btn.textContent = prev;
+        btn.classList.remove('is-ok');
+      }, 1200));
+      return;
+    }
+
+    if (wrap && !wrap.contains(el)) abrir(false);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') abrir(false);
+  });
+
+  fin?.addEventListener('click', () => {
+    if (ok) ok.hidden = false;
+  });
+</script>
+
+<style>
+  .ll-hdr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    color: #fff;
+    background: transparent;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .ll-hdr.is-solid,
+  .ll-hdr.is-menu {
+    background: var(--ll-negro);
+    box-shadow: 0 6px 20px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  .ll-hdr__row {
+    height: var(--ll-hdr);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .ll-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .ll-logo__marca {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--ll-titulos);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .ll-logo__rueda {
+    width: 24px;
+    height: 24px;
+    color: var(--ll-rojo);
+  }
+
+  .ll-logo__sub {
+    margin-left: 1.95rem;
+    margin-top: 0.1rem;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ll-rojo);
+  }
+
+  .ll-nav {
+    display: flex;
+    gap: 1.6rem;
+    margin-left: auto;
+  }
+
+  .ll-nav a {
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding-block: 0.4rem;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+
+  .ll-nav a:hover {
+    border-color: var(--ll-rojo);
+  }
+
+  .ll-hdr__acc {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .ll-mini-wrap {
+    position: relative;
+  }
+
+  .ll-hdr__cart {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+  }
+
+  .ll-hdr__cart:hover {
+    color: var(--ll-rojo);
+  }
+
+  .ll-hdr__badge[hidden] {
+    display: none;
+  }
+
+  .ll-hdr__badge {
+    position: absolute;
+    top: 1px;
+    right: -1px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: var(--ll-rojo);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+
+  .ll-hdr__badge.is-pop {
+    animation: ll-pop 0.35s ease;
+  }
+
+  @keyframes ll-pop {
+    50% { transform: scale(1.45); }
+  }
+
+  .ll-mini[hidden] {
+    display: none;
+  }
+
+  .ll-mini {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: -8px;
+    width: min(340px, 90vw);
+    background: #fff;
+    color: var(--ll-texto);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.55);
+  }
+
+  .ll-mini::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 22px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    transform: rotate(45deg);
+  }
+
+  .ll-mini__vacio[hidden],
+  .ll-mini__pie[hidden],
+  .ll-mini__ok[hidden] {
+    display: none;
+  }
+
+  .ll-mini__vacio {
+    font-size: 0.8rem;
+    color: var(--ll-gris);
+    text-align: center;
+    padding-block: 0.5rem;
+  }
+
+  .ll-mini__lista {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .ll-mini__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .ll-mini__nota {
+    font-size: 0.7rem;
+    color: var(--ll-gris);
+    margin-top: 0.2rem;
+  }
+
+  .ll-mini__fin {
+    width: 100%;
+    margin-top: 0.8rem;
+  }
+
+  .ll-mini__ok {
+    margin-top: 0.6rem;
+    font-size: 0.74rem;
+    color: var(--ll-texto);
+    background: var(--ll-gris-claro);
+    border-left: 3px solid var(--ll-rojo);
+    padding: 0.5rem 0.6rem;
+  }
+
+  .ll-hdr__cta {
+    padding: 0.6rem 1rem;
+  }
+
+  .ll-burger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding-inline: 9px;
+  }
+
+  .ll-burger span {
+    display: block;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 1080px) {
+    .ll-nav {
+      display: none;
+      position: absolute;
+      top: var(--ll-hdr);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--ll-negro);
+      padding: 0.5rem clamp(1rem, 3vw, 2rem) 1.25rem;
+      border-top: 1px solid var(--ll-linea-osc);
+    }
+
+    .ll-nav.is-open {
+      display: flex;
+    }
+
+    .ll-nav a {
+      padding-block: 0.8rem;
+      border-bottom: 1px solid var(--ll-linea-osc);
+    }
+
+    .ll-burger {
+      display: flex;
+    }
+
+    .ll-hdr__acc {
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ll-hdr__cta {
+      display: none;
+    }
+  }
+</style>

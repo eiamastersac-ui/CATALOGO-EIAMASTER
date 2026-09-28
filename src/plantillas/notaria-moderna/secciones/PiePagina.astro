@@ -1,0 +1,215 @@
+---
+import { marca, entidades, img } from '../datos/notaria.js';
+
+interface Hor { dia: string; h: string }
+const horario = marca.horario as Hor[];
+const links = [
+  { t: 'Trámites en línea', href: '#tramites' },
+  { t: 'Servicios', href: '#servicios' },
+  { t: 'Requisitos', href: '#requisitos' },
+  { t: 'Contáctenos', href: '#contacto' },
+  { t: 'Consulta tu Kardex', href: '#kardex' },
+];
+const anio = 2026;
+---
+
+<footer class="nm-pie">
+  <div class="nm-wrap">
+    <ul class="nm-pie__entidades" aria-label="Entidades con las que trabajamos">
+      {(entidades as string[]).map((e) => <li>{e}</li>)}
+    </ul>
+
+    <div class="nm-pie__marca-row">
+      <div>
+        <p class="nm-pie__marca">tienda.com <span>Notaría</span></p>
+        <p class="nm-pie__lema">{marca.lema}</p>
+      </div>
+      <nav aria-label="Enlaces del pie">
+        <ul class="nm-pie__links">
+          {links.map((l) => <li><a href={l.href}>{l.t}</a></li>)}
+          <li><button type="button" data-cita>Reserva tu cita</button></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div class="nm-pie__franja">
+    <img src={img('lima', 1800)} alt="Malecón de Miraflores, Lima" loading="lazy" />
+    <div class="nm-wrap nm-pie__cols">
+      <div>
+        <h3>Horario de atención</h3>
+        {horario.map((h) => <p>{h.dia}: {h.h}</p>)}
+      </div>
+      <div>
+        <h3>Central telefónica</h3>
+        <a class="nm-pie__tel" href={marca.telHref}>{marca.tel}</a>
+      </div>
+      <div>
+        <h3>Dirección</h3>
+        {(marca.direccionLarga as string[]).map((l) => <p>{l}</p>)}
+      </div>
+      <div>
+        <h3>Escríbenos</h3>
+        <a href={`mailto:${marca.correo}`}>{marca.correo}</a>
+        <p class="nm-pie__libro">Libro de reclamaciones virtual</p>
+      </div>
+    </div>
+    <div class="nm-wrap nm-pie__legal">
+      <p>© {anio} tienda.com Notaría · Notario titular: {marca.notario} (ficticio)</p>
+      <p>Plantilla demo · Sin fines comerciales</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .nm-pie {
+    background: #fff;
+    color: var(--nm-texto);
+    padding-top: 3rem;
+  }
+
+  .nm-pie__entidades {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem 2.8rem;
+    padding-bottom: 2.4rem;
+  }
+
+  .nm-pie__entidades li {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #a9b1b6;
+  }
+
+  .nm-pie__marca-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.2rem 2rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid var(--nm-linea);
+  }
+
+  .nm-pie__marca {
+    font-family: var(--nm-serif);
+    font-size: 1.9rem;
+    color: var(--nm-tinta);
+    line-height: 1.1;
+  }
+
+  .nm-pie__marca span {
+    color: var(--nm-acento);
+  }
+
+  .nm-pie__lema {
+    font-size: 0.9rem;
+  }
+
+  .nm-pie__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.3rem;
+  }
+
+  .nm-pie__links a,
+  .nm-pie__links button {
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--nm-tinta);
+  }
+
+  .nm-pie__links a:hover,
+  .nm-pie__links button:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--nm-acento);
+    text-underline-offset: 4px;
+  }
+
+  .nm-pie__franja {
+    position: relative;
+    margin-top: 2rem;
+    background: var(--nm-tinta-2);
+    color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+  }
+
+  .nm-pie__franja img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.16;
+    filter: grayscale(1);
+  }
+
+  .nm-pie__cols {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+    padding-top: 2.8rem;
+    padding-bottom: 2.4rem;
+    font-size: 0.88rem;
+  }
+
+  .nm-pie__cols h3 {
+    font-family: var(--nm-sans);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.7rem;
+  }
+
+  .nm-pie__cols a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .nm-pie__tel {
+    font-size: 1.35rem;
+    font-weight: 300;
+    color: #fff;
+  }
+
+  .nm-pie__libro {
+    margin-top: 0.8rem;
+    font-size: 0.78rem;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.3rem 0.6rem;
+  }
+
+  .nm-pie__legal {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  @media (max-width: 860px) {
+    .nm-pie__cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nm-pie__cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.4rem;
+    }
+
+    .nm-pie__entidades {
+      gap: 0.6rem 1.6rem;
+    }
+  }
+</style>

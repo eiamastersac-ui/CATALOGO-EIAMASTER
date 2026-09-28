@@ -1,0 +1,12 @@
+{
+  "titulo": "tienda.com Llantas (Estilo Alvillantas)",
+  "categoria": "llantas-neumaticos",
+  "descripcion": "Tienda online de llantas y neumaticos: cabecera fija transparente con mini carrito desplegable, hero carrusel a pantalla completa (4 slides con autoplay), buscador de llantas por medida (ancho / perfil / aro encadenados) con diagrama de lectura del neumatico, tarjetas foto-primero por tipo de vehiculo, carrusel automatico de marcas, carrusel de productos destacados, catalogo con filtros por vehiculo y marca, 12 servicios de taller, seccion nosotros, banner de delivery con medios de pago y pie con tiendas. Chat flotante estilo WhatsApp con respuestas automaticas. Sin login. Marca propia tienda.com.",
+  "thumbnail": "/previews/tienda-llantas.jpg",
+  "tags": ["llantas", "neumaticos", "automotriz", "ecommerce", "carrito", "buscador por medida", "taller", "chatbot"],
+  "paleta": ["#111111", "#c41212", "#f5f5f5", "#ffffff"],
+  "destacada": false,
+  "nuevo": true,
+  "inspiradoEn": "alvillantas.com",
+  "orden": 84
+}

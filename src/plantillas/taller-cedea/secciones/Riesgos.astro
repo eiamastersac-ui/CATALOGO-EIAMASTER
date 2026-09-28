@@ -1,0 +1,92 @@
+---
+import { riesgos } from '../datos/taller.js';
+---
+
+<section class="tc-seccion tc-riesgos" id="riesgos">
+  <img class="tc-riesgos__fondo" src={riesgos.fondo} alt="" loading="lazy" aria-hidden="true" />
+  <div class="tc-riesgos__velo" aria-hidden="true"></div>
+
+  <div class="tc-wrap tc-riesgos__cont">
+    <h2>{riesgos.titulo[0]}<b>{riesgos.titulo[1]}</b></h2>
+    <a href="#contacto" class="tc-btn tc-btn--acento">Contáctanos Hoy</a>
+    <p>{riesgos.intro}</p>
+    <ol class="tc-riesgos__lista">
+      {riesgos.lista.map((l: string, i: number) => (
+        <li><span>{String(i + 1).padStart(2, '0')}</span>{l}</li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .tc-riesgos {
+    position: relative;
+    isolation: isolate;
+    color: #fff;
+    background: var(--tc-tinta-2);
+  }
+
+  .tc-riesgos__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .tc-riesgos__velo {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 26, 45, 0.86);
+    z-index: -1;
+  }
+
+  .tc-riesgos__cont {
+    display: grid;
+    gap: 1.3rem;
+    justify-items: start;
+  }
+
+  .tc-riesgos h2 {
+    color: #fff;
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+    max-width: 22ch;
+  }
+
+  .tc-riesgos p {
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 640px;
+  }
+
+  .tc-riesgos__lista {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2.5rem;
+    width: 100%;
+    counter-reset: none;
+  }
+
+  .tc-riesgos__lista li {
+    display: flex;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    color: #fff;
+  }
+
+  .tc-riesgos__lista span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--tc-acento);
+    letter-spacing: 0.1em;
+    padding-top: 0.2rem;
+  }
+
+  @media (max-width: 760px) {
+    .tc-riesgos__lista {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

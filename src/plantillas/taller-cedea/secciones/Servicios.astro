@@ -1,0 +1,207 @@
+---
+import { servicios } from '../datos/taller.js';
+
+interface Servicio { t: string; d: string; img: string }
+const items = servicios.items as Servicio[];
+---
+
+<section class="tc-seccion tc-serv" id="servicios">
+  <img class="tc-serv__fondo" src={servicios.fondo} alt="" loading="lazy" aria-hidden="true" />
+  <div class="tc-serv__velo" aria-hidden="true"></div>
+
+  <div class="tc-wrap tc-serv__cont">
+    <header class="tc-serv__head">
+      <h2>{servicios.titulo}</h2>
+      <p>{servicios.texto}</p>
+    </header>
+
+    <ul class="tc-serv__grid">
+      {items.map((s, i) => (
+        <li>
+          <article class="tc-serv__card">
+            <img src={s.img} alt={s.t} loading="lazy" />
+            <div class="tc-serv__tx">
+              <span class="tc-serv__n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+              <button type="button" class="tc-serv__link" data-cita data-servicio={s.t}>
+                Agendar este servicio <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tc-serv {
+    position: relative;
+    color: #fff;
+    background: var(--tc-tinta);
+    isolation: isolate;
+  }
+
+  .tc-serv__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  /* velo solido de marca sobre la foto del taller, igual que el sitio original */
+  .tc-serv__velo {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 38, 64, 0.88);
+    z-index: -1;
+  }
+
+  .tc-serv__head {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto clamp(2rem, 5vw, 3rem);
+  }
+
+  .tc-serv__head h2 {
+    color: #fff;
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+    font-weight: 700;
+    margin-bottom: 0.9rem;
+  }
+
+  .tc-serv__head p {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .tc-serv__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .tc-serv__card {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--tc-radio);
+    overflow: hidden;
+    background: var(--tc-tinta-2);
+  }
+
+  .tc-serv__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .tc-serv__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 26, 45, 0) 30%, rgba(10, 26, 45, 0.92) 100%);
+    transition: background 0.3s ease;
+  }
+
+  .tc-serv__tx {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: 1.1rem 1.1rem 1.2rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .tc-serv__n {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .tc-serv__tx h3 {
+    color: #fff;
+    font-size: 1.12rem;
+    font-weight: 700;
+  }
+
+  .tc-serv__tx p {
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.82);
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+  }
+
+  .tc-serv__link {
+    justify-self: start;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    border-bottom: 2px solid var(--tc-acento);
+    padding: 0.1rem 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+  }
+
+  .tc-serv__card:hover img,
+  .tc-serv__card:focus-within img {
+    transform: scale(1.06);
+  }
+
+  .tc-serv__card:hover::after,
+  .tc-serv__card:focus-within::after {
+    background: rgba(10, 26, 45, 0.82);
+  }
+
+  .tc-serv__card:hover p,
+  .tc-serv__card:focus-within p {
+    max-height: 7rem;
+    opacity: 1;
+  }
+
+  .tc-serv__card:hover .tc-serv__link,
+  .tc-serv__card:focus-within .tc-serv__link {
+    max-height: 2rem;
+    opacity: 1;
+  }
+
+  @media (max-width: 980px) {
+    .tc-serv__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (hover: none), (max-width: 560px) {
+    .tc-serv__tx p,
+    .tc-serv__link {
+      max-height: none;
+      opacity: 1;
+    }
+
+    .tc-serv__card::after {
+      background: linear-gradient(180deg, rgba(10, 26, 45, 0.1) 10%, rgba(10, 26, 45, 0.92) 100%);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .tc-serv__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tc-serv__card {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

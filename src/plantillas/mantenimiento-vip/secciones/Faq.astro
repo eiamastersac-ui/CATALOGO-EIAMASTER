@@ -1,0 +1,93 @@
+---
+import { faqs } from '../datos/mantenimiento.js';
+---
+
+<section class="mv-faq" id="faqs">
+  <div class="mv-wrap">
+    <div class="mv-faq__caja mv-reveal">
+      <h2 class="mv-titulo">Preguntas frecuentes</h2>
+      <div class="mv-faq__lista" id="mv-faq-lista">
+        {faqs.map((f: { q: string; a: string }, i: number) => (
+          <details open={i === 0}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Acordeon exclusivo: abrir una pregunta cierra las demas.
+  const items = Array.from(document.querySelectorAll<HTMLDetailsElement>('.tpl-mantenimiento-vip #mv-faq-lista details'));
+  items.forEach((d) =>
+    d.addEventListener('toggle', () => {
+      if (d.open) items.forEach((o) => { if (o !== d) o.open = false; });
+    }),
+  );
+</script>
+
+<style>
+  .mv-faq {
+    padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .mv-faq__caja {
+    max-width: 1080px;
+    margin-inline: auto;
+    padding: clamp(1.8rem, 4vw, 2.6rem) clamp(1.1rem, 3vw, 2rem);
+    border: 1px solid var(--mv-linea);
+    border-radius: 24px;
+    background: var(--mv-negro);
+  }
+
+  .mv-faq__lista {
+    margin-top: 1.4rem;
+  }
+
+  .mv-faq details {
+    border-bottom: 1.5px solid #555;
+  }
+
+  .mv-faq summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0.5rem;
+    font-weight: 700;
+    font-size: clamp(0.98rem, 1.6vw, 1.15rem);
+    transition: color 0.2s ease;
+  }
+
+  .mv-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mv-faq summary::after {
+    content: "";
+    flex-shrink: 0;
+    border: 5px solid transparent;
+    border-top: 6px solid #fff;
+    border-bottom: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .mv-faq details[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  .mv-faq summary:hover {
+    color: var(--mv-rojo);
+  }
+
+  .mv-faq details p {
+    padding: 0 0.5rem 1.1rem;
+    color: var(--mv-humo);
+    font-size: 0.93rem;
+    max-width: 80ch;
+  }
+</style>

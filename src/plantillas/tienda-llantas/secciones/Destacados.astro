@@ -1,0 +1,58 @@
+---
+import { productos } from '../datos/llantas.js';
+import TarjetaProducto from '../componentes/TarjetaProducto.astro';
+
+const destacados = productos.filter((p: { destacado?: boolean }) => p.destacado);
+---
+
+<section class="ll-seccion ll-dest" id="destacados" aria-labelledby="ll-dest-titulo">
+  <div class="ll-wrap">
+    <header class="ll-cabeza ll-dest__cabeza">
+      <div>
+        <span class="ll-kicker">- Seleccion -</span>
+        <h2 class="ll-titulo" id="ll-dest-titulo">Productos <em>Destacados</em></h2>
+      </div>
+      <div class="ll-dest__flechas">
+        <button type="button" class="ll-flecha" data-dir="-1" aria-label="Anterior">&#8249;</button>
+        <button type="button" class="ll-flecha" data-dir="1" aria-label="Siguiente">&#8250;</button>
+      </div>
+    </header>
+
+    <div class="ll-fila" id="ll-dest-fila">
+      {destacados.map((p: any) => <TarjetaProducto producto={p} />)}
+    </div>
+  </div>
+</section>
+
+<script>
+  const fila = document.getElementById('ll-dest-fila');
+  document.querySelectorAll<HTMLButtonElement>('.ll-dest__flechas .ll-flecha').forEach((b) => {
+    b.addEventListener('click', () => {
+      if (!fila) return;
+      const card = fila.firstElementChild as HTMLElement | null;
+      const paso = (card?.offsetWidth || 280) + 20;
+      const dir = Number(b.dataset.dir);
+      const fin = fila.scrollLeft + fila.clientWidth >= fila.scrollWidth - 4;
+      if (dir > 0 && fin) fila.scrollTo({ left: 0, behavior: 'smooth' });
+      else fila.scrollBy({ left: dir * paso, behavior: 'smooth' });
+    });
+  });
+</script>
+
+<style>
+  .ll-dest {
+    background: var(--ll-gris-claro);
+  }
+
+  .ll-dest__cabeza {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .ll-dest__flechas {
+    display: flex;
+    gap: 0.5rem;
+  }
+</style>

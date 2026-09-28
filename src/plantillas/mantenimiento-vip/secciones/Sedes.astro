@@ -1,0 +1,129 @@
+---
+import { sedes } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+
+type Sede = { t: string; dir: string; img: string; horario: string };
+---
+
+<section class="mv-sedes" id="sedes">
+  <h2 class="mv-titulo mv-reveal">Nuestras sedes</h2>
+  <div class="mv-sedes__grid">
+    {sedes.map((s: Sede) => (
+      <a
+        class="mv-sedes__card mv-reveal"
+        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.dir + ', Lima')}`}
+        target="_blank"
+        rel="noopener"
+      >
+        <img src={s.img} alt={`Taller ${s.t}`} loading="lazy" />
+        <div class="mv-sedes__info">
+          <span class="mv-sedes__ico"><Icono nombre="taller" size={30} trazo={1.5} /></span>
+          <span>
+            <b>{s.t}</b>
+            {s.dir}
+            <small><Icono nombre="reloj" size={13} /> {s.horario}</small>
+          </span>
+          <span class="mv-sedes__ver">Cómo llegar <Icono nombre="flecha" size={16} /></span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .mv-sedes {
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .mv-sedes__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 2.4rem;
+  }
+
+  .mv-sedes__card {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--mv-card);
+  }
+
+  .mv-sedes__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mv-sedes__card:hover img {
+    transform: scale(1.04);
+  }
+
+  .mv-sedes__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(11, 11, 11, 0.92) 100%);
+  }
+
+  .mv-sedes__info {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1.3rem clamp(1rem, 2vw, 1.6rem);
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .mv-sedes__info b {
+    display: block;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+  }
+
+  .mv-sedes__info small {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.25rem;
+    color: var(--mv-humo);
+    font-size: 0.78rem;
+  }
+
+  .mv-sedes__ico {
+    flex-shrink: 0;
+    color: #fff;
+  }
+
+  .mv-sedes__ver {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    padding: 0.5rem 0.9rem;
+    border-radius: 4px;
+    background: var(--mv-rojo);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 760px) {
+    .mv-sedes__grid {
+      grid-template-columns: 1fr;
+    }
+    .mv-sedes__ver {
+      display: none;
+    }
+  }
+</style>

@@ -6,7 +6,7 @@
   "tags": ["barbería", "barber shop", "cortes", "barba", "afeitado", "caballeros", "perú", "reservas", "landing"],
   "paleta": ["#000000", "#1e1e1e", "#969696", "#eeeeee", "#ffffff"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "montalvoformen.com.pe",
   "orden": 78
 }

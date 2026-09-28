@@ -1,0 +1,314 @@
+---
+import { marca } from '../datos/llantas.js';
+---
+
+<div class="ll-chat" id="ll-chat">
+  <section class="ll-chat__panel" id="ll-chat-panel" hidden aria-label="Chat de ayuda">
+    <header class="ll-chat__head">
+      <span class="ll-chat__ava" aria-hidden="true">
+        <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="5 2.5"></circle><circle cx="20" cy="20" r="5" fill="currentColor"></circle></svg>
+      </span>
+      <div>
+        <b>{marca.nombre} {marca.sub}</b>
+        <small><i></i>En linea · responde en minutos</small>
+      </div>
+      <button type="button" class="ll-chat__x" id="ll-chat-x" aria-label="Cerrar chat">&times;</button>
+    </header>
+
+    <div class="ll-chat__body" id="ll-chat-body">
+      <p class="ll-chat__msg ll-chat__msg--bot">Hola! Bienvenido a tienda.com Llantas.</p>
+      <p class="ll-chat__msg ll-chat__msg--bot">¿Buscas llantas para auto, camioneta, camion o maquinaria? Cuentame y te cotizo al toque.</p>
+    </div>
+
+    <div class="ll-chat__rapidas" id="ll-chat-rapidas">
+      <button type="button">Cotizar una medida</button>
+      <button type="button">Delivery a domicilio</button>
+      <button type="button">Medios de pago</button>
+    </div>
+
+    <form class="ll-chat__form" id="ll-chat-form">
+      <input type="text" id="ll-chat-input" placeholder="Escribe un mensaje..." aria-label="Mensaje" autocomplete="off" />
+      <button type="submit" aria-label="Enviar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5 21 12 3 3.5l.01 6.6L15 12 3.01 13.9z"></path></svg>
+      </button>
+    </form>
+    <p class="ll-chat__pow">Demo — respuestas automaticas</p>
+  </section>
+
+  <div class="ll-chat__fila">
+    <button type="button" class="ll-chat__burbuja" id="ll-chat-burbuja">
+      <b>¡Hola! ¿Buscas llantas?</b>
+      <small>Escribenos por WhatsApp</small>
+    </button>
+    <button type="button" class="ll-chat__toggle" id="ll-chat-toggle" aria-label="Abrir chat" aria-expanded="false">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { chatCanned } from '../datos/llantas.js';
+
+  const toggle = document.getElementById('ll-chat-toggle');
+  const burbuja = document.getElementById('ll-chat-burbuja');
+  const cerrar = document.getElementById('ll-chat-x');
+  const panel = document.getElementById('ll-chat-panel');
+  const body = document.getElementById('ll-chat-body');
+  const form = document.getElementById('ll-chat-form');
+  const input = document.getElementById('ll-chat-input') as HTMLInputElement | null;
+  const rapidas = document.getElementById('ll-chat-rapidas');
+  let paso = 0;
+
+  function abrir(v: boolean) {
+    if (!panel || !toggle) return;
+    panel.hidden = !v;
+    toggle.setAttribute('aria-expanded', String(v));
+    if (burbuja) burbuja.hidden = v;
+    if (v) input?.focus();
+  }
+
+  function push(texto: string, quien: 'bot' | 'yo') {
+    if (!body) return;
+    const p = document.createElement('p');
+    p.className = `ll-chat__msg ll-chat__msg--${quien}`;
+    p.textContent = texto;
+    body.appendChild(p);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function enviar(txt: string) {
+    if (!txt) return;
+    push(txt, 'yo');
+    if (rapidas) rapidas.hidden = true;
+    const reply = chatCanned[Math.min(paso, chatCanned.length - 1)];
+    paso++;
+    window.setTimeout(() => push(reply, 'bot'), 650);
+  }
+
+  toggle?.addEventListener('click', () => abrir(panel?.hidden ?? true));
+  burbuja?.addEventListener('click', () => abrir(true));
+  cerrar?.addEventListener('click', () => abrir(false));
+
+  rapidas?.querySelectorAll('button').forEach((b) =>
+    b.addEventListener('click', () => enviar(b.textContent || ''))
+  );
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const txt = (input?.value || '').trim();
+    if (input) input.value = '';
+    enviar(txt);
+  });
+
+  window.addEventListener('ll-chat-abrir', (ev: Event) => {
+    abrir(true);
+    const txt = (ev as CustomEvent).detail as string | undefined;
+    if (txt) enviar(txt);
+  });
+</script>
+
+<style>
+  .ll-chat {
+    position: fixed;
+    right: clamp(1rem, 2.5vw, 1.75rem);
+    bottom: clamp(1rem, 2.5vw, 1.75rem);
+    z-index: 120;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.8rem;
+  }
+
+  .ll-chat__fila {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .ll-chat__burbuja[hidden] {
+    display: none;
+  }
+
+  .ll-chat__burbuja {
+    background: #fff;
+    color: var(--ll-texto);
+    border-radius: 12px;
+    padding: 0.55rem 0.85rem;
+    text-align: left;
+    box-shadow: 0 10px 28px -12px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  .ll-chat__burbuja b {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .ll-chat__burbuja small {
+    font-size: 0.66rem;
+    color: var(--ll-gris);
+  }
+
+  .ll-chat__toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 0 0 7px rgba(37, 211, 102, 0.18), 0 12px 26px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .ll-chat__panel[hidden] {
+    display: none;
+  }
+
+  .ll-chat__panel {
+    width: min(340px, calc(100vw - 2rem));
+    background: var(--ll-gris-claro);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 26px 50px -18px rgba(0, 0, 0, 0.55);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ll-chat__head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem 1rem;
+    background: var(--ll-negro);
+    color: #fff;
+  }
+
+  .ll-chat__ava {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ll-rojo);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .ll-chat__ava svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .ll-chat__head b {
+    display: block;
+    font-size: 0.86rem;
+  }
+
+  .ll-chat__head small {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .ll-chat__head i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #25d366;
+  }
+
+  .ll-chat__x {
+    margin-left: auto;
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .ll-chat__body {
+    height: 260px;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ll-chat__rapidas[hidden] {
+    display: none;
+  }
+
+  .ll-chat__rapidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0 1rem 0.75rem;
+  }
+
+  .ll-chat__rapidas button {
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid var(--ll-rojo);
+    color: var(--ll-rojo);
+    background: #fff;
+    border-radius: 20px;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .ll-chat__rapidas button:hover {
+    background: var(--ll-rojo);
+    color: #fff;
+  }
+
+  .ll-chat__form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    background: #fff;
+    border-top: 1px solid var(--ll-linea);
+  }
+
+  .ll-chat__form input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--ll-linea);
+    border-radius: 20px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+    outline: none;
+  }
+
+  .ll-chat__form input:focus {
+    border-color: var(--ll-negro);
+  }
+
+  .ll-chat__form button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--ll-rojo);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .ll-chat__pow {
+    font-size: 0.62rem;
+    text-align: center;
+    color: var(--ll-gris);
+    background: #fff;
+    padding-bottom: 0.5rem;
+  }
+
+  @media (max-width: 540px) {
+    .ll-chat__burbuja {
+      display: none;
+    }
+  }
+</style>

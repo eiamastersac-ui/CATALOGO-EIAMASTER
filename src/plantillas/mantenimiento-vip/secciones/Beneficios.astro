@@ -1,0 +1,174 @@
+---
+import { beneficios } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+---
+
+<section class="mv-ben" id="beneficios">
+  <img class="mv-ben__fondo" src={beneficios.fondo} alt="Técnico del taller junto a su coche de herramientas" loading="lazy" />
+  <div class="mv-ben__scrim" aria-hidden="true"></div>
+
+  <div class="mv-wrap mv-ben__inner">
+    <div class="mv-ben__texto mv-reveal">
+      <p class="mv-ben__kicker">{beneficios.kicker}</p>
+      <h2 class="mv-ben__h2">
+        {beneficios.titulo.map((l: string) => <span>{l}</span>)}
+      </h2>
+      <p class="mv-ben__extra">
+        {beneficios.extra} <span>{beneficios.extraAcento}</span><br />
+        <small>{beneficios.extra2}</small>
+      </p>
+      <a href="#contactar" class="mv-cta mv-ben__cta"><span>Quiero una cita</span></a>
+    </div>
+
+    <ul class="mv-ben__items">
+      {beneficios.items.map((b: { icono: string; t: string; d: string }) => (
+        <li class="mv-reveal">
+          <span class="mv-ben__ico"><Icono nombre={b.icono} size={24} /></span>
+          <span><b>{b.t}</b>{b.d}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .mv-ben {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-block: calc(var(--mv-hdr-h) + 2rem) 3rem;
+  }
+
+  .mv-ben__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    z-index: -2;
+  }
+
+  /* desktop: la foto se ensancha hacia la derecha para que el tecnico
+     quede al lado del titular y no debajo */
+  @media (min-width: 901px) {
+    .mv-ben__fondo {
+      width: 135%;
+      max-width: none;
+      object-position: 0% 30%;
+    }
+  }
+
+  .mv-ben__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgba(11, 11, 11, 0.9) 0%, rgba(11, 11, 11, 0.6) 45%, rgba(11, 11, 11, 0.1) 80%),
+      linear-gradient(180deg, transparent 60%, rgba(11, 11, 11, 0.85) 100%);
+  }
+
+  .mv-ben__inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .mv-ben__kicker {
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #d8d8d8;
+  }
+
+  .mv-ben__h2 {
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(3.2rem, 8vw, 6.4rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    line-height: 0.88;
+    color: #eee;
+    text-shadow: 0 3px 0 #7a7a7a;
+    transform: rotate(-3deg);
+    transform-origin: left;
+  }
+
+  .mv-ben__extra {
+    margin-top: 1rem;
+    font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    line-height: 1;
+    transform: rotate(-3deg);
+    transform-origin: left;
+  }
+
+  .mv-ben__extra span {
+    color: var(--mv-rojo);
+  }
+
+  .mv-ben__extra small {
+    font-size: 0.55em;
+    font-weight: 800;
+  }
+
+  .mv-ben__cta {
+    margin-top: 2.2rem;
+  }
+
+  .mv-ben__items {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 260px));
+    gap: 1rem;
+  }
+
+  .mv-ben__items li {
+    display: flex;
+    gap: 0.8rem;
+    padding: 1rem 1.1rem;
+    background: rgba(11, 11, 11, 0.78);
+    border: 1px solid var(--mv-linea);
+    border-radius: 10px;
+    font-size: 0.84rem;
+    color: var(--mv-humo);
+    line-height: 1.35;
+  }
+
+  .mv-ben__items b {
+    display: block;
+    color: #fff;
+    font-size: 0.95rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .mv-ben__ico {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1.5px solid var(--mv-rojo);
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .mv-ben {
+      min-height: 0;
+    }
+    .mv-ben__scrim {
+      background: rgba(11, 11, 11, 0.7);
+    }
+    .mv-ben__items {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+    }
+  }
+</style>

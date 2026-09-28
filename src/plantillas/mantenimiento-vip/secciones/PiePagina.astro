@@ -1,0 +1,141 @@
+---
+import { pie, marca, telHref } from '../datos/mantenimiento.js';
+import Icono from '../componentes/Icono.astro';
+
+const anio = new Date().getFullYear();
+---
+
+<footer class="mv-pie" id="footer">
+  <div class="mv-wrap">
+    <div class="mv-pie__cols">
+      {pie.cols.map((c: { t: string; l: string[] }, i: number) => (
+        <div>
+          <h3>{c.t}</h3>
+          <ul>
+            {c.l.map((l: string) => <li><a href="#footer">{l}</a></li>)}
+          </ul>
+          {i === 1 && (
+            <>
+              <h3 class="mv-pie__redes-t">Redes</h3>
+              <div class="mv-pie__redes">
+                {pie.redes.map((r: string) => (
+                  <a href="#footer" aria-label={r}><Icono nombre={r} size={22} /></a>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      ))}
+
+      <div>
+        <h3>Contáctenos</h3>
+        <ul class="mv-pie__contacto">
+          <li><span>Dirección:</span>{marca.direccion}</li>
+          <li><span>Teléfono:</span><a href={telHref}>{marca.tel}</a></li>
+          <li><span>Correo electrónico:</span><a href={`mailto:${marca.correo}`}>{marca.correo}</a></li>
+        </ul>
+        <a href="#sedes" class="mv-pie__btn"><Icono nombre="pin" size={16} /> Encuéntranos aquí</a>
+      </div>
+    </div>
+
+    <p class="mv-pie__copy">© {anio} {marca.nombre}. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<style>
+  .mv-pie {
+    background: var(--mv-panel);
+    padding-block: clamp(3.5rem, 7vw, 5rem) 5.5rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .mv-pie__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.4rem;
+  }
+
+  .mv-pie h3 {
+    font-size: 0.98rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .mv-pie li {
+    position: relative;
+    padding-left: 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .mv-pie li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--mv-humo);
+  }
+
+  .mv-pie li a {
+    transition: color 0.2s ease;
+  }
+
+  .mv-pie li a:hover {
+    color: var(--mv-rojo);
+  }
+
+  .mv-pie__contacto li span {
+    display: block;
+    line-height: 1.4;
+    margin-top: 0.3rem;
+  }
+
+  .mv-pie__redes-t {
+    margin-top: 1.4rem;
+  }
+
+  .mv-pie__redes {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .mv-pie__redes a {
+    transition: color 0.2s ease;
+  }
+
+  .mv-pie__redes a:hover {
+    color: var(--mv-rojo);
+  }
+
+  .mv-pie__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.3rem;
+    padding: 0.55rem 1.4rem;
+    border-radius: 6px;
+    background: var(--mv-rojo);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.92rem;
+    transition: background 0.2s ease;
+  }
+
+  .mv-pie__btn:hover {
+    background: var(--mv-rojo-osc);
+  }
+
+  .mv-pie__copy {
+    margin-top: 3.4rem;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 760px) {
+    .mv-pie__cols {
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+    }
+  }
+</style>

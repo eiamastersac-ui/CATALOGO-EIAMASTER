@@ -1,0 +1,268 @@
+---
+import { productos } from '../datos/llantas.js';
+
+interface P { ancho: string; perfil: string; aro: string }
+const orden = (a: string, b: string) => parseFloat(a.replace(/\D+/g, '')) - parseFloat(b.replace(/\D+/g, '')) || a.localeCompare(b);
+const anchos = [...new Set(productos.map((p: P) => p.ancho))].sort(orden);
+
+/* Diagrama: [x, y del badge, x, y del punto en la banda, valor, etiqueta] */
+const partes: [number, number, number, number, string, string][] = [
+  [104, 104, 128, 188, '195', 'Ancho'],
+  [166, 70, 186, 172, '55', 'Perfil'],
+  [226, 46, 226, 166, 'R', 'Radial'],
+  [284, 70, 262, 167, '15', 'Aro'],
+  [350, 96, 308, 176, '87', 'Carga'],
+  [408, 140, 346, 188, 'V', 'Velocidad'],
+];
+---
+
+<section class="ll-busca" id="buscador" aria-labelledby="ll-busca-titulo">
+  <div class="ll-wrap ll-busca__grid">
+    <div class="ll-busca__form-col">
+      <h2 id="ll-busca-titulo">Busca la medida de tus llantas</h2>
+      <form class="ll-busca__form" id="ll-busca-form">
+        <label>
+          <span>Ancho</span>
+          <select id="ll-sel-ancho" aria-label="Ancho">
+            <option value="">Ancho</option>
+            {anchos.map((a: string) => <option value={a}>{a}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>Perfil</span>
+          <select id="ll-sel-perfil" aria-label="Perfil" disabled>
+            <option value="">Perfil</option>
+          </select>
+        </label>
+        <label>
+          <span>Aro</span>
+          <select id="ll-sel-aro" aria-label="Aro" disabled>
+            <option value="">Aro</option>
+          </select>
+        </label>
+        <button type="submit" class="ll-busca__btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          Buscar
+        </button>
+      </form>
+      <p class="ll-busca__ayuda">
+        La medida esta impresa en el costado de tu llanta. Ejemplo: <b>195/65 R15</b>.
+      </p>
+    </div>
+
+    <figure class="ll-busca__diagrama" aria-label="Como leer la medida de una llanta: 195/55 R15 87V">
+      <svg viewBox="0 -12 460 252" role="img">
+        <defs>
+          <path id="ll-arco" d="M 10 250 Q 230 82 450 250"></path>
+        </defs>
+        <path d="M -10 262 Q 230 70 470 262" fill="none" stroke="#2a2a2a" stroke-width="70"></path>
+        <path d="M -10 262 Q 230 70 470 262" fill="none" stroke="#3a3a3a" stroke-width="70" stroke-dasharray="3 9" opacity=".6"></path>
+        <text class="ll-diag__txt"><textPath href="#ll-arco" startOffset="50%" text-anchor="middle">195 / 55 R 15 87V</textPath></text>
+        {partes.map(([bx, by, px, py, v, t]) => (
+          <g>
+            <line x1={bx} y1={by} x2={px} y2={py - 24} stroke="#fff" stroke-width="1.6"></line>
+            <circle cx={bx} cy={by} r="17" fill="#c41212" stroke="#fff" stroke-width="2"></circle>
+            <text x={bx} y={by + 6} class="ll-diag__v" text-anchor="middle">{v}</text>
+            <text x={bx} y={by - 24} class="ll-diag__t" text-anchor="middle">{t}</text>
+          </g>
+        ))}
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<script>
+  import { productos } from '../datos/llantas.js';
+
+  interface P { ancho: string; perfil: string; aro: string }
+  const lista = productos as P[];
+  const num = (s: string) => parseFloat(s.replace(/[^\d.]/g, '')) || 0;
+
+  const selA = document.getElementById('ll-sel-ancho') as HTMLSelectElement | null;
+  const selP = document.getElementById('ll-sel-perfil') as HTMLSelectElement | null;
+  const selR = document.getElementById('ll-sel-aro') as HTMLSelectElement | null;
+  const form = document.getElementById('ll-busca-form') as HTMLFormElement | null;
+
+  function llenar(sel: HTMLSelectElement | null, rotulo: string, valores: string[]) {
+    if (!sel) return;
+    sel.innerHTML = `<option value="">${rotulo}</option>` +
+      valores.map((v) => `<option value="${v}">${v}</option>`).join('');
+    sel.disabled = valores.length === 0;
+  }
+
+  selA?.addEventListener('change', () => {
+    const a = selA.value;
+    const perfiles = [...new Set(lista.filter((p) => p.ancho === a).map((p) => p.perfil))].sort((x, y) => num(x) - num(y));
+    llenar(selP, 'Perfil', a ? perfiles : []);
+    llenar(selR, 'Aro', []);
+  });
+
+  selP?.addEventListener('change', () => {
+    const a = selA?.value;
+    const pf = selP.value;
+    const aros = [...new Set(lista.filter((p) => p.ancho === a && p.perfil === pf).map((p) => p.aro))].sort((x, y) => num(x) - num(y));
+    llenar(selR, 'Aro', pf ? aros : []);
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    window.dispatchEvent(
+      new CustomEvent('ll-filtro', {
+        detail: { ancho: selA?.value || '', perfil: selP?.value || '', aro: selR?.value || '' },
+      })
+    );
+    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+
+<style>
+  .ll-busca {
+    background: var(--ll-negro);
+    color: #fff;
+    padding-block: clamp(2.5rem, 5vw, 3.5rem) 0;
+  }
+
+  .ll-busca__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: end;
+  }
+
+  .ll-busca__form-col {
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .ll-busca h2 {
+    color: #fff;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 1.1rem;
+  }
+
+  .ll-busca__form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    gap: 0.7rem;
+    align-items: end;
+    background: #fff;
+    color: var(--ll-texto);
+    border-radius: 12px;
+    padding: 1.1rem 1.1rem 1.2rem;
+  }
+
+  .ll-busca__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .ll-busca__form label span {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ll-gris);
+  }
+
+  .ll-busca__form select {
+    width: 100%;
+    height: 48px;
+    border: 1px solid var(--ll-linea);
+    border-radius: 8px;
+    background: var(--ll-gris-claro);
+    padding: 0 0.7rem;
+    font-size: 0.9rem;
+    color: var(--ll-texto);
+    cursor: pointer;
+  }
+
+  .ll-busca__form select:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+  }
+
+  .ll-busca__form select:focus-visible {
+    outline: 2px solid var(--ll-rojo);
+    outline-offset: 1px;
+  }
+
+  .ll-busca__btn {
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0 1.2rem;
+    background: var(--ll-rojo);
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+  }
+
+  .ll-busca__btn:hover {
+    background: var(--ll-rojo-osc);
+  }
+
+  .ll-busca__ayuda {
+    margin-top: 0.9rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .ll-busca__ayuda b {
+    color: #fff;
+  }
+
+  .ll-busca__diagrama svg {
+    width: 100%;
+    max-width: 480px;
+    display: block;
+    margin-inline: auto;
+  }
+
+  .ll-diag__txt {
+    font-family: var(--ll-titulos);
+    font-weight: 800;
+    font-size: 30px;
+    fill: #d9d9d9;
+    letter-spacing: 1px;
+  }
+
+  .ll-diag__v {
+    font-family: var(--ll-titulos);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 17px;
+    fill: #fff;
+  }
+
+  .ll-diag__t {
+    font-family: var(--ll-titulos);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 11.5px;
+    fill: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .ll-busca__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ll-busca__form-col {
+      padding-bottom: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ll-busca__form {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ll-busca__btn {
+      grid-column: 1 / -1;
+      justify-content: center;
+    }
+  }
+</style>

@@ -1,0 +1,335 @@
+---
+import { tiposCita, marca } from '../datos/notaria.js';
+
+const tipos = tiposCita as string[];
+const horas = ['08:30', '09:30', '10:30', '11:30', '12:30', '15:00', '16:00', '17:00'];
+---
+
+<div class="nm-md" id="nm-md" hidden>
+  <div class="nm-md__velo" data-cerrar></div>
+  <div class="nm-md__caja" role="dialog" aria-modal="true" aria-labelledby="nm-md-titulo">
+    <button type="button" class="nm-md__x" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+    </button>
+
+    <form class="nm-md__form" id="nm-md-form" novalidate>
+      <span class="nm-kicker">Reserva tu cita</span>
+      <h2 id="nm-md-titulo">Agende su atención en la notaría</h2>
+      <p class="nm-md__sub">Evite esperas: elija el trámite, la fecha y un horario disponible.</p>
+
+      <label>
+        <span>Trámite</span>
+        <select name="tipo" id="nm-md-tipo">
+          {tipos.map((t) => <option>{t}</option>)}
+        </select>
+      </label>
+      <div class="nm-md__fila">
+        <label>
+          <span>Fecha</span>
+          <input type="date" name="fecha" id="nm-md-fecha" required />
+        </label>
+        <label>
+          <span>Modalidad</span>
+          <select name="modo">
+            <option>Presencial</option>
+            <option>Videollamada</option>
+          </select>
+        </label>
+      </div>
+      <fieldset class="nm-md__horas">
+        <legend>Horario</legend>
+        {horas.map((h, i) => (
+          <label>
+            <input type="radio" name="hora" value={h} checked={i === 0} />
+            <span>{h}</span>
+          </label>
+        ))}
+      </fieldset>
+      <div class="nm-md__fila">
+        <label>
+          <span>Nombre completo*</span>
+          <input type="text" name="nombre" required autocomplete="name" />
+        </label>
+        <label>
+          <span>Celular*</span>
+          <input type="tel" name="cel" required inputmode="tel" autocomplete="tel" />
+        </label>
+      </div>
+      <button type="submit" class="nm-btn nm-btn--acento nm-md__enviar">Confirmar cita</button>
+      <p class="nm-md__nota">Atención: {marca.horario[0].dia}, {marca.horario[0].h}.</p>
+    </form>
+
+    <div class="nm-md__ok" id="nm-md-ok" hidden>
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2" /><path d="m15 24.5 6 6 12-13" fill="none" stroke="currentColor" stroke-width="2.4" /></svg>
+      <h2>¡Cita registrada!</h2>
+      <p id="nm-md-resumen"></p>
+      <button type="button" class="nm-btn nm-btn--tinta" data-cerrar>Entendido</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const md = document.getElementById('nm-md');
+  const form = document.getElementById('nm-md-form') as HTMLFormElement | null;
+  const ok = document.getElementById('nm-md-ok');
+  const tipo = document.getElementById('nm-md-tipo') as HTMLSelectElement | null;
+  const fecha = document.getElementById('nm-md-fecha') as HTMLInputElement | null;
+  let origen: HTMLElement | null = null;
+
+  const hoy = new Date();
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  if (fecha) {
+    const m = new Date(hoy);
+    m.setDate(m.getDate() + 1);
+    fecha.min = iso(hoy);
+    fecha.value = iso(m);
+  }
+
+  const abrir = (t?: string) => {
+    if (!md) return;
+    if (t && tipo) {
+      const op = [...tipo.options].find((o) => t.toLowerCase().startsWith(o.text.toLowerCase().slice(0, 10)));
+      if (op) tipo.value = op.value;
+    }
+    if (form) form.hidden = false;
+    if (ok) ok.hidden = true;
+    md.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    tipo?.focus();
+  };
+
+  const cerrar = () => {
+    if (!md || md.hidden) return;
+    md.hidden = true;
+    document.documentElement.style.overflow = '';
+    origen?.focus();
+  };
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const btn = t.closest<HTMLElement>('.tpl-notaria-moderna [data-cita]');
+    if (btn) {
+      e.preventDefault();
+      origen = btn;
+      abrir(btn.dataset.tipo);
+      return;
+    }
+    if (t.closest('#nm-md [data-cerrar]')) cerrar();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const req = [...form.querySelectorAll<HTMLInputElement>('input[required]')];
+    req.forEach((i) => i.classList.toggle('is-error', !i.value.trim()));
+    const falta = req.find((i) => !i.value.trim());
+    if (falta) {
+      falta.focus();
+      return;
+    }
+    const fd = new FormData(form);
+    const f = String(fd.get('fecha') ?? '').split('-').reverse().join('/');
+    const res = document.getElementById('nm-md-resumen');
+    if (res) res.textContent = `${fd.get('nombre')}, le esperamos el ${f} a las ${fd.get('hora')} (${fd.get('modo')}) para: ${fd.get('tipo')}. Demo: no se envió ningún dato.`;
+    form.hidden = true;
+    form.reset();
+    if (fecha) fecha.value = iso(new Date(hoy.getTime() + 86400000));
+    if (ok) ok.hidden = false;
+  });
+</script>
+
+<style>
+  .nm-md {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+
+  .nm-md[hidden] {
+    display: none;
+  }
+
+  .nm-md__velo {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 28, 33, 0.72);
+  }
+
+  .nm-md__caja {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: calc(100svh - 2rem);
+    overflow-y: auto;
+    background: #fff;
+    border-top: 4px solid var(--nm-acento);
+    padding: clamp(1.4rem, 4vw, 2.2rem);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
+  }
+
+  .nm-md__x {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    color: var(--nm-tinta);
+  }
+
+  .nm-md__x svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .nm-md h2 {
+    font-size: 1.7rem;
+    margin-bottom: 0.4rem;
+    padding-right: 2rem;
+  }
+
+  .nm-md__sub {
+    font-size: 0.9rem;
+    color: var(--nm-suave);
+    margin-bottom: 1.3rem;
+  }
+
+  .nm-md__form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .nm-md__form[hidden],
+  .nm-md__ok[hidden] {
+    display: none;
+  }
+
+  .nm-md__form label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--nm-tinta);
+  }
+
+  .nm-md__form input,
+  .nm-md__form select {
+    width: 100%;
+    border: 1px solid #cfd4d6;
+    padding: 0.7rem 0.8rem;
+    font-size: 0.92rem;
+    font-weight: 400;
+    background: #fff;
+    border-radius: 2px;
+  }
+
+  .nm-md__form input:focus,
+  .nm-md__form select:focus {
+    outline: none;
+    border-color: var(--nm-tinta);
+  }
+
+  .nm-md__form .is-error {
+    border-color: #c0634f;
+  }
+
+  .nm-md__fila {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .nm-md__horas {
+    border: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .nm-md__horas legend {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--nm-tinta);
+    margin-bottom: 0.35rem;
+  }
+
+  .nm-md__horas label {
+    display: block;
+  }
+
+  .nm-md__horas input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .nm-md__horas span {
+    display: block;
+    text-align: center;
+    padding: 0.5rem 0;
+    border: 1px solid #cfd4d6;
+    font-size: 0.85rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .nm-md__horas input:checked + span {
+    background: var(--nm-tinta);
+    border-color: var(--nm-tinta);
+    color: #fff;
+  }
+
+  .nm-md__horas input:focus-visible + span {
+    outline: 2px solid var(--nm-acento);
+  }
+
+  .nm-md__enviar {
+    width: 100%;
+    margin-top: 0.3rem;
+  }
+
+  .nm-md__nota {
+    font-size: 0.78rem;
+    color: var(--nm-suave);
+    text-align: center;
+  }
+
+  .nm-md__ok {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 0.8rem;
+    padding: 1rem 0;
+  }
+
+  .nm-md__ok svg {
+    width: 56px;
+    height: 56px;
+    color: var(--nm-acento);
+  }
+
+  .nm-md__ok p {
+    color: var(--nm-texto);
+    font-size: 0.93rem;
+    max-width: 40ch;
+    margin-bottom: 0.6rem;
+  }
+
+  @media (max-width: 480px) {
+    .nm-md__fila {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .nm-md__horas {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

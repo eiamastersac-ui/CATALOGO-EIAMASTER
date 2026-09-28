@@ -1,0 +1,51 @@
+---
+interface Props {
+  nombre: string;
+  size?: number;
+  trazo?: number;
+}
+const { nombre, size = 24, trazo = 1.7 } = Astro.props;
+
+const PATHS: Record<string, string> = {
+  telefono: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+  whatsapp: '<path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.76.46 3.44 1.32 4.94L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.23h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2z"/><path d="M8.4 7.9c.2-.5.4-.5.6-.5h.5c.2 0 .4-.1.6.4.2.5.7 1.7.8 1.8.1.2.1.3 0 .5-.1.2-.2.3-.3.4l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1.9.9 1.7 1.1 2 1.3.3.1.4.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.9.3.1.5.2.5.3.1.6-.2 1.2-.6 1.5-.4.4-1.4.7-2 .6-.9-.2-2.4-.9-4.2-2.5-2.2-2-3.5-4.4-3.6-4.7-.1-.2-.9-1.2-.9-2.3 0-1.1.6-1.6.8-1.8Z" fill="currentColor" stroke="none"/>',
+  escaner: '<path d="M3 13l2-5a2 2 0 0 1 1.9-1.4h7.2A2 2 0 0 1 16 8l1.2 3"/><path d="M2.5 13h11M4 16.5h.01M3 13v4h3"/><circle cx="17.5" cy="16.5" r="3.5"/><path d="m20 19 2 2M17.5 15v1.5l1 1"/>',
+  tecnico: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="m15.5 3.5 2-2M8.5 3.5l-2-2"/><path d="M10 17h4"/>',
+  repuesto: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+  reporte: '<rect x="3" y="4" width="13" height="10" rx="2"/><path d="M7 14v3l3-3"/><path d="M19 8h1a1 1 0 0 1 1 1v8l-2.5-2H12a1 1 0 0 1-1-1v-1"/><path d="M6.5 8h6M6.5 10.5h4"/>',
+  calibracion: '<rect x="2.5" y="4" width="19" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M6 12.5a6 6 0 0 1 12 0"/><path d="m12 12.5 2.5-3"/>',
+  autos: '<path d="M4 12l1.5-4A2 2 0 0 1 7.4 6.6h5.2A2 2 0 0 1 14.5 8L16 12"/><path d="M3 12h14v4H3zM5.5 16v2M14.5 16v2"/><path d="M17 9.5h1.5a2 2 0 0 1 1.8 1.2L21.5 14v3h-2.5"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  check: '<path d="m5 12 5 5L20 7"/>',
+  flecha: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  izq: '<path d="m15 5-7 7 7 7"/>',
+  der: '<path d="m9 5 7 7-7 7"/>',
+  mas: '<path d="M12 5v14M5 12h14"/>',
+  pin: '<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/>',
+  correo: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  reloj: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  estrella: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z" fill="currentColor" stroke="none"/>',
+  gota: '<path d="M12 3s6 6.4 6 11a6 6 0 0 1-12 0c0-4.6 6-11 6-11Z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/>',
+  grua: '<path d="M2 17V11h8l3-4h4l2 4h3v6"/><circle cx="6" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/><path d="M13 7 8 3M8 3v4"/>',
+  rayo: '<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',
+  taller: '<path d="M3 21V9l9-5 9 5v12"/><path d="M7 21v-8h10v8M7 16h10"/>',
+  facebook: '<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8Z"/>',
+  instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
+  youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3Z" fill="currentColor"/>',
+  tiktok: '<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.5 2.3 4 5 4"/>',
+  google: '<path d="M20.5 12.2c0-.6-.1-1.2-.2-1.7H12v3.3h4.8a4.1 4.1 0 0 1-1.8 2.7v2.2h2.9c1.7-1.6 2.6-3.9 2.6-6.5Z"/><path d="M12 21c2.4 0 4.5-.8 5.9-2.2L15 16.5c-.8.5-1.8.9-3 .9a5.3 5.3 0 0 1-5-3.6H4v2.3A9 9 0 0 0 12 21Z"/><path d="M7 13.8a5.3 5.3 0 0 1 0-3.5V8H4a9 9 0 0 0 0 8.1Z"/><path d="M12 6.6c1.3 0 2.5.5 3.4 1.3L18 5.4A9 9 0 0 0 4 8l3 2.3a5.3 5.3 0 0 1 5-3.7Z"/>',
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={trazo}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={PATHS[nombre] ?? ''}
+/>

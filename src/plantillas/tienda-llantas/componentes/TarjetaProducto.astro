@@ -1,0 +1,182 @@
+---
+import { soles, medida } from '../datos/llantas.js';
+
+interface Producto {
+  id: number;
+  marca: string;
+  nombre: string;
+  ancho: string;
+  perfil: string;
+  aro: string;
+  tipo: string;
+  precio: number;
+  antes?: number;
+  img: string;
+}
+const { producto } = Astro.props as { producto: Producto };
+const m = medida(producto);
+---
+
+<article
+  class="ll-prod"
+  data-id={producto.id}
+  data-nombre={producto.nombre}
+  data-precio={producto.precio}
+  data-img={producto.img}
+  data-medida={m}
+  data-marca={producto.marca}
+  data-tipo={producto.tipo}
+  data-ancho={producto.ancho}
+  data-perfil={producto.perfil}
+  data-aro={producto.aro}
+>
+  <div class="ll-prod__media">
+    <img src={producto.img} alt={`Llanta ${producto.nombre}`} loading="lazy" decoding="async" />
+    <span class="ll-prod__sello">tienda.com</span>
+    {producto.antes && <span class="ll-prod__oferta">Oferta</span>}
+  </div>
+  <div class="ll-prod__body">
+    <span class="ll-prod__marca">{producto.marca}</span>
+    <h3 class="ll-prod__nombre">{producto.nombre}</h3>
+    <span class="ll-prod__medida">{m}</span>
+    <p class="ll-prod__precio">
+      {soles(producto.precio)}
+      {producto.antes && <s>{soles(producto.antes)}</s>}
+    </p>
+    <button type="button" class="ll-prod__comprar">Comprar</button>
+  </div>
+</article>
+
+<style>
+  .ll-prod[hidden] {
+    display: none;
+  }
+
+  .ll-prod {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--ll-linea);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .ll-prod:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px -18px rgba(0, 0, 0, 0.35);
+  }
+
+  .ll-prod__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #eee;
+  }
+
+  .ll-prod__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .ll-prod:hover .ll-prod__media img {
+    transform: scale(1.04);
+  }
+
+  .ll-prod__sello {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    background: var(--ll-negro);
+    color: #fff;
+    font-family: var(--ll-titulos);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    border-left: 3px solid var(--ll-rojo);
+  }
+
+  .ll-prod__oferta {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    background: var(--ll-rojo);
+    color: #fff;
+    font-size: 0.64rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  .ll-prod__body {
+    padding: 0.95rem 1rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+  }
+
+  .ll-prod__marca {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--ll-rojo);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .ll-prod__nombre {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--ll-texto);
+    margin-top: 0.2rem;
+    min-height: 2.15em;
+  }
+
+  .ll-prod__medida {
+    font-family: var(--ll-titulos);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ll-texto);
+  }
+
+  .ll-prod__precio {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .ll-prod__precio s {
+    font-size: 0.76rem;
+    font-weight: 400;
+    color: var(--ll-gris);
+  }
+
+  .ll-prod__comprar {
+    margin-top: auto;
+    background: var(--ll-rojo);
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.6rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: background 0.15s ease;
+  }
+
+  .ll-prod__comprar:hover {
+    background: var(--ll-rojo-osc);
+  }
+
+  .ll-prod__comprar.is-ok {
+    background: var(--ll-negro);
+  }
+</style>

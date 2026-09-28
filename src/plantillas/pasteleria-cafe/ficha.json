@@ -6,7 +6,7 @@
   "tags": ["pastelería", "tortas", "postres", "cafetería", "cheesecake", "tienda online", "carrito", "lima"],
   "paleta": ["#ff5046", "#302d2a", "#e0dfc1", "#e5c7ad", "#f2c4b6"],
   "destacada": false,
-  "nuevo": true,
+  "nuevo": false,
   "inspiradoEn": "dolcecapriccio.pe",
   "orden": 79
 }

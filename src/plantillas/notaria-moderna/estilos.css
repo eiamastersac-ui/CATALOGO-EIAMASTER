@@ -1,0 +1,271 @@
+/* Plantilla notaria-moderna (estilo notariatarazona.pe) — todo bajo .tpl-notaria-moderna */
+@import url("https://fonts.googleapis.com/css2?family=Rufina:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap");
+
+.tpl-notaria-moderna {
+  --nm-tinta: #2c4350;
+  --nm-tinta-2: #1f2a30;
+  --nm-pizarra: #3a4a53;
+  --nm-papel: #f4f4f2;
+  --nm-blanco: #ffffff;
+  --nm-linea: #e3e3e0;
+  --nm-texto: #3d4a52;
+  --nm-suave: #6b7880;
+  --nm-acento: #8db43a;
+  --nm-acento-osc: #759a2b;
+
+  --nm-serif: "Rufina", Georgia, "Times New Roman", serif;
+  --nm-sans: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --nm-maxw: 1120px;
+  --nm-radio: 3px;
+  --nm-hdr: 112px;
+
+  background: var(--nm-blanco);
+  color: var(--nm-texto);
+  font-family: var(--nm-sans);
+  font-size: 15.5px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* clip (no hidden): no rompe position:sticky/fixed */
+  overflow-x: clip;
+}
+
+.tpl-notaria-moderna *,
+.tpl-notaria-moderna *::before,
+.tpl-notaria-moderna *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.tpl-notaria-moderna h1,
+.tpl-notaria-moderna h2,
+.tpl-notaria-moderna h3,
+.tpl-notaria-moderna h4 {
+  font-family: var(--nm-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--nm-tinta);
+}
+
+.tpl-notaria-moderna img {
+  display: block;
+  max-width: 100%;
+}
+
+.tpl-notaria-moderna a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tpl-notaria-moderna ul,
+.tpl-notaria-moderna ol {
+  list-style: none;
+}
+
+.tpl-notaria-moderna button,
+.tpl-notaria-moderna input,
+.tpl-notaria-moderna select,
+.tpl-notaria-moderna textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.tpl-notaria-moderna button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.tpl-notaria-moderna [hidden] {
+  display: none !important;
+}
+
+.tpl-notaria-moderna :focus-visible {
+  outline: 2px solid var(--nm-acento);
+  outline-offset: 2px;
+}
+
+/* ---------- utilidades ---------- */
+.tpl-notaria-moderna .nm-wrap {
+  width: 100%;
+  max-width: var(--nm-maxw);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+}
+
+.tpl-notaria-moderna .nm-seccion {
+  padding: clamp(3.5rem, 8vw, 6rem) 0;
+  scroll-margin-top: 70px;
+}
+
+.tpl-notaria-moderna .nm-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nm-suave);
+  margin-bottom: 0.9rem;
+}
+
+.tpl-notaria-moderna .nm-kicker::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nm-acento);
+}
+
+.tpl-notaria-moderna .nm-titulo {
+  font-size: clamp(1.8rem, 3.6vw, 2.5rem);
+  margin-bottom: 1rem;
+}
+
+.tpl-notaria-moderna .nm-lead {
+  color: var(--nm-suave);
+  max-width: 62ch;
+}
+
+.tpl-notaria-moderna .nm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.8rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--nm-radio);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.tpl-notaria-moderna .nm-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.tpl-notaria-moderna .nm-btn--acento {
+  background: var(--nm-acento);
+  color: #fff;
+}
+
+.tpl-notaria-moderna .nm-btn--acento:hover {
+  background: var(--nm-acento-osc);
+}
+
+.tpl-notaria-moderna .nm-btn--tinta {
+  background: var(--nm-tinta);
+  color: #fff;
+}
+
+.tpl-notaria-moderna .nm-btn--tinta:hover {
+  background: var(--nm-tinta-2);
+}
+
+.tpl-notaria-moderna .nm-btn--borde {
+  border: 1px solid currentColor;
+}
+
+.tpl-notaria-moderna .nm-btn--borde:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* lista con check (circulo pizarra + check blanco, como el original) */
+.tpl-notaria-moderna .nm-check {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tpl-notaria-moderna .nm-check li {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.tpl-notaria-moderna .nm-check li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #6e96aa url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6 10.2l2.6 2.6L14 7.4' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E") center / 100% no-repeat;
+}
+
+/* ---------- elementos creados por JS (no reciben estilos scoped) ---------- */
+.tpl-notaria-moderna .nm-res-card {
+  background: #fff;
+  border: 1px solid var(--nm-linea);
+  border-top: 3px solid var(--nm-tinta);
+  border-radius: var(--nm-radio);
+  padding: 1.2rem 1.3rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.tpl-notaria-moderna .nm-res-card__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--nm-suave);
+}
+
+.tpl-notaria-moderna .nm-res-card__top b {
+  color: var(--nm-tinta);
+  font-weight: 700;
+}
+
+.tpl-notaria-moderna .nm-res-card h4 {
+  font-size: 1.25rem;
+}
+
+.tpl-notaria-moderna .nm-res-card__estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--nm-tinta);
+}
+
+.tpl-notaria-moderna .nm-res-card__estado::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nm-acento);
+}
+
+.tpl-notaria-moderna .nm-pasos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.tpl-notaria-moderna .nm-pasos span {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--nm-suave);
+  padding-top: 0.45rem;
+  border-top: 3px solid var(--nm-linea);
+}
+
+.tpl-notaria-moderna .nm-pasos span.is-on {
+  border-top-color: var(--nm-acento);
+  color: var(--nm-tinta);
+  font-weight: 500;
+}
+
+.tpl-notaria-moderna .nm-res-vacio {
+  background: #fff;
+  border: 1px dashed #c9cfd2;
+  border-radius: var(--nm-radio);
+  padding: 1.2rem 1.3rem;
+  color: var(--nm-suave);
+  font-size: 0.92rem;
+}

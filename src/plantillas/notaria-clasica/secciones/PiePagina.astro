@@ -1,0 +1,184 @@
+---
+import Icono from '../componentes/Icono.astro';
+import { pie, marca } from '../datos/notaria.js';
+
+interface Link { t: string; href: string }
+const links = pie.links as Link[];
+---
+
+<footer class="ncl-pie" id="ncl-pie">
+  <div class="ncl-wrap ncl-pie__grid">
+    <a href="#ncl-inicio" class="ncl-pie__logo" aria-label="tienda.com Notaría — inicio">
+      <span class="ncl-pie__t" aria-hidden="true">T</span>
+      <span class="ncl-pie__txt">
+        <small>Notaría</small>
+        <b>IENDA.COM</b>
+      </span>
+    </a>
+
+    <ul class="ncl-pie__links">
+      {links.map((l) => <li><a href={l.href}>{l.t}</a></li>)}
+    </ul>
+
+    <div class="ncl-pie__dir">
+      <p>{marca.dir1} {marca.dir2}<br />{marca.dir3}<br /><a href={marca.telHref}>{marca.tel}</a></p>
+      <ul class="ncl-pie__redes">
+        <li><a href={`mailto:${marca.correo}`} aria-label="Correo"><Icono n="mail" size={22} /></a></li>
+        <li><a href="#ncl-pie" aria-label="Facebook"><Icono n="facebook" size={22} /></a></li>
+        <li><a href="#ncl-pie" aria-label="Instagram"><Icono n="instagram" size={22} /></a></li>
+      </ul>
+    </div>
+
+    <a href="#ncl-contacto" class="ncl-pie__libro">
+      <Icono n="libro" size={40} />
+      <span>Libro de<br />Reclamaciones</span>
+    </a>
+  </div>
+
+  <div class="ncl-pie__legal">
+    <div class="ncl-wrap">
+      <span>© 2026 {marca.nombre} {marca.sub}. Maqueta demostrativa — datos ficticios.</span>
+      <span>Políticas de privacidad · Derechos ARCO</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ncl-pie {
+    background: #222;
+    color: #fff;
+    border-top: 8px solid var(--ncl-acento);
+    font-size: 0.82rem;
+  }
+
+  .ncl-pie__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1.2fr auto;
+    gap: 2rem;
+    align-items: center;
+    padding-block: 3.2rem;
+  }
+
+  .ncl-pie__logo {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.15rem;
+    line-height: 1;
+  }
+
+  .ncl-pie__t {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    background: var(--ncl-acento);
+    font-family: var(--ncl-serif);
+    font-size: 2.8rem;
+    clip-path: polygon(0 6%, 100% 0, 100% 100%, 0 94%);
+  }
+
+  .ncl-pie__txt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: var(--ncl-serif);
+  }
+
+  .ncl-pie__txt small {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding-bottom: 0.2rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .ncl-pie__txt b {
+    font-size: 2.4rem;
+    font-weight: 500;
+  }
+
+  .ncl-pie__links {
+    display: grid;
+    gap: 1rem;
+    font-weight: 600;
+  }
+
+  .ncl-pie__links a:hover,
+  .ncl-pie__dir a:hover {
+    text-decoration: underline;
+  }
+
+  .ncl-pie__dir p {
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .ncl-pie__redes {
+    display: flex;
+    gap: 1.1rem;
+  }
+
+  .ncl-pie__redes a {
+    opacity: 0.9;
+  }
+
+  .ncl-pie__redes a:hover {
+    opacity: 1;
+    color: #e0b1a7;
+  }
+
+  .ncl-pie__libro {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: #fff;
+    color: var(--ncl-tinta);
+    padding: 0.8rem 1rem;
+    border-radius: 2px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ncl-pie__libro:hover {
+    color: var(--ncl-acento);
+  }
+
+  .ncl-pie__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-block: 1rem;
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .ncl-pie__legal .ncl-wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .ncl-pie__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .ncl-pie__grid {
+      grid-template-columns: 1fr;
+      padding-bottom: 5.5rem;
+    }
+
+    .ncl-pie__links {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+
+    .ncl-pie__libro {
+      justify-self: start;
+    }
+  }
+</style>

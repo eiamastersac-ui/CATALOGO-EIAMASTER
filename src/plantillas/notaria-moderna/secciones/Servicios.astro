@@ -1,0 +1,258 @@
+---
+import { servicios, img } from '../datos/notaria.js';
+
+interface Serv { id: string; t: string; d: string; img: string }
+interface Grupo { titulo: string; intro: string; items: Serv[] }
+const grupos = servicios as Record<string, Grupo>;
+const claves = Object.keys(grupos);
+---
+
+<section class="nm-sv" id="servicios" aria-labelledby="nm-sv-titulo">
+  <div class="nm-sv__banda">
+    <img src={img('laptopFirma', 1800)} alt="Profesional revisando y firmando documentos" loading="lazy" />
+    <div class="nm-wrap nm-sv__banda-txt">
+      <span class="nm-kicker nm-sv__kicker">Servicios notariales</span>
+      <h2 id="nm-sv-titulo">Ponemos a su disposición nuestros servicios notariales</h2>
+      <p>Nos caracterizamos por brindar la seguridad jurídica que usted necesita, tramitando los servicios requeridos de manera eficiente y en el más corto plazo posible.</p>
+    </div>
+  </div>
+
+  <div class="nm-wrap nm-sv__cuerpo">
+    <div class="nm-sv__tabs" role="tablist" aria-label="Tipo de servicio">
+      {claves.map((k, i) => (
+        <button
+          type="button"
+          role="tab"
+          class={`nm-sv__tab${i === 0 ? ' is-on' : ''}`}
+          id={`nm-sv-tab-${k}`}
+          aria-controls={`nm-sv-panel-${k}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-tab={k}
+        >
+          {grupos[k].titulo}
+          <small>{grupos[k].items.length} servicios</small>
+        </button>
+      ))}
+    </div>
+
+    {claves.map((k, i) => (
+      <div class="nm-sv__panel" id={`nm-sv-panel-${k}`} role="tabpanel" aria-labelledby={`nm-sv-tab-${k}`} hidden={i !== 0}>
+        <p class="nm-sv__intro">{grupos[k].intro}</p>
+        <ul class="nm-sv__grid">
+          {grupos[k].items.map((s) => (
+            <li class="nm-sv__card">
+              <div class="nm-sv__foto">
+                <img src={img(s.img, 640)} alt="" loading="lazy" />
+              </div>
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+              <a href="#requisitos" class="nm-btn nm-btn--acento nm-sv__btn" data-req={s.id}>
+                Ver requisitos
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.nm-sv__tab');
+  const activar = (k: string) => {
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === k;
+      t.classList.toggle('is-on', on);
+      t.setAttribute('aria-selected', String(on));
+    });
+    document.querySelectorAll<HTMLElement>('.nm-sv__panel').forEach((p) => {
+      p.hidden = p.id !== `nm-sv-panel-${k}`;
+    });
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => activar(t.dataset.tab ?? '')));
+  // enlaces del menu "Servicios protocolares / extraprotocolares"
+  document.querySelectorAll<HTMLAnchorElement>('.tpl-notaria-moderna a[href="#servicios"]').forEach((a) =>
+    a.addEventListener('click', () => {
+      const txt = a.textContent?.toLowerCase() ?? '';
+      if (txt.includes('extraprotocolares')) activar('extraprotocolares');
+      else if (txt.includes('protocolares')) activar('protocolares');
+    }),
+  );
+</script>
+
+<style>
+  .nm-sv {
+    background: var(--nm-pizarra);
+    color: rgba(255, 255, 255, 0.86);
+    scroll-margin-top: 70px;
+  }
+
+  .nm-sv__banda {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .nm-sv__banda img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  .nm-sv__banda::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(58, 74, 83, 0.97) 0%, rgba(58, 74, 83, 0.85) 45%, rgba(58, 74, 83, 0.35) 100%);
+  }
+
+  .nm-sv__banda-txt {
+    position: relative;
+    z-index: 2;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .nm-sv__kicker {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .nm-sv__banda h2 {
+    color: #fff;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    max-width: 16ch;
+    margin-bottom: 1rem;
+  }
+
+  .nm-sv__banda p {
+    max-width: 52ch;
+  }
+
+  .nm-sv__cuerpo {
+    padding-top: 3rem;
+    padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .nm-sv__tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    margin-bottom: 1.6rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .nm-sv__tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+    padding: 0.9rem 1.6rem 0.9rem 0;
+    margin-right: 1.6rem;
+    font-family: var(--nm-serif);
+    font-size: clamp(1.1rem, 2.4vw, 1.55rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.5);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nm-sv__tab small {
+    font-family: var(--nm-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  .nm-sv__tab:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .nm-sv__tab.is-on {
+    color: #fff;
+    border-bottom-color: var(--nm-acento);
+  }
+
+  .nm-sv__intro {
+    max-width: 70ch;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .nm-sv__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.2rem 1.25rem;
+  }
+
+  .nm-sv__card {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid var(--nm-acento);
+  }
+
+  .nm-sv__foto {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    margin-bottom: 1.1rem;
+    background: var(--nm-tinta-2);
+  }
+
+  .nm-sv__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .nm-sv__card:hover .nm-sv__foto img {
+    transform: scale(1.05);
+  }
+
+  .nm-sv__card h3 {
+    color: #fff;
+    font-size: 1.35rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .nm-sv__card p {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 1.3rem;
+    flex: 1;
+  }
+
+  .nm-sv__btn {
+    align-self: flex-start;
+    padding: 0.65rem 1.1rem;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 900px) {
+    .nm-sv__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 580px) {
+    .nm-sv__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nm-sv__banda::before {
+      background: rgba(58, 74, 83, 0.86);
+    }
+  }
+</style>

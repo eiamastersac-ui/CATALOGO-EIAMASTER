@@ -1,0 +1,241 @@
+---
+import { serviciosCita, horario } from '../datos/taller.js';
+---
+
+<div class="tc-modal" id="tc-cita" hidden>
+  <div class="tc-modal__fondo" data-cerrar-cita></div>
+  <div class="tc-modal__caja" role="dialog" aria-modal="true" aria-labelledby="tc-cita-titulo">
+    <button type="button" class="tc-modal__x" aria-label="Cerrar" data-cerrar-cita>&times;</button>
+
+    <div class="tc-modal__form-wrap" id="tc-cita-paso1">
+      <span class="tc-kicker">Taller mecánico</span>
+      <h2 id="tc-cita-titulo">Agenda tu servicio mecánico</h2>
+      <p class="tc-modal__sub">Déjanos tus datos y un asesor confirma tu cita. {horario[0]} · {horario[1]}</p>
+
+      <form class="tc-modal__form" id="tc-cita-form">
+        <label>
+          <span>Nombre</span>
+          <input type="text" name="nombre" required placeholder="Tu nombre" autocomplete="off" />
+        </label>
+        <label>
+          <span>Teléfono</span>
+          <input type="tel" name="telefono" required placeholder="999 999 999" autocomplete="off" />
+        </label>
+        <label>
+          <span>Marca y modelo</span>
+          <input type="text" name="vehiculo" placeholder="Ej. Pickup 4x4 2022" autocomplete="off" />
+        </label>
+        <label>
+          <span>Fecha preferida</span>
+          <input type="date" name="fecha" />
+        </label>
+        <label class="tc-modal__full">
+          <span>Servicio</span>
+          <select name="servicio" id="tc-cita-servicio">
+            {serviciosCita.map((s: string) => <option value={s}>{s}</option>)}
+          </select>
+        </label>
+        <button type="submit" class="tc-btn tc-btn--acento tc-modal__full">Solicitar cita</button>
+      </form>
+    </div>
+
+    <div class="tc-modal__ok" id="tc-cita-ok" hidden>
+      <span class="tc-modal__check" aria-hidden="true"></span>
+      <h2>¡Solicitud recibida!</h2>
+      <p id="tc-cita-resumen">Te contactaremos para confirmar tu cita.</p>
+      <button type="button" class="tc-btn tc-btn--tinta" data-cerrar-cita>Listo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('tc-cita');
+  const form = document.getElementById('tc-cita-form') as HTMLFormElement | null;
+  const paso1 = document.getElementById('tc-cita-paso1');
+  const ok = document.getElementById('tc-cita-ok');
+  const resumen = document.getElementById('tc-cita-resumen');
+  const selServ = document.getElementById('tc-cita-servicio') as HTMLSelectElement | null;
+
+  function abrir(servicio?: string) {
+    if (!modal) return;
+    if (paso1) paso1.hidden = false;
+    if (ok) ok.hidden = true;
+    if (servicio && selServ) {
+      const op = Array.from(selServ.options).find((o) =>
+        o.value.toLowerCase().includes(servicio.toLowerCase().split(' ')[0]),
+      );
+      if (op) selServ.value = op.value;
+    }
+    modal.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    form?.querySelector<HTMLInputElement>('input')?.focus();
+  }
+
+  function cerrar() {
+    if (!modal) return;
+    modal.hidden = true;
+    document.documentElement.style.overflow = '';
+  }
+
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+    const btn = el.closest<HTMLElement>('.tpl-taller-cedea [data-cita]');
+    if (btn) {
+      e.preventDefault();
+      abrir(btn.dataset.servicio);
+      return;
+    }
+    if (el.closest('[data-cerrar-cita]')) cerrar();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.hidden) cerrar();
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const datos = new FormData(form);
+    const nombre = String(datos.get('nombre') || '').trim();
+    const servicio = String(datos.get('servicio') || '');
+    const fecha = String(datos.get('fecha') || '');
+    if (resumen) {
+      resumen.textContent = `Gracias ${nombre || ''}. Registramos tu solicitud de "${servicio}"${fecha ? ' para el ' + fecha : ''}. Un asesor te llamará para confirmar.`;
+    }
+    if (paso1) paso1.hidden = true;
+    if (ok) ok.hidden = false;
+    form.reset();
+  });
+</script>
+
+<style>
+  .tc-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+
+  .tc-modal[hidden] {
+    display: none;
+  }
+
+  .tc-modal__fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 26, 45, 0.7);
+  }
+
+  .tc-modal__caja {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: calc(100svh - 2rem);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: clamp(1.4rem, 4vw, 2.2rem);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
+  }
+
+  .tc-modal__x {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--tc-suave);
+  }
+
+  .tc-modal__caja h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0 0.4rem;
+  }
+
+  .tc-modal__sub {
+    font-size: 0.88rem;
+    color: var(--tc-suave);
+    margin-bottom: 1.3rem;
+  }
+
+  .tc-modal__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+
+  .tc-modal__form label {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .tc-modal__form label span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--tc-tinta);
+  }
+
+  .tc-modal__form input,
+  .tc-modal__form select {
+    width: 100%;
+    border: 1px solid var(--tc-linea);
+    border-radius: 4px;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.92rem;
+    background: #fff;
+    outline: none;
+  }
+
+  .tc-modal__form input:focus,
+  .tc-modal__form select:focus {
+    border-color: var(--tc-tinta);
+  }
+
+  .tc-modal__full {
+    grid-column: 1 / -1;
+  }
+
+  .tc-modal__ok {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    padding: 1rem 0;
+  }
+
+  .tc-modal__ok[hidden] {
+    display: none;
+  }
+
+  .tc-modal__ok p {
+    color: var(--tc-suave);
+    margin-bottom: 0.8rem;
+  }
+
+  .tc-modal__check {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--tc-acento);
+    position: relative;
+  }
+
+  .tc-modal__check::after {
+    content: "";
+    position: absolute;
+    left: 17px;
+    top: 18px;
+    width: 20px;
+    height: 10px;
+    border-left: 3px solid var(--tc-acento);
+    border-bottom: 3px solid var(--tc-acento);
+    transform: rotate(-45deg);
+  }
+
+  @media (max-width: 520px) {
+    .tc-modal__form {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
